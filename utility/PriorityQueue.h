@@ -1,4 +1,4 @@
-// Implementation of Queue and PriorityQueue using Heap
+// Implementation of Queue and PriorityQueue using MaxHeap ( from EECS281 slides )
 
 #include "Vector.h"
 #include <iostream>
@@ -46,6 +46,32 @@ class PriorityQueue
             }
 
     public:
+        // Default Constructor
+        PriorityQueue( ) { }
+
+        // Copy Constructor
+        PriorityQueue( const PriorityQueue& other ) : heap( other.heap )
+            {
+            }
+
+        // Assignment Operator
+        PriorityQueue& operator= ( const PriorityQueue& other )
+            {
+            heap = other.heap;
+            }
+
+        // size
+        size_t size( ) const 
+            {
+            return heap.size( );
+            }
+
+        // empty
+        bool empty( ) const
+            {
+            return size( ) == 0;
+            }    
+
         // push one element to the last position of the heap
         // and fix the heap, taking O( logN )
         void Push( const T& x )
@@ -63,7 +89,7 @@ class PriorityQueue
             }
 
         // return the root element
-        T Top( )
+        T& Top( )
             {
             return heap[ 0 ];
             }
@@ -89,6 +115,18 @@ class PriorityQueue
                     }
                 std::cout << std::endl;
                 }
+            }
+        
+        // DEBUG fuction
+        void PrintHeapSort( )
+            {
+            PriorityQueue tmp( *this );
+            while ( !tmp.empty( ) )
+                {
+                std::cout << tmp.Top( ) << ' ';
+                tmp.Pop( );
+                }
+            std::cout << std::endl;
             }
 
     };

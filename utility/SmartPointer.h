@@ -190,7 +190,8 @@ class SharedPointer
             : memPtr( ptr ), count( nullptr )
             {
             if ( memPtr )
-                {    
+                {
+                // in case of allocation failure ( not enough space )
                 try
                     {
                     count = new int ( 1 );
