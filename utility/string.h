@@ -39,8 +39,8 @@ public:
         buffer[length] = '\0';
     }
 
-    // String Literal / C String Constructor
-    // REQUIRES: cstr is a null terminated C style String
+    // Buffer Constructor
+    // REQUIRES: cstr is a buffer with size >= len
     // MODIFIES: *this
     // EFFECTS: Creates a String with equivalent contents to cstr
     String(const char *cstr, const size_t len) {
