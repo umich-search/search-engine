@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "../../utility/string.h"
+#include "../../utility/Vector.h"
 #include "HtmlTags.h"
 
 // This is a simple HTML parser class.  Given a text buffer containing
@@ -69,10 +69,10 @@
 class Link
    {
    public:
-      std::string URL;
-      std::vector< std::string > anchorText;
+      String URL;
+      vector< String > anchorText;
 
-      Link( std::string URL ) : URL( URL )
+      Link( String URL ) : URL( URL )
          {
          }
    };
@@ -81,9 +81,9 @@ class HtmlParser
    {
    public:
 
-      std::vector< std::string > words, titleWords;
-      std::vector< Link > links;
-      std::string base;
+      vector< String > words, titleWords;
+      vector< Link > links;
+      String base;
        
        enum Token {
            OpeningTag,
@@ -98,8 +98,8 @@ class HtmlParser
       // Your code here.
        // TODO: Prob needchange that
        Link currLink = Link("");
-       bool findUrl(const char* token, size_t tokenLen, std::string linkType, std::string &url);
-       void appendInvalidTag(std::string tag);
+       bool findUrl(const char* token, size_t tokenLen, String linkType, String &url);
+       void appendInvalidTag(String tag);
        void appendInvalidTag(const char *tag, size_t tagLen);
        bool parsingTitle = false;
        bool parsingAnchor = false;
@@ -108,19 +108,19 @@ class HtmlParser
        bool shouldBreak = false;
        void handleTitleAction(Token &tokenType);
        void handleAnchorAction(Token &tokenType, const char *token, size_t tokenLen);
-       //void handleDiscardSectionAction(Token &tokenType, std::string potentialTag);
+       //void handleDiscardSectionAction(Token &tokenType, String potentialTag);
        void handleDiscardSectionAction(Token &tokenType, const char* potentialTag, size_t potentialTagLen);
        void handleEmbedAction(Token &tokenType, const char* token, size_t tokenLen);
        void cleanTagContents(const char* tag, size_t taglen, const char **dest, size_t &destSize);
        void cleanTruncatedTagContents(const char* tag, size_t taglen, const char  **dest, size_t &destSize);
        Token evalutateToken(const char* token, size_t tokenLen, const char **potentialToken, size_t &potentialTokenLen);
-       std::string currUrl;
+       String currUrl;
        void handleBaseAction(Token &tokenType, const char* token, size_t tokenLen);
        void handleWordAction(const char *token, size_t tokenLen);
        void processToken(const char *token, size_t tokenLen, Token tokenType, DesiredAction *action = nullptr);
-       void combinedCleanContents(const char *tag, size_t length, const char **dest, size_t &destSize, size_t endLen, size_t firstSpacePos = std::string::npos);
+       void combinedCleanContents(const char *tag, size_t length, const char **dest, size_t &destSize, size_t endLen, size_t firstSpacePos = String::npos);
        //TODO: Prob need to move
-       size_t firstSpaceCache = std::string::npos;
+       size_t firstSpaceCache = String::npos;
 
 
    public:

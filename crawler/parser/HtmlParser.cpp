@@ -10,7 +10,7 @@
 // HtmlParser.h, you may do it here.
 #include "HtmlParser.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 // O(1)
 void HtmlParser::combinedCleanContents(const char *tag, size_t length, const char **dest, size_t &destSize, size_t endLen, size_t firstSpacePos) {
@@ -26,7 +26,7 @@ void HtmlParser::combinedCleanContents(const char *tag, size_t length, const cha
     else if(tag[length - endLen] == '/') {
         substrEnd = length - 1;
     }
-    if (firstSpaceCache != std::string::npos) {
+    if (firstSpaceCache != String::npos) {
         *dest = tag + substrStart;
         destSize = firstSpaceCache - substrStart;
     }
@@ -37,24 +37,24 @@ void HtmlParser::combinedCleanContents(const char *tag, size_t length, const cha
 }
 
 void HtmlParser::appendInvalidTag(const char* tag, size_t tagLen) {
-    std::string word = "";
+    String word = "";
     for(unsigned int i = 0; i < tagLen; ++i) {
         if(isspace(tag[i]) == 0) {
             word += tag[i];
         }
         else {
             if(words.size() > 0) {
-                words.push_back(word);
+                words.pushBack(word);
             }
             word = "";
         }
     }
 }
 
-bool HtmlParser::findUrl(const char *token, size_t tokenLen, std::string linkType, std::string &url) {
-    size_t firstQuotePos = std::string::npos;
+bool HtmlParser::findUrl(const char *token, size_t tokenLen, String linkType, String &url) {
+    size_t firstQuotePos = String::npos;
     size_t urlLen = 0;
-    std::string searchPhrase;
+    String searchPhrase;
     if(linkType == "href") {
         searchPhrase = "href=\"";
     }
@@ -63,13 +63,13 @@ bool HtmlParser::findUrl(const char *token, size_t tokenLen, std::string linkTyp
     }
     size_t searchPos = 0;
     for(unsigned int i = 0; i < tokenLen; ++i) {
-        if(firstQuotePos != std::string::npos && token[i]=='"') {
+        if(firstQuotePos != String::npos && token[i]=='"') {
             urlLen = i - firstQuotePos - 1;
             break;
         }
         if(token[i] == searchPhrase[searchPos]) {
             searchPos++;
-            if(searchPos == searchPhrase.length()) {
+            if(searchPos == searchPhrase.size()) {
                 firstQuotePos = i;
             }
         }
@@ -77,8 +77,8 @@ bool HtmlParser::findUrl(const char *token, size_t tokenLen, std::string linkTyp
             searchPos = 0;
         }
     }
-    if (firstQuotePos != std::string::npos && urlLen != 0) {
-        url = std::string(token + firstQuotePos + 1, urlLen);
+    if (firstQuotePos != String::npos && urlLen != 0) {
+        url = String(token + firstQuotePos + 1, urlLen);
         return true;
     }
     return false;
@@ -87,7 +87,7 @@ bool HtmlParser::findUrl(const char *token, size_t tokenLen, std::string linkTyp
 // TODO: Rename token to tokentype
 void HtmlParser::handleBaseAction(Token &tokenType, const char* token, size_t tokenLen) {
     if( ( tokenType == OpeningTag || tokenType == OpenCloseTag ) && !baseFound) {
-        std::string url;
+        String url;
         if(findUrl(token, tokenLen, "href", url)){
             base=url;
             baseFound = true;
@@ -108,10 +108,10 @@ void HtmlParser::handleTitleAction(Token &tokenType) {
 
 void HtmlParser::handleAnchorAction(Token &tokenType, const char* token, size_t tokenLen) {
     if(tokenType == OpeningTag || tokenType == OpenCloseTag) {
-        std::string url;
+        String url;
         if(findUrl(token, tokenLen, "href", url) && tokenType == OpeningTag){
             if(parsingAnchor) {
-                links.push_back(currLink);
+                links.pushBack(currLink);
             }
             else {
                 parsingAnchor = true;
@@ -122,7 +122,7 @@ void HtmlParser::handleAnchorAction(Token &tokenType, const char* token, size_t 
     else if(tokenType == ClosingTag) {
         if(parsingAnchor) {
             parsingAnchor = false;
-            links.push_back(currLink);
+            links.pushBack(currLink);
         }
     }
 }
@@ -154,23 +154,23 @@ void HtmlParser::handleDiscardSectionAction(Token &tokenType, const char* potent
 }
 
 void HtmlParser::handleEmbedAction(Token &tokenType, const char* token, size_t tokenLen) {
-    std::string url;
+    String url;
     if( ( tokenType == OpeningTag || tokenType == OpenCloseTag ) && findUrl(token, tokenLen, "src", url)) {
-        links.push_back(Link(url));
+        links.pushBack(Link(url));
     }
 }
 
 void HtmlParser::handleWordAction(const char* token, size_t tokenLen) {
-    std::string word(token, tokenLen);
+    String word(token, tokenLen);
 
     if(parsingTitle) {
-        titleWords.push_back(word);
+        titleWords.pushBack(word);
     }
     else {
-        words.push_back(word);
+        words.pushBack(word);
     }
     if(parsingAnchor) {
-        currLink.anchorText.push_back(word);
+        currLink.anchorText.pushBack(word);
     }
 }
 
@@ -240,7 +240,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                 discardSection = 0;
                 token = buffer + i + 1;
                 tokenLen = 0;
-                firstSpaceCache = std::string::npos;
+                firstSpaceCache = String::npos;
                 prevBuffer = buffer + i + 1;
                 prevBufferLen = 0;
             }
@@ -256,7 +256,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                     processToken(prevBuffer, prevBufferLen + tokenLen,Token::Word, &action);
                     token = buffer + i + 1;
                     tokenLen = 0;
-                    firstSpaceCache = std::string::npos;
+                    firstSpaceCache = String::npos;
                     prevBuffer = buffer + i + 1;
                     prevBufferLen = 0;
                     parsingTag = 0;
@@ -279,7 +279,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                 processToken(token, tokenLen, Token::Word);
                 token = buffer + i + 1;
                 tokenLen = 0;
-                firstSpaceCache = std::string::npos;
+                firstSpaceCache = String::npos;
             }
         }
         else {
@@ -290,7 +290,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                     parsingTag = 1;
                     token = buffer + i;
                     tokenLen = 0;
-                    firstSpaceCache = std::string::npos;
+                    firstSpaceCache = String::npos;
                     if(buffer[i + 1] == '/') {
                         cachedTokenType = Token::ClosingTag;
                     }
@@ -312,7 +312,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                     }
                     
                     tokenLen = 0;
-                    firstSpaceCache = std::string::npos;
+                    firstSpaceCache = String::npos;
                     token = buffer + i + 1;
                 }
                 // parsingTag should be 1
@@ -326,7 +326,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                         processToken(prevBuffer, prevBufferLen + tokenLen + 1, cachedTokenType, &action);
                         token = buffer + i + 1;
                         tokenLen = 0;
-                        firstSpaceCache = std::string::npos;
+                        firstSpaceCache = String::npos;
                         prevBuffer = buffer + i; // TODO: Change to prevbuffer + len + 1 or something
                         prevBuffer = 0;
                     }
@@ -341,7 +341,7 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
                         }
                         token = buffer + i + 1;
                         tokenLen = 0;
-                        firstSpaceCache = std::string::npos;
+                        firstSpaceCache = String::npos;
 
                     }
                 }

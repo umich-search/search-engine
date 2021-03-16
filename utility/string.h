@@ -8,6 +8,9 @@
 class String {
 public:
 
+    // Marks the end of a string
+    static const size_t npos = -1;
+
     // Default Constructor
     // REQUIRES: Nothing
     // MODIFIES: *this
@@ -28,6 +31,20 @@ public:
     String(const char *cstr) {
         length=0;
         while(cstr[length]!='\0')length++;
+        capacity = length * 2;
+        buffer = new char[capacity];
+        for (size_t i = 0; i < length; i++) {
+            buffer[i] = cstr[i];
+        }
+        buffer[length] = '\0';
+    }
+
+    // String Literal / C String Constructor
+    // REQUIRES: cstr is a null terminated C style String
+    // MODIFIES: *this
+    // EFFECTS: Creates a String with equivalent contents to cstr
+    String(const char *cstr, const size_t len) {
+        length=len;
         capacity = length * 2;
         buffer = new char[capacity];
         for (size_t i = 0; i < length; i++) {
