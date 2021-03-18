@@ -1,40 +1,13 @@
 #pragma once
+
 #include "../utility/string.h"
 #include "../utility/PriorityQueue.h"
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
 #include "parser/HtmlParser.h"
+#include "Frontier.h"
 // TODO: #include "get-url/LinuxGetSsl.h" 
 // Create a get-url class like HtmlParser
-
-// Breadth-first search: visiting the most recently encountered URLs (stack)
-// - if PQ empty refresh with 10 random from pool from oldest N/10
-// - if N is large, it could contain a link we most recently pushed
-// Depth-first search: visiting all URLs in order (queue)
-
-
-class Frontier
-    {
-    // TODO: define a custom comparison symbol
-    PriorityQueue< const Link > urlPq( );
-    
-    // TODO: int fd = url pool on disk
-    mutex_t frontMutex;
-    cv_t frontWait;
-    
-    public:
-        // ctor from seeds file "seeds" and the file for url pool "urlPool" 
-        Frontier( const char *seeds, const char *urlPool, size_t pqSize = 10 );
-
-        ~Frontier( );
-
-        // if not already seen, push the url to the pool of urls
-        void PushUrl( Link );
-        
-        // If pq size == 0, refresh with 10 random urls from pool
-        // block until something shows up in the frontier
-        const Link GetUrl( );
-    };
 
 // class instance per crawler thread
 class Crawler
