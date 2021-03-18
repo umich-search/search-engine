@@ -1,4 +1,4 @@
-#include "crawler.h"
+#include "Crawler.h"
 
 void Crawler::setParameters( size_t crawlerId, Frontier *front )
     {
@@ -26,6 +26,53 @@ void Crawler::Work( )
 
         // 6. Add the words from the HTML to the index
         addWordsToIndex( htmlparser );
+        }
+    }
+
+void Crawler::parseRobot( const String& robotUrl )
+    {
+    String robotFile;
+    String rootUrl;
+    //TODO: crawl robotFile
+    String temp = "";
+    int i = 0;
+    for (  ; i < robotFile.size(); ++i )
+        { // First find the User-agent line
+        if (robotFile[i++] == ':')
+            {
+            if (temp == "User-agent")
+                {
+                temp = "";
+                while (isspace(robotFile[i++])) continue;
+                while (robotFile[i] != '\n') temp += robotFile[i++];
+                ++i; // move i after \n
+                if (temp == "*" || temp == "*\r")
+                    {
+                    temp = "";
+                    break;
+                    }
+                temp = "";
+                }
+            }
+            else // reached "disallow:"
+                {
+                temp = "";
+                while (robotFile[i++] != '\n') continue;
+                }
+        temp += robotFile[i];
+        }
+    for ( ; i < robotFile.size(); ++i )
+        { // have found userAgent = *
+        if (temp == "Disallow")
+            {
+            temp = "";
+            while ( isspace(robotFile[i]) || robotFile[i] == ':' ) ++i;
+            while ( robotFile[i] != '\n' && robotFile[i] != '\r') temp += robotFile[i++];
+            disallowedUrl->insert(rootUrl + temp);
+            }
+        else if (temp == "User-agent") break; // finished parsing User-Agent='*'
+        temp += robotFile[i];
+        if ( robotFile[i] == '\n' || robotFile[i] == '\r' ) temp = ""; // empty temp at end of every line
         }
     }
 

@@ -5,8 +5,11 @@
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
 #include "../utility/Thread.h"
+#include "../utility/BloomFilter.h"
 #include "parser/HtmlParser.h"
 #include "Frontier.h"
+#define NUM_OBJECTS 1000
+#define FP_RATE 0.1
 // TODO: #include "get-url/LinuxGetSsl.h" 
 // Create a get-url class like HtmlParser
 
@@ -15,7 +18,8 @@ class Crawler : public Thread
     size_t id;
     Frontier *frontier;
     // TODO: HashTable to store robot.txt files
-    
+    Bloomfilter *disallowedUrl;
+
     public:
         Crawler( );
 
@@ -39,7 +43,7 @@ class Crawler : public Thread
 
         // parse the robot.txt
         // mark urls as unreachable in the frontier
-        String parseRobot( const String& robotFile );
+        void parseRobot( const String& robotUrl );
 
         // add not-seen links the frontier
         void addLinksToFrontier( const HtmlParser& htmlparser );
