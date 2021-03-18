@@ -8,10 +8,10 @@
 // Create a get-url class like HtmlParser
 #include <atomic>
 
-// Breadth-first search: visiting the most recently encountered URLs (stack)
+// Breadth-first search: visiting URLs in the order they enter the frontier (queue)
 // - if PQ empty refresh with 10 random from pool from oldest N/10
 // - if N is large, it could contain a link we most recently pushed
-// Depth-first search: visiting all URLs in order (queue)
+// Depth-first search: visiting the most recently encountered URLs (stack)
 
 
 class Frontier
