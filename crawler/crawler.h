@@ -3,6 +3,7 @@
 #include "../utility/PriorityQueue.h"
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
+#include "../utility/Thread.h"
 #include "parser/HtmlParser.h"
 // TODO: #include "get-url/LinuxGetSsl.h" 
 // Create a get-url class like HtmlParser
@@ -25,7 +26,7 @@ class Frontier
     
     public:
         // ctor from seeds file "seeds" and the file for url pool "urlPool" 
-        Frontier( const char *seeds, const char *urlPool, size_t pqSize = 10 );
+        Frontier( const char *seeds, const char *urlQueue, size_t pqSize = 10 );
 
         ~Frontier( );
 
@@ -41,28 +42,29 @@ class Frontier
     };
 
 // class instance per crawler thread
-class Crawler
+class Crawler : public Thread
     {
+    size_t id;
     Frontier *frontier;
-    std::atomic<bool> dead;
     // TODO: HashTable to store robot.txt files
     
     public:
-        Crawler( Frontier *front );
+        Crawler( );
 
         ~Crawler( );
 
+        // These had to be moved out of the constructor because the crawler
+        // doesn't have an assignment operator that can be used when
+        // pushBack() is called on the vector<Crawler>
+        void setParameters( size_t cralwerId, Frontier *front );
+
+    private:
         // pack all crawler functionalities into one function
         // an infinite loop consisting of steps of poping urls, retrievingWebpages,
         // waiting if needed, parsing the retrieved file, and adding to the index
         // If the popped url is the "halting" url, stop looping
         void Work( );
 
-        // tell the crawler to stop crawling. it will only stop once it has finished
-        // the URLs in the PQ
-        void Kill();
-
-    private:
         // get a url from the frontier
         // check the url, call LinuxGetSsl or LinuxGetUrl based on the protocol
         String retrieveWebpage( const Link& url );
@@ -76,7 +78,4 @@ class Crawler
 
         // TODO: ( with the index team ) add words to index
         void addWordsToIndex( const HtmlParser& htmlparser );
-
-        // check if this crawler is still alive
-        bool isDead( );
     };

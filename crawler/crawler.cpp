@@ -1,9 +1,9 @@
 #include "crawler.h"
 
-Crawler::Crawler( Frontier *front )
+void Crawler::setParameters( size_t crawlerId, Frontier *front )
     {
+    id = crawlerId;
     frontier = front;
-    dead.store(false);
     }
 
 void Crawler::Work( )
@@ -29,11 +29,6 @@ void Crawler::Work( )
         }
     }
 
-void Crawler::Kill( )
-    {
-    dead.store(true);
-    }
-
 void Crawler::addLinksToFrontier( const HtmlParser& htmlparser )
     {
     for ( const Link& link : htmlparser.links )
@@ -46,9 +41,4 @@ void Crawler::addLinksToFrontier( const HtmlParser& htmlparser )
             frontier->PushUrl( link );
             }
         }
-    }
-
-bool Crawler::isDead( )
-    {
-    return dead.load();
     }
