@@ -1,13 +1,17 @@
 #pragma once
+
 #include "../utility/string.h"
 #include "../utility/PriorityQueue.h"
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
 #include "parser/HtmlParser.h"
+#include "Frontier.h"
 // TODO: #include "get-url/LinuxGetSsl.h" 
 // Create a get-url class like HtmlParser
 #include <atomic>
 
+<<<<<<< HEAD:crawler/Crawler.h
+=======
 // Breadth-first search: visiting the most recently encountered URLs (stack)
 // - if PQ empty refresh with 10 random from pool from oldest N/10
 // - if N is large, it could contain a link we most recently pushed
@@ -40,6 +44,7 @@ class Frontier
         bool empty();
     };
 
+>>>>>>> 8ba4be82c4f0532cd4e7595946fb52f4891a45c0:crawler/crawler.h
 // class instance per crawler thread
 class Crawler
     {
