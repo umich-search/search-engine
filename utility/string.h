@@ -135,6 +135,14 @@ public:
         return this->buffer[i];
     }
 
+<<<<<<< HEAD
+=======
+    const char &operator[](size_t i) const {
+        if (i >= length) exit(1);
+        return this->buffer[i];
+    }
+>>>>>>> 8ba4be82c4f0532cd4e7595946fb52f4891a45c0
+
     // String Append
     // REQUIRES: Nothing
     // MODIFIES: *this
@@ -276,9 +284,5 @@ private:
     }
 };
 
-std::ostream &operator<<(std::ostream &os, const String &s) {
-    for (size_t i = 0; i < s.size(); i++) {
-        os << *(s.begin() + i);
-    }
-    return os;
-}
+std::ostream &operator<< (std::ostream &os, const String& s);
+
