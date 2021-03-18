@@ -161,6 +161,11 @@ public:
         buffer[total] = '\0';
     }
 
+    String operator+(const String &other) {
+        String copy(*this);
+        copy += other;
+        return copy;
+    }
 
     // Push Back
     // REQUIRES: Nothing
