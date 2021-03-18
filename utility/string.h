@@ -65,6 +65,20 @@ public:
             buffer[ i ] = other.buffer[ i ];
         }
 
+    // Move Constructor
+    // REQUIRES: other is a rvalue
+    // MODIFIES: *this
+    // EFFECTS: move the content of other to *this
+    String( String&& other )
+        : length( other.length ),
+        capacity( other.capacity ),
+        buffer( other.buffer )
+        {
+        other.length = 0;
+        other.capacity = 0;
+        other.buffer = nullptr;
+        }
+
     // Assignment Operator ( Deep Copy )
     // REQUIRES: other is another string
     // MODIFIES: *this
