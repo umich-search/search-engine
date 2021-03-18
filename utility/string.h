@@ -135,6 +135,11 @@ public:
         return this->buffer[i];
     }
 
+    const char &operator[](size_t i) const {
+        if (i >= length) exit(1);
+        return this->buffer[i];
+    }
+
     // String Append
     // REQUIRES: Nothing
     // MODIFIES: *this
