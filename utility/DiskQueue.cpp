@@ -46,7 +46,8 @@ DiskQueue::DiskQueue( const char *dir )
                 if ( fileID > writeFileID || writeFileID == -1 )
                     writeFileID = fileID;
                 }
-            }   
+            }
+        closedir( handle );   
         }
     else
         {

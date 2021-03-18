@@ -52,7 +52,8 @@ class DiskQueue
 
     public:
         // Link the disk queue to the directory dirName
-        // stat the local blocks
+        // link the local blocks
+        // dirName should be absolute path
         DiskQueue( const char* );
         ~DiskQueue( );
         const String& GetDirName( ) const;

@@ -13,7 +13,6 @@
 // Enforcing politeness requires setting the possible access time for each domain
 // reference: https://michaelnielsen.org/ddi/how-to-crawl-a-quarter-billion-webpages-in-40-hours/
 
-
 #pragma once 
 
 #include <iostream>
@@ -23,6 +22,8 @@
 #include "../utility/PriorityQueue.h"
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
+#include "../utility/DiskQueue.h"
+#include "./get-url/GetUrl.h"
 #include "parser/HtmlParser.h"
 
 // Breadth-first search: visiting the most recently encountered URLs (stack)
@@ -30,32 +31,89 @@
 // - if N is large, it could contain a link we most recently pushed
 // Depth-first search: visiting all URLs in order (queue)
 
-const unsigned int URL_LENGTH_IN_BYTES = 400; 
-
-class FrontEndQueue
-    {
-
-    };
+const size_t NUM_PSCHEDULER = 20;
+const size_t NUM_DSCHEDULER = 2048;
 
 class Frontier
-    {
-    // TODO: define a custom comparison symbol
-    PriorityQueue< const Link > urlPq( );
-    
-    // TODO: int fd = url pool on disk
-    mutex_t frontMutex;
-    cv_t frontWait;
-    
-    public:
-        // ctor from seeds file "seeds" and the file for url pool "urlPool" 
-        Frontier( const char *seeds, const char *urlPool, size_t pqSize = 10 );
+   {
+   private:
+      struct pair
+         {
+         size_t dsIdx;  // the index in the domain scheduler
+         std::chrono::high_resolution_clock::time_point t;  // the time when that domain is accessible
 
-        ~Frontier( );
+         pair( size_t dsi ) : dsIdx( dsi ), t( std::chrono::high_resolution_clock::now( ) )
+            {
+            t += std::chrono::milliseconds( 70 );  // visit the same domain every 70ms
+            }
 
-        // if not already seen, push the url to the pool of urls
-        void PushUrl( Link );
-        
-        // If pq size == 0, refresh with 10 random urls from pool
-        // block until something shows up in the frontier
-        const Link GetUrl( );
-    };
+         bool operator< ( const pair& other ) const
+            {
+            return t > other.t;  // early pair will be the top one
+            }
+
+         bool operator> ( const pair& other ) const
+            {
+            return t < other.t;
+            }
+
+         bool operator<= ( const pair& other ) const
+            {
+            return !( *this > other );
+            }
+
+         bool operator>= ( const pair& other ) const
+            {
+            return !( *this < other );
+            }
+         };
+
+      // priority scheduler has 20 disk queues labeled with priority number
+      // domain scheduler categorizes urls into different domains ( disk queues ). As long as the number of disk queues in the domain 
+      // scheduler is far more than the number of threads, the efficiency is not harmed too much.
+      vector< DiskQueue * > priorityScheduler, domainScheduler;
+      // Sort the pair/domain according to the time of last access, the older the topper
+      // O(logn) faster than round robin O(n), and can block if no item satisfies the time requirement, while round robin will loop until
+      // a pair's time from last visit goes beyond 70ms.
+      PriorityQueue< pair > timeScheduler;  // faster than round robin
+      // necessary synchronization
+      // priority scheduler -> ps; domain sheduler -> ds; time scheduler -> ts
+      mutex_t psLock, dsLock, tsLock;  
+      cv_t psWait, dsWait, tsWait;
+      // attributes to control the random selector ( a separate thread )
+      bool halt;
+      pthread_t *rs;  // random selector
+      mutex_t haltLock;
+      cv_t haltWait;
+      // Score the priority of the input url to the range 1 - 20 and insert the url to the corresponding priority scheduler queue
+      // TODO: need more research on how to determine the priority score.
+      int ( *priorityCalculator )( const Link& );
+
+      // the function select the urls from ps to ds
+      static void *randomSelector( void * );
+      // link scheduler to the directory, the directory must exist
+      void linkScheduler( vector< DiskQueue * >&, const char * );
+
+   public:
+      // seeds should be in the file ( common seeds are in several MB )
+      // Link the ps and ds to their disk location
+      // the structure of psDir and dsDir should be the same:
+      // psDir( or dsDir )/diskqueue1Dir/fileblock1, fileblock2, ...
+      //                  |- diskqueue2Dir/fileblock1, fileblock2, ...
+      //                  |- diskqueue3Dir/fileblock1
+      //                  |               |- fileblock2
+      //                  |               |- fileblock3
+      //                  |               |- ...
+      //                  |- diskqueue4Dir/...
+      //                  |- ...
+      Frontier( const char *psDir, const char *dsDir, int (*)( const Link& ) );
+
+      ~Frontier( );
+
+      // if not already seen, push the url to the pool of urls
+      void PushUrl( Link& );
+      
+      // If pq size == 0, refresh with 10 random urls from pool
+      // block until something shows up in the frontier
+      const String GetUrl( );      
+   };
