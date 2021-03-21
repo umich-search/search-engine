@@ -40,12 +40,6 @@ unsigned int htoi( const char *ptr )
    return result >> 4;
    }
 
-String LinuxGetUrl( const String& sUrl )
-   {
-   ParsedUrl url( sUrl.cstr( ) );
-   return LinuxGetUrl( url );
-   }
-
 String LinuxGetUrl( const ParsedUrl& url )
    {
    // Get the host address.
@@ -68,7 +62,7 @@ String LinuxGetUrl( const ParsedUrl& url )
    message += url.Path;
    message += " HTTP/1.1\r\nHost: "; 
    message += String( url.Host );
-   message += "\r\nUser-Agent: LinuxGetUrl/2.0 ziyuanh@umich.edu (Linux)\r\nAccept: */*\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n";
+   message += "\r\nUser-Agent: LinuxGetUrl/2.0 usualprogrammers@umich.edu (Linux)\r\nAccept: */*\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n";
 
    // write( 1, message.c_str(), message.length() );
 
@@ -107,13 +101,8 @@ String LinuxGetUrl( const ParsedUrl& url )
    ParsedResponseHeader parsedHeader ( header.cstr( ) );
    if ( parsedHeader.redirectUrl )
       {
-      ParsedUrl url( parsedHeader.redirectUrl );
-      if ( !strncmp( url.Service, "http", 4 ) )
-         return LinuxGetUrl( url );
-      else if ( !strncmp( parsedHeader.redirectUrl, "https", 5 ) )
-         return LinuxGetSsl( url );
-      else
-         std::cerr << "Don't support protocol " << url.Service << std::endl;
+      ParsedUrl redirectUrl( parsedHeader.redirectUrl );
+      return LinuxGetHTML( redirectUrl );
       }
 
    if ( parsedHeader.chunked )
@@ -133,12 +122,6 @@ String LinuxGetUrl( const ParsedUrl& url )
       }
 
    return doc;
-   }
-
-String LinuxGetSsl( const String& sUrl )
-   {
-   ParsedUrl url( sUrl.cstr( ) );
-   return LinuxGetSsl( url );
    }
 
 String LinuxGetSsl( const ParsedUrl& url )
@@ -171,7 +154,7 @@ String LinuxGetSsl( const ParsedUrl& url )
    message += url.Path;
    message += " HTTP/1.1\r\nHost: "; 
    message += String( url.Host );
-   message += "\r\nUser-Agent: LinuxGetUrl/2.0 ziyuanh@umich.edu (Linux)\r\nAccept: */*\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n";
+   message += "\r\nUser-Agent: LinuxGetUrl/2.0 usualprogrammers@umich.edu (Linux)\r\nAccept: */*\r\nAccept-Encoding: identity\r\nConnection: close\r\n\r\n";
    SSL_write( ssl, message.cstr( ), message.size( ) );
    
    // Read from the socket until there's no more data, copying it to
@@ -210,13 +193,8 @@ String LinuxGetSsl( const ParsedUrl& url )
    ParsedResponseHeader parsedHeader ( header.cstr( ) );
    if ( parsedHeader.redirectUrl )
       {
-      ParsedUrl url( parsedHeader.redirectUrl );
-      if ( !strncmp( url.Service, "http", 4 ) )
-         return LinuxGetUrl( url );
-      else if ( !strncmp( parsedHeader.redirectUrl, "https", 5 ) )
-         return LinuxGetSsl( url );
-      else
-         std::cerr << "Don't support protocol " << url.Service << std::endl;
+      ParsedUrl redirectUrl( parsedHeader.redirectUrl );
+      return LinuxGetHTML( redirectUrl );
       }
 
    if ( parsedHeader.chunked )
@@ -238,3 +216,12 @@ String LinuxGetSsl( const ParsedUrl& url )
    return doc;
    }
    
+String LinuxGetHTML( const ParsedUrl& url )
+   {
+   if ( !strncmp( url.Service, "https", 5 ) )
+      return LinuxGetSsl( url );
+   else if ( !strncmp( url.Service, "http", 4 ) )
+      return LinuxGetUrl( url );
+   std::cerr << "Don't support protocol " << url.Service << std::endl;
+   return "";
+   }

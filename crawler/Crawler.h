@@ -7,6 +7,7 @@
 #include "../utility/Thread.h"
 #include "../utility/BloomFilter.h"
 #include "parser/HtmlParser.h"
+#include "get-url/GetUrl.h"
 #include "Frontier.h"
 #define NUM_OBJECTS 1000
 #define FP_RATE 0.1
@@ -37,9 +38,8 @@ class Crawler : public Thread
         // If the popped url is the "halting" url, stop looping
         void Work( );
 
-        // get a url from the frontier
         // check the url, call LinuxGetSsl or LinuxGetUrl based on the protocol
-        String retrieveWebpage( const Link& url );
+        String retrieveWebpage( const ParsedUrl& url );
 
         // parse the robot.txt
         // mark urls as unreachable in the frontier
