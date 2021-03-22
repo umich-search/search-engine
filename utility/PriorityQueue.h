@@ -1,5 +1,6 @@
 // Implementation of Queue and PriorityQueue using MaxHeap ( from EECS281 slides )
 
+#pragma once
 #include "Vector.h"
 #include <iostream>
 

@@ -5,7 +5,7 @@
 #include "../utility/Concurrency.h"
 #include "../utility/Vector.h"
 #include "../utility/Thread.h"
-#include "../utility/BloomFilter.h"
+//#include "../utility/BloomFilter.h"
 #include "parser/HtmlParser.h"
 #include "get-url/GetUrl.h"
 #include "Frontier.h"
@@ -17,19 +17,21 @@
 class Crawler : public Thread
     {
     size_t id;
-    Frontier *frontier;
+    // Frontier *frontier;
     // TODO: HashTable to store robot.txt files
-    Bloomfilter *disallowedUrl;
+    //Bloomfilter *disallowedUrl;
 
     public:
         Crawler( );
 
         ~Crawler( );
 
+        void parseRobot( const String& robotUrl );
+
         // These had to be moved out of the constructor because the crawler
         // doesn't have an assignment operator that can be used when
         // pushBack() is called on the vector<Crawler>
-        void setParameters( size_t cralwerId, Frontier *front );
+        // void setParameters( size_t cralwerId, Frontier *front );
 
     private:
         // pack all crawler functionalities into one function
@@ -43,7 +45,7 @@ class Crawler : public Thread
 
         // parse the robot.txt
         // mark urls as unreachable in the frontier
-        void parseRobot( const String& robotUrl );
+        //void parseRobot( const String& robotUrl );
 
         // add not-seen links the frontier
         void addLinksToFrontier( const HtmlParser& htmlparser );

@@ -1,40 +1,16 @@
 #include "Crawler.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
-void Crawler::setParameters( size_t crawlerId, Frontier *front )
-    {
-    id = crawlerId;
-    frontier = front;
-    }
+Crawler::Crawler( ){};
 
-void Crawler::Work( )
-    {
-    // TODO: race condition: after all threads isDead() == true
-    // two threads can check empty() == false, when PQ size == 1
-    // and then call to GetUrl() will add 10 new URLs to the frontier
-    while( !isDead() || !frontier->empty() )
-        {
-        // 1. Get a URL from the frontier
-        String url = frontier->GetUrl( );
-
-        // 2. Check for robots.txt for this domain
-        ParsedUrl parsedUrl( url.cstr() );
-
-        // 3. Retrieve the HTML webpage from the URL
-        String html = LinuxGetHTML( parsedUrl );
-
-        // 4. Parse the HTML for the webpage
-        HtmlParser htmlparser( html.cstr(), html.size() );
-
-        // 5. Add the parsed links to the frontier
-        addLinksToFrontier( htmlparser );
-
-        // 6. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser );
-        }
-    }
+Crawler::~Crawler( ){};
 
 void Crawler::parseRobot( const String& robotUrl )
     {
+    ofstream myfile;
+    myfile.open ("test.txt");
     ParsedUrl parsedUrl( robotUrl.cstr() );
     parsedUrl.Path = "robots.txt";
     String robotFile = LinuxGetHTML( parsedUrl );
@@ -80,6 +56,8 @@ void Crawler::parseRobot( const String& robotUrl )
             while ( robotFile[i] != '\n' && robotFile[i] != '\r') temp += robotFile[i++];
             //TODO: finish bloom filter
             //disallowedUrl->insert(rootUrl + temp);
+            myfile << rootUrl + temp << '\n';
+            myfile.close();
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
@@ -87,16 +65,10 @@ void Crawler::parseRobot( const String& robotUrl )
         }
     }
 
-void Crawler::addLinksToFrontier( const HtmlParser& htmlparser )
-    {
-    for ( const Link& link : htmlparser.links )
-        {
-        // TODO: check if link has been seen
-        bool linkSeen = false;
-        if ( !linkSeen )
-            {
-            // TODO: mark the link as seen
-            frontier->PushUrl( link );
-            }
-        }
-    }
+
+int main()
+{
+    Crawler myCrawler;
+    myCrawler.parseRobot("https://www.baidu.com/robots.txt");
+    return 0;
+}
