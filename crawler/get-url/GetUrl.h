@@ -142,8 +142,7 @@ class ParsedResponseHeader
             }
    };
 
-// returns the document with different arguments
-String LinuxGetUrl( const String& );  // handle redirect 
+// LinuxGetHTML determines service and calls Url/Ssl respectively
+String LinuxGetHTML( const ParsedUrl& );
 String LinuxGetUrl( const ParsedUrl& );
-String LinuxGetSsl( const String& );  // handle redirect
 String LinuxGetSsl( const ParsedUrl& );

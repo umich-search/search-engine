@@ -8,15 +8,19 @@ void Crawler::setParameters( size_t crawlerId, Frontier *front )
 
 void Crawler::Work( )
     {
+    // TODO: race condition: after all threads isDead() == true
+    // two threads can check empty() == false, when PQ size == 1
+    // and then call to GetUrl() will add 10 new URLs to the frontier
     while( !isDead() || !frontier->empty() )
         {
         // 1. Get a URL from the frontier
-        Link url = frontier->GetUrl( );
+        String url = frontier->GetUrl( );
 
         // 2. Check for robots.txt for this domain
+        ParsedUrl parsedUrl( url.cstr() );
 
-        // 3. Retrieve the webpage from the URL
-        String html = retrieveWebpage( url );
+        // 3. Retrieve the HTML webpage from the URL
+        String html = LinuxGetHTML( parsedUrl );
 
         // 4. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );

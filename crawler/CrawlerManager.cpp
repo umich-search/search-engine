@@ -1,4 +1,4 @@
-#include "crawlermanager.h"
+#include "CrawlerManager.h"
 
 CrawlerManager::CrawlerManager( const char *seeds, const char *urlQueue, size_t numCrawlers ) 
     : frontier( seeds, urlQueue ), crawlers( numCrawlers ) { }
@@ -9,6 +9,14 @@ void CrawlerManager::start()
         {
         crawlers[i].setParameters( i, &frontier );
         crawlers[i].Start();
+        }
+    }
+
+void CrawlerManager::halt()
+    {
+    for ( size_t i = 0; i < crawlers.size(); ++i )
+        {
+        crawlers[i].Kill();
         }
     }
 
