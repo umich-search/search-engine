@@ -7,6 +7,8 @@ Crawler::Crawler( ){};
 
 Crawler::~Crawler( ){};
 
+void Crawler::Work(){};
+
 void Crawler::parseRobot( const String& robotUrl )
     {
     ofstream myfile;
@@ -15,7 +17,7 @@ void Crawler::parseRobot( const String& robotUrl )
     parsedUrl.Path = "robots.txt";
     String robotFile = LinuxGetHTML( parsedUrl );
     String rootUrl = String(parsedUrl.Service) + String("://") + String(parsedUrl.Host);
-    if ( parsedUrl.Port ) rootUrl = rootUrl + ":" + String(parsedUrl.Port);
+    if ( *parsedUrl.Port ) rootUrl = rootUrl + ":" + String(parsedUrl.Port);
     String temp = "";
     int i = 0;
     for ( ; i < robotFile.size(); ++i )
@@ -57,18 +59,19 @@ void Crawler::parseRobot( const String& robotUrl )
             //TODO: finish bloom filter
             //disallowedUrl->insert(rootUrl + temp);
             myfile << rootUrl + temp << '\n';
-            myfile.close();
+            temp = "";
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
         temp += robotFile[i];
         }
+        myfile.close();
     }
 
 
 int main()
 {
     Crawler myCrawler;
-    myCrawler.parseRobot("https://www.baidu.com/robots.txt");
+    myCrawler.parseRobot("https://baidu.com/robots.txt");
     return 0;
 }

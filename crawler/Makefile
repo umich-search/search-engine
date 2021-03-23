@@ -13,4 +13,4 @@ parseRobots: parseRobots.cpp get-url/GetUrl.cpp ../utility/string.cpp
 .PHONY: clean
 
 clean:
-	rm -f CrawlerManager
+	rm -f CrawlerManager parseRobots
