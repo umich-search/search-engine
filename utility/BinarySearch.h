@@ -1,9 +1,9 @@
 #include "Vector.h"
 template<typename T>
-int binarySearch(vector<T> v,int n,T x)
+int binarySearch(vector<T> v,T x)
 {
 	int start = 0;
-	int end = n-1;
+	int end = v.size() - 1;
 	while(start<=end)
 	{
 		int mid = (start+end)/2;
