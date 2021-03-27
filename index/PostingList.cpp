@@ -1,6 +1,57 @@
 #include "PostingList.h"
 #include "../utility/BinarySearch.h"
 
+
+size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index) {
+    // syncPoints with high 8 bits of location
+    // postingsListsOffset 
+    // postLocation
+    // return first postion equal or after the target
+    // TOOD: Can possibly optimize by predetermining sync points
+    //int highBits = target >> (sizeof(size_t) * 7);
+    // 3443 / 1000 = 3 
+    int highPlace = target / 100; 
+    if(highBits > NUM_SYNC_POINTS) {
+        return -1;
+    }
+    //int pos = binarySearch(postings->syncIndex, highBits);
+    //highBits = 00000000, index = 0
+    size_t position = postings->syncIndex.postLocation[highBits];
+    size_t i = postings->syncIndex.postingsListOffset[highBits];
+
+    for(; i < MAX_POSTS; ++i) {
+        if(position >= target) {
+            index = i;
+            return position;
+        }
+        position += postings->posts[index].delta;
+    }
+    return -1;
+    
+}
+
+size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index){
+    //int highBits = target >> (sizeof(size_t) * 7);
+    int highPlace = target / 100; 
+
+    if(highBits > NUM_SYNC_POINTS) {
+        return -1;
+    }
+    //int pos = binarySearch(postings->syncIndex, highBits);
+    //highBits = 00000000, index = 0
+    size_t position = postings->syncIndex.postLocation[highBits];
+    size_t i = postings->syncIndex.postingsListOffset[highBits];
+
+    for(; i < MAX_POSTS; ++i) {
+        if(position >= target) {
+            index = i;
+            return position;
+        }
+        position += postings->posts[index].delta;
+    }
+    return -1;
+}
+/*
 size_t PostingList::getSize() {
     return listSize;
 };
@@ -96,3 +147,4 @@ int EndDocList::Insert( EndDoc post ) {
 
 
 
+*/

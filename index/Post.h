@@ -1,30 +1,17 @@
-#include "stdlib.h"
+
 #include <unordered_map>
 typedef size_t Location;
 
-typedef union Attributes {
-    //WordAttributes Word;
-    //DocAttributes Doc;
-    
-};
-
-
 class Post {
-    public: 
-        virtual Location GetStartLocation();
-        virtual Location GetEndLocation();
-        virtual Attributes GetAttributes();
-        virtual Location getDelta();
-
-    private:
-        Location delta;
-
+public:
+    Post(Location indexLoc) {
+        loc = indexLoc;
+    }
+    // Get position in index
+    Location GetStartLocation( );
+    // Get position in index
+    Location GetEndLocation( );
+private:
+    Location loc;
+    //virtual Attributes GetAttributes( );};
 };
-
-class Term : public Post {
-};
-
-
-class EndDoc : public Post {
-};
-
