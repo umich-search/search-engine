@@ -1,5 +1,5 @@
-
 #include <unordered_map>
+#pragma once
 typedef size_t Location;
 
 class Post {

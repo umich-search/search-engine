@@ -9,9 +9,8 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index) {
     // return first postion equal or after the target
     // TOOD: Can possibly optimize by predetermining sync points
     //int highBits = target >> (sizeof(size_t) * 7);
-    // 3443 / 1000 = 3 
-    int highPlace = target / 100; 
-    if(highBits > NUM_SYNC_POINTS) {
+    int highBits = target / 1000;
+    if (highBits > NUM_SYNC_POINTS) {
         return -1;
     }
     //int pos = binarySearch(postings->syncIndex, highBits);
@@ -32,7 +31,7 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index) {
 
 size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index){
     //int highBits = target >> (sizeof(size_t) * 7);
-    int highPlace = target / 100; 
+    int highBits = target / 1000;
 
     if(highBits > NUM_SYNC_POINTS) {
         return -1;
@@ -51,6 +50,8 @@ size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &inde
     }
     return -1;
 }
+
+
 /*
 size_t PostingList::getSize() {
     return listSize;
@@ -66,7 +67,7 @@ Post* EndDocList::Next() {
 
 Post* TermList::Seek( Location target ) {
 
-    // HIGHEST 16 bits for now?
+    HIGHEST 16 bits for now?
     int highBits = target >> 16;
     int pos = binarySearch(syncIndex.syncPoints, target);
     if(pos == -1) {
@@ -86,7 +87,7 @@ Post* TermList::Seek( Location target ) {
 
 Post* EndDocList::Seek( Location target ) {
 
-    // HIGHEST 16 bits for now?
+    HIGHEST 16 bits for now?
     int highBits = target >> 16;
     int pos = binarySearch(syncIndex.syncPoints, target);
     if(pos == -1) {
@@ -105,7 +106,7 @@ Post* EndDocList::Seek( Location target ) {
 }
 
 int TermList::Insert( Term post ) {
-    // change from reference?
+    change from reference?
     if(posts.size() == 0 ) {
         syncIndex.postingsListOffset.pushBack(post.getDelta());
         syncIndex.syncPoints.pushBack(post.getDelta());
@@ -126,7 +127,7 @@ int TermList::Insert( Term post ) {
 
 
 int EndDocList::Insert( EndDoc post ) {
-    // change from reference?
+    change from reference?
     if(posts.size() == 0 ) {
         syncIndex.postingsListOffset.pushBack(post.getDelta());
         syncIndex.syncPoints.pushBack(post.getDelta());

@@ -1,10 +1,10 @@
 #include "IPost.h"
-#include "SyncIndex.h"
 #include "../utility/Vector.h"
 
 #define MAX_POSTS 1000
 #define NUM_SYNC_POINTS 100 
 #define MAX_WORD_LENGTH 100
+#pragma once
 
 typedef size_t Location;
 // TODO: Need to figure out optimal size

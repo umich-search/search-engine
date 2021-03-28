@@ -1,34 +1,31 @@
-typedef size_t Location;
-
 #include "Post.h"
 #include "PostingList.h"
+#pragma once
+
+typedef size_t Location;
 
 class ISR {
 public:
     //Get post of next term
-    virtual Post* Next( );
+    virtual Post* Next( ) = 0;
     // Get post of next endDoc
-    virtual Post* NextEndDoc( );
+    virtual Post* NextEndDoc( ) = 0;
     // Get the first post after the target
-    virtual Post* Seek( Location target);
+    virtual Post* Seek( Location target) = 0;
     // Get position of first term
-    virtual Location GetStartLocation( );
+    virtual Location GetStartLocation( ) = 0;
     // Get position of last term
-    virtual Location GetEndLocation( );
-    
+    virtual Location GetEndLocation( ) = 0;
 };
 
 class ISRWord: public ISR {
 public:
-    ISRWord(TermPostingList termPostingList) {
-        postingList = termPostingList;
-        currentPostingsIndex = 0;
+    ISRWord(TermPostingList termPostingList) : currentPost(0),currentPostingsIndex(0),postingList(termPostingList) {
         // TODO: May need to change to pointer
-        currentPost = Post(0);
     }
     // Returns next post
-    Post* Next ();
-    Post* NextEndDoc();
+    Post* Next( );
+    Post* NextEndDoc( );
     // Get the first post after the target
     Post* Seek( Location target);
     // Get position of first term
@@ -51,16 +48,13 @@ private:
     
 };
 
-class ISREndDoc: public ISRWord {
+class ISREndDoc: public ISR {
 public: 
-    ISREndDoc(EndDocPostingList endDocPostingList) {
-        postingList = endDocPostingList;
-        currentPostingsIndex = 0;
+    ISREndDoc(EndDocPostingList endDocPostingList) : currentPost(0),currentPostingsIndex(0),postingList(endDocPostingList){
         // TODO: May need to change to pointer
-        currentPost = Post(0);
     }
-    Post* Next ();
-    Post* NextEndDoc();
+    Post* Next();
+    Post* NextEndDoc( );
     // Get the first post after the target
     Post* Seek( Location target);
     // Get position of first term

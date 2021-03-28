@@ -2,12 +2,13 @@
 typedef size_t Location;
 #define MAX_TITLE_LENGTH 500
 #define MAX_URL_LENGTH 500
+#pragma once
 
-typedef union Attributes {
-    //WordAttributes Word;
-    //DocAttributes Doc;
-    
-};
+//typedef union Attributes {
+//    WordAttributes Word;
+//    DocAttributes Doc;
+//
+//};
 
 struct IPostTerm {
     size_t delta;

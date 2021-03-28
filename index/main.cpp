@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ISR.h"
 using namespace std;
 int main (int argc, char *argv[]) 
@@ -19,11 +20,13 @@ int main (int argc, char *argv[])
         0 i 2i 3i 
         term = dog, (100 posts)
         
-        0 100 200 300 400 500 
+        0 100 200 300 400 500 ...1000
         delta = 100
-        sync = 100
+        sync = 1000
         posts = 1000
-        max posts 1000*100/1000=100
+        max posts 1000
+        syn Offset 0 10 20...
+        syn Location 0 1000 2000 ...
     */
     
     SyncIndex syncIndex;
@@ -40,19 +43,11 @@ int main (int argc, char *argv[])
     }
     termPostingList.syncIndex = syncIndex;
     ISRWord isrword = ISRWord(termPostingList);
-    cout << isrword.Next()->GetStartLocation();
-    
+
+    cout << isrword.Next()->GetStartLocation()<<endl;
+    cout <<isrword.Next()->GetStartLocation()<<endl;
+    cout << isrword.Seek(850)->GetStartLocation()<<endl;
+    cout <<isrword.Next()->GetStartLocation()<<endl;
     return 0; 
 }
 
-struct SyncIndex {
-    size_t syncPoints[NUM_SYNC_POINTS]; // high eight bits
-    size_t postingsListOffset[NUM_SYNC_POINTS]; // offset in postings list
-    size_t postLocation[NUM_SYNC_POINTS]; // location in index
-};
-
-struct TermPostingList {
-    CommonHeader header;
-    IPostTerm posts[MAX_POSTS];
-    SyncIndex syncIndex;
-};
