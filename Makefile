@@ -129,6 +129,54 @@ search_engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/build
 .PHONY : search_engine/fast
 
+index/Dictionary.o: index/Dictionary.cpp.o
+.PHONY : index/Dictionary.o
+
+# target to build an object file
+index/Dictionary.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/Dictionary.cpp.o
+.PHONY : index/Dictionary.cpp.o
+
+index/Dictionary.i: index/Dictionary.cpp.i
+.PHONY : index/Dictionary.i
+
+# target to preprocess a source file
+index/Dictionary.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/Dictionary.cpp.i
+.PHONY : index/Dictionary.cpp.i
+
+index/Dictionary.s: index/Dictionary.cpp.s
+.PHONY : index/Dictionary.s
+
+# target to generate assembly for a file
+index/Dictionary.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/Dictionary.cpp.s
+.PHONY : index/Dictionary.cpp.s
+
+index/DocumentInfo.o: index/DocumentInfo.cpp.o
+.PHONY : index/DocumentInfo.o
+
+# target to build an object file
+index/DocumentInfo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/DocumentInfo.cpp.o
+.PHONY : index/DocumentInfo.cpp.o
+
+index/DocumentInfo.i: index/DocumentInfo.cpp.i
+.PHONY : index/DocumentInfo.i
+
+# target to preprocess a source file
+index/DocumentInfo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/DocumentInfo.cpp.i
+.PHONY : index/DocumentInfo.cpp.i
+
+index/DocumentInfo.s: index/DocumentInfo.cpp.s
+.PHONY : index/DocumentInfo.s
+
+# target to generate assembly for a file
+index/DocumentInfo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/DocumentInfo.cpp.s
+.PHONY : index/DocumentInfo.cpp.s
+
 index/ISR.o: index/ISR.cpp.o
 .PHONY : index/ISR.o
 
@@ -152,6 +200,30 @@ index/ISR.s: index/ISR.cpp.s
 index/ISR.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/ISR.cpp.s
 .PHONY : index/ISR.cpp.s
+
+index/IndexConstructor.o: index/IndexConstructor.cpp.o
+.PHONY : index/IndexConstructor.o
+
+# target to build an object file
+index/IndexConstructor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/IndexConstructor.cpp.o
+.PHONY : index/IndexConstructor.cpp.o
+
+index/IndexConstructor.i: index/IndexConstructor.cpp.i
+.PHONY : index/IndexConstructor.i
+
+# target to preprocess a source file
+index/IndexConstructor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/IndexConstructor.cpp.i
+.PHONY : index/IndexConstructor.cpp.i
+
+index/IndexConstructor.s: index/IndexConstructor.cpp.s
+.PHONY : index/IndexConstructor.s
+
+# target to generate assembly for a file
+index/IndexConstructor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/index/IndexConstructor.cpp.s
+.PHONY : index/IndexConstructor.cpp.s
 
 index/Ipost.o: index/Ipost.cpp.o
 .PHONY : index/Ipost.o
@@ -258,9 +330,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... search_engine"
+	@echo "... index/Dictionary.o"
+	@echo "... index/Dictionary.i"
+	@echo "... index/Dictionary.s"
+	@echo "... index/DocumentInfo.o"
+	@echo "... index/DocumentInfo.i"
+	@echo "... index/DocumentInfo.s"
 	@echo "... index/ISR.o"
 	@echo "... index/ISR.i"
 	@echo "... index/ISR.s"
+	@echo "... index/IndexConstructor.o"
+	@echo "... index/IndexConstructor.i"
+	@echo "... index/IndexConstructor.s"
 	@echo "... index/Ipost.o"
 	@echo "... index/Ipost.i"
 	@echo "... index/Ipost.s"

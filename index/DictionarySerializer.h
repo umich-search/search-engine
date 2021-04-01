@@ -1,3 +1,4 @@
+#pragma once
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -14,15 +15,15 @@
 #include "PostingList.h"
 
 
-using Hash = HashTable< const char *, TermPostingList* >;
-using Pair = Tuple< const char *, TermPostingList* >;
-using HashBucket = Bucket< const char *, TermPostingList* >;
+using Hash = HashTable< String, TermPostingList* >;
+using Pair = Tuple< String, TermPostingList* >;
+using HashBucket = Bucket< String, TermPostingList* >;
 
 
 static const size_t Unknown = 0;
 
-
-size_t RoundUp( size_t length, size_t boundary )
+// TODO: Why setting to static fix linker error
+static size_t RoundUp( size_t length, size_t boundary )
    {
    // Round up to the next multiple of the boundary, which
    // must be a power of 2.
@@ -99,7 +100,7 @@ struct SerialTuple
          */
           size_t hashValueSize, keySize, postingsListSize;
           hashValueSize = sizeof( uint32_t);
-          keySize = sizeof(strlen(b->tuple.key));
+          keySize = sizeof(strlen(b->tuple.key.cstr())); 
           postingsListSize = BytesRequired(b->tuple.value);
           return hashValueSize + keySize + postingsListSize;
       }
@@ -120,8 +121,8 @@ struct SerialTuple
          head->HashValue = b->hashValue;
          char * curr = head->DynamicSpace;
          // Copy key
-         memcpy( curr, b->tuple.key, strlen( b->tuple.key ) + 1 );
-         curr = curr + strlen(b->tuple.key) + 1;
+         memcpy( curr, b->tuple.key.cstr(), strlen( b->tuple.key.cstr() ) + 1 );
+         curr = curr + strlen(b->tuple.key.cstr()) + 1;
 
          // Copy header 
          memcpy(curr , &b->tuple.value->header.type, sizeof(int));
@@ -136,7 +137,7 @@ struct SerialTuple
              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
-         for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
+         for(size_t i = 0; i < b->tuple.value->syncIndex.postLocation.size(); ++i) {
              memcpy(curr, &b->tuple.value->syncIndex.postLocation[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
@@ -207,8 +208,6 @@ struct SerialTuple
             }
          
          return nullptr;
-         
-
          }
 
 

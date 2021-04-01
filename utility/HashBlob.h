@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 // HashBlob, a serialization of a HashTable into one contiguous
@@ -316,3 +317,4 @@ class HashFile
          // HashBlob::Discard( blob );
          }
    };
+*/

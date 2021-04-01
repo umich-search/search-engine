@@ -4,8 +4,10 @@
 // Nicole Hamilton  nham@umich.edu
 
 #include "Vector.h"
-#include <string>
-#include "HashTable.h"
+//#include <string>
+#include "string.h"
+#include <iostream>
+//#include "HashTable.h"
 
 
 // You may define additional helper routines here and in
@@ -57,6 +59,14 @@ bool CompareEqual( const char *L, const char *R )
         }
     return true;
     }
+
+bool CompareEqual(const String &L,const String &R) {
+    //cout << "In static ocmpare qequal" << endl;
+    std::cout << "comparing: " << L.cstr() << " and " << R.cstr() << std::endl;
+    bool ret = strcmp(L.cstr(),R.cstr()) == 0;
+    //cout << "Returning with : " << ret << endl;
+    return ret;
+}
 
 
 // -v (verbose) command line option.
