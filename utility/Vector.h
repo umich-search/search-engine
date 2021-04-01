@@ -14,7 +14,7 @@ template <typename T> class vector
       // REQUIRES: Nothing
       // MODIFIES: *this
       // EFFECTS: Constructs an empty vector with capacity 0
-      vector() : _size ( 0 ), _capacity ( 0 ), arr ( nullptr ) {}
+      vector() :  arr ( nullptr ), _size ( 0 ), _capacity ( 0 ) {}
 
       // Destructor
       // REQUIRES: Nothing
