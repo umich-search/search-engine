@@ -126,6 +126,19 @@ template <typename T> class vector
          delete[] arr;
          arr = new_arr;
          }
+         
+      void resize ( size_t newSize )
+         {
+         if ( newSize <= _size )
+            return;
+         _capacity = newSize;
+         T* new_arr = new T[_capacity];
+         for ( int i = 0; i < _size; ++i )
+            new_arr[i] = arr[i];
+         _size = newSize;
+         delete[] arr;
+         arr = new_arr;
+         }
 
       // REQUIRES: Nothing
       // MODIFIES: Nothing
