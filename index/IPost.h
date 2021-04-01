@@ -1,8 +1,10 @@
-#include "stdlib.h"
+
+#pragma once
+
+#include <stddef.h>  
 typedef size_t Location;
 #define MAX_TITLE_LENGTH 500
 #define MAX_URL_LENGTH 500
-#pragma once
 
 //typedef union Attributes {
 //    WordAttributes Word;
@@ -11,14 +13,23 @@ typedef size_t Location;
 //};
 
 struct IPostTerm {
-    size_t delta;
+    IPostTerm(Location d) {
+        delta = d;
+    }
+
+    IPostTerm() {
+        delta = -1;
+    }
+    Location delta;
 };
 
 struct IPostEndDoc {
-    size_t delta;
-    size_t lengthOfDocument;
-    size_t numOfAnchorText;
-    size_t numUniqueWords;
-    char URL[MAX_URL_LENGTH];
-    char title[MAX_TITLE_LENGTH];
+    Location delta;
+    Location lengthOfDocument;
+    Location numOfAnchorText;
+    Location numUniqueWords;
+    //char URL[MAX_URL_LENGTH];
+    char *URL;
+    //char title[MAX_TITLE_LENGTH];
+    char *title;
 };

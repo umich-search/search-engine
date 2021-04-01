@@ -3,7 +3,7 @@
 
 // Nicole Hamilton  nham@umich.edu
 
-#include <vector>
+#include "Vector.h"
 #include <string>
 #include "HashTable.h"
 
@@ -21,14 +21,43 @@
 
 // Caller is responsible for deleting the Hash.
 
-HashTable<const char *, size_t> *BuildHashTable(const vector<string> &words);
+//HashTable<const char *, size_t> *BuildHashTable(const vector<string> &words);
 
 
 // Collect words read from a file specified on the command line
 // as either individual word or whole lines in a vector of
 // strings.
 
-void CollectWordsIn(int argc, char **argv, vector<string> &words);
+//void CollectWordsIn(int argc, char **argv, vector<string> &words);
+
+
+// fnv hashing function
+
+uint32_t fnvHash( const char *data, size_t length ) 
+    {
+    static const size_t FnvOffsetBasis = 146959810393466560;
+    static const size_t FnvPrime = 1099511628211ul;
+    size_t hash = FnvOffsetBasis;
+    for (size_t i = 0; i < length; ++i) 
+        {
+        hash *= FnvPrime;
+        hash ^= data[i];
+        }
+    return hash;
+    }
+
+bool CompareEqual( const char *L, const char *R ) 
+    {
+    // Your code here.
+    while (*L != '\0' || *R != '\0') 
+        {
+        if (*L != *R)return false;
+        L += 1;
+        R += 1;
+        }
+    return true;
+    }
+
 
 // -v (verbose) command line option.
 

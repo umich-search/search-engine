@@ -16,7 +16,7 @@ Post* ISRWord::NextEndDoc() {
 }
 
 Post* ISRWord::Seek( Location target){
-   size_t indexLocation = seekTermTarget(&postingList, target, currentPostingsIndex);
+   size_t indexLocation = 0;//seekTermTarget(&postingList, target, currentPostingsIndex);
    // term after target not found;
    if(indexLocation == -1) {
        return nullptr;
@@ -27,7 +27,8 @@ Post* ISRWord::Seek( Location target){
 
 Location ISRWord::GetStartLocation( ){
     size_t throwaway;
-    return seekTermTarget(&postingList, 0, throwaway);
+    //return seekTermTarget(&postingList, 0, throwaway);
+    return -1;
 }
 // TODO
 Location ISRWord::GetEndLocation( ){
@@ -63,18 +64,21 @@ Post* ISREndDoc::NextEndDoc() {
 }
 
 Post* ISREndDoc::Seek( Location target){
-   size_t indexLocation = seekEndDocTarget(&postingList, target, currentPostingsIndex);
+   //size_t indexLocation = seekEndDocTarget(&postingList, target, currentPostingsIndex);
    // term after target not found;
+   /*
    if(indexLocation == -1) {
        return nullptr;
    }
-    currentPost = Post(indexLocation);
+   */
+    currentPost = Post(2);//Post(indexLocation);
    return &currentPost;
 }
 
 Location ISREndDoc::GetStartLocation( ){
     size_t throwaway;
-    return seekEndDocTarget(&postingList, 0, throwaway);
+    //return seekEndDocTarget(&postingList, 0, throwaway);
+    return -1;
 }
 
 Location ISREndDoc::GetEndLocation( ){
