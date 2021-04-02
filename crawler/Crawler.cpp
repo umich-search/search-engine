@@ -35,8 +35,6 @@ void Crawler::Work( )
 
 void Crawler::parseRobot( const String& robotUrl )
     {
-    ofstream myfile;
-    myfile.open ("test.txt");
     ParsedUrl parsedUrl( robotUrl.cstr() );
     parsedUrl.Path = "robots.txt";
     String robotFile = LinuxGetHTML( parsedUrl );
@@ -80,16 +78,14 @@ void Crawler::parseRobot( const String& robotUrl )
             temp = "";
             while ( isspace( robotFile[i] ) || robotFile[i] == ':' ) ++i;
             while ( robotFile[i] != '\n' && robotFile[i] != '\r') temp += robotFile[i++];
-            //TODO: finish bloom filter
-            //disallowedUrl->insert(rootUrl + temp);
-            myfile << rootUrl + temp << '\n';
+            disallowedUrl->insert(rootUrl + temp);
+            //myfile << rootUrl + temp << '\n';
             temp = "";
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
         temp += robotFile[i];
         }
-        myfile.close();
     }
 
 void Crawler::addLinksToFrontier( const HtmlParser& htmlparser )
