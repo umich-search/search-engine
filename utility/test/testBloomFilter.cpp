@@ -1,7 +1,7 @@
 #include "BloomFilter.h"
 #include <iostream>
 #include <fstream>
-#include <string>
+#include "mString.h"
 
 using namespace std;
 
@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
         cout << "Usage: " << argv[0] << endl;
         return 1; 
     }
-    std::string filename, stdInput;
+    String filename, stdInput;
     String input;
     cout << "Running bloom filter...\n";
     // cout << "Enter 'd' for default init, or 'c' for custom: ";
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     cout << "Initializing bloom filter...\n\n";
 
     Bloomfilter bf(size, error);
-    ifstream fin(filename);
+    ifstream fin(filename.cstr());
     if (!fin.is_open()) {
         cout << "Error opening: " << filename << endl;
         return 1;
@@ -39,17 +39,17 @@ int main(int argc, char** argv) {
 
     uint64_t counter = 0;
     while(fin >> stdInput) {
-        input = String(stdInput.c_str());
+        input = String(stdInput.cstr());
         bf.insert(input);
         counter++;
     }
 
-    cout << "Bloom filter initialized:\n\tItems inserted: " << counter << "\n\tEstimated Total Size: " << size << "\n\tFalse positive error rate: " << error << "\n\tFilename: " << filename <<
+    cout << "Bloom filter initialized:\n\tItems inserted: " << counter << "\n\tEstimated Total Size: " << size << "\n\tFalse positive error rate: " << strerror( errno ) << "\n\tFilename: " << filename <<
         "\nEnter a string to check if the bloom filter contains or enter 'q' to quit.\n";
 
     while (true) {
         cin >> stdInput;
-        input = String(stdInput.c_str());
+        input = String(stdInput.cstr());
         if (input == "q") return 0;
         bf.contains(input) ? cout << "Found!\n" : cout << "Not found.\n";
     }
