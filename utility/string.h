@@ -61,7 +61,7 @@ public:
         : length( other.length ), capacity( other.capacity )
         {
         buffer = new char[ capacity ];
-        for ( int i = 0; i < length; i++ )
+        for ( int i = 0; i <= length; i++ )
             buffer[ i ] = other.buffer[ i ];
         }
 
@@ -91,7 +91,7 @@ public:
         length = other.length;
         capacity = other.capacity;
         buffer = new char[ capacity ];
-        for ( int i = 0; i < length; i++ )
+        for ( int i = 0; i <= length; i++ )
             buffer[ i ] = other.buffer[ i ];
         return *this;
         }
@@ -211,7 +211,7 @@ public:
     bool operator==(const String &other) const {
         if (length != other.size()) return false;
         else {
-            for (size_t i = 0; i < length; i++) {
+            for (size_t i = 0; i <= length; i++) {
                 if (buffer[i] != other.buffer[i])
                     return false;
             }
