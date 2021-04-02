@@ -3,9 +3,7 @@
 
 #include "bitmap.h"
 #include <cmath>
-#include <string.h>
-#include <string>
-// #include "String.h"
+#include "mystring.h"
 #include <openssl/md5.h>
 using namespace std;
 
@@ -19,20 +17,20 @@ public:
         numHash = vecSize / num_objects * log(2);
     }
 
-    void insert(const string& s) {
+    void insert(const String& s) {
         //Hash the string into two unique hashes
         std::pair<uint64_t, uint64_t> myHash = hash(s);
         uint64_t first = myHash.first;
         uint64_t second = myHash.second;
-        string firstStr = to_string(first);
-        string secondStr = to_string(second);
+        String firstStr = String(ltos(first).cstr());
+        String secondStr = String(ltos(second).cstr());
         //Use double hashing to get unique bit, and repeat for each hash function
         for ( int i = 0; i < numHash; ++i )
             {
             uint64_t firstHash, secondHash;
             unsigned char firstBuffer[ MD5_DIGEST_LENGTH ], secondBuffer[ MD5_DIGEST_LENGTH ];
-            MD5( (const unsigned char *)firstStr.c_str(), firstStr.size(), firstBuffer); //TODO: change datum.size
-            MD5( (const unsigned char *)secondStr.c_str(), secondStr.size(), secondBuffer);
+            MD5( (const unsigned char *)firstStr.cstr(), firstStr.size(), firstBuffer); //TODO: change datum.size
+            MD5( (const unsigned char *)secondStr.cstr(), secondStr.size(), secondBuffer);
             memcpy( &firstHash, firstBuffer, 8 );
             memcpy( &secondHash, secondBuffer, 8 );
             size_t ind = (firstHash + i * secondHash) % container.size();
@@ -40,21 +38,21 @@ public:
             }
     }
 
-    bool contains(const std::string& s) {
+    bool contains(const String& s) {
         //Hash the string into two unqiue hashes
         std::pair<uint64_t, uint64_t> myHash = hash(s);
         uint64_t first = myHash.first;
         uint64_t second = myHash.second;
-        string firstStr = to_string(first);
-        string secondStr = to_string(second);
+        String firstStr = String(ltos(first).cstr());
+        String secondStr = String(ltos(second).cstr());
         //Use double hashing to get unique bit, and repeat for each hash function
         //If bit is false, we know for certain this unique string has not been inserted
         for ( int i = 0; i < numHash; ++i )
             {
             uint64_t firstHash, secondHash;
             unsigned char firstBuffer[ MD5_DIGEST_LENGTH ], secondBuffer[ MD5_DIGEST_LENGTH ];
-            MD5( (const unsigned char *)firstStr.c_str(), firstStr.size(), firstBuffer); //TODO: change datum.size
-            MD5( (const unsigned char *)secondStr.c_str(), secondStr.size(), secondBuffer);
+            MD5( (const unsigned char *)firstStr.cstr(), firstStr.size(), firstBuffer); //TODO: change datum.size
+            MD5( (const unsigned char *)secondStr.cstr(), secondStr.size(), secondBuffer);
             memcpy( &firstHash, firstBuffer, 8 );
             memcpy( &secondHash, secondBuffer, 8 );
             size_t ind = (firstHash + i * secondHash) % container.size();
@@ -68,10 +66,10 @@ private:
     //Add any private member variables that may be neccessary
     bitmap container;
     size_t numHash;
-    std::pair<uint64_t, uint64_t> hash(const std::string& datum) {
+    std::pair<uint64_t, uint64_t> hash(const String& datum) {
         //Use MD5 to hash the string into one 128 bit hash, and split into 2 hashes
         unsigned char buffer[ MD5_DIGEST_LENGTH ];
-        MD5( (const unsigned char *)datum.c_str(), datum.size(), buffer) ;
+        MD5( (const unsigned char *)datum.cstr(), datum.size(), buffer) ;
         //This line is for compiling, replace this with own code
         uint64_t first, second;
         memcpy( &first, buffer, 8 );
