@@ -120,7 +120,7 @@ int main (int argc, char *argv[])
     IndexConstructor indexConstructor(10);
     indexConstructor.Insert("cat", Body);
     pl = indexConstructor.termIndex.Find(String("cat"))->value;
-    ASSERT(strcmp("cat",pl->header.term), ==, 0);
+    ASSERT(std::strcmp("cat",pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->header.numOfOccurence, ==, 1);
     ASSERT(pl->posts.size(), ==, 1);
@@ -130,7 +130,7 @@ int main (int argc, char *argv[])
     for(unsigned int i = 0; i < 10; ++i) {
         indexConstructor.Insert("dog", Body);
         pl = indexConstructor.termIndex.Find(String("dog"))->value;
-        ASSERT(strcmp("dog",pl->header.term), ==, 0);
+        ASSERT(strcmp("dog",pl->header.term.cstr()), ==, 0);
         ASSERT(pl->header.numOfDocument, ==, 1);
         ASSERT(pl->header.numOfOccurence, ==, i + 1);
         ASSERT(pl->posts.size(), ==, i + 1);
@@ -145,11 +145,11 @@ int main (int argc, char *argv[])
     IndexConstructor indexConstructor2(10);
     indexConstructor2.Insert("cat", Body);
     pl = indexConstructor2.termIndex.Find("cat")->value;
-    ASSERT(strcmp("cat", pl->header.term), ==, 0);
+    ASSERT(strcmp("cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 1);
     indexConstructor2.Insert("dog", Body);
     pl = indexConstructor2.termIndex.Find("dog")->value;
-    ASSERT(strcmp("dog", pl->header.term), ==, 0);
+    ASSERT(strcmp("dog", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 1);
     // inserting dog 10 times
     for(unsigned int i = 0; i < 10; ++i) {
@@ -159,7 +159,7 @@ int main (int argc, char *argv[])
     indexConstructor2.Insert("cat", Body);
     pl = indexConstructor2.termIndex.Find("cat")->value;
     cout << pl->header.term << endl;
-    ASSERT(strcmp("cat", pl->header.term), ==, 0);
+    ASSERT(strcmp("cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 2);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->posts.size(), ==, 2);
@@ -182,7 +182,7 @@ int main (int argc, char *argv[])
     }
     pl = ic3.termIndex.Find(String("Dog"))->value;
     cout << pl->header.term << endl;
-    ASSERT(strcmp("Dog", pl->header.term), ==, 0);
+    ASSERT(strcmp("Dog", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->posts.size(), ==, 10);
@@ -200,14 +200,12 @@ int main (int argc, char *argv[])
     }
     pl = t->value;//ic3.termIndex.Find(String("Cat"))->value;
     cout << "TEST: Checking between " << "Cat" << " and " << pl->header.term << endl;
-    cout << "TEST: Malformed pl address: " << (void*)pl << endl;
-    cout << "TEST: Malformed term address: " << (void*)pl->header.term << endl;
     cout  << pl->header.numOfOccurence << endl;
 
 
 
     cout << pl->header.term << endl;
-    ASSERT(strcmp("Cat", pl->header.term), ==, 0);
+    ASSERT(strcmp("Cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->posts.size(), ==, 10);
@@ -219,7 +217,7 @@ int main (int argc, char *argv[])
     pl = ic3.termIndex.Find(String("Hamster"))->value;
     cout << pl->header.term << endl;
 
-    ASSERT(strcmp("Hamster", pl->header.term), ==, 0);
+    ASSERT(strcmp("Hamster", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->posts.size(), ==, 10);
@@ -233,7 +231,7 @@ int main (int argc, char *argv[])
     pl = ic3.termIndex.Find(String("Deer"))->value;
     cout << pl->header.term << endl;
 
-    ASSERT(strcmp("Deer", pl->header.term), ==, 0);
+    ASSERT(strcmp("Deer", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->posts.size(), ==, 10);

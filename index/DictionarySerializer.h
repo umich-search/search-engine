@@ -66,7 +66,7 @@ struct SerialTuple
          typeSize = sizeof(int);
          numOfDocumentSize = sizeof(size_t);
          numOfOccurenceSize = sizeof(size_t);
-         termSize = strlen((char*)header->term) + 1;
+         termSize = header->term.size() + 1;
          return typeSize + numOfOccurenceSize + numOfDocumentSize + termSize;
       }
 
@@ -128,7 +128,8 @@ struct SerialTuple
          memcpy(curr , &b->tuple.value->header.type, sizeof(int));
          memcpy(curr + sizeof(int), &b->tuple.value->header.numOfOccurence, sizeof(size_t));
          memcpy(curr + sizeof(int) + sizeof(size_t), &b->tuple.value->header.numOfDocument, sizeof(size_t));
-         memcpy(curr + sizeof(int) + 2 * sizeof(size_t), b->tuple.value->header.term, strlen((char*)b->tuple.value->header.term) + 1);
+          // TODO: Need to fix?
+         memcpy(curr + sizeof(int) + 2 * sizeof(size_t), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
          curr += BytesRequired(&b->tuple.value->header);
 
          // Copy syncIndex

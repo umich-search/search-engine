@@ -2,6 +2,7 @@
 
 #include "IPost.h"
 #include <iostream>
+#include "../utility/string.h"
 #include "../utility/Vector.h"
 
 //#define MAX_POSTS 1000
@@ -36,7 +37,8 @@ struct CommonHeader{
     // TODO: us init list
     size_t numOfDocument; // number of doucments term occurs in
     size_t numOfOccurence; //number of times the term occurs
-    const char* term; // term
+    //char* term; // term
+    String term;
     Type type; // type of token document is
     //size_t size; // size of entire postings list
 };

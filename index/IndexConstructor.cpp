@@ -56,10 +56,9 @@ int IndexConstructor::Insert( String term, Type type ) {
         cd = new ConstructionData;
 
         postings->header = header;
-        postings->header.term = term.cstr();
+        postings->header.term = String(term);
+        //std::strcpy(postings->header.term,term.cstr());
         cout << "postings header term is: " << postings->header.term << endl;
-        cout << "postings address: " << (void*)postings << endl;
-        cout << "header term address" << (void*)postings->header.term << endl;
         postings->header.type = type;
         postings->header.numOfDocument = 0;
         postings->header.numOfOccurence = 0;
