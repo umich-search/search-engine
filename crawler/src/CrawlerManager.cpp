@@ -26,7 +26,9 @@ void CrawlerManager::HaltCrawl()
 
 void CrawlerManager::DoTask( void *args )
     {
-    
+    // TODO: task needs to run forever, but need a way to interrupt
+    // Block the frontier? 
+    // Run for limited time before new task issued?
     }
 
 // int main( int argc, char **argv )
