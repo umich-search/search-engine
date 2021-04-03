@@ -1,0 +1,1 @@
+synchronization of bloom filter; test other crawler functions; finsh manager; have it operate

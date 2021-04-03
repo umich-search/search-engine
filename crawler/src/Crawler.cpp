@@ -65,7 +65,8 @@ void Crawler::parseRobot( const String& robotUrl )
                 temp = "";
                 ++i;
                 while ( isspace( robotFile[i] ) ) ++i;
-                while ( robotFile[i] != '\n' && robotFile[i] != '\r' ) temp += robotFile[i++];
+                while ( robotFile[i] != '\n' && robotFile[i] != '\r' ) 
+                    temp += robotFile[i++];
                 if ( temp == "*" ) // found "User-agent: *" line
                     {
                     temp = "";
@@ -86,9 +87,9 @@ void Crawler::parseRobot( const String& robotUrl )
             {
             temp = "";
             while ( isspace( robotFile[i] ) || robotFile[i] == ':' ) ++i;
-            while ( robotFile[i] != '\n' && robotFile[i] != '\r') temp += robotFile[i++];
-            //TODO: finish bloom filter
-            //disallowedUrl->insert(rootUrl + temp);
+            while ( robotFile[i] != '\n' && robotFile[i] != '\r') 
+                temp += robotFile[i++];
+            visited->insert(rootUrl + temp);
             myfile << rootUrl + temp << '\n';
             temp = "";
             continue;

@@ -1,13 +1,20 @@
 #include "CrawlerManager.h"
 
-CrawlerManager::CrawlerManager( const char *dir, size_t numq, size_t pqsize, size_t numCrawlers ) 
-    : frontier( dir, numq, pqsize ), crawlers( numCrawlers ) { }
+CrawlerManager::CrawlerManager( 
+    const char *dir, size_t numq, size_t pqsize, 
+    const char *filename, int num_objects, double false_positive_rate,
+    size_t numCrawlers ) 
+    : frontier( dir, numq, pqsize ),   
+      visited( filename, num_objects, false_positive_rate ),
+      crawlers( numCrawlers )
+    { 
+    }
 
 void CrawlerManager::start()
     {
     for ( size_t i = 0; i < crawlers.size(); ++i )
         {
-        crawlers[i].setParameters( i, &frontier );
+        crawlers[i].setParameters( i, &frontier, &visited );
         crawlers[i].Start();
         }
     }

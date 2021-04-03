@@ -6,10 +6,17 @@ class CrawlerManager
     {
     vector< Crawler > crawlers;
     Frontier frontier;
+    FileBloomfilter visited;
 
     public:
         // Create all threads 
-        CrawlerManager( const char *dir, size_t numq, size_t pqsize, size_t numCrawlers = 100 );
+        CrawlerManager( 
+            // frontier
+            const char *dir, size_t numq, size_t pqsize, 
+            // bloom filter
+            const char *filename, int num_objects, double false_positive_rate,
+            // crawlers
+            size_t numCrawlers = 100 );
 
         // destroy the threads
         ~CrawlerManager( );

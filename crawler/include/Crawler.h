@@ -11,7 +11,7 @@
 #include "Frontier.h"
 #define NUM_OBJECTS 1000
 #define FP_RATE 0.1
-static const char *ROBOT_FILE = "robot.txt";
+static const char *ROBOT_FILE = "robots.txt";
 
 class Crawler : public Thread
     {
