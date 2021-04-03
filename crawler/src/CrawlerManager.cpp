@@ -1,23 +1,32 @@
 #include "CrawlerManager.h"
 
-CrawlerManager::CrawlerManager( const char *dir, size_t numq, size_t pqsize, size_t numCrawlers ) 
-    : frontier( dir, numq, pqsize ), crawlers( numCrawlers ) { }
+CrawlerManager::CrawlerManager( Frontier *front, size_t numCrawlers ) 
+    : frontier( front ), crawlers( numCrawlers ) { }
 
-void CrawlerManager::start()
+void CrawlerManager::StartCrawl()
     {
+    // Start the crawler threads async
     for ( size_t i = 0; i < crawlers.size(); ++i )
         {
-        crawlers[i].setParameters( i, &frontier );
-        crawlers[i].Start();
+        crawlers[i].Start( i, &crawlerTaskQueue );
+        }
+    // Start the manager thread async
+    Start( crawlers.size(), &managerTaskQueue );
+    }
+
+void CrawlerManager::HaltCrawl()
+    {
+    managerTaskQueue.Halt();
+    crawlerTaskQueue.Halt();
+    for ( size_t i = 0; i < crawlers.size(); ++i )
+        {
+        crawlers[i].Join();
         }
     }
 
-void CrawlerManager::halt()
+void CrawlerManager::DoTask( void *args )
     {
-    for ( size_t i = 0; i < crawlers.size(); ++i )
-        {
-        crawlers[i].Kill();
-        }
+    
     }
 
 // int main( int argc, char **argv )

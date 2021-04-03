@@ -5,37 +5,25 @@ Crawler::Crawler( ){};
 
 Crawler::~Crawler( ){};
 
-void Crawler::setParameters( size_t crawlerId, Frontier *front )
+void Crawler::DoTask( void *args )
     {
-    id = crawlerId;
-    frontier = front;
-    }
+    // 1. Get a URL from the frontier
+    String *url = (String *)args;
 
-void Crawler::Work( )
-    {
-    // TODO: race condition: after all threads isDead() == true
-    // two threads can check empty() == false, when PQ size == 1
-    // and then call to GetUrl() will add 10 new URLs to the frontier
-    while( !isDead() )// || !frontier->empty() )
-        {
-        // 1. Get a URL from the frontier
-        String url = frontier->PopUrl( );
+    // 2. Check for robots.txt for this domain
+    ParsedUrl parsedUrl( url->cstr() );
 
-        // 2. Check for robots.txt for this domain
-        ParsedUrl parsedUrl( url.cstr() );
+    // 3. Retrieve the HTML webpage from the URL
+    String html = LinuxGetHTML( parsedUrl );
 
-        // 3. Retrieve the HTML webpage from the URL
-        String html = LinuxGetHTML( parsedUrl );
+    // 4. Parse the HTML for the webpage
+    HtmlParser htmlparser( html.cstr(), html.size() );
 
-        // 4. Parse the HTML for the webpage
-        HtmlParser htmlparser( html.cstr(), html.size() );
+    // 5. Add the parsed links to the frontier
+    addLinksToFrontier( htmlparser );
 
-        // 5. Add the parsed links to the frontier
-        addLinksToFrontier( htmlparser );
-
-        // 6. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser );
-        }
+    // 6. Add the words from the HTML to the index
+    addWordsToIndex( htmlparser );
     }
 
 void Crawler::parseRobot( const String& robotUrl )
