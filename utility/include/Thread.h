@@ -55,7 +55,7 @@ class Thread
         // entire process, losing the frontier/index in memory 
         void Work()
             {
-            for( void *task = taskQueue->PopTask(); task != nullptr; )
+            for( void *task = taskQueue->PopTask(); task != nullptr; task = taskQueue->PopTask() )
                 {
                 try 
                     {

@@ -12,7 +12,6 @@ public:
 private:
     void DoTask( void *args ) override
         {
-            if ( args == nullptr ) return;
             String *url = (String *)args;
             std::cout << "Thread (" << GetID() << "): " << url->cstr() << std::endl;
             //int test = 1 / 0;
@@ -37,6 +36,7 @@ int main(int argc, char **argv )
     taskQueue.PushTask((void *) &task2);
     taskQueue.PushTask((void *) &task3);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    taskQueue.Halt();
     for ( size_t i = 0; i < tests.size(); ++i )
         {
             tests[i].Join();
