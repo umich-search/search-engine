@@ -17,7 +17,7 @@ class Crawler : public Thread
     {
     Frontier *frontier;
     // TODO: HashTable to store robot.txt files
-    Bloomfilter *disallowedUrl;
+    FileBloomfilter *visited;
 
     public:
         Crawler( );

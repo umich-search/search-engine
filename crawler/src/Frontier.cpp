@@ -21,11 +21,11 @@ bool Frontier::url_t::operator<= ( const url_t& other ) const
     return ( *this < other ) || ( *this == other );
     }
 
-Frontier::url_t::url_t( const String& param ) : url( param )
+Frontier::url_t::url_t( )
     {
     }
 
-Frontier::url_t::url_t( ) : url( "" )
+Frontier::url_t::url_t( const String& param ) : url( param )
     {
     }
 
@@ -92,7 +92,7 @@ Frontier::Frontier( const char *root, size_t numq, size_t pqSize_,
             String pathName( root );
             pathName += '/';
             pathName += ltos( i );
-            if ( mkdir( pathName.cstr( ), S_IRWXU ) )
+            if ( mkdir( pathName.cstr( ), S_IRWXU | S_IRWXG | S_IRWXO ) )
                 {
                 std::cerr << "Cannot make directory " << pathName << " with errno = " << strerror( errno ) << std::endl;
                 exit( 1 );
@@ -152,6 +152,12 @@ String Frontier::PopUrl( )
             else
                 {
                 String poppedUrl = urlPool[ poolIdx ]->PopFront( );
+                // if the read file pointer is at the EOF of the first file
+                if ( poppedUrl.size( ) == 0 )
+                    {
+                    Unlock( poolMutexes[ poolIdx ] );
+                    continue;
+                    }
                 urlPq.Push( poppedUrl );
                 Unlock( poolMutexes[ poolIdx ] );
                 }

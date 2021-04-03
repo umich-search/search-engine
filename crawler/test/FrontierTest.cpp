@@ -12,45 +12,76 @@ struct p
     int y;
     };
 
+mutex_t m;
+int numt = 0, numwt = 1;
+const char *nm = "./seen.txt", *dbg = "./crawler/test/seen.txt";
+
+
+void printWithLock( int id, String s )
+    {
+    CriticalSection ct( &m );
+    std::cout << "id = " << id << ' ' << s << std::endl;
+    }
+
 void *func( void *x )
     {
     Frontier *ft = (( p * )x)->x;
     int k = (( p * )x)->y;
-    for ( int i = 0; i < 18; ++i )
-        std::cout << "id = " << k << ' ' << ft->PopUrl( ) << std::endl;
+    for ( int i = 0; i < 100; ++i )
+        {
+        String st = ft->PopUrl( );
+        printWithLock( k, st );
+        }
+    return nullptr;
+    }
+
+void *writeFunc( void *x )
+    {
+    Frontier *ft = ( Frontier *) x;
+    ifstream fin;
+    fin.open( nm );
+    string s;
+    int i = 0;
+    while ( fin >> s && i < 1 )
+        {
+        ++i;
+        Link l( s.c_str( ) );
+        ft->PushUrl( l );
+        }
+    fin.close( );
     return nullptr;
     }
 
 int main( int argc, char *argv[] )
     {
-    const char *nm = "./seen.txt", *dbg = "./crawler/test/seen.txt";
     if ( argc != 2 )
         exit( 1 );
     Frontier a( argv[1], 3, 2);
+    MutexInit( &m, nullptr );
 
-    pthread_t *tp = new pthread_t[ 3 ];
-    p *ag = new p[ 3 ];
-    for ( int i = 0; i < 3; ++i)
+    pthread_t *tp = new pthread_t[ numt ],
+        *wtp = new pthread_t[ numwt ];
+    p *ag = new p[ numt ];
+    for ( int i = 0; i < numt; ++i)
         {
         ag[ i ].x = &a;
         ag[ i ].y = i;
         pthread_create( tp + i, nullptr, func, ( void * )( ag + i ) );
         }
-
-    ifstream fin;
-    fin.open( nm );
-    string s;
-    int i = 0;
-    while ( fin >> s && i < 100 )
+    for ( int i = 0; i < numwt; ++i )
         {
-        ++i;
-        Link l( s.c_str( ) );
-        a.PushUrl( l );
+        pthread_create( wtp + i, nullptr, writeFunc, ( void * )( &a ) );
         }
+    
 
-    for ( int i = 0; i < 3; ++i )
+    for ( int i = 0; i < numt; ++i )
         pthread_join( tp[ i ], nullptr );
+    for ( int i = 0; i < numwt; ++i )
+        pthread_join( wtp[ i ], nullptr );
+
+    MutexDestroy( &m );
     delete [] tp;
+    delete [] wtp;
     delete [] ag;
     return 0;
     }

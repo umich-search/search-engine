@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
         cout << "Usage: " << argv[0] << endl;
         return 1; 
     }
-    String filename, stdInput;
+    std::string filename, stdInput;
     String input;
     cout << "Running bloom filter...\n";
     // cout << "Enter 'd' for default init, or 'c' for custom: ";
@@ -30,8 +30,9 @@ int main(int argc, char** argv) {
     // }
     cout << "Initializing bloom filter...\n\n";
 
-    Bloomfilter bf(size, error);
-    ifstream fin(filename.cstr());
+    FileBloomfilter bf("./bf", size, error);
+
+    ifstream fin(filename.c_str());
     if (!fin.is_open()) {
         cout << "Error opening: " << filename << endl;
         return 1;
@@ -39,7 +40,7 @@ int main(int argc, char** argv) {
 
     uint64_t counter = 0;
     while(fin >> stdInput) {
-        input = String(stdInput.cstr());
+        input = String(stdInput.c_str());
         bf.insert(input);
         counter++;
     }
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
 
     while (true) {
         cin >> stdInput;
-        input = String(stdInput.cstr());
+        input = String(stdInput.c_str());
         if (input == "q") return 0;
         bf.contains(input) ? cout << "Found!\n" : cout << "Not found.\n";
     }

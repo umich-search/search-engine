@@ -93,7 +93,7 @@ void Frontier::linkScheduler( vector< DiskQueue *>& scheduler, const char *dirNa
                 {
                 String pathName( dir );
                 pathName += ltos( i );
-                if ( mkdir( pathName.cstr( ), S_IRWXU ) )
+                if ( mkdir( pathName.cstr( ), S_IRWXU | S_IRWXG | S_IRWXO ) )
                     {
                     std::cerr << "Cannot make directory " << pathName << " with errno = " << errno << std::endl;
                     exit( 1 );

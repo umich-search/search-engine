@@ -29,6 +29,14 @@ public:
     // MODIFIES: *this
     // EFFECTS: Creates a String with equivalent contents to cstr
     String(const char *cstr) {
+        if ( *cstr == '\0' )
+            {
+            length = 0;
+            capacity = 1;
+            buffer = new char[ 1 ];
+            buffer[ 0 ] = '\0';
+            return;
+            }
         length=0;
         while(cstr[length]!='\0')length++;
         capacity = length * 2;
