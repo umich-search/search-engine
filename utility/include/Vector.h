@@ -67,7 +67,7 @@ template <typename T> class vector
       // REQUIRES: Nothing
       // MODIFIES: *this
       // EFFECTS: Duplicates the state of other to *this
-      vector operator= ( const vector<T>& other )
+      vector &operator= ( const vector<T>& other )
          {
          if ( this != &other )
             {
@@ -99,7 +99,7 @@ template <typename T> class vector
       // REQUIRES: Nothing
       // MODIFIES: *this, leaves otherin a default constructed state
       // EFFECTS: Takes the data from other in constant time
-      vector operator= ( vector<T>&& other )
+      vector &operator= ( vector<T>&& other )
          {
          if ( this != &other )
             {

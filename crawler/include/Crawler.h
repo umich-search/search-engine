@@ -18,7 +18,7 @@ class Crawler : public Thread
     size_t id;
     Frontier *frontier;
     // TODO: HashTable to store robot.txt files
-    Bloomfilter *disallowedUrl;
+    FileBloomfilter *visited;
 
     public:
         Crawler( );
@@ -30,7 +30,7 @@ class Crawler : public Thread
         // These had to be moved out of the constructor because the crawler
         // doesn't have an assignment operator that can be used when
         // pushBack() is called on the vector<Crawler>
-        void setParameters( size_t cralwerId, Frontier *front );
+        void setParameters( size_t cralwerId, Frontier *front, FileBloomfilter *bf );
 
     private:
         // pack all crawler functionalities into one function

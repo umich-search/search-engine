@@ -5,7 +5,7 @@ int DiskQueue::openFileRD( int id )
     {
     String filePath = dirName;
     filePath += ltos( id );
-    int fd = open( filePath.cstr( ), O_RDONLY, S_IRWXU );
+    int fd = open( filePath.cstr( ), O_RDONLY );
     if ( fd == -1 )
         std::cerr << "Cannot open file " << filePath << " with errno = " << strerror(errno) << std::endl;
     return fd;
@@ -15,7 +15,7 @@ int DiskQueue::openFileWR( int id )
     {
     String filePath = dirName;
     filePath += ltos( id );
-    int fd = open( filePath.cstr( ), O_CREAT | O_WRONLY | O_APPEND, S_IRWXU );
+    int fd = open( filePath.cstr( ), O_CREAT | O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO );
     if ( fd == -1 )
         std::cerr << "Cannot open file " << filePath << " with errno = " << strerror(errno) << std::endl;
     return fd;
@@ -104,7 +104,8 @@ DiskQueue::DiskQueue( const char *dir )
 DiskQueue::~DiskQueue( )
     {
     if ( readFileID != -1 )
-        close( readFd );
+        // close( readFd );
+        fclose( readFp );
     close( writeFd );
     }
 
@@ -133,9 +134,11 @@ String DiskQueue::PopFront( )
             pathName += ltos( readFileID );
             if ( unlink( pathName.cstr( ) ) )  // delete the file
                 std::cerr << "Error deleting the file " << pathName << " with the errno = " << strerror(errno) << std::endl;
-            fclose( readFp );  // this will close the file as well as the stream, and remove the file if it is unlinked
+            fclose( readFp );  // this will close the file pointer as well as the file descriptor, 
+                               // and delete the file if it is unlinked
             
             readFileID = -1;  // wait for the write file to complete
+            free( linePtr );  // free linPtr
             return String( "" );
             }
         else
@@ -151,11 +154,17 @@ String DiskQueue::PopFront( )
             readFp = fdopen( readFd, "r" );
             nread = getline( &linePtr, &len, readFp );
             assert( nread != -1 );
-            return String( linePtr, len );
+            String ret( linePtr, nread - 1 );  // nread - 1 to exclude the terminating '\n'
+            free( linePtr );
+            return ret;
             }
         }
     else  // normal reading a line
-        return String( linePtr, len );
+        {
+        String ret( linePtr, nread - 1 );
+        free( linePtr );
+        return ret;
+        }
     }
 
 void DiskQueue::PushBack( String& item )

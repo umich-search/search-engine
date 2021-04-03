@@ -5,10 +5,12 @@ Crawler::Crawler( ){};
 
 Crawler::~Crawler( ){};
 
-void Crawler::setParameters( size_t crawlerId, Frontier *front )
+void Crawler::setParameters( size_t crawlerId, 
+    Frontier *front, FileBloomfilter *bf )
     {
     id = crawlerId;
     frontier = front;
+    visited = bf;
     }
 
 void Crawler::Work( )

@@ -274,7 +274,7 @@ class HashFile
          // and note the blob address.
 
          // Your code here.
-         int f = open( filename, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
+         int f = open( filename, O_RDONLY );
          if ( f == -1 )
             std::cerr << "Error openning file " << filename << " with errno = " << strerror( errno ) << std::endl;
          size_t fileSize = FileSize( f );
