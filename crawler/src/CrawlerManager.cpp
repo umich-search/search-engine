@@ -1,30 +1,34 @@
 #include "CrawlerManager.h"
 
-CrawlerManager::CrawlerManager( 
-    const char *dir, size_t numq, size_t pqsize, 
-    const char *filename, int num_objects, double false_positive_rate,
-    size_t numCrawlers ) 
-    : frontier( dir, numq, pqsize ),   
-      visited( filename, num_objects, false_positive_rate ),
-      crawlers( numCrawlers )
-    { 
-    }
+CrawlerManager::CrawlerManager( Frontier *front, size_t numCrawlers ) 
+    : frontier( front ), crawlers( numCrawlers ) { }
 
-void CrawlerManager::start()
+void CrawlerManager::StartCrawl()
     {
+    // Start the crawler threads async
     for ( size_t i = 0; i < crawlers.size(); ++i )
         {
-        crawlers[i].setParameters( i, &frontier, &visited );
-        crawlers[i].Start();
+        crawlers[i].Start( i, &crawlerTaskQueue );
+        }
+    // Start the manager thread async
+    Start( crawlers.size(), &managerTaskQueue );
+    }
+
+void CrawlerManager::HaltCrawl()
+    {
+    managerTaskQueue.Halt();
+    crawlerTaskQueue.Halt();
+    for ( size_t i = 0; i < crawlers.size(); ++i )
+        {
+        crawlers[i].Join();
         }
     }
 
-void CrawlerManager::halt()
+void CrawlerManager::DoTask( void *args )
     {
-    for ( size_t i = 0; i < crawlers.size(); ++i )
-        {
-        crawlers[i].Kill();
-        }
+    // TODO: task needs to run forever, but need a way to interrupt
+    // Block the frontier? 
+    // Run for limited time before new task issued?
     }
 
 // int main( int argc, char **argv )
