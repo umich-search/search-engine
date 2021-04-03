@@ -18,7 +18,8 @@ void Crawler::Work( )
     // TODO: race condition: after all threads isDead() == true
     // two threads can check empty() == false, when PQ size == 1
     // and then call to GetUrl() will add 10 new URLs to the frontier
-    while( !isDead() )// || !frontier->empty() )
+
+    while( !isDead( ) )  // || !frontier->empty() )
         {
         // 1. Get a URL from the frontier
         String url = frontier->PopUrl( );
@@ -104,11 +105,11 @@ void Crawler::addLinksToFrontier( HtmlParser& htmlparser )
     {
     for ( Link& link : htmlparser.links )
         {
-        // TODO: check if link has been seen
-        bool linkSeen = false;
+        bool linkSeen = visited->contains( link.URL );
         if ( !linkSeen )
             {
-            // TODO: mark the link as seen
+            // order matters! we don't mind losing a link but we mind duplicates
+            visited->insert( link.URL );
             frontier->PushUrl( link );
             }
         }
@@ -116,5 +117,6 @@ void Crawler::addLinksToFrontier( HtmlParser& htmlparser )
 
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser )
     {
+    // TODO: implement this function
     return;
     }

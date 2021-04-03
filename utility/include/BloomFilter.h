@@ -1,9 +1,9 @@
-#ifndef BLOOMFILTER_H
-#define BLOOMFILTER_H
+#pragma once
 
 #include "Bitmap.h"
 #include <cmath>
 #include "mString.h"
+#include "Concurrency.h"
 #include <string.h>
 #include <openssl/md5.h>
 using namespace std;
@@ -90,10 +90,19 @@ public:
     FileBloomfilter(const char *filename, int num_objects, double false_positive_rate) 
         : container( filename, 0 - num_objects * log( false_positive_rate ) / ( log( 2 ) * log( 2 ) ) ),
         numHash( container.size( ) / num_objects * log( 2 ) )
-    {
-    }
+        {
+        MutexInit( &containerMutex, nullptr );
+        }
+
+    ~FileBloomfilter( )
+        {
+        MutexDestroy( &containerMutex );
+        }
 
     void insert(const String& s) {
+        // acquire the container lock
+        CriticalSection c_section( &containerMutex );
+
         //Hash the string into two unique hashes
         std::pair<uint64_t, uint64_t> myHash = hash(s);
         uint64_t first = myHash.first;
@@ -115,6 +124,9 @@ public:
     }
 
     bool contains(const String& s) {
+        // acquire the container lock
+        CriticalSection c_section( &containerMutex );
+        
         //Hash the string into two unqiue hashes
         std::pair<uint64_t, uint64_t> myHash = hash(s);
         uint64_t first = myHash.first;
@@ -138,15 +150,18 @@ public:
         return true;
     }
 
-    size_t size( ) const
+    size_t size( )
         {
+        // acquire the container lock
+        CriticalSection c_section( &containerMutex );
         return container.size( );
         }
 
 private:
     //Add any private member variables that may be neccessary
     bitmap_f container;
-    size_t numHash;
+    const size_t numHash;
+    mutex_t containerMutex;
     std::pair<uint64_t, uint64_t> hash(const String& datum) {
         //Use MD5 to hash the string into one 128 bit hash, and split into 2 hashes
         unsigned char buffer[ MD5_DIGEST_LENGTH ];
@@ -158,5 +173,3 @@ private:
         return {first, second};
     }
 };
-
-#endif
