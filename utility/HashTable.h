@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <cstdint>
 #include "string.h"
-
+#include "params.h"
 #define INITIAL_SIZE 5
 using namespace std;
 
@@ -79,8 +79,8 @@ public:
         // in the hash, add it with the initial value.
 
         // Your code here.
-
-        uint32_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ) );
+            // TODO: Does it matter if length includes nullterm;
+        uint32_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
         Bucket< Key, Value > *curr = buckets[ hashValue % numberOfBuckets ];
         while ( curr ) 
             {

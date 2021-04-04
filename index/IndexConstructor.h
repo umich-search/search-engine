@@ -1,5 +1,6 @@
 #include "../utility/string.h"
 #include "DictionarySerializer.h"
+#include "params.h"
 
 class IndexConstructor {
 public:

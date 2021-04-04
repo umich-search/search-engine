@@ -19,7 +19,7 @@ int IndexConstructor::Insert( String title, String URL) {
 */
 
 int IndexConstructor::Insert( String term, Type type ) {
-    cout << "Inserting: " << term.cstr() << endl;
+    //cout << "Inserting: " << term.cstr() << endl;
     // Get either currently existing postings or create a new one
     CommonHeader header; //= new CommonHeader;
     TermPostingList *postings = nullptr;
@@ -52,13 +52,12 @@ int IndexConstructor::Insert( String term, Type type ) {
         cd = cdTuple->value;
     } else {
         //cout << "New Term: " << term.cstr() << endl;
-        postings = new TermPostingList;
+        // TODO: Change num sync points
+        postings = new TermPostingList(8);
         cd = new ConstructionData;
 
         postings->header = header;
         postings->header.term = String(term);
-        //std::strcpy(postings->header.term,term.cstr());
-        cout << "postings header term is: " << postings->header.term << endl;
         postings->header.type = type;
         postings->header.numOfDocument = 0;
         postings->header.numOfOccurence = 0;
@@ -125,11 +124,22 @@ void IndexConstructor::createNewChunk() {
 
 // TODO: I think ptr passing is off
 void IndexConstructor::createSynchronization() {
-    size_t leftShift = numberOfWords / NUM_SYNC_POINTS;
+    size_t leftShift = numberOfWords / 8;///NUM_SYNC_POINTS;
+    // TODO: Change to dynamic caluclation of num low bits
     size_t numHighBits = sizeof(size_t) * 8 - leftShift;
-    size_t numLowBits = leftShift;
-    for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex.begin(); iterator != termIndex.end( ); ++iterator ) {
-        createSeekIndex(iterator->value, numLowBits);
+    int count=0;
+    // While loop will run until we get n = 0
+    while(leftShift)
+    {
+        count++;
+        // We are shifting n to right by 1
+        // place as explained above
+        leftShift=leftShift>>1;
     }
-    createSeekIndex(&endDocPostings, numLowBits);
+    size_t numLowBits = count;
+    for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex.begin(); iterator != termIndex.end( ); ++iterator ) {
+        createSeekIndex(iterator->value, constructionData.Find(iterator->key)->value->firstTermLoc, numLowBits);
+    }
+    // TODO: Make doc temp data
+    //createSeekIndex(&endDocPostings, numLowBits);
 }

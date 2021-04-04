@@ -4,8 +4,8 @@
 #include "ISR.h"
 #include "DictionarySerializer.h"
 #include "../utility/string.h"
+#include "params.h"
 //#include "../utility/HashTable.h"
-typedef size_t Location; 
 //TODO: Fix include multi errors
 
 

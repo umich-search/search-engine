@@ -13,6 +13,7 @@
 
 #include "../utility/HashTable.h"
 #include "PostingList.h"
+#include "params.h"
 
 
 using Hash = HashTable< String, TermPostingList* >;
@@ -72,7 +73,7 @@ struct SerialTuple
 
       // Bytes required to encode synchronization index
       static size_t BytesRequired( const SyncIndex *syncIndex) {
-         return syncIndex->postingsListOffset.size() * 2;
+         return syncIndex->postingsListOffset.size() * 2 * sizeof(size_t);
       }
       // Bytes required to encode TermPostingList
       static size_t BytesRequired( const TermPostingList *p) {
@@ -120,15 +121,16 @@ struct SerialTuple
          head->Length = bytes;
          head->HashValue = b->hashValue;
          char * curr = head->DynamicSpace;
+          
          // Copy key
          memcpy( curr, b->tuple.key.cstr(), strlen( b->tuple.key.cstr() ) + 1 );
          curr = curr + strlen(b->tuple.key.cstr()) + 1;
-
-         // Copy header 
-         memcpy(curr , &b->tuple.value->header.type, sizeof(int));
-         memcpy(curr + sizeof(int), &b->tuple.value->header.numOfOccurence, sizeof(size_t));
-         memcpy(curr + sizeof(int) + sizeof(size_t), &b->tuple.value->header.numOfDocument, sizeof(size_t));
+         // Copy header
+         memcpy(curr, &b->tuple.value->header.numOfOccurence, sizeof(size_t));
+         memcpy(curr + sizeof(size_t), &b->tuple.value->header.numOfDocument, sizeof(size_t));
           // TODO: Need to fix?
+         memcpy(curr + 2 * sizeof(size_t), &b->tuple.value->header.type, sizeof(int));
+
          memcpy(curr + sizeof(int) + 2 * sizeof(size_t), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
          curr += BytesRequired(&b->tuple.value->header);
 
@@ -138,16 +140,31 @@ struct SerialTuple
              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
+          /*
+          for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
+              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
+              curr += sizeof(size_t);
+          }
+*/
          for(size_t i = 0; i < b->tuple.value->syncIndex.postLocation.size(); ++i) {
+             int64_t ploc = b->tuple.value->syncIndex.postLocation[i];
              memcpy(curr, &b->tuple.value->syncIndex.postLocation[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
+          
+          for(size_t i = 0; i < b->tuple.value->posts.size(); ++i) {
+              memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
+              curr += sizeof(size_t);
+          }
+ 
+          /*
+
             // Copy posts
          for(size_t i = 0; i < b->tuple.value->posts.size(); ++i) {
              memcpy(curr, &b->tuple.value->posts[i].delta, sizeof(size_t));
              curr += sizeof(size_t);
          }
-
+*/
          return buffer + RoundUp( bytes, sizeof( size_t ) );
          }
       // Calculate the bytes required to encode a HashBucket as a
@@ -236,15 +253,18 @@ struct SerialTuple
                tupleSize += sentinalSize;
             }
          }
+        /*
          cout << "headerSize: " << headerSize << endl;
          cout << "bucketsSize: " << bucketsSize << endl;
          cout << "tupleSize: "  << tupleSize << endl;
          cout << "sentinalSize: " << sentinalSize << endl;
+         */
          return headerSize + bucketsSize + tupleSize;
          }
 
       // Write a HashBlob into a buffer, returning a
       // pointer to the blob.
+       // TODO: Is hashblob using length to skip?
 
       static HashBlob *Write( HashBlob *hb, size_t bytes,
             const Hash *hashTable )

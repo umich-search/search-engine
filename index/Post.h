@@ -1,6 +1,7 @@
 #include <unordered_map>
 #pragma once
 typedef size_t Location;
+#include "params.h"
 
 class Post {
 public:

@@ -66,12 +66,6 @@ public:
         buffer = new char[ capacity ];
         for ( int i = 0; i < length + 1; i++ )
             buffer[ i ] = other.buffer[ i ];
-                
-        std::cout << "BUFFER RESULT: " << buffer <<  std::endl;
-        std::cout << "OTHER BUFFER RESULT: " << other.buffer <<  std::endl;
-
-
-
         }
 
     // Move Constructor

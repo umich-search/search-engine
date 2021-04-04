@@ -62,7 +62,7 @@ bool CompareEqual( const char *L, const char *R )
 
 bool CompareEqual(const String &L,const String &R) {
     //cout << "In static ocmpare qequal" << endl;
-    std::cout << "comparing: " << L.cstr() << " and " << R.cstr() << std::endl;
+    //std::cout << "comparing: " << L.cstr() << " and " << R.cstr() << std::endl;
     bool ret = strcmp(L.cstr(),R.cstr()) == 0;
     //cout << "Returning with : " << ret << endl;
     return ret;

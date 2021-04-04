@@ -34,7 +34,7 @@ class UniquePointer
 
         // move constructor
         UniquePointer( UniquePointer&& other ) noexcept
-            : memPtr( nullptr )
+            : memPtr( nullptr ) 
             { 
             this->swap( other );
             }

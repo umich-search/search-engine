@@ -1,6 +1,7 @@
 #include "Post.h"
 #include "PostingList.h"
 #pragma once
+#include "params.h"
 
 typedef size_t Location;
 

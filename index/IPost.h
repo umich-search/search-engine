@@ -3,8 +3,8 @@
 
 #include <stddef.h>  
 typedef size_t Location;
-#define MAX_TITLE_LENGTH 500
-#define MAX_URL_LENGTH 500
+#include "params.h"
+
 
 //typedef union Attributes {
 //    WordAttributes Word;
