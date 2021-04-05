@@ -1,6 +1,6 @@
 #include "ISR.h"
 #include "PostingList.h"
-#include "stdlib.h"
+#include "stdlib.h" // TODO: Is this needed?
 
 // ISRWord Functions
 
@@ -26,7 +26,6 @@ Post* ISRWord::Seek( Location target){
 }
 
 Location ISRWord::GetStartLocation( ){
-    size_t throwaway;
     //return seekTermTarget(&postingList, 0, throwaway);
     return -1;
 }
@@ -35,11 +34,11 @@ Location ISRWord::GetEndLocation( ){
     return -1;
 }
 
-unsigned ISRWord::GetDocumentCount( ){
+d_Occurence ISRWord::GetDocumentCount( ){
     return postingList.header.numOfDocument;
 }
 
-unsigned ISRWord::GetNumberOfOccurrences( ){
+w_Occurence ISRWord::GetNumberOfOccurrences( ){
     return postingList.header.numOfOccurence;
 }
 
@@ -76,7 +75,6 @@ Post* ISREndDoc::Seek( Location target){
 }
 
 Location ISREndDoc::GetStartLocation( ){
-    size_t throwaway;
     //return seekEndDocTarget(&postingList, 0, throwaway);
     return -1;
 }
@@ -86,10 +84,14 @@ Location ISREndDoc::GetEndLocation( ){
 }
 
 unsigned ISREndDoc::GetDocumentLength() {
+    /*
    return postingList.posts[currentPostingsIndex].lengthOfDocument;
+     */
+    return -1;
 }
 
 unsigned ISREndDoc::GetTitleLength() {
+    /*
     char c = postingList.posts[currentPostingsIndex].title[0];
     unsigned int count = 0;
     while(c != '\0') {
@@ -97,15 +99,20 @@ unsigned ISREndDoc::GetTitleLength() {
     }
    
     return count;
+     */
+    return -1;
    
 }
 
 unsigned ISREndDoc::GetUrlLength() {
+    /*
     char c = postingList.posts[currentPostingsIndex].URL[0];
     unsigned int count = 0;
     while(c != '\0') {
         count++;
     }
     return count;
+     */
+    return -1;
 }
 

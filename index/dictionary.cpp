@@ -1,7 +1,5 @@
-#include "Dictionary.h"
+#include "dictionary.h"
 #include "PostingList.h"
-//#include "ISR.h"
-//#include "DictionarySerializer.h"
 
 
 ISRWord* Dictionary::OpenISRWord( char* word ) {

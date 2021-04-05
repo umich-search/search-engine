@@ -1,34 +1,36 @@
-#include "IndexConstructor.h"
+#include "params.h"
+#include "DocumentInfo.h"
 
-size_t IndexConstructor::DocumentInfo::getNumberOfUniqueWords() {
+
+size_t DocumentInfo::getNumberOfUniqueWords() {
     return numUniqueDocWords;
 };
 
-void IndexConstructor::DocumentInfo::incrementUniqueNumberOfWords() {
+void DocumentInfo::incrementUniqueNumberOfWords() {
     numUniqueDocWords++;
 }
 
-size_t IndexConstructor::DocumentInfo::getNumberOfWords() {
+size_t DocumentInfo::getNumberOfWords() {
     return numDocWords;
 };
 
-void IndexConstructor::DocumentInfo::incrementNumberOfWords(){
+void DocumentInfo::incrementNumberOfWords(){
     numDocWords++;
 };
 
-size_t IndexConstructor::DocumentInfo::getPrevEndLocation() {
+size_t DocumentInfo::getPrevEndLocation() {
     return prevEndLocation;
 };
 
-char* IndexConstructor::DocumentInfo::getTitle() {
+char* DocumentInfo::getTitle() {
     return title;
 };
 
-char* IndexConstructor::DocumentInfo::getURL() {
+char* DocumentInfo::getURL() {
     return URL;
 };
-
-void IndexConstructor::DocumentInfo::reset( size_t dID, Location recenEndDocLocation ){
+// TODO: typo
+void DocumentInfo::reset( size_t dID, Location recenEndDocLocation ){
     numDocWords = 0;
     numUniqueDocWords = 0;
     prevEndLocation = recenEndDocLocation;

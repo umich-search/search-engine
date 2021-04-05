@@ -1,13 +1,12 @@
 #pragma once
 
+#include <iostream> // TODO: Remove
+
+#include "params.h"
 #include "IPost.h"
-#include <iostream>
 #include "../utility/string.h"
 #include "../utility/Vector.h"
-#include "params.h"
 
-//#define MAX_POSTS 1000
-#pragma once
 
 typedef size_t Location;
 
@@ -30,21 +29,22 @@ struct SyncIndex {
 
 struct ConstructionData {
     size_t currDoc;
-    size_t firstTermLoc; // location in index of first term
-    size_t latestTermLoc;
+    Location firstTermLoc; // location in index of first term
+    Location latestTermLoc;
 };
 
 struct CommonHeader{
+    CommonHeader () : numOfOccurence(0), numOfDocument(0) {}
     // TODO: us init list
-    size_t numOfOccurence; //number of times the term occurs
-    size_t numOfDocument; // number of doucments term occurs in
+    w_Occurence numOfOccurence; //number of times the term occurs
+    d_Occurence numOfDocument; // number of doucments term occurs in
     String term;
     Type type; // type of token document is
 };
 
 struct CommonHeaderBlob{
-    size_t numOfOccurence;
-    size_t numOfDocument;
+    w_Occurence numOfOccurence;
+    d_Occurence numOfDocument;
     Type type;
     char term[];
 };
@@ -53,10 +53,7 @@ struct PostingList {};
 
 struct TermPostingList {
     TermPostingList(){};
-    TermPostingList(size_t syncSize) : syncIndex(syncSize) {
-        //syncIndex(syncSize);
-        //syncIndex = SyncIndex(syncSize);
-    }
+    TermPostingList(size_t syncSize) : syncIndex(syncSize) {}
     CommonHeader header;
     ::vector< IPostTerm > posts;
     SyncIndex syncIndex;
@@ -65,24 +62,18 @@ struct TermPostingList {
 struct TermPostingListRaw {
     const char* buffer;
     CommonHeaderBlob *header;
-    size_t termOffset;
-    size_t numOccurenceOffset; 
-    size_t numDocumentsOffset;
-    size_t typeOffset;
-    size_t postingsListOffsetOffset;
-    size_t postLocationOffset;
-    size_t postsOffset;
+    Offset termOffset;
+    Offset numOccurenceOffset;
+    Offset numDocumentsOffset;
+    Offset typeOffset;
+    Offset postingsListOffsetOffset;
+    Offset postLocationOffset;
+    Offset postsOffset;
 
     TermPostingListRaw(const char * b) {
         buffer = b + strlen(b) + 1;
         header = (CommonHeaderBlob *)buffer;
-        /*
-        termOffset = sizeof(int) + 2 * sizeof(size_t);
-        numOccurenceOffset = sizeof(int);
-        numDocumentsOffset = sizeof(int) + sizeof(size_t);
-        typeOffset = 0;
-         */
-        postingsListOffsetOffset = sizeof(int) + 2 * sizeof(size_t) + strlen(header->term) + 1;// strlen(buffer + termOffset) + 1;
+        postingsListOffsetOffset = sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence) + strlen(header->term) + 1;
         postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * 8; //TODO: Change based off num sync points//header->numOfOccurence;
         postsOffset = postLocationOffset + sizeof(size_t) * 8; //TODO: Same as abovevheader->numOfOccurence;
     }
@@ -91,79 +82,69 @@ struct TermPostingListRaw {
         return header;
     }
     
-    size_t getPostingsListOffsetAt(size_t i) {
+    Offset getPostingsListOffsetAt(Offset i) {
         //std::cout << "pploo: " << postingsListOffsetOffset << std::endl;
-        return *(size_t *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
+        return *(Offset *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
     }
-    size_t getPostLocationAt(size_t i) {
-        return *(size_t *)(buffer + postLocationOffset + sizeof(size_t) * i);
+    Offset getPostLocationAt(Offset i) {
+        return *(Offset *)(buffer + postLocationOffset + sizeof(size_t) * i);
     }
 
-    IPostTerm getPostAt(size_t i) {
-        size_t a = sizeof(size_t);
-        size_t b = sizeof(int64_t);
-        const char * offset = buffer + postsOffset;
-        size_t conv = *(size_t *)(buffer + postsOffset + sizeof(size_t) * i);
-        return IPostTerm(*(size_t *)(buffer + postsOffset + sizeof(size_t) * i));
+    IPostTerm getPostAt(Offset i) {
+        return IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
     }
 };
-/*
+
+
 struct EndDocPostingListRaw {
+    // TODO: Remove superflous members
     const char* buffer;
     CommonHeaderBlob *header;
-    size_t termOffset;
-    size_t numOccurenceOffset;
-    size_t numDocumentsOffset;
-    size_t typeOffset;
-    size_t postingsListOffsetOffset;
-    size_t postLocationOffset;
-    size_t postsOffset;
+    Offset termOffset;
+    Offset numOccurenceOffset;
+    Offset numDocumentsOffset;
+    Offset typeOffset;
+    Offset postingsListOffsetOffset;
+    Offset postLocationOffset;
+    Offset postsOffset;
 
-    TermPostingListRaw(const char * b) {
-        buffer = b + strlen(b) + 1;
+    EndDocPostingListRaw(const char * b) {
+        buffer = b;
         header = (CommonHeaderBlob *)buffer;
-        
-        termOffset = sizeof(int) + 2 * sizeof(size_t);
-        numOccurenceOffset = sizeof(int);
-        numDocumentsOffset = sizeof(int) + sizeof(size_t);
-        typeOffset = 0;
-         
-        postingsListOffsetOffset = sizeof(int) + 2 * sizeof(size_t) + strlen(header->term) + 1;// strlen(buffer + termOffset) + 1;
-        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * header->numOfOccurence;
-        postsOffset = postLocationOffset + sizeof(size_t) * header->numOfOccurence;
+        postingsListOffsetOffset = sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence) + strlen(header->term) + 1;
+        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * 8; //TODO: Change based off num sync points//header->numOfOccurence;
+        postsOffset = postLocationOffset + sizeof(size_t) * 8; //TODO: Same as abovevheader->numOfOccurence;
     }
     // TODO: Switch to smart pointers
     CommonHeaderBlob *getHeader() {
         return header;
     }
     
-    size_t getPostingsListOffsetAt(size_t i) {
+    Offset getPostingsListOffsetAt(Offset i) {
         //std::cout << "pploo: " << postingsListOffsetOffset << std::endl;
-        return *(size_t *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
+        return *(Offset *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
     }
-    size_t getPostLocationAt(size_t i) {
-        return *(size_t *)(buffer + postLocationOffset + sizeof(size_t) * i);
+    Offset getPostLocationAt(Offset i) {
+        return *(Offset *)(buffer + postLocationOffset + sizeof(size_t) * i);
     }
 
-    IPostTerm getPostAt(size_t i) {
-        return IPostTerm(*(size_t *)(buffer + postsOffset + sizeof(size_t) * i));
+    IPostTerm getPostAt(Offset i) {
+        return IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
     }
 };
-*/
-
 
 struct EndDocPostingList {
+    EndDocPostingList(size_t syncSize) : syncIndex(syncSize) {}
    CommonHeader header;
    size_t DocID;
     ::vector< IPostEndDoc > posts;
     SyncIndex syncIndex;
 };
 
-size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits);
-size_t seekTermTarget(TermPostingListRaw *postings, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
-
-
-size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits);
+Location seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits);
+Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
+Location seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits);
+Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
 
 void createSeekIndex(TermPostingList *postings, size_t startLoc, size_t numLowBits);
 

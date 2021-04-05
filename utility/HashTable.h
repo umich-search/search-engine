@@ -244,7 +244,7 @@ public:
                 size_t size = table->numberOfBuckets;
                 Bucket< Key, Value > **buckets = table->buckets;
                 bool if_over = true;
-                for ( int i = cur_index + 1; i < size; i++ ) 
+                for ( uint64_t i = cur_index + 1; i < size; i++ ) 
                     {
                     if ( buckets[ i ] ) 
                         {

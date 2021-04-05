@@ -34,8 +34,8 @@
 
 
 // fnv hashing function
-
-uint32_t fnvHash( const char *data, size_t length ) 
+// TODO: Hashing a proble for onlyhaving uin32?
+uint32_t fnvHash( const char *data, size_t length )
     {
     static const size_t FnvOffsetBasis = 146959810393466560;
     static const size_t FnvPrime = 1099511628211ul;

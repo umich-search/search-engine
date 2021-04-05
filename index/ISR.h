@@ -1,7 +1,7 @@
-#include "Post.h"
-#include "PostingList.h"
 #pragma once
 #include "params.h"
+#include "Post.h"
+#include "PostingList.h"
 
 typedef size_t Location;
 
@@ -34,9 +34,9 @@ public:
     // Get position of last term
     Location GetEndLocation( );
     // get number of documents word is in
-    unsigned GetDocumentCount( );
+    d_Occurence GetDocumentCount( );
     // get number of occurances in index
-    unsigned GetNumberOfOccurrences( );
+    w_Occurence GetNumberOfOccurrences( );
     // get current post
     Post* GetCurrentPost( );
 private:

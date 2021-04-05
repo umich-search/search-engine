@@ -11,9 +11,9 @@
 #include <sys/mman.h>
 #include <iostream>
 
-#include "../utility/HashTable.h"
-#include "PostingList.h"
 #include "params.h"
+#include "PostingList.h"
+#include "../utility/HashTable.h"
 
 
 using Hash = HashTable< String, TermPostingList* >;
@@ -22,6 +22,7 @@ using HashBucket = Bucket< String, TermPostingList* >;
 
 
 static const size_t Unknown = 0;
+
 
 // TODO: Why setting to static fix linker error
 static size_t RoundUp( size_t length, size_t boundary )
@@ -33,7 +34,6 @@ static size_t RoundUp( size_t length, size_t boundary )
       mask = ~( oneless );
    return ( length + oneless ) & mask;
    }
-
 
 struct SerialTuple
    {
@@ -65,8 +65,8 @@ struct SerialTuple
        */
          size_t typeSize, numOfOccurenceSize, numOfDocumentSize, termSize;
          typeSize = sizeof(int);
-         numOfDocumentSize = sizeof(size_t);
-         numOfOccurenceSize = sizeof(size_t);
+         numOfDocumentSize = sizeof(w_Occurence);
+         numOfOccurenceSize = sizeof(d_Occurence);
          termSize = header->term.size() + 1;
          return typeSize + numOfOccurenceSize + numOfDocumentSize + termSize;
       }
@@ -126,28 +126,22 @@ struct SerialTuple
          memcpy( curr, b->tuple.key.cstr(), strlen( b->tuple.key.cstr() ) + 1 );
          curr = curr + strlen(b->tuple.key.cstr()) + 1;
          // Copy header
-         memcpy(curr, &b->tuple.value->header.numOfOccurence, sizeof(size_t));
-         memcpy(curr + sizeof(size_t), &b->tuple.value->header.numOfDocument, sizeof(size_t));
+         memcpy(curr, &b->tuple.value->header.numOfOccurence, sizeof(w_Occurence));
+         memcpy(curr + sizeof(w_Occurence), &b->tuple.value->header.numOfDocument, sizeof(d_Occurence));
           // TODO: Need to fix?
-         memcpy(curr + 2 * sizeof(size_t), &b->tuple.value->header.type, sizeof(int));
+         memcpy(curr + sizeof(w_Occurence) + sizeof(d_Occurence), &b->tuple.value->header.type, sizeof(int));
 
-         memcpy(curr + sizeof(int) + 2 * sizeof(size_t), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
+         memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
          curr += BytesRequired(&b->tuple.value->header);
-
+          //TODO: Should first delta in list be offset from front (aka position?)
          // Copy syncIndex
          // TODO: ENCODE HERE
          for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
-          /*
-          for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
-              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
-              curr += sizeof(size_t);
-          }
-*/
+
          for(size_t i = 0; i < b->tuple.value->syncIndex.postLocation.size(); ++i) {
-             int64_t ploc = b->tuple.value->syncIndex.postLocation[i];
              memcpy(curr, &b->tuple.value->syncIndex.postLocation[i], sizeof(size_t));
              curr += sizeof(size_t);
          }
@@ -156,15 +150,6 @@ struct SerialTuple
               memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
               curr += sizeof(size_t);
           }
- 
-          /*
-
-            // Copy posts
-         for(size_t i = 0; i < b->tuple.value->posts.size(); ++i) {
-             memcpy(curr, &b->tuple.value->posts[i].delta, sizeof(size_t));
-             curr += sizeof(size_t);
-         }
-*/
          return buffer + RoundUp( bytes, sizeof( size_t ) );
          }
       // Calculate the bytes required to encode a HashBucket as a
@@ -253,12 +238,6 @@ struct SerialTuple
                tupleSize += sentinalSize;
             }
          }
-        /*
-         cout << "headerSize: " << headerSize << endl;
-         cout << "bucketsSize: " << bucketsSize << endl;
-         cout << "tupleSize: "  << tupleSize << endl;
-         cout << "sentinalSize: " << sentinalSize << endl;
-         */
          return headerSize + bucketsSize + tupleSize;
          }
 

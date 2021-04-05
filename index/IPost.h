@@ -1,8 +1,6 @@
 
 #pragma once
-
 #include <stddef.h>  
-typedef size_t Location;
 #include "params.h"
 
 
@@ -25,11 +23,4 @@ struct IPostTerm {
 
 struct IPostEndDoc {
     Location delta;
-    Location lengthOfDocument;
-    Location numOfAnchorText;
-    Location numUniqueWords;
-    //char URL[MAX_URL_LENGTH];
-    char *URL;
-    //char title[MAX_TITLE_LENGTH];
-    char *title;
 };
