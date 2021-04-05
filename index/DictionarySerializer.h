@@ -1,4 +1,5 @@
 #pragma once
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -6,14 +7,13 @@
 #include <cassert>
 #include <cstring>
 #include <cstdint>
-//#include <malloc.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <iostream>
 
-#include "global.h"
+#include "Global.h"
 #include "PostingList.h"
-#include "../utility/HashTable.h"
+
 
 
 using Hash = HashTable< String, TermPostingList* >;

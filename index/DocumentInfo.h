@@ -1,5 +1,5 @@
-#include "../utility/HashTable.h"
-#include "../utility/Vector.h"
+#pragma once
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -7,7 +7,6 @@
 #include <cassert>
 #include <cstring>
 #include <cstdint>
-//#include <malloc.h>
 #include <unistd.h>
 #include <sys/mman.h>
 
@@ -16,9 +15,7 @@
 class DocumentInfo {
     public:
     DocumentInfo() : numDocWords(0), numUniqueDocWords(0), prevEndLocation(0) {}
-    
         size_t DocID; // DocumentID
-        // increment
         void incrementNumberOfWords();
         void incrementUniqueNumberOfWords();
         void reset( size_t DocID, Location recentEndDocLocation );
@@ -35,5 +32,4 @@ class DocumentInfo {
         char* URL;
 };
 
-//SyncIndex(size_t initialElements) : postingsListOffset(initialElements, -1), postLocation(initialElements, -1){
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "global.h"
+#include "Global.h"
 
 class Post {
 public:
@@ -13,5 +13,4 @@ public:
     Location GetEndLocation( );
 private:
     Location loc;
-    //virtual Attributes GetAttributes( );};
 };

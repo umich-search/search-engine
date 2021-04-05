@@ -1,9 +1,10 @@
+#pragma once
+
 #include "DictionarySerializer.h"
 #include "DocumentInfo.h"
 #include "DocumentsSerializer.h"
-#include "global.h"
-// TODO: Put coommon in global
-#include "../utility/string.h"
+#include "EndDocSerializer.h"
+#include "Global.h"
 
 class IndexConstructor {
 public:

@@ -1,7 +1,3 @@
-// Simple hash table template.
-
-// Nicole Hamilton  nham@umich.edu
-
 #pragma once
 
 #include <cassert>
@@ -9,13 +5,9 @@
 #include <iomanip>
 #include <cstdint>
 #include "string.h"
-#include "global.h"
+#include "Global.h"
 #define INITIAL_SIZE 5
 using namespace std;
-
-
-// You may add additional members or helper functions.
-
 
 // Compare C-strings, return true if they are the same.
 

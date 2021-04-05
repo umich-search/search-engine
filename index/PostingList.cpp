@@ -1,41 +1,4 @@
 #include "PostingList.h"
-#include "../utility/BinarySearch.h"
-
-Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {
-    try {
-        Location syncPoint = target >> numLowBits;
-        Location curr = syncPoint;
-        Location loc = raw->getPostLocationAt(syncPoint);
-        if(loc == -1) {
-            while(loc == -1) {
-                if(++curr >= numSyncPoints) {
-                    return -1;
-                }
-                loc = raw->getPostLocationAt(curr);
-            }
-            index = raw->getPostingsListOffsetAt(curr);
-            return loc;
-        } else {
-            // Until next sync point or posts runs out
-            for(Offset i = raw->getPostingsListOffsetAt(syncPoint);
-                loc < (syncPoint + 1) << numLowBits && i < raw->getHeader()->numOfOccurence;
-                ++i ) {
-                if(i != raw->getPostingsListOffsetAt(syncPoint)) {
-                    loc += raw->getPostAt(i).delta;
-                }
-                if(loc >= target) {
-                    index = i;
-                    return loc;
-                }
-            }
-        }
-        return -1;
-    }
-    catch(char *excp) {
-        return -1;
-    }
-}
-
 
 // TODO: size_t can't return -1 dummy
 size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
@@ -116,42 +79,6 @@ size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &inde
         return -1;
     }
 };
-
-Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {
-    try{
-        Location syncPoint = target >> numLowBits;
-        Location curr = syncPoint;
-        Location loc = raw->getPostLocationAt(syncPoint);
-        if(loc == -1) {
-            while(loc == -1) {
-                if(++curr >= numSyncPoints) {
-                    return -1;
-                }
-                loc = raw->getPostLocationAt(curr);
-                index = raw->getPostingsListOffsetAt(curr);
-            }
-            return loc;
-        } else {
-            // Until next sync point or posts runs out
-            for(Offset i = raw->getPostingsListOffsetAt(syncPoint);
-                loc < (syncPoint + 1) << numLowBits && i < raw->getHeader()->numOfOccurence;
-                ++i ) {
-                // Don't add delta from previous on initial sync point
-                if(i != raw->getPostingsListOffsetAt(syncPoint)) {
-                    loc += raw->getPostAt(i).delta;
-                }
-                if(loc >= target) {
-                    index = i;
-                    return loc;
-                }
-            }
-        }
-        return -1;
-    }
-    catch(char *excp) {
-        return -1;
-    }
-}
 
 int createSeekIndex(TermPostingList *postings, size_t startLoc, size_t numLowBits) {
     try {

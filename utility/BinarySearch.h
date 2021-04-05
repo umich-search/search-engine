@@ -1,6 +1,6 @@
 #include "Vector.h"
 template<typename T>
-int binarySearch(vector<T> v,T x)
+int binarySearch(::vector<T> v,T x)
 {
 	int start = 0;
 	int end = v.size() - 1;

@@ -4,9 +4,7 @@
 // Nicole Hamilton  nham@umich.edu
 
 #include "Vector.h"
-//#include <string>
 #include "string.h"
-#include <iostream>
 uint32_t fnvHash( const char *data, size_t length )
     {
     static const size_t FnvOffsetBasis = 146959810393466560;

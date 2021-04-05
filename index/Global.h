@@ -1,6 +1,10 @@
 
 #pragma once
 #include "stdlib.h"
+#include "../utility/Vector.h"
+#include "../utility/string.h"
+#include "../utility/HashTable.h"
+
 #define NUM_SYNC_POINTS 11
 #define MAX_SYNC_DISTANCE 100
 #define MAX_WORD_LENGTH 100
@@ -17,3 +21,13 @@ typedef uint64_t w_Occurence;
 typedef uint32_t d_Occurence;
 //
 typedef size_t Offset;
+
+
+enum Type{
+    Document,
+    URL,
+    Anchor,
+    Title,
+    Body
+};
+

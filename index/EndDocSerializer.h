@@ -1,6 +1,5 @@
 #pragma once
-#include "../utility/HashTable.h"
-#include "../utility/Vector.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -97,10 +96,8 @@ public:
     // TODO: Relable header
     static SerialEndDocs *Create( const EndDocPostingList *endDocs )
        {
-       // Your code here.
        size_t bytes = BytesRequired( endDocs );
        char *blobByte = new char[ bytes ];
-       //SerialEndDocs *blob = ( SerialEndDocs * )blobByte;
            Write( blobByte, blobByte + bytes, endDocs );
            return ( SerialEndDocs *) blobByte;
        }

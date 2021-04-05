@@ -1,14 +1,6 @@
-
 #pragma once
-#include <stddef.h>  
-#include "global.h"
 
-
-//typedef union Attributes {
-//    WordAttributes Word;
-//    DocAttributes Doc;
-//
-//};
+#include "Global.h"
 
 struct IPostTerm {
     IPostTerm(Location d) {

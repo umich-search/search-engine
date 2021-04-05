@@ -1,5 +1,6 @@
 #pragma once
-#include "global.h"
+
+#include "Global.h"
 #include "Post.h"
 #include "PostingList.h"
 
@@ -72,5 +73,4 @@ private:
     EndDocPostingList postingList;
     size_t currentPostingsIndex;
     Post currentPost;
-
 };

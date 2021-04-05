@@ -1,10 +1,8 @@
 
-//#include "stdlib.h"
 #pragma once
 #include "ISR.h"
 #include "DictionarySerializer.h"
-#include "../utility/string.h"
-#include "global.h"
+#include "Global.h"
 
 class Dictionary {
 public:

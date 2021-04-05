@@ -1,6 +1,5 @@
 #pragma once
-#include "../utility/HashTable.h"
-#include "../utility/Vector.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -8,7 +7,6 @@
 #include <cassert>
 #include <cstring>
 #include <cstdint>
-//#include <malloc.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <cstring>
@@ -116,8 +114,6 @@ class DocumentFile
          close( f );
          }
        
-       //using HashBucket = Bucket< String, TermPostingList* >;
-
       DocumentFile( const char *filename, const ::vector<DocumentDetails *> * docs )
          {
          // Open the file for write, map it, write

@@ -1,6 +1,4 @@
-#include "dictionary.h"
-#include "PostingList.h"
-
+#include "Dictionary.h"
 
 ISRWord* Dictionary::OpenISRWord( char* word ) {
     return nullptr;

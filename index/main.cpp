@@ -1,7 +1,8 @@
-#include "dictionary.h"
+#include "Dictionary.h"
 #include "EndDocSerializer.h"
 #include "../utility/Common.h"
 #include "IndexConstructor.h"
+#include "PostingListBlob.h"
 #define ASSERT(left,operator,right) { if(!((left) operator (right))){ std::cerr << "ASSERT FAILED: " << #left << #operator << #right << " @ " << __FILE__ << " (" << __LINE__ << "). " << #left << "=" << (left) << "; " << #right << "=" << (right) << std::endl; } }
 
 using namespace std;
