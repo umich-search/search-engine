@@ -74,8 +74,8 @@ struct TermPostingListRaw {
         buffer = b + strlen(b) + 1;
         header = (CommonHeaderBlob *)buffer;
         postingsListOffsetOffset = sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence) + strlen(header->term) + 1;
-        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * 8; //TODO: Change based off num sync points//header->numOfOccurence;
-        postsOffset = postLocationOffset + sizeof(size_t) * 8; //TODO: Same as abovevheader->numOfOccurence;
+        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * NUM_SYNC_POINTS;//8; //TODO: Change based off num sync points//header->numOfOccurence;
+        postsOffset = postLocationOffset + sizeof(size_t) * NUM_SYNC_POINTS;//8; //TODO: Same as abovevheader->numOfOccurence;
     }
     // TODO: Switch to smart pointers
     CommonHeaderBlob *getHeader() {
@@ -91,6 +91,14 @@ struct TermPostingListRaw {
     }
 
     IPostTerm getPostAt(Offset i) {
+        char * start = (char *)(buffer + postsOffset);
+        char * offset = (char *)(buffer + postsOffset + sizeof(size_t) * i);
+        size_t n;
+        for(unsigned int j = 0; j < header->numOfOccurence; ++j) {
+            IPostTerm t = IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * j));
+            n = *(size_t*)(buffer + postsOffset + sizeof(size_t) * j);
+        }
+        Offset l = (*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
         return IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
     }
 };
@@ -112,8 +120,8 @@ struct EndDocPostingListRaw {
         buffer = b;
         header = (CommonHeaderBlob *)buffer;
         postingsListOffsetOffset = sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence) + strlen(header->term) + 1;
-        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * 8; //TODO: Change based off num sync points//header->numOfOccurence;
-        postsOffset = postLocationOffset + sizeof(size_t) * 8; //TODO: Same as abovevheader->numOfOccurence;
+        postLocationOffset = postingsListOffsetOffset + sizeof(size_t) * NUM_SYNC_POINTS;//; //TODO: Change based off num sync points//header->numOfOccurence;
+        postsOffset = postLocationOffset + sizeof(size_t) * NUM_SYNC_POINTS; //TODO: Same as abovevheader->numOfOccurence;
     }
     // TODO: Switch to smart pointers
     CommonHeaderBlob *getHeader() {

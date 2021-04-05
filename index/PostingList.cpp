@@ -18,8 +18,8 @@ size_t seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, siz
                 return -1;
             }
             loc = raw->getPostLocationAt(curr);//postings->syncIndex.postLocation[curr];
-            index = raw->getPostingsListOffsetAt(curr);////postings->syncIndex.postingsListOffset[curr];
         }
+        index = raw->getPostingsListOffsetAt(curr);////postings->syncIndex.postingsListOffset[curr];
         return loc;
     } else {
         // Until next sync point or posts runs out
@@ -59,8 +59,8 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
                 return -1;
             }
             loc = postings->syncIndex.postLocation[curr];
-            index = postings->syncIndex.postingsListOffset[curr];
         }
+        index = postings->syncIndex.postingsListOffset[curr];
         return loc;
     } else {
         // Until next sync point or posts runs out
@@ -81,7 +81,6 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
 
 };
 
-// TODO: As of now not changed form seekTermTarget
 
 size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
     // TODO: Catch exceptions?
@@ -124,9 +123,11 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
     // TODO: Catch exceptions?
     size_t syncPoint = target >> numLowBits;
     // TODO: Prob need to switch to num of words in index?
+    /*
     if(syncPoint >= raw->getHeader()->numOfOccurence) {//postings->syncIndex.postingsListOffset.size()) {
         return -1;
     }
+     */
     
     Location curr = syncPoint;
     Location loc = raw->getPostLocationAt(syncPoint);

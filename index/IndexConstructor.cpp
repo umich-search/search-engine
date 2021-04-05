@@ -61,7 +61,7 @@ int IndexConstructor::Insert( String term, Type type ) {
 
     } else {
         // TODO: Change num sync points
-        postings = new TermPostingList(8);
+        postings = new TermPostingList(NUM_SYNC_POINTS);
         cd = new ConstructionData;
 
         postings->header = header;
@@ -116,20 +116,22 @@ void IndexConstructor::createNewChunk() {
     currentChunkNum++;
 }
 
-
-// TODO: I think ptr passing is off
-void IndexConstructor::createSynchronization() {
-    size_t leftShift = ( endLocation + 8 - 1 )/ 8;//numberOfWords / 8;///NUM_SYNC_POINTS;
-    // TODO: Change to dynamic caluclation of num low bits
-    //size_t numHighBits = sizeof(size_t) * 8 - leftShift;
-    int count=0;
+// returns number of low bits given total count and number of syncs
+size_t getNumLowBits(size_t count, size_t spacing) {
+    size_t leftShift = ( count + spacing - 1 )/ spacing;
+    int numLowBits=0;
     // While loop will run until we get n = 0
     while(leftShift)
     {
-        count++;
+        numLowBits++;
         leftShift=leftShift>>1;
     }
-    size_t numLowBits = count;
+    return numLowBits;
+}
+// TODO: I think ptr passing is off
+void IndexConstructor::createSynchronization() {
+
+    size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
     for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex.begin(); iterator != termIndex.end( ); ++iterator ) {
         createSeekIndex(iterator->value, constructionData.Find(iterator->key)->value->firstTermLoc, numLowBits);
     }

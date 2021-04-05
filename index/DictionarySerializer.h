@@ -65,8 +65,8 @@ struct SerialTuple
        */
          size_t typeSize, numOfOccurenceSize, numOfDocumentSize, termSize;
          typeSize = sizeof(int);
-         numOfDocumentSize = sizeof(w_Occurence);
-         numOfOccurenceSize = sizeof(d_Occurence);
+         numOfDocumentSize = sizeof(d_Occurence);
+         numOfOccurenceSize = sizeof(w_Occurence);
          termSize = header->term.size() + 1;
          return typeSize + numOfOccurenceSize + numOfDocumentSize + termSize;
       }
@@ -99,11 +99,12 @@ struct SerialTuple
             char key
             char posstingsList
          */
-          size_t hashValueSize, keySize, postingsListSize;
+          size_t hashValueSize, keySize, postingsListSize, memberVarsSize;
           hashValueSize = sizeof( uint32_t);
           keySize = sizeof(strlen(b->tuple.key.cstr())); 
           postingsListSize = BytesRequired(b->tuple.value);
-          return hashValueSize + keySize + postingsListSize;
+          memberVarsSize = sizeof(Offset) + sizeof(uint32_t);
+          return hashValueSize + keySize + postingsListSize + memberVarsSize;
       }
       // Write the HashBucket out as a SerialTuple in the buffer,
       // returning a pointer to one past the last character written.

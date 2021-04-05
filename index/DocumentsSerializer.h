@@ -76,25 +76,6 @@ struct DocumentBlob {
         }
         return buffer + RoundUp( bytes, sizeof( size_t ) );
     }
-    /*
-    static HashBlob *Create( const Hash *hashTable )
-       {
-       // Your code here.
-       size_t bytes = BytesRequired( hashTable );
-       char *blobByte = new char[ bytes ];
-       HashBlob *blob = ( HashBlob * )blobByte;
-       return Write( blob, bytes, hashTable );
-       }
-
-    // Discard
-
-    static void Discard( HashBlob *blob )
-       {
-       // Your code here.
-       char *blobByte = ( char * )blob;
-       delete [] blobByte;
-       }
-    */
 };
 
 class DocumentFile

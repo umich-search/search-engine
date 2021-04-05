@@ -70,7 +70,6 @@ public:
        memcpy(curr + sizeof(w_Occurence), &p->header.numOfDocument, sizeof(d_Occurence));
         // TODO: Need to fix?
        memcpy(curr + sizeof(w_Occurence) + sizeof(d_Occurence), &p->header.type, sizeof(int));
-        // TODO: no cstr()?
         // TODO: Should modify header?
        memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), p->header.term.cstr(), p->header.term.size() + 1);
        curr += BytesRequired(&p->header);

@@ -5,10 +5,22 @@
 #define ASSERT(left,operator,right) { if(!((left) operator (right))){ std::cerr << "ASSERT FAILED: " << #left << #operator << #right << " @ " << __FILE__ << " (" << __LINE__ << "). " << #left << "=" << (left) << "; " << #right << "=" << (right) << std::endl; } }
 
 using namespace std;
+// returns number of low bits given total count and number of syncs
+size_t getNumLowBits2(size_t count, size_t spacing) {
+    size_t leftShift = ( count + spacing - 1 )/ spacing;
+    int numLowBits=0;
+    // While loop will run until we get n = 0
+    while(leftShift)
+    {
+        numLowBits++;
+        leftShift=leftShift>>1;
+    }
+    return numLowBits;
+}
 
 int main (int argc, char *argv[]) 
 {
-    
+    size_t lowBits;
     // CREATE POSTING LIST
     CommonHeader header1;
     SyncIndex syncIndex1;
@@ -46,7 +58,7 @@ int main (int argc, char *argv[])
     // CREATE POSTING LIST
     //CommonHeader header3;
 
-    TermPostingList list3(8);
+    TermPostingList list3(NUM_SYNC_POINTS);
     list3.header.term = "cow";
     list3.header.numOfDocument = 333;
     list3.header.numOfOccurence = 1024;
@@ -57,118 +69,127 @@ int main (int argc, char *argv[])
     for(unsigned int i = 0; i < list3.header.numOfOccurence - 1; ++i) {
         list3.posts.pushBack(IPostTerm(1));
     }
+    lowBits = getNumLowBits2(1024, NUM_SYNC_POINTS);
+
     // Should be 7 lowbits, so we'll have 1024/2^7 == 8 sync points
-    createSeekIndex(&list3, 0, 7);
-    
-    ASSERT(list3.syncIndex.postingsListOffset.size(), ==, 8);
-    ASSERT(list3.syncIndex.postLocation.size(), ==, 8);
-    ASSERT(list3.syncIndex.postingsListOffset[0], ==, 0);
-    ASSERT(list3.syncIndex.postingsListOffset[1], ==, 128);
-    ASSERT(list3.syncIndex.postingsListOffset[2], ==, 256);
-    ASSERT(list3.syncIndex.postingsListOffset[3], ==, 384);
-    ASSERT(list3.syncIndex.postingsListOffset[5], ==, 640);
-    ASSERT(list3.syncIndex.postingsListOffset[7], ==, 896);
-    ASSERT(list3.syncIndex.postLocation[0], ==, 0);
-    ASSERT(list3.syncIndex.postLocation[1], ==, 128);
-    ASSERT(list3.syncIndex.postLocation[2], ==, 256);
-    ASSERT(list3.syncIndex.postLocation[3], ==, 384);
-    ASSERT(list3.syncIndex.postLocation[5], ==, 640);
-    ASSERT(list3.syncIndex.postLocation[7], ==, 896);
+    createSeekIndex(&list3, 0, lowBits);
+    if (NUM_SYNC_POINTS == 8 ) {
+        ASSERT(list3.syncIndex.postingsListOffset.size(), ==, 8);
+        ASSERT(list3.syncIndex.postLocation.size(), ==, 8);
+        ASSERT(list3.syncIndex.postingsListOffset[0], ==, 0);
+        ASSERT(list3.syncIndex.postingsListOffset[1], ==, 128);
+        ASSERT(list3.syncIndex.postingsListOffset[2], ==, 256);
+        ASSERT(list3.syncIndex.postingsListOffset[3], ==, 384);
+        ASSERT(list3.syncIndex.postingsListOffset[5], ==, 640);
+        ASSERT(list3.syncIndex.postingsListOffset[7], ==, 896);
+        ASSERT(list3.syncIndex.postLocation[0], ==, 0);
+        ASSERT(list3.syncIndex.postLocation[1], ==, 128);
+        ASSERT(list3.syncIndex.postLocation[2], ==, 256);
+        ASSERT(list3.syncIndex.postLocation[3], ==, 384);
+        ASSERT(list3.syncIndex.postLocation[5], ==, 640);
+        ASSERT(list3.syncIndex.postLocation[7], ==, 896);
+    }
+
     
     cout << "TEST: Create Synchronization Index with non-continous deltas" << endl;
-    TermPostingList list4(8);
+    TermPostingList list4(NUM_SYNC_POINTS);
     list4.header.numOfOccurence = 16;
     list4.posts.pushBack(IPostTerm(0));
 
     for(unsigned int i = 1; i < list4.header.numOfOccurence; ++i) {
         list4.posts.pushBack(IPostTerm(i));
     }
-    createSeekIndex(&list4, 0, 4);
+    lowBits = getNumLowBits2(120., NUM_SYNC_POINTS);
+    createSeekIndex(&list4, 0, lowBits);
+    if(NUM_SYNC_POINTS == 8) {
+        ASSERT(list4.syncIndex.postingsListOffset.size(), ==, 8);
+        ASSERT(list4.syncIndex.postLocation.size(), ==, 8);
+        ASSERT(list4.syncIndex.postingsListOffset[0], ==, 0);
+        ASSERT(list4.syncIndex.postingsListOffset[1], ==, 6);
+        ASSERT(list4.syncIndex.postingsListOffset[2], ==, 8);
+        ASSERT(list4.syncIndex.postingsListOffset[3], ==, 10);
+        ASSERT(list4.syncIndex.postingsListOffset[4], ==, 11);
+        ASSERT(list4.syncIndex.postingsListOffset[5], ==, 13);
+        ASSERT(list4.syncIndex.postingsListOffset[6], ==, 14);
+        ASSERT(list4.syncIndex.postingsListOffset[7], ==, 15);
+        ASSERT(list4.syncIndex.postLocation[0], ==, 0);
+        ASSERT(list4.syncIndex.postLocation[1], ==, 21);
+        ASSERT(list4.syncIndex.postLocation[2], ==, 36);
+        ASSERT(list4.syncIndex.postLocation[3], ==, 55);
+        ASSERT(list4.syncIndex.postLocation[4], ==, 66);
+        ASSERT(list4.syncIndex.postLocation[5], ==, 91);
+        ASSERT(list4.syncIndex.postLocation[6], ==, 105);
+        ASSERT(list4.syncIndex.postLocation[7], ==, 120);
+    }
 
-    ASSERT(list4.syncIndex.postingsListOffset.size(), ==, 8);
-    ASSERT(list4.syncIndex.postLocation.size(), ==, 8);
-    ASSERT(list4.syncIndex.postingsListOffset[0], ==, 0);
-    ASSERT(list4.syncIndex.postingsListOffset[1], ==, 6);
-    ASSERT(list4.syncIndex.postingsListOffset[2], ==, 8);
-    ASSERT(list4.syncIndex.postingsListOffset[3], ==, 10);
-    ASSERT(list4.syncIndex.postingsListOffset[4], ==, 11);
-    ASSERT(list4.syncIndex.postingsListOffset[5], ==, 13);
-    ASSERT(list4.syncIndex.postingsListOffset[6], ==, 14);
-    ASSERT(list4.syncIndex.postingsListOffset[7], ==, 15);
-    ASSERT(list4.syncIndex.postLocation[0], ==, 0);
-    ASSERT(list4.syncIndex.postLocation[1], ==, 21);
-    ASSERT(list4.syncIndex.postLocation[2], ==, 36);
-    ASSERT(list4.syncIndex.postLocation[3], ==, 55);
-    ASSERT(list4.syncIndex.postLocation[4], ==, 66);
-    ASSERT(list4.syncIndex.postLocation[5], ==, 91);
-    ASSERT(list4.syncIndex.postLocation[6], ==, 105);
-    ASSERT(list4.syncIndex.postLocation[7], ==, 120);
     
     cout << "TEST: Seek using Synchronization Index" << endl;
     size_t indexPos = 0;
     size_t loc;
     // test with basic lsit
-    loc = seekTermTarget(&list3, 0, indexPos, 7);
+    lowBits = getNumLowBits2(1024, NUM_SYNC_POINTS);
+    loc = seekTermTarget(&list3, 0, indexPos, lowBits);
     ASSERT(loc,==,0);
     ASSERT(indexPos,==,0);
     
-    loc = seekTermTarget(&list3, 1, indexPos, 7);
+    loc = seekTermTarget(&list3, 1, indexPos, lowBits);
     ASSERT(loc,==,1);
     ASSERT(indexPos,==,1);
     
-    loc = seekTermTarget(&list3, 88, indexPos, 7);
+    loc = seekTermTarget(&list3, 88, indexPos, lowBits);
     ASSERT(loc,==,88);
     ASSERT(indexPos,==,88);
     
-    loc = seekTermTarget(&list3, 512, indexPos, 7);
+    loc = seekTermTarget(&list3, 512, indexPos, lowBits);
     ASSERT(loc,==,512);
     ASSERT(indexPos,==,512);
     
-    loc = seekTermTarget(&list3, 831, indexPos, 7);
+    loc = seekTermTarget(&list3, 831, indexPos, lowBits);
     ASSERT(loc,==,831);
     ASSERT(indexPos,==,831);
     
-    loc = seekTermTarget(&list3, 1023, indexPos, 7);
+    loc = seekTermTarget(&list3, 1023, indexPos, lowBits);
     ASSERT(loc,==,1023);
     ASSERT(indexPos,==,1023);
     
-    loc = seekTermTarget(&list3, 1024, indexPos, 7);
+    loc = seekTermTarget(&list3, 1024, indexPos, lowBits);
     ASSERT(loc,==, -1);
     ASSERT(indexPos,==,1023);
     // Test with complex list
-    loc = seekTermTarget(&list4, 0,indexPos, 4);
+    lowBits = getNumLowBits2(120, NUM_SYNC_POINTS);
+    loc = seekTermTarget(&list4, 0,indexPos, lowBits);
     ASSERT(loc,==, 0);
     ASSERT(indexPos,==,0);
     
-    loc = seekTermTarget(&list4, 2,indexPos, 4);
+    loc = seekTermTarget(&list4, 2,indexPos, lowBits);
     ASSERT(loc,==,3);
     ASSERT(indexPos,==,2);
     
-    loc = seekTermTarget(&list4, 10, indexPos, 4);
+    loc = seekTermTarget(&list4, 10, indexPos, lowBits);
     ASSERT(loc,==, 10);
     ASSERT(indexPos,==,4);
     
-    loc = seekTermTarget(&list4, 11, indexPos, 4);
+    loc = seekTermTarget(&list4, 11, indexPos, lowBits);
     ASSERT(loc,==, 15);
     ASSERT(indexPos,==,5);
     
-    loc = seekTermTarget(&list4, 55, indexPos, 4);
+    loc = seekTermTarget(&list4, 55, indexPos, lowBits);
     ASSERT(loc,==, 55);
     ASSERT(indexPos,==,10);
     
-    loc = seekTermTarget(&list4, 91, indexPos, 4);
+    loc = seekTermTarget(&list4, 91, indexPos, lowBits);
     ASSERT(loc,==, 91);
     ASSERT(indexPos,==,13);
     
-    loc = seekTermTarget(&list4, 104, indexPos, 4);
+    loc = seekTermTarget(&list4, 104, indexPos, lowBits);
     ASSERT(loc,==, 105);
     ASSERT(indexPos,==,14);
     
-    loc = seekTermTarget(&list4, 120, indexPos, 4);
+    loc = seekTermTarget(&list4, 120, indexPos, lowBits);
     ASSERT(loc,==, 120);
     ASSERT(indexPos,==,15);
     
-    loc = seekTermTarget(&list4, 125, indexPos, 4);
+    loc = seekTermTarget(&list4, 125, indexPos, lowBits);
     ASSERT(loc,==, -1);
     ASSERT(indexPos,==,15);
 
@@ -425,35 +446,40 @@ int main (int argc, char *argv[])
 
     ic3.createSynchronization();
     SyncIndex &deerSync = ic3.termIndex.Find("Deer")->value->syncIndex;
-    ASSERT(deerSync.postLocation.size(), ==, 8);
-    ASSERT(deerSync.postingsListOffset.size(), ==, 8);
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,i*2);
-    }
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,-1);
-    }
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(deerSync.postLocation[i],==,i*8 + 3);
-    }
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postLocation[i],==,-1);
-    }
     
+    ASSERT(deerSync.postLocation.size(), ==, NUM_SYNC_POINTS);
+    ASSERT(deerSync.postingsListOffset.size(), ==, NUM_SYNC_POINTS);
+    if(NUM_SYNC_POINTS == 8) {
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,i*2);
+        }
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,-1);
+        }
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(deerSync.postLocation[i],==,i*8 + 3);
+        }
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postLocation[i],==,-1);
+        }
+    }
+
     SyncIndex &dogSync = ic3.termIndex.Find("Dog")->value->syncIndex;
-    ASSERT(dogSync.postLocation.size(), ==, 8);
-    ASSERT(dogSync.postingsListOffset.size(), ==, 8);
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(dogSync.postingsListOffset[i],==,i*2);
-    }
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(dogSync.postingsListOffset[i],==,-1);
-    }
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(dogSync.postLocation[i],==,i*8);
-    }
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(dogSync.postLocation[i],==,-1);
+    ASSERT(dogSync.postLocation.size(), ==, NUM_SYNC_POINTS);
+    ASSERT(dogSync.postingsListOffset.size(), ==, NUM_SYNC_POINTS);
+    if(NUM_SYNC_POINTS == 8){
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(dogSync.postingsListOffset[i],==,i*2);
+        }
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(dogSync.postingsListOffset[i],==,-1);
+        }
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(dogSync.postLocation[i],==,i*8);
+        }
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(dogSync.postLocation[i],==,-1);
+        }
     }
 
     cout << "TEST: Large hashblob creation and access" << endl;
@@ -486,42 +512,45 @@ int main (int argc, char *argv[])
     ASSERT(raw2d.getHeader()->numOfDocument, ==, 1);
     ASSERT(raw2d.getHeader()->type, ==, 4);
     
-    cout << "TEST: Basic hashblob seek" << endl;
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(raw2.getPostingsListOffsetAt(i),==,i*2);
+    if (NUM_SYNC_POINTS == 8) {
+        cout << "TEST: Basic hashblob seek" << endl;
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(raw2.getPostingsListOffsetAt(i),==,i*2);
+        }
+        /* TODO: Need to convert stuff to int64 or int32
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,-1);
+        }
+         */
+        
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(raw2.getPostLocationAt(i),==,i*8);
+        }
+        /*
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,-1);
+        }
+         */
+        
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(raw2b.getPostingsListOffsetAt(i),==,i*2);
+        }
+        /* TODO: Need to convert stuff to int64 or int32
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,-1);
+        }
+         */
+        
+        for(unsigned int i = 0; i < 5; ++i) {
+            ASSERT(raw2b.getPostLocationAt(i),==,i*8 + 3);
+        }
+        /*
+        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
+            ASSERT(deerSync.postingsListOffset[i],==,-1);
+        }
+         */
     }
-    /* TODO: Need to convert stuff to int64 or int32
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,-1);
-    }
-     */
-    
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(raw2.getPostLocationAt(i),==,i*8);
-    }
-    /*
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,-1);
-    }
-     */
-    
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(raw2b.getPostingsListOffsetAt(i),==,i*2);
-    }
-    /* TODO: Need to convert stuff to int64 or int32
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,-1);
-    }
-     */
-    
-    for(unsigned int i = 0; i < 5; ++i) {
-        ASSERT(raw2b.getPostLocationAt(i),==,i*8 + 3);
-    }
-    /*
-    for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-        ASSERT(deerSync.postingsListOffset[i],==,-1);
-    }
-     */
+
 
     cout << "TEST: Optimzed index have same values" << endl;
     ic3.termIndex.Optimize();
@@ -585,32 +614,32 @@ int main (int argc, char *argv[])
    ASSERT(rawSyncTable1.getHeader()->numOfDocument, ==, 333);
    ASSERT(rawSyncTable1.getHeader()->numOfOccurence, ==, 1024);
    ASSERT(rawSyncTable1.getHeader()->type, ==, 4);
-
-   loc = seekTermTarget(&rawSyncTable1, 0, indexPos, 7, 8);
+    lowBits = getNumLowBits2(rawSyncTable1.getHeader()->numOfOccurence, NUM_SYNC_POINTS);
+   loc = seekTermTarget(&rawSyncTable1, 0, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,0);
    ASSERT(indexPos,==,0);
    
-   loc = seekTermTarget(&rawSyncTable1, 1, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 1, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,1);
    ASSERT(indexPos,==,1);
    
-   loc = seekTermTarget(&rawSyncTable1, 88, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 88, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,88);
    ASSERT(indexPos,==,88);
    
-   loc = seekTermTarget(&rawSyncTable1, 512, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 512, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,512);
    ASSERT(indexPos,==,512);
    
-   loc = seekTermTarget(&rawSyncTable1, 831, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 831, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,831);
    ASSERT(indexPos,==,831);
    
-   loc = seekTermTarget(&rawSyncTable1, 1023, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 1023, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,1023);
    ASSERT(indexPos,==,1023);
    
-   loc = seekTermTarget(&rawSyncTable1, 1024, indexPos, 7, 8);
+   loc = seekTermTarget(&rawSyncTable1, 1024, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==, -1);
    ASSERT(indexPos,==,1023);
     
@@ -621,40 +650,41 @@ int main (int argc, char *argv[])
 
     syncTableHash2Blob->Find("list4");
     TermPostingListRaw rawSyncTable2(syncTableHash2Blob->Find("list4")->DynamicSpace);
+    lowBits = getNumLowBits2(120, NUM_SYNC_POINTS);
     ASSERT(rawSyncTable2.getHeader()->numOfOccurence, ==, 16);
-    loc = seekTermTarget(&rawSyncTable2, 0,indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 0,indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 0);
     ASSERT(indexPos,==,0);
     
-    loc = seekTermTarget(&rawSyncTable2, 2,indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 2,indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==,3);
     ASSERT(indexPos,==,2);
     
-    loc = seekTermTarget(&rawSyncTable2, 10, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 10, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 10);
     ASSERT(indexPos,==,4);
     
-    loc = seekTermTarget(&rawSyncTable2, 11, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 11, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 15);
     ASSERT(indexPos,==,5);
     
-    loc = seekTermTarget(&rawSyncTable2, 55, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 55, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 55);
     ASSERT(indexPos,==,10);
     
-    loc = seekTermTarget(&rawSyncTable2, 91, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 91, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 91);
     ASSERT(indexPos,==,13);
     
-    loc = seekTermTarget(&rawSyncTable2, 104, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 104, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 105);
     ASSERT(indexPos,==,14);
     
-    loc = seekTermTarget(&rawSyncTable2, 120, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 120, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 120);
     ASSERT(indexPos,==,15);
     
-    loc = seekTermTarget(&rawSyncTable2, 125, indexPos, 4, 8);
+    loc = seekTermTarget(&rawSyncTable2, 125, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, -1);
     ASSERT(indexPos,==,15);
     
@@ -768,93 +798,94 @@ int main (int argc, char *argv[])
     // TODO: Remove dependence on this pass through?
     size_t fisIndex;
     size_t fisLoc;
+    lowBits = getNumLowBits2(ic5.endLocation, NUM_SYNC_POINTS);
     // Check dog postings
-    fisLoc = seekTermTarget(dogPostings, 0, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 0, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 0);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekTermTarget(dogPostings, 1, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 1, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 1);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekTermTarget(dogPostings, 2, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 2, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 2);
     ASSERT(fisIndex, ==, 2);
-    fisLoc = seekTermTarget(dogPostings, 3, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 3, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 5);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekTermTarget(dogPostings, 6, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 6, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 6);
     ASSERT(fisIndex, ==, 4);
-    fisLoc = seekTermTarget(dogPostings, 7, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 7, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 7);
     ASSERT(fisIndex, ==, 5);
-    fisLoc = seekTermTarget(dogPostings, 9, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 9, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 11);
     ASSERT(fisIndex, ==, 6);
-    fisLoc = seekTermTarget(dogPostings, 12, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 12, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 17);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekTermTarget(dogPostings, 20, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 20, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 23);
     ASSERT(fisIndex, ==, 8);
-    fisLoc = seekTermTarget(dogPostings, 29, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 29, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 29);
     ASSERT(fisIndex, ==, 9);
-    fisLoc = seekTermTarget(dogPostings, 31, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 31, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 35);
     ASSERT(fisIndex, ==, 10);
-    fisLoc = seekTermTarget(dogPostings, 41, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 41, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 41);
     ASSERT(fisIndex, ==, 11);
-    fisLoc = seekTermTarget(dogPostings, 43, fisIndex, 3);
+    fisLoc = seekTermTarget(dogPostings, 43, fisIndex, lowBits);
     ASSERT(fisLoc, ==, -1);
     ASSERT(fisIndex, ==, 11);
     // Check deer postings
     TermPostingList * deerPostings = ic5.termIndex.Find("deer")->value;
-    fisLoc = seekTermTarget(deerPostings, 0, fisIndex, 3);
+    fisLoc = seekTermTarget(deerPostings, 0, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 13);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekTermTarget(deerPostings, 3, fisIndex, 3);
+    fisLoc = seekTermTarget(deerPostings, 3, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 13);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekTermTarget(deerPostings, 19, fisIndex, 3);
+    fisLoc = seekTermTarget(deerPostings, 19, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 19);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekTermTarget(deerPostings, 37, fisIndex, 3);
+    fisLoc = seekTermTarget(deerPostings, 37, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 37);
     ASSERT(fisIndex, ==, 4);
-    fisLoc = seekTermTarget(deerPostings, 43, fisIndex, 3);
+    fisLoc = seekTermTarget(deerPostings, 43, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 43);
     ASSERT(fisIndex, ==, 5);
     // Check endDoc postings
     EndDocPostingList * endDoc1 = &ic5.endDocPostings;
-    fisLoc = seekEndDocTarget(endDoc1, 0, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 0, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 3);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekEndDocTarget(endDoc1, 4, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 4, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 8);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekEndDocTarget(endDoc1, 5, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 5, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 8);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekEndDocTarget(endDoc1, 11, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 11, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 14);
     ASSERT(fisIndex, ==, 2);
-    fisLoc = seekEndDocTarget(endDoc1, 20, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 20, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 20);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekEndDocTarget(endDoc1, 17, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 17, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 20);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekEndDocTarget(endDoc1, 26, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 26, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 26);
     ASSERT(fisIndex, ==, 4);
-    fisLoc = seekEndDocTarget(endDoc1, 39, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 39, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(endDoc1, 44, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 44, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(endDoc1, 45, fisIndex, 3);
+    fisLoc = seekEndDocTarget(endDoc1, 45, fisIndex, lowBits);
     ASSERT(fisLoc, ==, -1);
     ASSERT(fisIndex, ==, 7);
     
@@ -864,82 +895,81 @@ int main (int argc, char *argv[])
     sTableBlob->Find("dog");
     TermPostingListRaw rawDogList(sTableBlob->Find("dog")->DynamicSpace);
     // Check dog postings
-    fisLoc = seekTermTarget(&rawDogList, 0, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 0, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 0);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekTermTarget(&rawDogList, 1, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 1, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 1);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekTermTarget(&rawDogList, 2, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 2, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 2);
     ASSERT(fisIndex, ==, 2);
-    fisLoc = seekTermTarget(&rawDogList, 3, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 3, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 5);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekTermTarget(&rawDogList, 6, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 6, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 6);
     ASSERT(fisIndex, ==, 4);
-    fisLoc = seekTermTarget(&rawDogList, 7, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 7, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 7);
     ASSERT(fisIndex, ==, 5);
-    fisLoc = seekTermTarget(&rawDogList, 9, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 9, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 11);
     ASSERT(fisIndex, ==, 6);
-    fisLoc = seekTermTarget(&rawDogList, 12, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 12, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 17);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekTermTarget(&rawDogList, 20, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 20, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 23);
     ASSERT(fisIndex, ==, 8);
-    fisLoc = seekTermTarget(&rawDogList, 29, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 29, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 29);
     ASSERT(fisIndex, ==, 9);
-    fisLoc = seekTermTarget(&rawDogList, 31, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 31, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 35);
     ASSERT(fisIndex, ==, 10);
-    fisLoc = seekTermTarget(&rawDogList, 41, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 41, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 41);
     ASSERT(fisIndex, ==, 11);
-    fisLoc = seekTermTarget(&rawDogList, 43, fisIndex, 3, 8);
+    fisLoc = seekTermTarget(&rawDogList, 43, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, -1);
     ASSERT(fisIndex, ==, 11);
 
     
     cout << "TEST: EndDoc postings list hashblob synchronization" << endl;
-    
     SerialEndDocs * sBlob;
     SerialEndDocs * endDocBlob = sBlob->Create(endDoc1);
     EndDocPostingListRaw endDoc1Raw(endDocBlob->DynamicSpace);
     ASSERT(endDoc1Raw.getHeader()->numOfDocument, ==, 8);
     // Check endDoc postings
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 0, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 0, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 3);
     ASSERT(fisIndex, ==, 0);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 4, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 4, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 8);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 5, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 5, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 8);
     ASSERT(fisIndex, ==, 1);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 11, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 11, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 14);
     ASSERT(fisIndex, ==, 2);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 20, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 20, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 20);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 17, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 17, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 20);
     ASSERT(fisIndex, ==, 3);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 26, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 26, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 26);
     ASSERT(fisIndex, ==, 4);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 39, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 39, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 44, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 44, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 45, fisIndex, 3, 8);
+    fisLoc = seekEndDocTarget(&endDoc1Raw, 45, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, -1);
     ASSERT(fisIndex, ==, 7);
 

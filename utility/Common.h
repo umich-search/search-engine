@@ -67,8 +67,21 @@ bool CompareEqual(const String &L,const String &R) {
     //cout << "Returning with : " << ret << endl;
     return ret;
 }
+/*
+// returns number of low bits given total count and number of syncs
+size_t getNumLowBits(size_t count, size_t spacing) {
+    size_t leftShift = ( count + spacing - 1 )/ spacing;
+    int numLowBits=0;
+    // While loop will run until we get n = 0
+    while(leftShift)
+    {
+        numLowBits++;
+        leftShift=leftShift>>1;
+    }
+    return numLowBits;
+}
 
-
+*/
 // -v (verbose) command line option.
 
 extern bool optVerbose;
