@@ -19,10 +19,11 @@ class CrawlerManager : public Thread
         void HaltCrawl( );
 
     private:   
-        void DoTask( void *args ) override;
+        void DoTask( Task *task ) override;
+
+        Frontier *frontier;
 
         vector< Crawler > crawlers;
-        Frontier *frontier;
         TaskQueue crawlerTaskQueue;
         TaskQueue managerTaskQueue;
     };

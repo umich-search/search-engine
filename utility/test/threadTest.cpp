@@ -10,35 +10,47 @@ class Test : public Thread
     {
 public:
 private:
-    void DoTask( void *args ) override
+    void DoTask( Task *task ) override
         {
-            String *url = (String *)args;
-            std::cout << "Thread (" << GetID() << "): " << url->cstr() << std::endl;
-            //int test = 1 / 0;
-            return;
+        std::string *args = (std::string *) task->GetArgs();
+        Print(*args);
+        //int test = 1 / 0;
+        if ( task->DeleteArgs() )
+            delete args;
+        return;
         }
     };
 
 int main(int argc, char **argv )
     {
     TaskQueue taskQueue;
-    vector<Test> tests(1000);
+    pthread_mutex_t printMutex;
+    pthread_mutex_init(&printMutex, nullptr);
+    vector<Test> threads(100);
+    // Test thread creation
     bool startup = true;
-    for ( size_t i = 0; i < tests.size(); ++i )
+    for ( size_t i = 0; i < threads.size(); ++i )
         {
-            startup = startup && tests[i].Start( i, &taskQueue );
+        startup = startup && threads[i].Start( i, &taskQueue, &printMutex );
         }
     std::cout << "All threads started: " << startup << std::endl;
-    String task1 = "task1";
-    String task2 = "task2";
-    String task3 = "task3";
-    taskQueue.PushTask((void *) &task1);
-    taskQueue.PushTask((void *) &task2);
-    taskQueue.PushTask((void *) &task3);
+    // Test stack args (no dynamic memory)
+    std::string args("Stack");
+    for ( size_t i = 0; i < 1000; ++i )
+        {
+        taskQueue.PushTask((void *)&args, false );
+        }
+    taskQueue.WaitForEmptyQueue();
+    // Test heap args (dynamic memory)
+    for ( size_t i = 0; i < 1000; ++i )
+        {
+        std::string* args = new std::string("Heap");
+        taskQueue.PushTask((void *)args, true );
+        }
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     taskQueue.Halt();
-    for ( size_t i = 0; i < tests.size(); ++i )
+    for ( size_t i = 0; i < threads.size(); ++i )
         {
-            tests[i].Join();
+        threads[i].Join();
         }
     }

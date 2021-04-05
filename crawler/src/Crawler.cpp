@@ -5,10 +5,10 @@ Crawler::Crawler( ){};
 
 Crawler::~Crawler( ){};
 
-void Crawler::DoTask( void *args )
+void Crawler::DoTask( Task *task )
     {
     // 1. Get a URL from the frontier
-    String *url = (String *)args;
+    String *url = (String *) task->GetArgs();
 
     // 2. Check for robots.txt for this domain
     ParsedUrl parsedUrl( url->cstr() );

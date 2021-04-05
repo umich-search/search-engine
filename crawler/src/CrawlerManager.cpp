@@ -16,7 +16,7 @@ void CrawlerManager::StartCrawl()
 
 void CrawlerManager::HaltCrawl()
     {
-    managerTaskQueue.Halt();
+    managerTaskQueue.Halt(); // stop pulling from frontier
     crawlerTaskQueue.Halt();
     for ( size_t i = 0; i < crawlers.size(); ++i )
         {
@@ -24,11 +24,18 @@ void CrawlerManager::HaltCrawl()
         }
     }
 
-void CrawlerManager::DoTask( void *args )
+void CrawlerManager::DoTask( Task *task )
     {
-    // TODO: task needs to run forever, but need a way to interrupt
-    // Block the frontier? 
-    // Run for limited time before new task issued?
+    while ( task->ExitStatus() == false || frontier->Empty() )
+        {
+        // Get a URL from the frontier
+        String url = frontier->PopUrl();
+        // Put the URL on the heap
+        String *args = new String(url);
+        // Send the task to the pool of crawler threads
+        crawlerTaskQueue.PushTask((void *) args, true );
+        // URL will be freed from heap in crawler thread
+        }
     }
 
 // int main( int argc, char **argv )

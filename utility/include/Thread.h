@@ -8,15 +8,16 @@
 class Thread
     {
     public:
-        Thread() { }
+        Thread( ) { }
 
         ~Thread( ) { }
 
         // Returns true on successful thread creation
-        bool Start( int threadID, TaskQueue *queue )
+        bool Start( int threadID, TaskQueue *queue, pthread_mutex_t *pMutex )
             {
             ID = threadID;
             taskQueue = queue;
+            printMutex = pMutex;
             return pthread_create( &thread, NULL, ThreadStart, this ) == 0;
             }
 
@@ -26,21 +27,29 @@ class Thread
             return pthread_join( thread, NULL );
             }
 
+    protected:
+        // Override this function with the single task a thread should run
+        virtual void DoTask( Task *task ) = 0;
+
         // Get the ID of this thread
         int GetID()
             {
             return ID;
             }
 
-    protected:
-        // Override this function with the single task a thread should run
-        virtual void DoTask( void *args ) = 0;
+        void Print( std::string output )
+            {
+            pthread_mutex_lock(printMutex);
+            std::cout << "Thread (ID:#" << GetID() << "): " << output << std::endl;
+            pthread_mutex_unlock(printMutex);
+            }
 
     private:
 
         int ID;
         pthread_t thread;
         TaskQueue *taskQueue;
+        pthread_mutex_t *printMutex;
 
         // Entry point for the pthread
         static void * ThreadStart( void *context ) 
@@ -55,7 +64,7 @@ class Thread
         // entire process, losing the frontier/index in memory 
         void Work()
             {
-            for( void *task = taskQueue->PopTask(); task != nullptr; task = taskQueue->PopTask() )
+            for( Task *task = taskQueue->PopTask(); task != nullptr; task = taskQueue->PopTask() )
                 {
                 try 
                     {
@@ -63,8 +72,9 @@ class Thread
                     }
                 catch ( ... )
                     {
-                    std::cerr << "Thread (" << ID << ") Exception" << std::endl;
+                    Print(std::string("Exception"));
                     }
+                delete task;
                 }
             }
     };

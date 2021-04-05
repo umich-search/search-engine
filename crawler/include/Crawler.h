@@ -15,9 +15,6 @@ static const char *ROBOT_FILE = "robots.txt";
 
 class Crawler : public Thread
     {
-    Frontier *frontier;
-    FileBloomfilter *visited;
-
     public:
         Crawler( );
 
@@ -26,8 +23,9 @@ class Crawler : public Thread
         void parseRobot( const String& robotUrl );
 
     private:
+        FileBloomfilter *visited;
 
-        void DoTask( void *args ) override;
+        void DoTask( Task *task ) override;
 
         String retrieveWebpage( const ParsedUrl& url );
 
