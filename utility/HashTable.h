@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <cstdint>
 #include "string.h"
-#include "params.h"
+#include "global.h"
 #define INITIAL_SIZE 5
 using namespace std;
 
@@ -21,13 +21,7 @@ using namespace std;
 
 bool CompareEqual( const char *L, const char *R );
 
-bool CompareEqual(const String &L,const String &R); /*{
-    cout << "In static ocmpare qequal" << endl;
-    cout << "comparing: " << L.cstr() << " and " << R.cstr() << endl;
-    bool ret = strcmp(L.cstr(),R.cstr()) == 0;
-    cout << "Returning with : " << ret << endl;
-    return ret;
-}*/
+bool CompareEqual(const String &L,const String &R);
 
 uint32_t fnvHash( const char *data, size_t length );
 
@@ -73,13 +67,11 @@ public:
 
     Tuple< Key, Value > *Find( const Key &k, const Value initialValue ) 
         {
-            //cout << "IN FIND with key " << (String)k << endl;
         // Search for the key k and return a pointer to the
         // ( key, value ) entry.  If the key is not already
         // in the hash, add it with the initial value.
 
-        // Your code here.
-            // TODO: Does it matter if length includes nullterm;
+        // TODO: Does it matter if length includes nullterm;
         uint32_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
         Bucket< Key, Value > *curr = buckets[ hashValue % numberOfBuckets ];
         while ( curr ) 
@@ -106,14 +98,6 @@ public:
         // ( key, value ) enty.  If the key is not already
         // in the hash, return nullptr.
         // Your code here.
-        /*
-        const char* str = ((String)k).cstr();
-        std::cout << "Got find: " << ((String)k).buffer << endl;
-        for(unsigned int i = 0; i < 10; ++i){
-            cout << "str[" << i << "]: " << str[i] << " ";
-        }
-        cout << endl;
-        */
         size_t index = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr() ) ) % numberOfBuckets;
         Bucket< Key, Value > *curr = buckets[ index ];
         while ( curr ) 

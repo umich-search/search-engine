@@ -11,7 +11,7 @@
 #include <sys/mman.h>
 #include <iostream>
 
-#include "params.h"
+#include "global.h"
 #include "PostingList.h"
 #include "../utility/HashTable.h"
 
@@ -129,12 +129,9 @@ struct SerialTuple
          // Copy header
          memcpy(curr, &b->tuple.value->header.numOfOccurence, sizeof(w_Occurence));
          memcpy(curr + sizeof(w_Occurence), &b->tuple.value->header.numOfDocument, sizeof(d_Occurence));
-          // TODO: Need to fix?
          memcpy(curr + sizeof(w_Occurence) + sizeof(d_Occurence), &b->tuple.value->header.type, sizeof(int));
-
          memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
          curr += BytesRequired(&b->tuple.value->header);
-          //TODO: Should first delta in list be offset from front (aka position?)
          // Copy syncIndex
          // TODO: ENCODE HERE
          for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
@@ -244,8 +241,6 @@ struct SerialTuple
 
       // Write a HashBlob into a buffer, returning a
       // pointer to the blob.
-       // TODO: Is hashblob using length to skip?
-
       static HashBlob *Write( HashBlob *hb, size_t bytes,
             const Hash *hashTable )
          {

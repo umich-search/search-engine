@@ -1,6 +1,5 @@
 #include "ISR.h"
 #include "PostingList.h"
-#include "stdlib.h" // TODO: Is this needed?
 
 // ISRWord Functions
 
@@ -29,7 +28,6 @@ Location ISRWord::GetStartLocation( ){
     //return seekTermTarget(&postingList, 0, throwaway);
     return -1;
 }
-// TODO
 Location ISRWord::GetEndLocation( ){
     return -1;
 }
@@ -47,7 +45,6 @@ Post* ISRWord::GetCurrentPost( ){
 }
 
 // ISREndDoc Functions
-
 Post* ISREndDoc::Next () {
     size_t indexLocation = currentPost.GetEndLocation() + postingList.posts[currentPostingsIndex+1].delta;
     currentPostingsIndex++;

@@ -45,7 +45,6 @@ struct DocumentBlob {
     static size_t BytesRequired(const ::vector<DocumentDetails*> * docs) {
         size_t bytes = 0;
         for(size_t i = 0; i < docs->size(); ++i) {
-            // TODO: is this jank?
             bytes += BytesRequired(docs->operator[](i));
         }
         return bytes;

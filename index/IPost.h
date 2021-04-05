@@ -1,7 +1,7 @@
 
 #pragma once
 #include <stddef.h>  
-#include "params.h"
+#include "global.h"
 
 
 //typedef union Attributes {

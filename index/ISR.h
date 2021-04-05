@@ -1,5 +1,5 @@
 #pragma once
-#include "params.h"
+#include "global.h"
 #include "Post.h"
 #include "PostingList.h"
 

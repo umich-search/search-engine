@@ -8,7 +8,6 @@
 #include <cassert>
 #include <cstring>
 #include <cstdint>
-//#include <malloc.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <cstring>
@@ -93,12 +92,8 @@ public:
        return buffer + RoundUp( bytes, sizeof( size_t ) );
        }
     
-    // Create allocates memory for a HashBlob of required size
-    // and then converts the HashTable into a HashBlob.
+    // Create allocates memory
     // Caller is responsible for discarding when done.
-
-    // (No easy way to override the new operator to create a
-    // variable sized object.)
     // TODO: Relable header
     static SerialEndDocs *Create( const EndDocPostingList *endDocs )
        {

@@ -284,7 +284,6 @@ int main (int argc, char *argv[])
     }
     
     // TEST WRTIE TO HASHTABLE (1 Entry)
-    // TODO: Can probably consolidate test variables
     cout << "TEST: Convert to hashblob (2 Entries)" << endl;
     tbl1.Find("camel", &list2);
     HashBlob *b2 = blob.Create(&tbl1);
@@ -517,38 +516,17 @@ int main (int argc, char *argv[])
         for(unsigned int i = 0; i < 5; ++i) {
             ASSERT(raw2.getPostingsListOffsetAt(i),==,i*2);
         }
-        /* TODO: Need to convert stuff to int64 or int32
-        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-            ASSERT(deerSync.postingsListOffset[i],==,-1);
-        }
-         */
         
         for(unsigned int i = 0; i < 5; ++i) {
             ASSERT(raw2.getPostLocationAt(i),==,i*8);
         }
-        /*
-        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-            ASSERT(deerSync.postingsListOffset[i],==,-1);
-        }
-         */
-        
         for(unsigned int i = 0; i < 5; ++i) {
             ASSERT(raw2b.getPostingsListOffsetAt(i),==,i*2);
         }
-        /* TODO: Need to convert stuff to int64 or int32
-        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-            ASSERT(deerSync.postingsListOffset[i],==,-1);
-        }
-         */
         
         for(unsigned int i = 0; i < 5; ++i) {
             ASSERT(raw2b.getPostLocationAt(i),==,i*8 + 3);
         }
-        /*
-        for(unsigned int i = 5; i < deerSync.postingsListOffset.size(); ++i) {
-            ASSERT(deerSync.postingsListOffset[i],==,-1);
-        }
-         */
     }
 
 
@@ -597,12 +575,6 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-/*
-    // TODO: Creation of sync index with EndDoc
-    cout << "TEST: Synchronization table creation" << endl;
-
-*/
-
 
    cout << "TEST: Synchronization table seek from blob" << endl;
    HashTable<String, TermPostingList*> syncTableHash1;
@@ -726,7 +698,6 @@ int main (int argc, char *argv[])
     }
     ASSERT(ic5.currDocInfo.getNumberOfUniqueWords(), ==, 1);
     ASSERT(ic5.currDocInfo.getNumberOfWords(), ==, 3);
-    // TODO: Reverse constructor
     ic5.Insert("dog_title", "dog.com");
     ASSERT(ic5.endDocPostings.posts[0].delta, ==, 0);
     ASSERT(ic5.docDetails[0]->lengthOfDocument, ==, 3);
@@ -793,9 +764,7 @@ int main (int argc, char *argv[])
     
     cout << "TEST: Full Index synhroniation" << endl;
     ic5.createSynchronization();
-    // TODO: Need to test/ implement add on same search
     TermPostingList * dogPostings = ic5.termIndex.Find("dog")->value;
-    // TODO: Remove dependence on this pass through?
     size_t fisIndex;
     size_t fisLoc;
     lowBits = getNumLowBits2(ic5.endLocation, NUM_SYNC_POINTS);

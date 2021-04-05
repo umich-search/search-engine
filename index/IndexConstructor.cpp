@@ -1,31 +1,23 @@
 #include "IndexConstructor.h"
 #include "DocumentsSerializer.h"
 
-
 int IndexConstructor::Insert( String title, String URL) {
-    // TODO: Is this correct?
-    if(firstDocEnd == 0) {
-        firstDocEnd = endLocation;
-        // TODO: Porb not a good idea to hardcode liket this
-    }
     IPostEndDoc lastDoc;
     if(endDocPostings.posts.size() == 0){
         lastDoc.delta = 0;
+        firstDocEnd = endLocation;
     }
     else {
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
     endDocPostings.posts.pushBack(lastDoc);
     
-    // TODO: Proper location pushing?
     // TODO: Do we need doc id
     // TODO: DocID could be safegaurd if something goes wrong
     docDetails.pushBack(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
     numberOfDocuments++;
-    // TODO: Prob don't need to actually do this
     endDocPostings.header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
-    // Skip location between endDoc positions;
     endLocation+=2;
     //resolveChunkMem();
     return 0;
@@ -43,16 +35,15 @@ int IndexConstructor::resolveChunkMem() {
 
 
 int IndexConstructor::Insert( String term, Type type ) {
-    // Get either currently existing postings or create a new one
-    CommonHeader header; //= new CommonHeader;
+    CommonHeader header;
     TermPostingList *postings = nullptr;
     ConstructionData *cd = nullptr;
+    size_t memoryAlloc = 0;
     size_t delta;
     // TODO: Prob ened to use new operator
 
-    Tuple<String, TermPostingList*> * termTuple = termIndex.Find(term);//, postings);//->value;
-    Tuple<String, ConstructionData*> * cdTuple = constructionData.Find( term) ;//, cd);//->value;
-    // TODO: Can prob provide beter schemantics
+    Tuple<String, TermPostingList*> * termTuple = termIndex.Find(term);
+    Tuple<String, ConstructionData*> * cdTuple = constructionData.Find( term);
 
     if(termTuple) {
         postings = termTuple->value;
@@ -60,42 +51,39 @@ int IndexConstructor::Insert( String term, Type type ) {
         delta = endLocation - cd->latestTermLoc;
 
     } else {
-        // TODO: Change num sync points
         postings = new TermPostingList(NUM_SYNC_POINTS);
-        cd = new ConstructionData;
-
         postings->header = header;
         postings->header.term = String(term);
         postings->header.type = type;
         postings->header.numOfDocument = 0;
         postings->header.numOfOccurence = 0;
-        cd->currDoc = -2;//currDocInfo.DocID;
+        cd = new ConstructionData;
+        cd->currDoc = -2;
         cd->firstTermLoc = endLocation;
         cd->latestTermLoc = endLocation;
 
         termIndex.Find(term, postings);
         constructionData.Find(term, cd);
-
         delta = 0;
         numberOfUniqueWords++;
-        // TODO: Move somewhere else probably
-        chunkMemoryAlloc += sizeof(w_Occurence) + sizeof(d_Occurence) + sizeof(type) + strlen(term.cstr()) + 1;
+        memoryAlloc += sizeof(w_Occurence) + sizeof(d_Occurence) + sizeof(type) + strlen(term.cstr()) + 1;
     }
-    // TODO: Move somewhere else probably
-    chunkMemoryAlloc += sizeof(size_t) * 3;
-    cd->latestTermLoc = endLocation;
+    memoryAlloc += sizeof(size_t) * 3;
 
     if(cd->currDoc != currDocInfo.DocID) {
         postings->header.numOfDocument++;
         currDocInfo.incrementUniqueNumberOfWords();
         cd->currDoc = currDocInfo.DocID;
-        //numberOfUniqueWords++;
     }
+    
     postings->posts.pushBack(IPostTerm(delta));
+    postings->header.numOfOccurence++;
+    cd->latestTermLoc = endLocation;
+
     currDocInfo.incrementNumberOfWords();
     numberOfWords++;
     endLocation++;
-    postings->header.numOfOccurence++;
+    chunkMemoryAlloc += memoryAlloc;
 
     return 0;
 };
@@ -128,13 +116,11 @@ size_t getNumLowBits(size_t count, size_t spacing) {
     }
     return numLowBits;
 }
-// TODO: I think ptr passing is off
 void IndexConstructor::createSynchronization() {
 
     size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
     for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex.begin(); iterator != termIndex.end( ); ++iterator ) {
         createSeekIndex(iterator->value, constructionData.Find(iterator->key)->value->firstTermLoc, numLowBits);
     }
-    // TODO: Make doc temp data
     createSeekIndex(&endDocPostings, firstDocEnd, numLowBits);
 }

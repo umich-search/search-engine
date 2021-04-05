@@ -1,4 +1,4 @@
-#include "params.h"
+#include "global.h"
 #include "DocumentInfo.h"
 
 
@@ -29,10 +29,10 @@ char* DocumentInfo::getTitle() {
 char* DocumentInfo::getURL() {
     return URL;
 };
-// TODO: typo
-void DocumentInfo::reset( size_t dID, Location recenEndDocLocation ){
+
+void DocumentInfo::reset( size_t dID, Location recentEndLocation ){
     numDocWords = 0;
     numUniqueDocWords = 0;
-    prevEndLocation = recenEndDocLocation;
+    prevEndLocation = recentEndLocation;
     DocID = dID;
 };

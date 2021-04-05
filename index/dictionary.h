@@ -4,11 +4,7 @@
 #include "ISR.h"
 #include "DictionarySerializer.h"
 #include "../utility/string.h"
-#include "params.h"
-//#include "../utility/HashTable.h"
-//TODO: Fix include multi errors
-
-
+#include "global.h"
 
 class Dictionary {
 public:
@@ -30,14 +26,12 @@ public:
     }
 
 private:
-    // number of unique words in the index
-    size_t numberOfUniqueWords;
-    // number of documents in the index
-    size_t numberOfDocuments;
-    // number of words in the index
-    Location numberOfWords;
-    
-    size_t numChunks;
-
     HashBlob indexBlob;
+    // number of unique words in the index
+    w_Occurence numberOfUniqueWords;
+    // number of documents in the index
+    d_Occurence numberOfDocuments;
+    // number of words in the index
+    w_Occurence numberOfWords;
+    size_t numChunks;
 };

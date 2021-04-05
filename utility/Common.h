@@ -7,34 +7,6 @@
 //#include <string>
 #include "string.h"
 #include <iostream>
-//#include "HashTable.h"
-
-
-// You may define additional helper routines here and in
-// Common.cpp.
-
-
-
-// Build a HashTable of strings and numbers of occurrences, given a vector
-// of strings representing the words.  You may assume the vector and the
-// strings will not be changed during the lifetime of the Hash.
-
-// You may add additional default parameters.
-
-// Caller is responsible for deleting the Hash.
-
-//HashTable<const char *, size_t> *BuildHashTable(const vector<string> &words);
-
-
-// Collect words read from a file specified on the command line
-// as either individual word or whole lines in a vector of
-// strings.
-
-//void CollectWordsIn(int argc, char **argv, vector<string> &words);
-
-
-// fnv hashing function
-// TODO: Hashing a proble for onlyhaving uin32?
 uint32_t fnvHash( const char *data, size_t length )
     {
     static const size_t FnvOffsetBasis = 146959810393466560;
@@ -67,21 +39,6 @@ bool CompareEqual(const String &L,const String &R) {
     //cout << "Returning with : " << ret << endl;
     return ret;
 }
-/*
-// returns number of low bits given total count and number of syncs
-size_t getNumLowBits(size_t count, size_t spacing) {
-    size_t leftShift = ( count + spacing - 1 )/ spacing;
-    int numLowBits=0;
-    // While loop will run until we get n = 0
-    while(leftShift)
-    {
-        numLowBits++;
-        leftShift=leftShift>>1;
-    }
-    return numLowBits;
-}
 
-*/
-// -v (verbose) command line option.
 
 extern bool optVerbose;

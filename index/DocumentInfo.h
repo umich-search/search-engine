@@ -27,7 +27,6 @@ class DocumentInfo {
         size_t getNumberOfWords();
         size_t getNumberOfUniqueWords();
         Location getPrevEndLocation();
-        HashTable< const char*, int > wordSet; // TODO: Not used
     private:
         size_t numDocWords;
         size_t numUniqueDocWords;

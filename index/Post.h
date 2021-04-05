@@ -1,6 +1,6 @@
 #pragma once
 
-#include "params.h"
+#include "global.h"
 
 class Post {
 public:

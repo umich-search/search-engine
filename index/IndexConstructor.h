@@ -1,8 +1,7 @@
 #include "DictionarySerializer.h"
 #include "DocumentInfo.h"
 #include "DocumentsSerializer.h"
-#include "params.h"
-//#include "Common.h"
+#include "global.h"
 // TODO: Put coommon in global
 #include "../utility/string.h"
 
@@ -43,7 +42,7 @@ public:
     w_Occurence numberOfUniqueWords;
     d_Occurence numberOfDocuments;
     Location numberOfWords;
-    Location firstDocEnd; // TODO: Prob need to ptut this somewhere
+    Location firstDocEnd; 
     Location endLocation;
     size_t currentChunkNum;
     size_t chunkMemoryAlloc;
