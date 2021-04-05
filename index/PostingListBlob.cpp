@@ -8,7 +8,7 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= numSyncPoints) {
-                    return -1;
+                    throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
             }
@@ -28,10 +28,10 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
                 }
             }
         }
-        return -1;
+        throw "seek out of range";
     }
     catch(char *excp) {
-        return -1;
+        throw "unknown error";
     }
 }
 
@@ -58,7 +58,7 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= numSyncPoints) {
-                    return -1;
+                    throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
                 index = raw->getPostingsListOffsetAt(curr);
@@ -79,10 +79,10 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
                 }
             }
         }
-        return -1;
+        throw "seek out of range";
     }
     catch(char *excp) {
-        return -1;
+        throw "unkown error";
     }
 }
 

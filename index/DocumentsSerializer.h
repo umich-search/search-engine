@@ -24,18 +24,6 @@ struct DocumentBlob {
     char title[MAX_TITLE_LENGTH];
     Location lengthOfDocument;
     Location numUniqueWords;
-    // TODO: Why setting to static fix linker error
-    // TODO: Abstract this
-    static size_t RoundUp( size_t length, size_t boundary )
-       {
-       // Round up to the next multiple of the boundary, which
-       // must be a power of 2.
-
-       static const size_t oneless = boundary - 1,
-          mask = ~( oneless );
-       return ( length + oneless ) & mask;
-       }
-    
     static size_t BytesRequired(const DocumentDetails * doc) {
         return 2 * sizeof(Location) + MAX_URL_LENGTH + MAX_TITLE_LENGTH;
     }
@@ -116,11 +104,6 @@ class DocumentFile
        
       DocumentFile( const char *filename, const ::vector<DocumentDetails *> * docs )
          {
-         // Open the file for write, map it, write
-         // the hashtable out as a HashBlob, and note
-         // the blob address.
-
-         // Your code here.
          int f = open( filename, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );  // if file not exist, create it
          if ( f == -1)
             {

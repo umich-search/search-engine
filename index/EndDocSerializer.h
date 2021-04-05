@@ -66,24 +66,18 @@ public:
        // Copy header
        memcpy(curr, &p->header.numOfOccurence, sizeof(w_Occurence));
        memcpy(curr + sizeof(w_Occurence), &p->header.numOfDocument, sizeof(d_Occurence));
-        // TODO: Need to fix?
        memcpy(curr + sizeof(w_Occurence) + sizeof(d_Occurence), &p->header.type, sizeof(int));
         // TODO: Should modify header?
        memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), p->header.term.cstr(), p->header.term.size() + 1);
        curr += BytesRequired(&p->header);
-        //TODO: Should first delta in list be offset from front (aka position?)
-       // Copy syncIndex
-       // TODO: ENCODE HERE
        for(size_t i = 0; i < p->syncIndex.postingsListOffset.size(); ++i) {
            memcpy(curr, &p->syncIndex.postingsListOffset[i], sizeof(size_t));
            curr += sizeof(size_t);
        }
-
        for(size_t i = 0; i < p->syncIndex.postLocation.size(); ++i) {
            memcpy(curr, &p->syncIndex.postLocation[i], sizeof(size_t));
            curr += sizeof(size_t);
        }
-        
         for(size_t i = 0; i < p->posts.size(); ++i) {
             memcpy(curr, &p->posts[i], sizeof(size_t));
             curr += sizeof(size_t);
@@ -93,7 +87,6 @@ public:
     
     // Create allocates memory
     // Caller is responsible for discarding when done.
-    // TODO: Relable header
     static SerialEndDocs *Create( const EndDocPostingList *endDocs )
        {
        size_t bytes = BytesRequired( endDocs );

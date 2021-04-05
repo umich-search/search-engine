@@ -167,7 +167,6 @@ template <typename T> class vector
       // MODIFIES: this, size(), capacity()
       // EFFECTS: Appends the element x to the vector, allocating
       //    additional space if neccesary
-       // TODO: Does this allocate enough at once?
       void pushBack ( const T& x )
          {
          if ( _size == _capacity )

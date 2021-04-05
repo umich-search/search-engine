@@ -152,10 +152,13 @@ int main (int argc, char *argv[])
     loc = seekTermTarget(&list3, 1023, indexPos, lowBits);
     ASSERT(loc,==,1023);
     ASSERT(indexPos,==,1023);
-    
-    loc = seekTermTarget(&list3, 1024, indexPos, lowBits);
-    ASSERT(loc,==, -1);
-    ASSERT(indexPos,==,1023);
+    try {
+        loc = seekTermTarget(&list3, 1024, indexPos, lowBits);
+    }
+    catch(const char *excp){
+        ASSERT(indexPos,==,1023);
+    }
+
     // Test with complex list
     lowBits = getNumLowBits2(120, NUM_SYNC_POINTS);
     loc = seekTermTarget(&list4, 0,indexPos, lowBits);
@@ -189,10 +192,12 @@ int main (int argc, char *argv[])
     loc = seekTermTarget(&list4, 120, indexPos, lowBits);
     ASSERT(loc,==, 120);
     ASSERT(indexPos,==,15);
-    
-    loc = seekTermTarget(&list4, 125, indexPos, lowBits);
-    ASSERT(loc,==, -1);
-    ASSERT(indexPos,==,15);
+    try {
+        loc = seekTermTarget(&list4, 125, indexPos, lowBits);
+    }
+    catch(const char *excp) {
+        ASSERT(indexPos,==,15);
+    }
 
     cout << "TEST: Synchronziation Index for EndDocList" << endl;
 
@@ -611,10 +616,12 @@ int main (int argc, char *argv[])
    loc = seekTermTarget(&rawSyncTable1, 1023, indexPos, lowBits, NUM_SYNC_POINTS);
    ASSERT(loc,==,1023);
    ASSERT(indexPos,==,1023);
-   
-   loc = seekTermTarget(&rawSyncTable1, 1024, indexPos, lowBits, NUM_SYNC_POINTS);
-   ASSERT(loc,==, -1);
-   ASSERT(indexPos,==,1023);
+    try {
+        loc = seekTermTarget(&rawSyncTable1, 1024, indexPos, lowBits, NUM_SYNC_POINTS);
+    }
+    catch(const char * excp) {
+        ASSERT(indexPos,==,1023);
+    }
     
    // complex iterations
     HashTable<String, TermPostingList*> syncTableHash2;
@@ -656,10 +663,12 @@ int main (int argc, char *argv[])
     loc = seekTermTarget(&rawSyncTable2, 120, indexPos, lowBits, NUM_SYNC_POINTS);
     ASSERT(loc,==, 120);
     ASSERT(indexPos,==,15);
-    
-    loc = seekTermTarget(&rawSyncTable2, 125, indexPos, lowBits, NUM_SYNC_POINTS);
-    ASSERT(loc,==, -1);
-    ASSERT(indexPos,==,15);
+    try {
+        loc = seekTermTarget(&rawSyncTable2, 125, indexPos, lowBits, NUM_SYNC_POINTS);
+    }
+    catch (const char* e){
+        ASSERT(indexPos,==,15);
+    }
     
     cout << "TEST: Write document to blob" << endl;
     char testTitle[] = "title1";
@@ -806,9 +815,12 @@ int main (int argc, char *argv[])
     fisLoc = seekTermTarget(dogPostings, 41, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 41);
     ASSERT(fisIndex, ==, 11);
-    fisLoc = seekTermTarget(dogPostings, 43, fisIndex, lowBits);
-    ASSERT(fisLoc, ==, -1);
-    ASSERT(fisIndex, ==, 11);
+    try {
+        fisLoc = seekTermTarget(dogPostings, 43, fisIndex, lowBits);
+    }
+    catch (const char * e) {
+        ASSERT(fisIndex, ==, 11);
+    }
     // Check deer postings
     TermPostingList * deerPostings = ic5.termIndex.Find("deer")->value;
     fisLoc = seekTermTarget(deerPostings, 0, fisIndex, lowBits);
@@ -855,9 +867,12 @@ int main (int argc, char *argv[])
     fisLoc = seekEndDocTarget(endDoc1, 44, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(endDoc1, 45, fisIndex, lowBits);
-    ASSERT(fisLoc, ==, -1);
-    ASSERT(fisIndex, ==, 7);
+    try {
+        fisLoc = seekEndDocTarget(endDoc1, 45, fisIndex, lowBits);
+    }
+    catch (const char* e){
+        ASSERT(fisIndex, ==, 7);
+    }
     
     cout << "TEST: Term postings list hashblob synchronization" << endl;
     
@@ -901,9 +916,12 @@ int main (int argc, char *argv[])
     fisLoc = seekTermTarget(&rawDogList, 41, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 41);
     ASSERT(fisIndex, ==, 11);
-    fisLoc = seekTermTarget(&rawDogList, 43, fisIndex, lowBits, NUM_SYNC_POINTS);
-    ASSERT(fisLoc, ==, -1);
-    ASSERT(fisIndex, ==, 11);
+    try {
+        fisLoc = seekTermTarget(&rawDogList, 43, fisIndex, lowBits, NUM_SYNC_POINTS);
+    }
+    catch (const char* e) {
+        ASSERT(fisIndex, ==, 11);
+    }
 
     
     cout << "TEST: EndDoc postings list hashblob synchronization" << endl;
@@ -939,9 +957,12 @@ int main (int argc, char *argv[])
     fisLoc = seekEndDocTarget(&endDoc1Raw, 44, fisIndex, lowBits, NUM_SYNC_POINTS);
     ASSERT(fisLoc, ==, 44);
     ASSERT(fisIndex, ==, 7);
-    fisLoc = seekEndDocTarget(&endDoc1Raw, 45, fisIndex, lowBits, NUM_SYNC_POINTS);
-    ASSERT(fisLoc, ==, -1);
-    ASSERT(fisIndex, ==, 7);
+    try {
+        fisLoc = seekEndDocTarget(&endDoc1Raw, 45, fisIndex, lowBits, NUM_SYNC_POINTS);
+    }
+    catch (const char * e) {
+        ASSERT(fisIndex, ==, 7);
+    }
 
     
      

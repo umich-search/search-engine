@@ -11,9 +11,6 @@ int IndexConstructor::Insert( String title, String URL) {
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
     endDocPostings.posts.pushBack(lastDoc);
-    
-    // TODO: Do we need doc id
-    // TODO: DocID could be safegaurd if something goes wrong
     docDetails.pushBack(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
     numberOfDocuments++;
     endDocPostings.header.numOfDocument++;

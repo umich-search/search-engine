@@ -1,18 +1,15 @@
 #include "PostingList.h"
 
-// TODO: size_t can't return -1 dummy
 size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
     try {
         Location syncPoint = target >> numLowBits;
-        if(syncPoint >= postings->syncIndex.postingsListOffset.size()) {
-            return -1;
-        }
+
         Location curr = syncPoint;
         Location loc = postings->syncIndex.postLocation[curr];
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= postings->syncIndex.postingsListOffset.size()) {
-                    return -1;
+                    throw "seek out of range";
                 }
                 loc = postings->syncIndex.postLocation[curr];
             }
@@ -33,10 +30,10 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
                 }
             }
         }
-        return -1;
+        throw "seek out of range";
     }
     catch(char *excp) {
-        return -1;
+        throw "unknown error";
     }
 };
 
@@ -44,15 +41,12 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
 size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
     try {
         Location syncPoint = target >> numLowBits;
-        if(syncPoint >= postings->syncIndex.postingsListOffset.size()) {
-            return -1;
-        }
         Location curr = syncPoint;
         Location loc = postings->syncIndex.postLocation[curr];
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= postings->syncIndex.postingsListOffset.size()) {
-                    return -1;
+                    throw "seek out of range";
                 }
                 loc = postings->syncIndex.postLocation[curr];
                 index = postings->syncIndex.postingsListOffset[curr];
@@ -73,10 +67,10 @@ size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &inde
                 }
             }
         }
-        return -1;
+        throw "seek out of range";
     }
     catch(char *excp) {
-        return -1;
+        throw "unknown error";
     }
 };
 

@@ -17,7 +17,6 @@ bool CompareEqual(const String &L,const String &R);
 
 uint32_t fnvHash( const char *data, size_t length );
 
-
 template<typename Key, typename Value>
 class Tuple {
 public:
@@ -63,7 +62,6 @@ public:
         // ( key, value ) entry.  If the key is not already
         // in the hash, add it with the initial value.
 
-        // TODO: Does it matter if length includes nullterm;
         uint32_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
         Bucket< Key, Value > *curr = buckets[ hashValue % numberOfBuckets ];
         while ( curr ) 

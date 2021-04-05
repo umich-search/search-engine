@@ -11,9 +11,7 @@
 #define MAX_TITLE_LENGTH 512
 #define MAX_URL_LENGTH 2048
 #define CHUNK_SIZE_BYTES 10000
-// TODO: Move somewhere else eventually
 #define DOCUMENT_SIZE 2576
-//#include "../utility/Common.h"
 typedef size_t Location;
 // Should be large enough to fit max word occurence
 typedef uint64_t w_Occurence;
@@ -31,3 +29,12 @@ enum Type{
     Body
 };
 
+static size_t RoundUp( size_t length, size_t boundary )
+   {
+   // Round up to the next multiple of the boundary, which
+   // must be a power of 2.
+
+   static const size_t oneless = boundary - 1,
+      mask = ~( oneless );
+   return ( length + oneless ) & mask;
+   }

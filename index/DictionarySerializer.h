@@ -23,18 +23,6 @@ using HashBucket = Bucket< String, TermPostingList* >;
 
 static const size_t Unknown = 0;
 
-
-// TODO: Why setting to static fix linker error
-static size_t RoundUp( size_t length, size_t boundary )
-   {
-   // Round up to the next multiple of the boundary, which
-   // must be a power of 2.
-
-   static const size_t oneless = boundary - 1,
-      mask = ~( oneless );
-   return ( length + oneless ) & mask;
-   }
-
 struct SerialTuple
    {
    // This is a serialization of a HashTable< char *, PostingList >::Bucket.
@@ -244,7 +232,6 @@ struct SerialTuple
       static HashBlob *Write( HashBlob *hb, size_t bytes,
             const Hash *hashTable )
          {
-         // Your code here.
          // caller guarantees the memory is enough
 
          char *blobByte = ( char * )hb;
