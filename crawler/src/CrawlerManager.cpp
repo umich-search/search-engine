@@ -26,7 +26,7 @@ void CrawlerManager::HaltCrawl()
 
 void CrawlerManager::DoTask( Task *task )
     {
-    while ( task->ExitStatus() == false || frontier->Empty() )
+    while ( !task->IsHalted() || frontier->Empty() )
         {
         // Get a URL from the frontier
         String url = frontier->PopUrl();

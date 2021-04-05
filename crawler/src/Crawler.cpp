@@ -86,6 +86,7 @@ void Crawler::parseRobot( const String& robotUrl )
         myfile.close();
     }
 
+// TODO: send URLs back to manager for frontier and bloom filter
 void Crawler::addLinksToFrontier( HtmlParser& htmlparser )
     {
     for ( Link& link : htmlparser.links )

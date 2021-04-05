@@ -7,14 +7,13 @@ struct Task
     private:
         void *arg;
         bool delArgs; // Should the tasked thread free the args from memory?
-        std::atomic<bool> exit; // Used for infinitely running tasks
+        std::atomic<bool> *halted; // Check this in infinitely running tasks
 
     public:
-        Task( void* args, bool deleteArgs ) 
-            : arg( args ), delArgs( deleteArgs ), exit( false ) { }
+        Task( void* args, bool deleteArgs, std::atomic<bool> *halt ) 
+            : arg( args ), delArgs( deleteArgs ), halted( halt ) { }
 
-        void Exit() { exit.store( true ); }
-        bool ExitStatus() { return exit.load(); }
+        bool IsHalted() { return halted->load(); }
 
         void *GetArgs() { return arg; }
         bool DeleteArgs() { return delArgs; }
@@ -51,7 +50,7 @@ class TaskQueue
         void PushTask( void *args, bool deleteArgs ) 
             { 
             // Create a task
-            Task *task = new Task( args, deleteArgs );
+            Task *task = new Task( args, deleteArgs, &halted );
             // Create a place in task queue
             QueueItem *item = new QueueItem;
             item->task = task;
