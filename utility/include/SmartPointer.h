@@ -164,18 +164,6 @@ bool operator!= ( std::nullptr_t, const UniquePointer< Type >& x ) noexcept
     return bool( x );
     }
 
-template< class Type >
-bool operator!= ( const UniquePointer< Type >& x, std::nullptr_t ) noexcept
-    {
-    return bool( x );
-    }
-
-template< class Type >
-bool operator!= ( std::nullptr_t, const UniquePointer< Type >& x ) noexcept
-    {
-    return bool( x );
-    }
-
 
 // shared_ptr
 template< class Type >
@@ -183,26 +171,22 @@ class SharedPointer
     {
     private:
         Type *memPtr;
-        int count;
+        int *count;
     public:
         // explict construction
-        explicit SharedPointer( Type *ptr == nullptr )
+        explicit SharedPointer( Type *ptr )
+        try  // in case of allocation failure ( not enough space )
             : memPtr( ptr ), count( nullptr )
             {
             if ( memPtr )
-                {
-                // in case of allocation failure ( not enough space )
-                try
-                    {
-                    count = new int ( 1 );
-                    }
-                catch ( ... )
-                    {
-                    delete memPtr;
-                    throw "Bad alloc!";
-                    }
-                }
+                count = new int ( 1 );
             }
+        catch ( ... )
+            {
+            delete memPtr;
+            throw "Bad alloc!";
+            }
+                
 
         // copyt constructor
         SharedPointer( const SharedPointer& other )
@@ -266,7 +250,6 @@ class SharedPointer
                 }
             }
 
-
         // Modifiers 
         void reset( )
             {
@@ -279,7 +262,6 @@ class SharedPointer
             Swap( memPtr, other.memPtr );
             Swap( count, other.count );
             }
-
 
         // Observers
         Type *get( ) const noexcept
@@ -306,7 +288,6 @@ class SharedPointer
             {
             return *count;
             }
-
     };
 
 // SharedPointer comparison functions
@@ -356,18 +337,6 @@ template< class Type >
 bool operator== ( std::nullptr_t, const SharedPointer< Type >& x ) noexcept
     {
     return !x;
-    }
-
-template< class Type >
-bool operator!= ( const SharedPointer< Type >& x, std::nullptr_t ) noexcept
-    {
-    return bool( x );
-    }
-
-template< class Type >
-bool operator!= ( std::nullptr_t, const SharedPointer< Type >& x ) noexcept
-    {
-    return bool( x );
     }
 
 template< class Type >
