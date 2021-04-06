@@ -8,6 +8,7 @@ int IndexConstructor::Insert( String title, String URL) {
         firstDocEnd = endLocation;
     }
     else {
+        // TODO: Chunk memoy alloc for doc
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
     endDocPostings.posts.pushBack(lastDoc);
@@ -16,17 +17,25 @@ int IndexConstructor::Insert( String title, String URL) {
     endDocPostings.header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
     endLocation+=2;
-    //resolveChunkMem();
+    
+    if(WRITE_TO_DISK) {
+        resolveChunkMem();
+    }
     return 0;
 }
 
 int IndexConstructor::resolveChunkMem() {
     chunkMemoryAlloc += DOCUMENT_SIZE;
-    if(chunkMemoryAlloc > CHUNK_SIZE_BYTES) {
+    //if(chunkMemoryAlloc > CHUNK_SIZE_BYTES) {
         createSynchronization();
-        optimizeIndex();
-        createNewChunk();
-    }
+    //    optimizeIndex();
+        flushData();
+        // TODO: Need to switch to smart ptr
+        // Currently causes mem leak
+        endDocPostings = *(new EndDocPostingList(NUM_SYNC_POINTS));
+        termIndex = *(new HashTable<String, TermPostingList*>);
+        docDetails = ::vector<DocumentDetails*>();
+    //}
     return 0;
 }
 
@@ -64,8 +73,10 @@ int IndexConstructor::Insert( String term, Type type ) {
         delta = 0;
         numberOfUniqueWords++;
         memoryAlloc += sizeof(w_Occurence) + sizeof(d_Occurence) + sizeof(type) + strlen(term.cstr()) + 1;
+        memoryAlloc += NUM_SYNC_POINTS * 2 * sizeof(size_t);
+
     }
-    memoryAlloc += sizeof(size_t) * 3;
+   /// memoryAlloc += sizeof(size_t) * 3;
 
     if(cd->currDoc != currDocInfo.DocID) {
         postings->header.numOfDocument++;
@@ -90,10 +101,11 @@ void IndexConstructor::optimizeIndex() {
 }
 
 int IndexConstructor::flushData() {
-    char *filename;
-    sprintf(filename, "chunk_%zu", currentChunkNum);
-    HashFile h(filename, &termIndex);
-    createNewChunk();
+    char chunkFilename[100];
+    char docsFilename[100];
+    sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
+    sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
+    fileManager.WriteChunk(termIndex, &endDocPostings, numberOfWords, numberOfUniqueWords, numberOfDocuments, endLocation, docDetails, currentChunkNum, chunkFilename, docsFilename);
     return 0;
 }
 
@@ -105,6 +117,7 @@ void IndexConstructor::createNewChunk() {
 size_t getNumLowBits(size_t count, size_t spacing) {
     size_t leftShift = ( count + spacing - 1 )/ spacing;
     int numLowBits=0;
+    leftShift--;
     // While loop will run until we get n = 0
     while(leftShift)
     {

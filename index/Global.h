@@ -5,13 +5,16 @@
 #include "../utility/string.h"
 #include "../utility/HashTable.h"
 
-#define NUM_SYNC_POINTS 11
+#define NUM_SYNC_POINTS 8
 #define MAX_SYNC_DISTANCE 100
 #define MAX_WORD_LENGTH 100
 #define MAX_TITLE_LENGTH 512
 #define MAX_URL_LENGTH 2048
-#define CHUNK_SIZE_BYTES 10000
 #define DOCUMENT_SIZE 2576
+#define CHUNK_SIZE_BYTES 100
+#define CHUNKS_META_FILENAME "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
+#define WRITE_TO_DISK true
+
 typedef size_t Location;
 // Should be large enough to fit max word occurence
 typedef uint64_t w_Occurence;

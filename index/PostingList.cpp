@@ -5,6 +5,9 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
         Location syncPoint = target >> numLowBits;
 
         Location curr = syncPoint;
+        if(curr >= postings->syncIndex.postLocation.size()) {
+            throw "seek out of range";
+        }
         Location loc = postings->syncIndex.postLocation[curr];
         if(loc == -1) {
             while(loc == -1) {
@@ -42,6 +45,9 @@ size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &inde
     try {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
+        if(curr >= postings->syncIndex.postLocation.size()) {
+            throw "seek out of range";
+        }
         Location loc = postings->syncIndex.postLocation[curr];
         if(loc == -1) {
             while(loc == -1) {

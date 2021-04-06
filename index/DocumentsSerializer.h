@@ -12,7 +12,12 @@
 #include <cstring>
 
 struct DocumentDetails {
-    DocumentDetails(const char* u, const char* t, Location lengthOfDocument, Location numUniqueWords) : url(u), title(t), lengthOfDocument(lengthOfDocument), numUniqueWords(numUniqueWords) {}
+    DocumentDetails(const char* u, const char* t, Location lengthOfDocument, Location numUniqueWords) :
+                        url(u),
+                        title(t),
+                        lengthOfDocument(lengthOfDocument),
+                        numUniqueWords(numUniqueWords)
+                        {}
     String url;
     String title;
     Location lengthOfDocument;
@@ -20,10 +25,11 @@ struct DocumentDetails {
 };
 
 struct DocumentBlob {
-    char URL[MAX_URL_LENGTH];
-    char title[MAX_TITLE_LENGTH];
     Location lengthOfDocument;
     Location numUniqueWords;
+    char URL[MAX_URL_LENGTH];
+    char title[MAX_TITLE_LENGTH];
+    
     static size_t BytesRequired(const DocumentDetails * doc) {
         return 2 * sizeof(Location) + MAX_URL_LENGTH + MAX_TITLE_LENGTH;
     }
@@ -35,6 +41,7 @@ struct DocumentBlob {
         }
         return bytes;
     }
+
     // TODO: Catch errors or handle them somehow
     static char *Write( char *buffer, char *bufferEnd, const DocumentDetails * doc ) {
         if ( !doc ) {

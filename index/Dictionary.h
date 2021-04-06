@@ -1,5 +1,6 @@
 
 #pragma once
+
 #include "ISR.h"
 #include "DictionarySerializer.h"
 #include "Global.h"

@@ -5,6 +5,7 @@
 #include "DocumentsSerializer.h"
 #include "EndDocSerializer.h"
 #include "Global.h"
+#include "FileManager.h"
 
 class IndexConstructor {
 public:
@@ -35,6 +36,8 @@ public:
 
     
 public:
+    // TODO: Maybe switch to static
+    FileManager fileManager;
     HashTable< String, TermPostingList*> termIndex;
     HashTable< String, ConstructionData*> constructionData;
     EndDocPostingList endDocPostings;
@@ -42,7 +45,7 @@ public:
     DocumentInfo currDocInfo;
     w_Occurence numberOfUniqueWords;
     d_Occurence numberOfDocuments;
-    Location numberOfWords;
+    w_Occurence numberOfWords;
     Location firstDocEnd; 
     Location endLocation;
     size_t currentChunkNum;

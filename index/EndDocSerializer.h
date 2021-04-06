@@ -38,12 +38,13 @@ public:
        SyncIndex syncIndex
        vector<IPostTerm> posts
     */
-      size_t headerSize, syncIndexSize, endDocsSize;
+      size_t headerSize, syncIndexSize, endDocsSize, memberVarSize;
       headerSize = BytesRequired(&p->header);
       syncIndexSize = BytesRequired(&p->syncIndex);
       // TODO: may have to move this posts size if using variable encoding
       endDocsSize = p->posts.size() * sizeof(size_t);
-      return headerSize + syncIndexSize + endDocsSize;
+        memberVarSize = sizeof(Offset);
+      return headerSize + syncIndexSize + endDocsSize + memberVarSize;
     }
     
     static char *Write( char *buffer, char *bufferEnd, const EndDocPostingList *p ) {
@@ -53,14 +54,14 @@ public:
           //sentinel->Length = 0;
            return buffer + RoundUp( sizeof( SerialEndDocs ), sizeof(size_t));//RoundUp( sizeof( SerialTuple ), sizeof( size_t ) );
        }
-       size_t bytes = BytesRequired( p );
+        size_t bytes = BytesRequired( p );// + sizeof(size_t);
        if ( bufferEnd - buffer < bytes )
           throw "Not enough memory allocated!";
 
        SerialEndDocs *head = new( ( void * )buffer ) SerialEndDocs;
         // TODO: Does size need to account for length
         // TODO: Is this length feature necessary?
-       head->Length = bytes;
+        head->Length = bytes;// + sizeof(size_t);
        char * curr = head->DynamicSpace;
         
        // Copy header

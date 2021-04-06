@@ -4,7 +4,11 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
     try {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
+        if(curr >= numSyncPoints) {
+            throw "seek out of range";
+        }
         Location loc = raw->getPostLocationAt(syncPoint);
+
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= numSyncPoints) {
@@ -54,6 +58,9 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
     try{
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
+        if(curr >= numSyncPoints) {
+            throw "seek out of range";
+        }
         Location loc = raw->getPostLocationAt(syncPoint);
         if(loc == -1) {
             while(loc == -1) {

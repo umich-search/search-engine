@@ -8,7 +8,9 @@
 using namespace std;
 // returns number of low bits given total count and number of syncs
 size_t getNumLowBits2(size_t count, size_t spacing) {
+    
     size_t leftShift = ( count + spacing - 1 )/ spacing;
+    leftShift--;
     int numLowBits=0;
     // While loop will run until we get n = 0
     while(leftShift)
@@ -21,6 +23,20 @@ size_t getNumLowBits2(size_t count, size_t spacing) {
 
 int main (int argc, char *argv[]) 
 {
+    if(WRITE_TO_DISK) {
+        IndexConstructor ic;
+        /*
+        for(unsigned int i = 0; i < 1024; ++i) {
+            ic.Insert("a", Body);
+        }
+         */
+        ic.Insert("hello", Body);
+        ic.Insert("title", "url");
+        
+        ic.fileManager.ReadChunk("/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/0.chunk");
+        TermPostingListRaw raw(ic.fileManager.termIndexBlob->Find("hello")->DynamicSpace);
+        return 0;
+    }
     size_t lowBits;
     // CREATE POSTING LIST
     CommonHeader header1;
@@ -412,7 +428,7 @@ int main (int argc, char *argv[])
         }
     }
     Tuple<String, TermPostingList*> *t = ic3.termIndex.Find(String("Cat"));
-    pl = t->value;//ic3.termIndex.Find(String("Cat"))->value;
+    pl = t->value;
     ASSERT(strcmp("Cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);

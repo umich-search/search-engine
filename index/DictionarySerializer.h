@@ -14,8 +14,6 @@
 #include "Global.h"
 #include "PostingList.h"
 
-
-
 using Hash = HashTable< String, TermPostingList* >;
 using Pair = Tuple< String, TermPostingList* >;
 using HashBucket = Bucket< String, TermPostingList* >;
@@ -25,7 +23,7 @@ static const size_t Unknown = 0;
 
 struct SerialTuple
    {
-   // This is a serialization of a HashTable< char *, PostingList >::Bucket.
+   // This is a serialization of a HashTable< String, PostingList *>::Bucket.
    // One is packed up against the next in a HashBlob.
 
    // Since this struct includes size_t and uint32_t members, we'll
@@ -84,16 +82,18 @@ struct SerialTuple
          /* 
             HASHBUCKET DATA TO SERIALIZE:
             uint32_t fnvHash
-            char key
-            char posstingsList
+            String key
+            TermPostingList *posstingsList
+            any additional member variables
          */
           size_t hashValueSize, keySize, postingsListSize, memberVarsSize;
           hashValueSize = sizeof( uint32_t);
-          keySize = sizeof(strlen(b->tuple.key.cstr())); 
+          keySize = sizeof(strlen(b->tuple.key.cstr()) + 1); 
           postingsListSize = BytesRequired(b->tuple.value);
-          memberVarsSize = sizeof(Offset) + sizeof(uint32_t);
+          memberVarsSize = sizeof(Offset); //+ sizeof(uint32_t);
           return hashValueSize + keySize + postingsListSize + memberVarsSize;
       }
+       
       // Write the HashBucket out as a SerialTuple in the buffer,
       // returning a pointer to one past the last character written.
       static char *Write( char *buffer, char *bufferEnd, const HashBucket *b ) {
