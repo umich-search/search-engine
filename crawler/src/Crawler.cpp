@@ -1,28 +1,30 @@
 #include "Crawler.h"
 #include <fstream>
 
-Crawler::Crawler( ){};
+Crawler::Crawler( const Thread::Init &init ) : Thread( init ) { }
 
-Crawler::~Crawler( ){};
+Crawler::~Crawler( ) { }
 
-void Crawler::DoTask( Task *task )
+void Crawler::DoTask( TaskQueue::Task *task )
     {
-    // 1. Get a URL from the frontier
-    String *url = (String *) task->GetArgs();
+    // 1. URL is received as a task
+    String *url = (String *) task->args;
 
-    // 2. Check for robots.txt for this domain
+    // 2. Retrieve the HTML webpage from the URL
     ParsedUrl parsedUrl( url->cstr() );
-
-    // 3. Retrieve the HTML webpage from the URL
     String html = LinuxGetHTML( parsedUrl );
 
-    // 4. Parse the HTML for the webpage
+    // 3. Parse the HTML for the webpage
     HtmlParser htmlparser( html.cstr(), html.size() );
 
-    // 5. Add the parsed links to the frontier
-    addLinksToFrontier( htmlparser );
+    // 4. Send the URLs found in the HTML back to the manager
+    for ( Link& link : htmlparser.links )
+        {
+        Link* newLink = new Link( link );
+        linkTaskQueue->PushTask( (void *) newLink, true );
+        }
 
-    // 6. Add the words from the HTML to the index
+    // 5. Add the words from the HTML to the index
     addWordsToIndex( htmlparser );
     }
 
@@ -84,21 +86,6 @@ void Crawler::parseRobot( const String& robotUrl )
         temp += robotFile[i];
         }
         myfile.close();
-    }
-
-// TODO: send URLs back to manager for frontier and bloom filter
-void Crawler::addLinksToFrontier( HtmlParser& htmlparser )
-    {
-    for ( Link& link : htmlparser.links )
-        {
-        bool linkSeen = visited->contains( link.URL );
-        if ( !linkSeen )
-            {
-            // order matters! we don't mind losing a link but we mind duplicates
-            visited->insert( link.URL );
-            frontier->PushUrl( link );
-            }
-        }
     }
 
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser )

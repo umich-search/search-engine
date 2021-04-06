@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string.h>
 #include <PriorityQueue.h>
 #include <Concurrency.h>
@@ -13,28 +12,26 @@
 #define FP_RATE 0.1
 static const char *ROBOT_FILE = "robots.txt";
 
+// ----- Crawler.h
+// Task Input: One URL from crawler manager
+// Task: Download the HTML, parse the HTML, add the parsed words to the index
+// Task Output: Parsed URLs to link manager (via linkTaskQueue)
+
 class Crawler : public Thread
     {
     public:
-        Crawler( );
+        Crawler( const Thread::Init &init );
 
         ~Crawler( );
 
         void parseRobot( const String& robotUrl );
 
     private:
-        FileBloomfilter *visited;
+        TaskQueue *linkTaskQueue;
 
-        void DoTask( Task *task ) override;
+        void DoTask( TaskQueue::Task *task ) override;
 
         String retrieveWebpage( const ParsedUrl& url );
-
-        // parse the robot.txt
-        // mark urls as unreachable in the frontier
-        // void parseRobot( const String& robotUrl );
-
-        // add not-seen links the frontier
-        void addLinksToFrontier( HtmlParser& htmlparser );
 
         // TODO: ( with the index team ) add words to index
         void addWordsToIndex( const HtmlParser& htmlparser );

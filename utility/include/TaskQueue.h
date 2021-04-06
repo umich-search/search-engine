@@ -1,40 +1,36 @@
 #pragma once
+#include "Concurrency.h"
 #include <atomic>
 #include <pthread.h>
-
-struct Task
-    {
-    private:
-        void *arg;
-        bool delArgs; // Should the tasked thread free the args from memory?
-        std::atomic<bool> *halted; // Check this in infinitely running tasks
-
-    public:
-        Task( void* args, bool deleteArgs, std::atomic<bool> *halt ) 
-            : arg( args ), delArgs( deleteArgs ), halted( halt ) { }
-
-        bool IsHalted() { return halted->load(); }
-
-        void *GetArgs() { return arg; }
-        bool DeleteArgs() { return delArgs; }
-    };
-
-struct QueueItem
-    {
-    Task *task;
-    QueueItem *next;
-    };
 
 class TaskQueue
     {
     public:
+        struct Task
+            {
+            Task( void *args, bool deleteArgs )
+                : args( args ), deleteArgs( deleteArgs ) { }
+
+            void *args;
+            bool deleteArgs; // Should the tasked thread free the args from memory?
+            };
+        
+        struct QueueItem
+            {
+            QueueItem( Task *task, QueueItem *next )
+                : task( task ), next( next ) { }
+
+            Task *task;
+            QueueItem *next;
+            };
+
         TaskQueue() 
             {
             halted.store( false );
             front = nullptr;
             back = nullptr;
-            pthread_mutex_init(&mutex, nullptr);
-            pthread_cond_init(&cv, nullptr);
+            MutexInit(&mutex, nullptr);
+            CvInit(&cv, nullptr);
             }
 
         ~TaskQueue() 
@@ -45,73 +41,72 @@ class TaskQueue
                 front = front->next;
                 delete temp;
                 }
+            MutexDestroy(&mutex);
+            CvDestroy(&cv);
             }
 
         void PushTask( void *args, bool deleteArgs ) 
             { 
             // Create a task
-            Task *task = new Task( args, deleteArgs, &halted );
+            Task *task = new Task( args, deleteArgs );
             // Create a place in task queue
-            QueueItem *item = new QueueItem;
-            item->task = task;
-            item->next = nullptr;
+            QueueItem *item = new QueueItem( task, nullptr );
             // Add the task to the back of the queue
-            pthread_mutex_lock(&mutex);
+            Lock(&mutex);
             if ( front == nullptr )
                 front = item;
             if ( back != nullptr )
                 back->next = item;
             back = item;
-            // Signal an available task for a thread
-            pthread_cond_signal(&cv);
-            pthread_mutex_unlock(&mutex);
+            Signal(&cv);
+            Unlock(&mutex);
             }
 
         // Wait for task if necessary. May return nullptr if queue halted.
         Task *PopTask( ) 
             {
-            pthread_mutex_lock(&mutex);
-            while ( !IsHalted() && (front == nullptr) )
+            Lock(&mutex);
+            while ( !IsHalted() && ( front == nullptr ) )
                 {
-                pthread_cond_wait(&cv, &mutex);
+                Wait(&cv, &mutex);
                 }
             if ( front == nullptr )
                 {
-                pthread_mutex_unlock(&mutex);
+                Unlock(&mutex);
                 return nullptr;
                 }
             Task *task = front->task;
             QueueItem* temp = front;
             front = temp->next;
             delete temp;
-            pthread_cond_broadcast(&cv);   
-            pthread_mutex_unlock(&mutex);
+            Broadcast(&cv);   
+            Unlock(&mutex);
             return task;      
             }
 
         // Wait until the task queue is empty. 
         void WaitForEmptyQueue() 
             {
-            pthread_mutex_lock(&mutex);
+            Lock(&mutex);
             while ( !IsHalted() && ( front != nullptr ) )
                 {
-                pthread_cond_wait(&cv, &mutex);
+                Wait(&cv, &mutex);
                 }
-            pthread_mutex_unlock(&mutex);
+            Unlock(&mutex);
             }
 
         // Wait until all tasks are complete before halting.
         // Race condition: halt before main thread can push a task, task lost
         void Halt()
             {
-            pthread_mutex_lock(&mutex);
+            Lock(&mutex);
             while ( front != nullptr )
                 {
-                pthread_cond_wait(&cv, &mutex);
+                Wait(&cv, &mutex);
                 }
             halted.store( true );
-            pthread_cond_broadcast(&cv);
-            pthread_mutex_unlock(&mutex);
+            Broadcast(&cv);
+            Unlock(&mutex);
             }
 
         bool IsHalted( )
@@ -123,8 +118,8 @@ class TaskQueue
         QueueItem *front;
         QueueItem *back;
 
-        pthread_mutex_t mutex;
-        pthread_cond_t cv;
+        mutex_t mutex;
+        cv_t cv;
 
         std::atomic<bool> halted;
     };

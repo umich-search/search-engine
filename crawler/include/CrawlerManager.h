@@ -2,28 +2,22 @@
 #include "Crawler.h"
 #include "TaskQueue.h"
 
+// ----- CrawlerManager.h
+// Task Input: None (run forever until interrupted)
+// Task: Pull URLs from the frontier and distribute to crawlers
+// Task Output: URLs to crawlers (via crawlerTaskQueue)
+
 class CrawlerManager : public Thread
     {
     public:
-        // Create all threads 
-        CrawlerManager( Frontier *frontier, size_t numCrawlers = 100 );
+        CrawlerManager( const Thread::Init &init, Frontier *frontier, TaskQueue *crawlerTaskQueue )
+            : Thread( init ), frontier( frontier ), crawlerTaskQueue( crawlerTaskQueue ) { }
 
-        // destroy the threads
         ~CrawlerManager( );
 
-        // start the crawling process
-        void StartCrawl( );
-
-        // block until the frontier is empty, namely joining all thread workers,
-        // then broadcast all threads to stop working
-        void HaltCrawl( );
-
     private:   
-        void DoTask( Task *task ) override;
+        void DoTask( TaskQueue::Task *task ) override;
 
         Frontier *frontier;
-
-        vector< Crawler > crawlers;
-        TaskQueue crawlerTaskQueue;
-        TaskQueue managerTaskQueue;
+        TaskQueue *crawlerTaskQueue;
     };
