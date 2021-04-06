@@ -23,6 +23,8 @@ class Crawler : public Thread
         void parseRobot( const String& robotUrl );
 
     private:
+
+        Frontier *frontier;
         FileBloomfilter *visited;
 
         void DoTask( Task *task ) override;

@@ -55,9 +55,14 @@ class Frontier
         Frontier( const char *, size_t, size_t, int ( * )( const Link& ) = nullptr );
         // dtor
         ~Frontier( );
+        // initialize the frontier with the seed list file
+        void FrontierInit( const char *seedFile );
         // push the url into the frontier; the url has to be unseen
         void PushUrl( Link& );
         // return the top url in the urlPq
         // if urlPq is empty, refills it with random sampling
         String PopUrl( );
+
+        // TODO
+        bool Empty( ) { return true; }
     };

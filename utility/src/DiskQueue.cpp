@@ -200,7 +200,7 @@ void DiskQueue::PrintStatus( ) const
         << "Number of files in the directory: " 
         << ( readFileID == -1 ? ( writeFileID == -1 ? 0 : 1 ) : writeFileID - readFileID ) << std::endl
         << "ReadFile: " << readFileID << ", WriteFile: " << writeFileID << std::endl;
-    }
+    }    
 
 bool DotName( const char *name )
     {

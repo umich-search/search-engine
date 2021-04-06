@@ -22,8 +22,12 @@ class CrawlerManager : public Thread
         void DoTask( Task *task ) override;
 
         Frontier *frontier;
+        FileBloomfilter *visited;
 
         vector< Crawler > crawlers;
         TaskQueue crawlerTaskQueue;
         TaskQueue managerTaskQueue;
+
+        // added to compile
+        mutex_t printMutex; 
     };

@@ -120,6 +120,21 @@ Frontier::~Frontier( )
         }
     }
 
+void Frontier::FrontierInit( const char *seedFile )
+    {
+    FILE *fp = fopen( seedFile, "r" );
+    char *linePtr = nullptr;
+    size_t bufferSize = 0;
+    ssize_t bytes;
+    while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
+        {
+        Link lk( linePtr, bytes - 1 );  // excluding the trailing '\n'
+        PushUrl( lk );
+        }
+    free( linePtr );
+    fclose( fp );
+    }
+
 void Frontier::PushUrl( Link& link )
     {
     size_t dqIdx = 0;  // disk queue index

@@ -8,10 +8,10 @@ void CrawlerManager::StartCrawl()
     // Start the crawler threads async
     for ( size_t i = 0; i < crawlers.size(); ++i )
         {
-        crawlers[i].Start( i, &crawlerTaskQueue );
+        crawlers[i].Start( i, &crawlerTaskQueue, &printMutex );
         }
     // Start the manager thread async
-    Start( crawlers.size(), &managerTaskQueue );
+    Start( crawlers.size(), &managerTaskQueue, &printMutex );
     }
 
 void CrawlerManager::HaltCrawl()

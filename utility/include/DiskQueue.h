@@ -20,7 +20,7 @@
 #include <cassert>
 #include "mString.h"
 
-const unsigned int MAX_FILE_BLOCK_IN_BYTES = 512;
+const unsigned int MAX_FILE_BLOCK_IN_BYTES = 4096;
 
 bool DotName( const char * );
 String ltos( int );
@@ -61,4 +61,5 @@ class DiskQueue
         String PopFront( );
         void PushBack( String& item );
         void PrintStatus( ) const;
+
     };
