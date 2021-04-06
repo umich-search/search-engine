@@ -1,5 +1,20 @@
 #include "PostingListBlob.h"
 
+CommonHeaderBlob * TermPostingListRaw::getHeader() {
+    return header;
+}
+
+Offset TermPostingListRaw::getPostingsListOffsetAt(Offset i) {
+    return *(Offset *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
+}
+Offset TermPostingListRaw::getPostLocationAt(Offset i) {
+    return *(Offset *)(buffer + postLocationOffset + sizeof(size_t) * i);
+}
+
+IPostTerm TermPostingListRaw::getPostAt(Offset i) {
+    return IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
+}
+
 Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {
     try {
         Location syncPoint = target >> numLowBits;
@@ -37,21 +52,6 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
     catch(char *excp) {
         throw "unknown error";
     }
-}
-
-CommonHeaderBlob * TermPostingListRaw::getHeader() {
-    return header;
-}
-
-Offset TermPostingListRaw::getPostingsListOffsetAt(Offset i) {
-    return *(Offset *)(buffer + postingsListOffsetOffset + sizeof(size_t) * i);
-}
-Offset TermPostingListRaw::getPostLocationAt(Offset i) {
-    return *(Offset *)(buffer + postLocationOffset + sizeof(size_t) * i);
-}
-
-IPostTerm TermPostingListRaw::getPostAt(Offset i) {
-    return IPostTerm(*(Offset *)(buffer + postsOffset + sizeof(size_t) * i));
 }
 
 Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {

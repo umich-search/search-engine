@@ -144,9 +144,9 @@ void IndexConstructor::createSynchronization() {
     size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
     
     for (  TermHash::Iterator iterator = termIndex->begin();
-                                                            iterator != termIndex->end( );
-                                                            ++iterator ) {
-        createSeekIndex(iterator->value,
+            iterator != termIndex->end( );
+            ++iterator ) {
+                        createSeekIndex(iterator->value,
                             constructionData->Find(iterator->key)->value->firstTermLoc,
                             numLowBits
                         );

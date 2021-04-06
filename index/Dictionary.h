@@ -3,6 +3,7 @@
 
 #include "ISR.h"
 #include "DictionarySerializer.h"
+#include "FileManager.h"
 #include "Global.h"
 
 class Dictionary {
@@ -25,7 +26,7 @@ public:
     }
 
 private:
-    HashBlob indexBlob;
+    FileManager manager;
     // number of unique words in the index
     w_Occurence numberOfUniqueWords;
     // number of documents in the index

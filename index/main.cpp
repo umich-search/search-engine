@@ -25,11 +25,18 @@ int main (int argc, char *argv[])
 {
     if(WRITE_TO_DISK) {
         IndexConstructor ic;
-        ic.Insert("hello", Body);
+        for(unsigned int i = 0; i < 20; ++i) {
+            ic.Insert("hello", Body);
+        }
+        for(unsigned int i = 0; i < 20; ++i) {
+            ic.Insert("world", Title);
+        }
         ic.Insert("title", "url");
-        
+
+        // TODO: Invalid term handle
         ic.fileManager.ReadChunk("/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/0.chunk");
         TermPostingListRaw raw(ic.fileManager.termIndexBlob->Find("hello")->DynamicSpace);
+        TermPostingListRaw rawWorld(ic.fileManager.termIndexBlob->Find("world")->DynamicSpace);
         return 0;
     }
     
