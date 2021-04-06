@@ -1,6 +1,10 @@
 #include "IndexConstructor.h"
 #include "DocumentsSerializer.h"
 
+using TermHash = HashTable< String, TermPostingList* >;
+using ConstructionHash = HashTable< String, ConstructionData*>;
+
+
 int IndexConstructor::Insert( String title, String URL) {
     IPostEndDoc lastDoc;
     if(endDocPostings->posts.size() == 0){
@@ -8,17 +12,20 @@ int IndexConstructor::Insert( String title, String URL) {
         firstDocEnd = endLocation;
     }
     else {
-        // TODO: Chunk memoy alloc for doc
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
+    
     endDocPostings->posts.pushBack(lastDoc);
-    SharedPointer<DocumentDetails> sharedDoc(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
+    SharedPointer<DocumentDetails> sharedDoc(new DocumentDetails(URL.cstr(),
+                                                                 title.cstr(),
+                                                                 currDocInfo.getNumberOfWords(),
+                                                                 currDocInfo.getNumberOfUniqueWords())
+                                             );
     docDetails.pushBack(sharedDoc);
     numberOfDocuments++;
     endDocPostings->header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
     endLocation+=2;
-    
     if(WRITE_TO_DISK) {
         resolveChunkMem();
     }
@@ -31,16 +38,12 @@ int IndexConstructor::resolveChunkMem() {
         createSynchronization();
     //    optimizeIndex();
         flushData();
-        // TODO: Need to switch to smart ptr
-        // Currently causes mem leak
-    endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
-    termIndex = SharedPointer<HashTable<String, TermPostingList*>>(new HashTable<String, TermPostingList*>);
-    constructionData = SharedPointer<HashTable<String, ConstructionData*>>(new HashTable<String, ConstructionData*>);
     
-        //endDocPostings = *(new EndDocPostingList(NUM_SYNC_POINTS));
-        //termIndex = *(new HashTable<String, TermPostingList*>);
-    docDetails = ::vector<SharedPointer<DocumentDetails>>();//::vector<DocumentDetails*>();
-    //}
+    endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+    termIndex = SharedPointer<TermHash>(new TermHash);
+    constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
+    docDetails = ::vector<SharedPointer<DocumentDetails>>();
+    
     return 0;
 }
 
@@ -51,7 +54,6 @@ int IndexConstructor::Insert( String term, Type type ) {
     ConstructionData *cd = nullptr;
     size_t memoryAlloc = 0;
     size_t delta;
-    // TODO: Prob ened to use new operator
 
     Tuple<String, TermPostingList*> * termTuple = termIndex->Find(term);
     Tuple<String, ConstructionData*> * cdTuple = constructionData->Find( term);
@@ -97,7 +99,6 @@ int IndexConstructor::Insert( String term, Type type ) {
     numberOfWords++;
     endLocation++;
     chunkMemoryAlloc += memoryAlloc;
-
     return 0;
 };
 
@@ -110,7 +111,16 @@ int IndexConstructor::flushData() {
     char docsFilename[100];
     sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
     sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
-    fileManager.WriteChunk(termIndex, endDocPostings, numberOfWords, numberOfUniqueWords, numberOfDocuments, endLocation, docDetails, currentChunkNum, chunkFilename, docsFilename);
+    fileManager.WriteChunk(termIndex,
+                           endDocPostings,
+                           numberOfWords,
+                           numberOfUniqueWords,
+                           numberOfDocuments,
+                           endLocation,
+                           docDetails,
+                           currentChunkNum,
+                           chunkFilename,
+                           docsFilename);
     return 0;
 }
 
@@ -123,7 +133,6 @@ size_t getNumLowBits(size_t count, size_t spacing) {
     size_t leftShift = ( count + spacing - 1 )/ spacing;
     int numLowBits=0;
     leftShift--;
-    // While loop will run until we get n = 0
     while(leftShift)
     {
         numLowBits++;
@@ -132,10 +141,15 @@ size_t getNumLowBits(size_t count, size_t spacing) {
     return numLowBits;
 }
 void IndexConstructor::createSynchronization() {
-
     size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
-    for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex->begin(); iterator != termIndex->end( ); ++iterator ) {
-        createSeekIndex(iterator->value, constructionData->Find(iterator->key)->value->firstTermLoc, numLowBits);
+    
+    for (  TermHash::Iterator iterator = termIndex->begin();
+                                                            iterator != termIndex->end( );
+                                                            ++iterator ) {
+        createSeekIndex(iterator->value,
+                            constructionData->Find(iterator->key)->value->firstTermLoc,
+                            numLowBits
+                        );
     }
     createSeekIndex(endDocPostings, firstDocEnd, numLowBits);
 }

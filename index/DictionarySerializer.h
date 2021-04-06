@@ -291,7 +291,7 @@ struct SerialTuple
          }
    };
 
-   /*
+   
 class HashFile
    {
    private:
@@ -331,7 +331,7 @@ class HashFile
          close( f );
          }
 
-      HashFile( const char *filename, const Hash *hashtable )
+      HashFile( const char *filename, const SharedPointer<Hash> hashtable )
          {
          // Open the file for write, map it, write
          // the hashtable out as a HashBlob, and note
@@ -362,4 +362,4 @@ class HashFile
          // HashBlob::Discard( blob );
          }
    };
-*/
+

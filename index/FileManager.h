@@ -69,12 +69,7 @@ public:
       }
 
       else {
-          //blob += sizeof(Offset);
-          char * start = (char*) blob;
          blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
-          char * after = (char *) blob;
-          size_t diff = after - start;
-          //char *curr = (char*)blob + endDocEnd;
          blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
       }
       close(f_chunk);

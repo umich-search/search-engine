@@ -3,7 +3,7 @@
 #include "stdlib.h"
 #include "../utility/Vector.h"
 #include "../utility/string.h"
-#include "../utility/HashTable.h"
+#include "HashTable.h"
 #include "../utility/SmartPointer.h"
 
 #define NUM_SYNC_POINTS 8
@@ -14,8 +14,10 @@
 #define DOCUMENT_SIZE 2576
 #define CHUNK_SIZE_BYTES 100
 #define CHUNKS_META_FILENAME "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
+#define CHUNK_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
+#define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define WRITE_TO_DISK false
-#define DEBUG true
+#define INITAL_HASHTABLE_SIZE 5
 
 typedef size_t Location;
 // Should be large enough to fit max word occurence
