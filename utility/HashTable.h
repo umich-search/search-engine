@@ -105,7 +105,7 @@ public:
         // nothing more is to be added.
 
         // Your code here.
-        HashTable tmp( numberOfEntries / loading );
+        HashTable tmp( numberOfEntries * loading );
         tmp.numberOfEntries = numberOfEntries;
         // iterate over indexes
         for ( int i = 0; i < numberOfBuckets; ++i )
