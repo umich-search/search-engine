@@ -30,11 +30,11 @@ struct DocumentBlob {
     char URL[MAX_URL_LENGTH];
     char title[MAX_TITLE_LENGTH];
     
-    static size_t BytesRequired(const DocumentDetails * doc) {
+    static size_t BytesRequired(const SharedPointer<DocumentDetails> doc){//const DocumentDetails * doc) {
         return 2 * sizeof(Location) + MAX_URL_LENGTH + MAX_TITLE_LENGTH;
     }
     
-    static size_t BytesRequired(const ::vector<DocumentDetails*> * docs) {
+    static size_t BytesRequired(const SharedPointer<::vector<SharedPointer<DocumentDetails>>> docs) {//::vector<DocumentDetails*> * docs) {
         size_t bytes = 0;
         for(size_t i = 0; i < docs->size(); ++i) {
             bytes += BytesRequired(docs->operator[](i));
@@ -43,7 +43,7 @@ struct DocumentBlob {
     }
 
     // TODO: Catch errors or handle them somehow
-    static char *Write( char *buffer, char *bufferEnd, const DocumentDetails * doc ) {
+    static char *Write( char *buffer, char *bufferEnd, const SharedPointer<DocumentDetails> doc){// const DocumentDetails * doc ) {
         if ( !doc ) {
             return buffer;
         }
@@ -69,7 +69,7 @@ struct DocumentBlob {
         return buffer + RoundUp( bytes, sizeof( size_t ) );
     }
 };
-
+/*
 class DocumentFile
    {
    private:
@@ -142,4 +142,4 @@ class DocumentFile
          // HashBlob::Discard( blob );
          }
    };
-
+*/

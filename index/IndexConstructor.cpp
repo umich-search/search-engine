@@ -12,7 +12,8 @@ int IndexConstructor::Insert( String title, String URL) {
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
     endDocPostings.posts.pushBack(lastDoc);
-    docDetails.pushBack(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
+    SharedPointer<DocumentDetails> sharedDoc(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
+    docDetails.pushBack(sharedDoc);
     numberOfDocuments++;
     endDocPostings.header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
@@ -34,7 +35,7 @@ int IndexConstructor::resolveChunkMem() {
         // Currently causes mem leak
         endDocPostings = *(new EndDocPostingList(NUM_SYNC_POINTS));
         termIndex = *(new HashTable<String, TermPostingList*>);
-        docDetails = ::vector<DocumentDetails*>();
+    docDetails = ::vector<SharedPointer<DocumentDetails>>();//::vector<DocumentDetails*>();
     //}
     return 0;
 }

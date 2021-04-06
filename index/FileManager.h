@@ -41,7 +41,7 @@ public:
                   w_Occurence numUniqueWords, 
                   d_Occurence numDocs, 
                   Location endLocation,
-                  ::vector<DocumentDetails*> docDetails,
+                  ::vector<SharedPointer<DocumentDetails>> docDetails,
                  size_t numChunks,
                   const char* filename,
                   const char* docs_filename) 

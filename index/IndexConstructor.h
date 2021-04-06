@@ -41,7 +41,8 @@ public:
     HashTable< String, TermPostingList*> termIndex;
     HashTable< String, ConstructionData*> constructionData;
     EndDocPostingList endDocPostings;
-    ::vector<DocumentDetails *> docDetails;
+    //::vector<DocumentDetails *> docDetails;
+    ::vector<SharedPointer<DocumentDetails>> docDetails;
     DocumentInfo currDocInfo;
     w_Occurence numberOfUniqueWords;
     d_Occurence numberOfDocuments;

@@ -689,13 +689,15 @@ int main (int argc, char *argv[])
     cout << "TEST: Write document to blob" << endl;
     char testTitle[] = "title1";
     char testUrl[] = "www.test_url.com";
-    DocumentDetails details1("www.test_url.com", "title1", 20, 100);
+    //DocumentDetails details1("www.test_url.com", "title1", 20, 100);
+    SharedPointer<DocumentDetails> details1(new DocumentDetails("www.test_url.com", "title1", 20, 100));
     DocumentBlob * dblob;
-    size_t docBytes = dblob->BytesRequired(&details1);
+    
+    size_t docBytes = dblob->BytesRequired(details1);
     ASSERT(docBytes, ==, 2576);
     //cout << bucketBytes << endl;
     char *docBuffer = (char *)malloc(docBytes);
-    dblob->Write(docBuffer, docBuffer + docBytes, &details1);
+    dblob->Write(docBuffer, docBuffer + docBytes, details1);
     dblob = (DocumentBlob *)docBuffer;
     ASSERT(strcmp(dblob->title, testTitle), ==, 0);
     ASSERT(strcmp(dblob->URL, testUrl), ==, 0);
