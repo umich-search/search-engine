@@ -80,6 +80,10 @@ class Link
       Link( String URL ) : URL( URL )
          {
          }
+
+      Link( const char *surl, size_t size ) : URL( surl, size )
+         {
+         }
    };
 
 class HtmlParser

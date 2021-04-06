@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Frontier.h"
 #include "Concurrency.h"
+#include "DiskQueue.h"
 #include <fstream>
 #include <iostream>
 
@@ -52,36 +53,42 @@ void *writeFunc( void *x )
     return nullptr;
     }
 
+void init( Frontier *f, const char *seedFile )
+    {
+    f->FrontierInit( seedFile );
+    }
+
 int main( int argc, char *argv[] )
     {
-    if ( argc != 2 )
+    if ( argc != 3 )
         exit( 1 );
-    Frontier a( argv[1], 3, 2);
-    MutexInit( &m, nullptr );
+    Frontier a( argv[1], 20, 15);
+    init( &a, argv[2] );
+    // MutexInit( &m, nullptr );
 
-    pthread_t *tp = new pthread_t[ numt ],
-        *wtp = new pthread_t[ numwt ];
-    p *ag = new p[ numt ];
-    for ( int i = 0; i < numt; ++i)
-        {
-        ag[ i ].x = &a;
-        ag[ i ].y = i;
-        pthread_create( tp + i, nullptr, func, ( void * )( ag + i ) );
-        }
-    for ( int i = 0; i < numwt; ++i )
-        {
-        pthread_create( wtp + i, nullptr, writeFunc, ( void * )( &a ) );
-        }
+    // pthread_t *tp = new pthread_t[ numt ],
+    //     *wtp = new pthread_t[ numwt ];
+    // p *ag = new p[ numt ];
+    // for ( int i = 0; i < numt; ++i)
+    //     {
+    //     ag[ i ].x = &a;
+    //     ag[ i ].y = i;
+    //     pthread_create( tp + i, nullptr, func, ( void * )( ag + i ) );
+    //     }
+    // for ( int i = 0; i < numwt; ++i )
+    //     {
+    //     pthread_create( wtp + i, nullptr, writeFunc, ( void * )( &a ) );
+    //     }
     
 
-    for ( int i = 0; i < numt; ++i )
-        pthread_join( tp[ i ], nullptr );
-    for ( int i = 0; i < numwt; ++i )
-        pthread_join( wtp[ i ], nullptr );
+    // for ( int i = 0; i < numt; ++i )
+    //     pthread_join( tp[ i ], nullptr );
+    // for ( int i = 0; i < numwt; ++i )
+    //     pthread_join( wtp[ i ], nullptr );
 
-    MutexDestroy( &m );
-    delete [] tp;
-    delete [] wtp;
-    delete [] ag;
+    // MutexDestroy( &m );
+    // delete [] tp;
+    // delete [] wtp;
+    // delete [] ag;
     return 0;
     }

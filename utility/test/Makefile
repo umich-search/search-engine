@@ -23,8 +23,9 @@ CXXFLAGS = -std=c++11 -g -I$(UIDIR)
 LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
+
 # TODO: add the name of the main source file here
-EXEC = testBloomFilter
+EXEC = SmartPointerTest
 
 all: $(EXEC)
 
