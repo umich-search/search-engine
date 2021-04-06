@@ -3,7 +3,7 @@
 
 int IndexConstructor::Insert( String title, String URL) {
     IPostEndDoc lastDoc;
-    if(endDocPostings.posts.size() == 0){
+    if(endDocPostings->posts.size() == 0){
         lastDoc.delta = 0;
         firstDocEnd = endLocation;
     }
@@ -11,11 +11,11 @@ int IndexConstructor::Insert( String title, String URL) {
         // TODO: Chunk memoy alloc for doc
         lastDoc.delta = endLocation - currDocInfo.getPrevEndLocation();
     }
-    endDocPostings.posts.pushBack(lastDoc);
+    endDocPostings->posts.pushBack(lastDoc);
     SharedPointer<DocumentDetails> sharedDoc(new DocumentDetails(URL.cstr(), title.cstr(), currDocInfo.getNumberOfWords(), currDocInfo.getNumberOfUniqueWords() ));
     docDetails.pushBack(sharedDoc);
     numberOfDocuments++;
-    endDocPostings.header.numOfDocument++;
+    endDocPostings->header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
     endLocation+=2;
     
@@ -33,8 +33,12 @@ int IndexConstructor::resolveChunkMem() {
         flushData();
         // TODO: Need to switch to smart ptr
         // Currently causes mem leak
-        endDocPostings = *(new EndDocPostingList(NUM_SYNC_POINTS));
-        termIndex = *(new HashTable<String, TermPostingList*>);
+    endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+    termIndex = SharedPointer<HashTable<String, TermPostingList*>>(new HashTable<String, TermPostingList*>);
+    constructionData = SharedPointer<HashTable<String, ConstructionData*>>(new HashTable<String, ConstructionData*>);
+    
+        //endDocPostings = *(new EndDocPostingList(NUM_SYNC_POINTS));
+        //termIndex = *(new HashTable<String, TermPostingList*>);
     docDetails = ::vector<SharedPointer<DocumentDetails>>();//::vector<DocumentDetails*>();
     //}
     return 0;
@@ -49,8 +53,8 @@ int IndexConstructor::Insert( String term, Type type ) {
     size_t delta;
     // TODO: Prob ened to use new operator
 
-    Tuple<String, TermPostingList*> * termTuple = termIndex.Find(term);
-    Tuple<String, ConstructionData*> * cdTuple = constructionData.Find( term);
+    Tuple<String, TermPostingList*> * termTuple = termIndex->Find(term);
+    Tuple<String, ConstructionData*> * cdTuple = constructionData->Find( term);
 
     if(termTuple) {
         postings = termTuple->value;
@@ -69,8 +73,8 @@ int IndexConstructor::Insert( String term, Type type ) {
         cd->firstTermLoc = endLocation;
         cd->latestTermLoc = endLocation;
 
-        termIndex.Find(term, postings);
-        constructionData.Find(term, cd);
+        termIndex->Find(term, postings);
+        constructionData->Find(term, cd);
         delta = 0;
         numberOfUniqueWords++;
         memoryAlloc += sizeof(w_Occurence) + sizeof(d_Occurence) + sizeof(type) + strlen(term.cstr()) + 1;
@@ -98,7 +102,7 @@ int IndexConstructor::Insert( String term, Type type ) {
 };
 
 void IndexConstructor::optimizeIndex() {
-    termIndex.Optimize();
+    termIndex->Optimize();
 }
 
 int IndexConstructor::flushData() {
@@ -106,7 +110,7 @@ int IndexConstructor::flushData() {
     char docsFilename[100];
     sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
     sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
-    fileManager.WriteChunk(termIndex, &endDocPostings, numberOfWords, numberOfUniqueWords, numberOfDocuments, endLocation, docDetails, currentChunkNum, chunkFilename, docsFilename);
+    fileManager.WriteChunk(termIndex, endDocPostings, numberOfWords, numberOfUniqueWords, numberOfDocuments, endLocation, docDetails, currentChunkNum, chunkFilename, docsFilename);
     return 0;
 }
 
@@ -130,8 +134,8 @@ size_t getNumLowBits(size_t count, size_t spacing) {
 void IndexConstructor::createSynchronization() {
 
     size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
-    for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex.begin(); iterator != termIndex.end( ); ++iterator ) {
-        createSeekIndex(iterator->value, constructionData.Find(iterator->key)->value->firstTermLoc, numLowBits);
+    for ( HashTable< String, TermPostingList *>::Iterator iterator = termIndex->begin(); iterator != termIndex->end( ); ++iterator ) {
+        createSeekIndex(iterator->value, constructionData->Find(iterator->key)->value->firstTermLoc, numLowBits);
     }
-    createSeekIndex(&endDocPostings, firstDocEnd, numLowBits);
+    createSeekIndex(endDocPostings, firstDocEnd, numLowBits);
 }

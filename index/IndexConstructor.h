@@ -10,7 +10,6 @@
 class IndexConstructor {
 public:
     IndexConstructor(w_Occurence uniqueWords, d_Occurence numDocs, w_Occurence numWords, Location firstDocEnd, Location endLocation, Location end, size_t currChunkNum) :
-                        endDocPostings(NUM_SYNC_POINTS),
                         numberOfUniqueWords(uniqueWords),
                         numberOfDocuments(numDocs),
                         numberOfWords(numWords),
@@ -18,10 +17,13 @@ public:
                         endLocation(endLocation),
                         currentChunkNum(currChunkNum),
                         chunkMemoryAlloc(0)
-                        {}
+                        {
+                            endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+                            constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
+                            termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
+                        }
     
     IndexConstructor() :
-                        endDocPostings(NUM_SYNC_POINTS),
                         numberOfUniqueWords(0),
                         numberOfDocuments(0),
                         numberOfWords(0),
@@ -29,7 +31,14 @@ public:
                         endLocation(0),
                         currentChunkNum(0),
                         chunkMemoryAlloc(0)
-                        {}
+                        {
+                            endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+                            constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
+                            termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
+                        }
+    
+    ~IndexConstructor() {
+    }
     
     int Insert ( String title, String URL );
     int Insert( String term, Type type );
@@ -38,9 +47,9 @@ public:
 public:
     // TODO: Maybe switch to static
     FileManager fileManager;
-    HashTable< String, TermPostingList*> termIndex;
-    HashTable< String, ConstructionData*> constructionData;
-    EndDocPostingList endDocPostings;
+    SharedPointer<HashTable< String, TermPostingList*>> termIndex;
+    SharedPointer<HashTable< String, ConstructionData*>> constructionData;
+    SharedPointer<EndDocPostingList> endDocPostings;
     //::vector<DocumentDetails *> docDetails;
     ::vector<SharedPointer<DocumentDetails>> docDetails;
     DocumentInfo currDocInfo;

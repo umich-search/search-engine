@@ -17,6 +17,8 @@ bool CompareEqual(const String &L,const String &R);
 
 uint32_t fnvHash( const char *data, size_t length );
 
+
+
 template<typename Key, typename Value>
 class Tuple {
 public:
@@ -24,6 +26,22 @@ public:
     Value value;
 
     Tuple(const Key &k, const Value v) : key(k), value(v) {
+    }
+};
+
+template<typename Key, typename Value>
+class Tuple<Key,Value*> {
+public:
+    Key key;
+    Value* value;
+
+    Tuple(const Key &k, Value* v) : key(k), value(v) {
+    }
+    
+    ~Tuple() {
+        if( !DEBUG ){
+            delete value;
+        }
     }
 };
 

@@ -35,8 +35,8 @@ public:
    void * docDetailsBlob;
    void * chunkDetails;
 
-    int WriteChunk(HashTable<String, TermPostingList *> &termIndex, 
-                  EndDocPostingList * endDocList, 
+    int WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> termIndex, 
+                  SharedPointer<EndDocPostingList> endDocList, 
                   w_Occurence numWords, 
                   w_Occurence numUniqueWords, 
                   d_Occurence numDocs, 
@@ -53,7 +53,7 @@ public:
       }
       // WRITE ENDDOC AND TERMPOSTING LIST TO FILE
       size_t termListSize, endDocEnd, numWordsSize, numUniqueWordsSize, numDocsSize, endLocationSize;
-      termListSize = RoundUp(HashBlob::BytesRequired(&termIndex), sizeof(size_t));
+      termListSize = RoundUp(HashBlob::BytesRequired(termIndex), sizeof(size_t));
        endDocEnd = RoundUp(SerialEndDocs::BytesRequired(endDocList), sizeof(size_t)); // TODO: more dynamic, bytes reuired doesn't include lebgth size
       numWordsSize = sizeof(w_Occurence);
       numUniqueWordsSize = sizeof(w_Occurence);
@@ -75,7 +75,7 @@ public:
           char * after = (char *) blob;
           size_t diff = after - start;
           //char *curr = (char*)blob + endDocEnd;
-         blob = HashBlob::Write((HashBlob *)blob, termListSize, &termIndex);
+         blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
       }
       close(f_chunk);
       // READ FIRST

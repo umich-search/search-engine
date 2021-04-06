@@ -25,11 +25,6 @@ int main (int argc, char *argv[])
 {
     if(WRITE_TO_DISK) {
         IndexConstructor ic;
-        /*
-        for(unsigned int i = 0; i < 1024; ++i) {
-            ic.Insert("a", Body);
-        }
-         */
         ic.Insert("hello", Body);
         ic.Insert("title", "url");
         
@@ -37,6 +32,7 @@ int main (int argc, char *argv[])
         TermPostingListRaw raw(ic.fileManager.termIndexBlob->Find("hello")->DynamicSpace);
         return 0;
     }
+    
     size_t lowBits;
     // CREATE POSTING LIST
     CommonHeader header1;
@@ -227,6 +223,7 @@ int main (int argc, char *argv[])
     SerialTuple s;
     size_t bucketBytes = s.BytesRequired(&testBucket);
     //cout << bucketBytes << endl;
+    
     char *buffer = (char *)malloc(bucketBytes);
     
     // TEST WRITE BUCKET TO BUFFER
@@ -272,9 +269,10 @@ int main (int argc, char *argv[])
 
     // TEST WRTIE TO HASHTABLE (1 Entry)
     cout << "TEST: Convert to hashblob (1 Entry)" << endl;
-    HashTable< String, TermPostingList *> tbl1;
-    tbl1.Find("dog", &list1);
-    HashBlob *b1 = blob.Create(&tbl1);
+
+    SharedPointer<HashTable< String, TermPostingList *>> tbl1(new HashTable< String , TermPostingList *>());
+    tbl1->Find("dog", &list1);
+    HashBlob *b1 = blob.Create(tbl1);
     tuple = b1->Find("dog");
     
     ASSERT(tuple, !=, nullptr);
@@ -307,8 +305,8 @@ int main (int argc, char *argv[])
     
     // TEST WRTIE TO HASHTABLE (1 Entry)
     cout << "TEST: Convert to hashblob (2 Entries)" << endl;
-    tbl1.Find("camel", &list2);
-    HashBlob *b2 = blob.Create(&tbl1);
+    tbl1->Find("camel", &list2);
+    HashBlob *b2 = blob.Create(tbl1);
     tuple = b2->Find("camel");
     ASSERT(tuple, !=, nullptr);
     ASSERT(tuple->HashValue, ==, fnvHash("camel", strlen("camel")));
@@ -336,28 +334,15 @@ int main (int argc, char *argv[])
     for(size_t i = 0; i < 26; ++i) {
         ASSERT(*(size_t *)dspace3, ==, i);
         dspace3 += sizeof(size_t);
-    }/*
-    
-    cout << "TEST: Blob data wrapper functions" << endl;
-    TermPostingListRaw raw1(tuple->DynamicSpace);
-    ASSERT(raw1.getHeader()->numOfDocument, ==, 222);
-    ASSERT(raw1.getHeader()->numOfOccurence, ==, 26);
-    ASSERT(strcmp(raw1.getHeader()->term, "camel"), ==, 0);
-    ASSERT(raw1.getHeader()->type, ==, 4);
-    
-    for(unsigned int i = 0; i < 26; ++i) {
-        ASSERT(raw1.getPostingsListOffsetAt(i),==,i);
-        ASSERT(raw1.getPostAt(i).delta,==,i);
-        ASSERT(raw1.getPostLocationAt(i),==,i);
     }
-*/
+    
 // TEST INDEX CONSTRUCTOR
     
     cout << "TEST: Basic insert" << endl;
     TermPostingList *pl;
     IndexConstructor indexConstructor;
     indexConstructor.Insert("cat", Body);
-    pl = indexConstructor.termIndex.Find(String("cat"))->value;
+    pl = indexConstructor.termIndex->Find(String("cat"))->value;
     ASSERT(std::strcmp("cat",pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfDocument, ==, 1);
     ASSERT(pl->header.numOfOccurence, ==, 1);
@@ -367,7 +352,7 @@ int main (int argc, char *argv[])
     cout << "TEST: Insert multiple inserts, same term" << endl;
     for(unsigned int i = 0; i < 10; ++i) {
         indexConstructor.Insert("dog", Body);
-        pl = indexConstructor.termIndex.Find(String("dog"))->value;
+        pl = indexConstructor.termIndex->Find(String("dog"))->value;
         ASSERT(strcmp("dog",pl->header.term.cstr()), ==, 0);
         ASSERT(pl->header.numOfDocument, ==, 1);
         ASSERT(pl->header.numOfOccurence, ==, i + 1);
@@ -382,11 +367,11 @@ int main (int argc, char *argv[])
     cout << "TEST: Insert two seperate terms" << endl;
     IndexConstructor indexConstructor2;
     indexConstructor2.Insert("cat", Body);
-    pl = indexConstructor2.termIndex.Find("cat")->value;
+    pl = indexConstructor2.termIndex->Find("cat")->value;
     ASSERT(strcmp("cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 1);
     indexConstructor2.Insert("dog", Body);
-    pl = indexConstructor2.termIndex.Find("dog")->value;
+    pl = indexConstructor2.termIndex->Find("dog")->value;
     ASSERT(strcmp("dog", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 1);
     // inserting dog 10 times
@@ -395,7 +380,7 @@ int main (int argc, char *argv[])
         //pl = indexConstructor2.termIndex.Find(String("dog"))->value;
     }
     indexConstructor2.Insert("cat", Body);
-    pl = indexConstructor2.termIndex.Find("cat")->value;
+    pl = indexConstructor2.termIndex->Find("cat")->value;
     ASSERT(strcmp("cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 2);
     ASSERT(pl->header.numOfDocument, ==, 1);
@@ -417,7 +402,7 @@ int main (int argc, char *argv[])
             ic3.Insert("Deer", Body);
         }
     }
-    pl = ic3.termIndex.Find(String("Dog"))->value;
+    pl = ic3.termIndex->Find(String("Dog"))->value;
     ASSERT(strcmp("Dog", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
@@ -427,7 +412,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    Tuple<String, TermPostingList*> *t = ic3.termIndex.Find(String("Cat"));
+    Tuple<String, TermPostingList*> *t = ic3.termIndex->Find(String("Cat"));
     pl = t->value;
     ASSERT(strcmp("Cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
@@ -438,7 +423,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    pl = ic3.termIndex.Find(String("Hamster"))->value;
+    pl = ic3.termIndex->Find(String("Hamster"))->value;
 
     ASSERT(strcmp("Hamster", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
@@ -450,7 +435,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    pl = ic3.termIndex.Find(String("Deer"))->value;
+    pl = ic3.termIndex->Find(String("Deer"))->value;
 
     ASSERT(strcmp("Deer", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
@@ -463,10 +448,10 @@ int main (int argc, char *argv[])
     }
 
     cout << "TEST: Create synchronization for hashtable" << endl;
-    pl = ic3.termIndex.Find(String("Deer"))->value;
+    pl = ic3.termIndex->Find(String("Deer"))->value;
 
     ic3.createSynchronization();
-    SyncIndex &deerSync = ic3.termIndex.Find("Deer")->value->syncIndex;
+    SyncIndex &deerSync = ic3.termIndex->Find("Deer")->value->syncIndex;
     
     ASSERT(deerSync.postLocation.size(), ==, NUM_SYNC_POINTS);
     ASSERT(deerSync.postingsListOffset.size(), ==, NUM_SYNC_POINTS);
@@ -485,7 +470,7 @@ int main (int argc, char *argv[])
         }
     }
 
-    SyncIndex &dogSync = ic3.termIndex.Find("Dog")->value->syncIndex;
+    SyncIndex &dogSync = ic3.termIndex->Find("Dog")->value->syncIndex;
     ASSERT(dogSync.postLocation.size(), ==, NUM_SYNC_POINTS);
     ASSERT(dogSync.postingsListOffset.size(), ==, NUM_SYNC_POINTS);
     if(NUM_SYNC_POINTS == 8){
@@ -504,7 +489,7 @@ int main (int argc, char *argv[])
     }
 
     cout << "TEST: Large hashblob creation and access" << endl;
-    HashBlob * lb1 = blob.Create(&ic3.termIndex);
+    HashBlob * lb1 = blob.Create(ic3.termIndex);
     tuple = lb1->Find("Dog");
     TermPostingListRaw raw2(tuple->DynamicSpace);
     ASSERT(strcmp(raw2.getHeader()->term, "Dog"),==, 0);
@@ -553,8 +538,8 @@ int main (int argc, char *argv[])
 
 
     cout << "TEST: Optimzed index have same values" << endl;
-    ic3.termIndex.Optimize();
-    pl = ic3.termIndex.Find(String("Dog"))->value;
+    ic3.termIndex->Optimize();
+    pl = ic3.termIndex->Find(String("Dog"))->value;
     ASSERT(strcmp("Dog", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
@@ -564,7 +549,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    pl = ic3.termIndex.Find(String("Cat"))->value;
+    pl = ic3.termIndex->Find(String("Cat"))->value;
     ASSERT(strcmp("Cat", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
     ASSERT(pl->header.numOfDocument, ==, 1);
@@ -574,7 +559,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    pl = ic3.termIndex.Find(String("Hamster"))->value;
+    pl = ic3.termIndex->Find(String("Hamster"))->value;
 
     ASSERT(strcmp("Hamster", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
@@ -586,7 +571,7 @@ int main (int argc, char *argv[])
             ASSERT(4, ==, pl->posts[i].delta);
         }
     }
-    pl = ic3.termIndex.Find(String("Deer"))->value;
+    pl = ic3.termIndex->Find(String("Deer"))->value;
 
     ASSERT(strcmp("Deer", pl->header.term.cstr()), ==, 0);
     ASSERT(pl->header.numOfOccurence, ==, 10);
@@ -599,9 +584,9 @@ int main (int argc, char *argv[])
     }
 
    cout << "TEST: Synchronization table seek from blob" << endl;
-   HashTable<String, TermPostingList*> syncTableHash1;
-   syncTableHash1.Find("list3", &list3);
-   HashBlob * syncTableHash1Blob = blob.Create(&syncTableHash1);
+   SharedPointer<HashTable<String, TermPostingList*>> syncTableHash1(new HashTable<String, TermPostingList*>());
+   syncTableHash1->Find("list3", &list3);
+   HashBlob * syncTableHash1Blob = blob.Create(syncTableHash1);
    syncTableHash1Blob->Find("list3");
    TermPostingListRaw rawSyncTable1(syncTableHash1Blob->Find("list3")->DynamicSpace);
    ASSERT(strcmp(rawSyncTable1.getHeader()->term, "cow"), ==, 0);
@@ -640,9 +625,9 @@ int main (int argc, char *argv[])
     }
     
    // complex iterations
-    HashTable<String, TermPostingList*> syncTableHash2;
-    syncTableHash2.Find("list4", &list4);
-    HashBlob * syncTableHash2Blob = blob.Create(&syncTableHash2);
+    SharedPointer<HashTable<String, TermPostingList*>> syncTableHash2(new HashTable<String, TermPostingList*>());
+    syncTableHash2->Find("list4", &list4);
+    HashBlob * syncTableHash2Blob = blob.Create(syncTableHash2);
 
     syncTableHash2Blob->Find("list4");
     TermPostingListRaw rawSyncTable2(syncTableHash2Blob->Find("list4")->DynamicSpace);
@@ -709,14 +694,14 @@ int main (int argc, char *argv[])
     ic4.Insert("title1", "www.hello.com");
     ic4.Insert("title2", "www.hello2.com");
     ASSERT(ic4.numberOfDocuments, ==, 2);
-    ASSERT(ic4.endDocPostings.posts.size(), ==, 2);
-    ASSERT(ic4.endDocPostings.posts[0].delta, ==, 0);
-    ASSERT(ic4.endDocPostings.posts[1].delta, ==, 2);
+    ASSERT(ic4.endDocPostings->posts.size(), ==, 2);
+    ASSERT(ic4.endDocPostings->posts[0].delta, ==, 0);
+    ASSERT(ic4.endDocPostings->posts[1].delta, ==, 2);
     for(unsigned int i = 0; i < 10; ++i) {
         ic4.Insert("title", "url");
     }
     for(unsigned int i = 1; i < 12; ++i) {
-        ASSERT(ic4.endDocPostings.posts[i].delta, ==, 2);
+        ASSERT(ic4.endDocPostings->posts[i].delta, ==, 2);
     }
     
     cout << "TEST: Multiple Docs, Single Term" << endl;
@@ -727,7 +712,7 @@ int main (int argc, char *argv[])
     ASSERT(ic5.currDocInfo.getNumberOfUniqueWords(), ==, 1);
     ASSERT(ic5.currDocInfo.getNumberOfWords(), ==, 3);
     ic5.Insert("dog_title", "dog.com");
-    ASSERT(ic5.endDocPostings.posts[0].delta, ==, 0);
+    ASSERT(ic5.endDocPostings->posts[0].delta, ==, 0);
     ASSERT(ic5.docDetails[0]->lengthOfDocument, ==, 3);
     ASSERT(ic5.docDetails[0]->numUniqueWords, ==, 1);
     ASSERT(ic5.endLocation, ==, 5);
@@ -744,12 +729,12 @@ int main (int argc, char *argv[])
     ASSERT(ic5.numberOfUniqueWords, ==, 1);
     ic5.Insert("doggy", "doggy.com");
     ASSERT(ic5.endLocation, ==, 10)
-    ASSERT(ic5.endDocPostings.posts[1].delta, ==, 5);
+    ASSERT(ic5.endDocPostings->posts[1].delta, ==, 5);
     ASSERT(ic5.docDetails[1]->lengthOfDocument, ==, 3);
     ASSERT(ic5.docDetails[1]->numUniqueWords, ==, 1);
     ASSERT(strcmp(ic5.docDetails[1]->title.cstr(), "doggy"), ==, 0);
     ASSERT(strcmp(ic5.docDetails[1]->url.cstr(), "doggy.com"), ==, 0);
-    /* STRUCT: dog dog dog end1 buf dog dog dog end2 buf endPos*/
+    // STRUCT: dog dog dog end1 buf dog dog dog end2 buf endPos
     for(unsigned int i = 0; i < 6; ++i) {
         ic5.Insert("cat", Body);
         ic5.Insert("dog", Body);
@@ -757,42 +742,42 @@ int main (int argc, char *argv[])
         ic5.Insert("deer", Body);
         ic5.Insert("a", "a.com");
     }
-    /* STRUCT: dog dog dog end1 buf dog dog dog end2 buf cat dog hamster deer end3 buf ...*/
-    ASSERT(ic5.endDocPostings.posts.size(), ==, 8);
+    // STRUCT: dog dog dog end1 buf dog dog dog end2 buf cat dog hamster deer end3 buf ...
+    ASSERT(ic5.endDocPostings->posts.size(), ==, 8);
     ASSERT(ic5.docDetails.size(), ==, 8);
     for(unsigned int i = 2; i < ic5.docDetails.size(); ++i) {
         ASSERT(ic5.docDetails[i]->numUniqueWords, ==, 4);
         ASSERT(ic5.docDetails[i]->lengthOfDocument, ==, 4);
-        ASSERT(ic5.endDocPostings.posts[i].delta, ==, 6);
+        ASSERT(ic5.endDocPostings->posts[i].delta, ==, 6);
     }
-    ASSERT(ic5.endDocPostings.header.numOfDocument, ==, 8);
+    ASSERT(ic5.endDocPostings->header.numOfDocument, ==, 8);
     ASSERT(ic5.numberOfDocuments, ==, 8);
     ASSERT(ic5.numberOfWords, ==, 30);
     ASSERT(ic5.numberOfUniqueWords, ==, 4);
 
-    TermPostingList * mw1 = ic5.termIndex.Find("cat")->value;
+    TermPostingList * mw1 = ic5.termIndex->Find("cat")->value;
     ASSERT(mw1->header.numOfDocument, ==, 6);
     ASSERT(mw1->header.numOfOccurence, ==, 6);
     ASSERT(strcmp(mw1->header.term.cstr(), "cat"), ==, 0);
     
-    mw1 = ic5.termIndex.Find("deer")->value;
+    mw1 = ic5.termIndex->Find("deer")->value;
     ASSERT(mw1->header.numOfDocument, ==, 6);
     ASSERT(mw1->header.numOfOccurence, ==, 6);
     ASSERT(strcmp(mw1->header.term.cstr(), "deer"), ==, 0);
     
-    mw1 = ic5.termIndex.Find("hamster")->value;
+    mw1 = ic5.termIndex->Find("hamster")->value;
     ASSERT(mw1->header.numOfDocument, ==, 6);
     ASSERT(mw1->header.numOfOccurence, ==, 6);
     ASSERT(strcmp(mw1->header.term.cstr(), "hamster"), ==, 0);
     
-    mw1 = ic5.termIndex.Find("dog")->value;
+    mw1 = ic5.termIndex->Find("dog")->value;
     ASSERT(mw1->header.numOfDocument, ==, 8);
     ASSERT(mw1->header.numOfOccurence, ==, 12);
     ASSERT(strcmp(mw1->header.term.cstr(), "dog"), ==, 0);
     
     cout << "TEST: Full Index synhroniation" << endl;
     ic5.createSynchronization();
-    TermPostingList * dogPostings = ic5.termIndex.Find("dog")->value;
+    TermPostingList * dogPostings = ic5.termIndex->Find("dog")->value;
     size_t fisIndex;
     size_t fisLoc;
     lowBits = getNumLowBits2(ic5.endLocation, NUM_SYNC_POINTS);
@@ -840,7 +825,7 @@ int main (int argc, char *argv[])
         ASSERT(fisIndex, ==, 11);
     }
     // Check deer postings
-    TermPostingList * deerPostings = ic5.termIndex.Find("deer")->value;
+    TermPostingList * deerPostings = ic5.termIndex->Find("deer")->value;
     fisLoc = seekTermTarget(deerPostings, 0, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 13);
     ASSERT(fisIndex, ==, 0);
@@ -857,7 +842,7 @@ int main (int argc, char *argv[])
     ASSERT(fisLoc, ==, 43);
     ASSERT(fisIndex, ==, 5);
     // Check endDoc postings
-    EndDocPostingList * endDoc1 = &ic5.endDocPostings;
+    SharedPointer<EndDocPostingList> endDoc1 = ic5.endDocPostings;
     fisLoc = seekEndDocTarget(endDoc1, 0, fisIndex, lowBits);
     ASSERT(fisLoc, ==, 3);
     ASSERT(fisIndex, ==, 0);
@@ -894,7 +879,7 @@ int main (int argc, char *argv[])
     
     cout << "TEST: Term postings list hashblob synchronization" << endl;
     
-    HashBlob * sTableBlob = blob.Create(&ic5.termIndex);
+    HashBlob * sTableBlob = blob.Create(ic5.termIndex);
     sTableBlob->Find("dog");
     TermPostingListRaw rawDogList(sTableBlob->Find("dog")->DynamicSpace);
     // Check dog postings
@@ -981,18 +966,7 @@ int main (int argc, char *argv[])
     catch (const char * e) {
         ASSERT(fisIndex, ==, 7);
     }
-
-    
      
-    /*
-    HashBlob * syncTableHash1Blob = blob.Create(&syncTableHash1);
-
-    syncTableHash1Blob->Find("list3");
-    TermPostingListRaw rawSyncTable1(syncTableHash1Blob->Find("list3")->DynamicSpace);
-
-    
-    */
-     //HashBlob * endDocPostingsblob = blob.Create(ic5.endDocPostings);
     
 
     return 0; 

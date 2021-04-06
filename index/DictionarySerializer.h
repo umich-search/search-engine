@@ -200,7 +200,7 @@ struct SerialTuple
          }
 
 
-      static size_t BytesRequired( const Hash *hashTable )
+      static size_t BytesRequired( const SharedPointer<Hash> hashTable )
          {
          // Calculate how much space it will take to
          // represent a HashTable as a HashBlob.
@@ -230,7 +230,7 @@ struct SerialTuple
       // Write a HashBlob into a buffer, returning a
       // pointer to the blob.
       static HashBlob *Write( HashBlob *hb, size_t bytes,
-            const Hash *hashTable )
+            const SharedPointer<Hash> hashTable )
          {
          // caller guarantees the memory is enough
 
@@ -272,7 +272,7 @@ struct SerialTuple
       // (No easy way to override the new operator to create a
       // variable sized object.)
 
-      static HashBlob *Create( const Hash *hashTable )
+      static HashBlob *Create( const SharedPointer<Hash> hashTable )
          {
          // Your code here.
          size_t bytes = BytesRequired( hashTable );
@@ -291,7 +291,7 @@ struct SerialTuple
          }
    };
 
-   
+   /*
 class HashFile
    {
    private:
@@ -362,3 +362,4 @@ class HashFile
          // HashBlob::Discard( blob );
          }
    };
+*/

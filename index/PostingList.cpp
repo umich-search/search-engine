@@ -41,7 +41,7 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
 };
 
 
-size_t seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
+size_t seekEndDocTarget(SharedPointer<EndDocPostingList> postings, size_t target, size_t &index, size_t numLowBits) {
     try {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
@@ -100,7 +100,7 @@ int createSeekIndex(TermPostingList *postings, size_t startLoc, size_t numLowBit
     }
 }
 
-int createSeekIndex(EndDocPostingList *postings, size_t startLoc, size_t numLowBits) {
+int createSeekIndex(SharedPointer<EndDocPostingList> postings, size_t startLoc, size_t numLowBits) {
     try {
         SyncIndex* index = &postings->syncIndex;
         Location runningLocation = startLoc;

@@ -52,9 +52,9 @@ struct EndDocPostingList {
 };
 
 Location seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits);
-Location seekEndDocTarget(EndDocPostingList *postings, size_t target, size_t &index, size_t numLowBits);
+Location seekEndDocTarget(SharedPointer<EndDocPostingList> postings, size_t target, size_t &index, size_t numLowBits);
 
 int createSeekIndex(TermPostingList *postings, size_t startLoc, size_t numLowBits);
 
-int createSeekIndex(EndDocPostingList *postings, size_t startLoc, size_t numLowBits);
+int createSeekIndex(SharedPointer<EndDocPostingList> postings, size_t startLoc, size_t numLowBits);
 

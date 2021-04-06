@@ -30,7 +30,7 @@ public:
        return syncIndex->postingsListOffset.size() * 2 * sizeof(size_t);
     }
     // Bytes required to encode TermPostingList
-    static size_t BytesRequired( const EndDocPostingList *p) {
+    static size_t BytesRequired( const SharedPointer<EndDocPostingList> p) {
        // TODO: Have term in Key and Value, may not need both
     /*
        TERM POSTING LIST DATA TO SERIALIZE:
@@ -47,7 +47,7 @@ public:
       return headerSize + syncIndexSize + endDocsSize + memberVarSize;
     }
     
-    static char *Write( char *buffer, char *bufferEnd, const EndDocPostingList *p ) {
+    static char *Write( char *buffer, char *bufferEnd, const SharedPointer<EndDocPostingList> p ) {
         // TODO: Handle null case better?
        if ( !p ) {
           //SerialTuple *sentinel = new( ( void * )buffer ) SerialTuple;
@@ -88,7 +88,7 @@ public:
     
     // Create allocates memory
     // Caller is responsible for discarding when done.
-    static SerialEndDocs *Create( const EndDocPostingList *endDocs )
+    static SerialEndDocs *Create( const SharedPointer<EndDocPostingList> endDocs )
        {
        size_t bytes = BytesRequired( endDocs );
        char *blobByte = new char[ bytes ];
@@ -97,14 +97,9 @@ public:
        }
 
     // Discard
-// TODO: Fix discard
-    /*
-    static void Discard( HashBlob *blob )
-       {
-       // Your code here.
-       char *blobByte = ( char * )blob;
-       delete [] blobByte;
-       }
-     */
-    
+    static void Discard( SerialEndDocs *blob ) {
+        char *blobByte = ( char * )blob;
+        delete [] blobByte;
+    }
+
 };
