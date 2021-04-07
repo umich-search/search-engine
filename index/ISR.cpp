@@ -54,11 +54,11 @@ Location ISRWord::GetEndLocation() {
         try {
             Next();
         }
-        catch(std::exception){
+        catch(std::exception&){
             break;
         }
     }
-    return &currPost;
+    return currPost.GetLocation();
 }
 
 d_Occurence ISRWord::GetDocumentCount() {
