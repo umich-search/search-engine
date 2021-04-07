@@ -42,7 +42,11 @@ public:
       headerSize = BytesRequired(&p->header);
       syncIndexSize = BytesRequired(&p->syncIndex);
       // TODO: may have to move this posts size if using variable encoding
-      endDocsSize = p->posts.size() * sizeof(size_t);
+      //endDocsSize = p->posts.size() * sizeof(size_t);
+        endDocsSize = 0;
+      for(unsigned int i = 0; i < p->posts.size(); ++i) {
+          endDocsSize += UtfBytes(p->posts[i].delta);
+      }
         memberVarSize = sizeof(Offset);
       return headerSize + syncIndexSize + endDocsSize + memberVarSize;
     }
@@ -78,9 +82,17 @@ public:
            curr += sizeof(size_t);
        }
         for(size_t i = 0; i < p->posts.size(); ++i) {
+            size_t utfBytes = IntToUtf(p->posts[i].delta, (uint8_t*)curr);
+            //memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
+            curr += utfBytes;//sizeof(size_t);
+        }
+        /*
+        for(size_t i = 0; i < p->posts.size(); ++i) {
             memcpy(curr, &p->posts[i], sizeof(size_t));
             curr += sizeof(size_t);
         }
+         //TODO: Remove
+         */
        return buffer + RoundUp( bytes, sizeof( size_t ) );
        }
     

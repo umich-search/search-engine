@@ -31,6 +31,11 @@ struct TermPostingListRaw {
     Offset getPostingsListOffsetAt(Offset i);
     Offset getPostLocationAt(Offset i);
     IPostTerm getPostAt(Offset i);
+    // byteAfterPost will return the byte offset of 1 after the requested post
+    IPostTerm getPostAt(Offset i, Offset &byteAfterPost);
+    // IPostTerm getPostAt(Offset i, Offset numBytes);
+    IPostTerm getPostAtByte(Offset numBytes, Offset &byteAfterPost);
+
 };
 
 
@@ -53,6 +58,11 @@ struct EndDocPostingListRaw {
     Offset getPostingsListOffsetAt(Offset i);
     Offset getPostLocationAt(Offset i);
     IPostTerm getPostAt(Offset i);
+    // byteAfterPost will return the byte offset of 1 after the requested post
+    IPostTerm getPostAt(Offset i, Offset &byteAfterPost);
+    // IPostTerm getPostAt(Offset i, Offset numBytes);
+    IPostTerm getPostAtByte(Offset numBytes, Offset &byteAfterPost);
+
 };
 
 Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
