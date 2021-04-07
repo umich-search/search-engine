@@ -24,6 +24,7 @@ size_t getNumLowBits2(size_t count, size_t spacing) {
 int main (int argc, char *argv[]) 
 {
     if(WRITE_TO_DISK) {
+        /*
         IndexConstructor ic;
         for(unsigned int i = 0; i < 20; ++i) {
             ic.Insert("hello", Body);
@@ -37,6 +38,63 @@ int main (int argc, char *argv[])
         ic.fileManager.ReadChunk("/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/0.chunk");
         TermPostingListRaw raw(ic.fileManager.termIndexBlob->Find("hello")->DynamicSpace);
         TermPostingListRaw rawWorld(ic.fileManager.termIndexBlob->Find("world")->DynamicSpace);
+        */
+        IndexConstructor ic2;
+        ic2.Insert("dog", Body);
+        for(unsigned int i = 0; i < 15; ++i) {
+            int gap = i;
+            while(gap > 0) {
+                ic2.Insert("cat", Body);
+                gap--;
+            }
+            
+            ic2.Insert("dog", Body);
+        }
+        ic2.resolveChunkMem();
+        //ic2.Insert("title", "url");
+        
+        ic2.fileManager.ReadChunk(0);
+        TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog");
+        size_t indexPos = 0;
+        size_t lowBits = getNumLowBits2(120, NUM_SYNC_POINTS);
+        ASSERT(rawSync.getHeader()->numOfOccurence, ==, 16);
+        size_t loc = seekTermTarget(&rawSync, 0,indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 0);
+        ASSERT(indexPos,==,0);
+        
+        loc = seekTermTarget(&rawSync, 2,indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==,3);
+        ASSERT(indexPos,==,2);
+        
+        loc = seekTermTarget(&rawSync, 10, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 10);
+        ASSERT(indexPos,==,4);
+        
+        loc = seekTermTarget(&rawSync, 11, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 15);
+        ASSERT(indexPos,==,5);
+        
+        loc = seekTermTarget(&rawSync, 55, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 55);
+        ASSERT(indexPos,==,10);
+        
+        loc = seekTermTarget(&rawSync, 91, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 91);
+        ASSERT(indexPos,==,13);
+        
+        loc = seekTermTarget(&rawSync, 104, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 105);
+        ASSERT(indexPos,==,14);
+        
+        loc = seekTermTarget(&rawSync, 120, indexPos, lowBits, NUM_SYNC_POINTS);
+        ASSERT(loc,==, 120);
+        ASSERT(indexPos,==,15);
+        try {
+            loc = seekTermTarget(&rawSync, 125, indexPos, lowBits, NUM_SYNC_POINTS);
+        }
+        catch (const char* e){
+            ASSERT(indexPos,==,15);
+        }
         return 0;
     }
     

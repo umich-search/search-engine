@@ -59,8 +59,6 @@ public:
           throw "Not enough memory allocated!";
 
        SerialEndDocs *head = new( ( void * )buffer ) SerialEndDocs;
-        // TODO: Does size need to account for length
-        // TODO: Is this length feature necessary?
         head->Length = bytes;// + sizeof(size_t);
        char * curr = head->DynamicSpace;
         

@@ -8,6 +8,7 @@
 #include "EndDocSerializer.h"
 #include <cstring>
 
+using TermHash = HashTable< String, TermPostingList* >;
 
 class FileManager {
 private:
@@ -25,8 +26,17 @@ private:
        Offset numDocDetails;
       char docDetailsLoc[];
    };
+    
+    static int resolveChunkPath(size_t offset, char * pathname);
+    static int resolveDocsChunkPath(size_t offset, char * pathname);
+    
     // Reads metadata file
     int ReadMetadata();
+    static int writePostingListsToFile(SharedPointer<TermHash> termIndex,
+                                SharedPointer<EndDocPostingList>
+                                endDocList, const char *pathname);
+    static int writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname );
+    static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks);
 
 
 public:
@@ -41,25 +51,25 @@ public:
         ReadMetadata();
     }
 
-    static int WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> termIndex, 
+    static int WriteChunk(SharedPointer<TermHash> termIndex, 
                   SharedPointer<EndDocPostingList> endDocList, 
                   w_Occurence numWords, 
                   w_Occurence numUniqueWords, 
                   d_Occurence numDocs, 
                   Location endLocation,
                   ::vector<SharedPointer<DocumentDetails>> docDetails,
-                 size_t numChunks,
-                  const char* filename,
-                   const char* docs_filename);
+                  size_t numChunks,
+                  size_t chunkOffset,
+                  size_t docsOffset);
 
     // Bring chunk into memory
-    int ReadChunk(const char *path);
+    int ReadChunk(size_t chunkOffset);
     // Bring documents into memory
-    int ReadDocuments(const char *path);
+    int ReadDocuments(size_t docChunkOffset);
     // Returns term list given term and optional chunk_path
-    TermPostingListRaw GetTermList(String &term, const char* chunk_path = nullptr);
+    TermPostingListRaw GetTermList(const char* term , size_t chunkOffset = 0);
     // Returns end doc list given term and optional chunk_path
-    EndDocPostingListRaw GetEndDocList(const char* chunk_path = nullptr);
+    EndDocPostingListRaw GetEndDocList(size_t chunkOffset = 0);
     // Get the number of chunks in the index
     Offset getNumChunks();
     // Get total number of words in index

@@ -49,6 +49,7 @@ int IndexConstructor::resolveChunkMem() {
 
 
 int IndexConstructor::Insert( String term, Type type ) {
+    std::cout << "Inserting: " << term.cstr() << std::endl;
     CommonHeader header;
     TermPostingList *postings = nullptr;
     ConstructionData *cd = nullptr;
@@ -107,10 +108,13 @@ void IndexConstructor::optimizeIndex() {
 }
 
 int IndexConstructor::flushData() {
+    /*
     char chunkFilename[100];
     char docsFilename[100];
+    
     sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
     sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
+     */
     fileManager.WriteChunk(termIndex,
                            endDocPostings,
                            numberOfWords,
@@ -119,8 +123,8 @@ int IndexConstructor::flushData() {
                            endLocation,
                            docDetails,
                            currentChunkNum,
-                           chunkFilename,
-                           docsFilename);
+                           currentChunkNum,
+                           currentChunkNum);
     return 0;
 }
 

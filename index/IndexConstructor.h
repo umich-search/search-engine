@@ -45,7 +45,6 @@ public:
 
     
 public:
-    // TODO: Maybe switch to static
     FileManager fileManager;
     SharedPointer<HashTable< String, TermPostingList*>> termIndex;
     SharedPointer<HashTable< String, ConstructionData*>> constructionData;

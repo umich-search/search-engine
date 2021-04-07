@@ -23,7 +23,6 @@ public:
 class ISRWord: public ISR {
 public:
     ISRWord(TermPostingList termPostingList) : currentPost(0),currentPostingsIndex(0),postingList(termPostingList) {
-        // TODO: May need to change to pointer
     }
     // Returns next post
     Post* Next( );
@@ -41,7 +40,6 @@ public:
     // get current post
     Post* GetCurrentPost( );
 private:
-    // TODO: Should this be a reference
     // postingList[]
     TermPostingList postingList;
     //index of Post 
@@ -53,7 +51,6 @@ private:
 class ISREndDoc: public ISR {
 public: 
     ISREndDoc(EndDocPostingList endDocPostingList) : currentPost(0),currentPostingsIndex(0),postingList(endDocPostingList){
-        // TODO: May need to change to pointer
     }
     Post* Next();
     Post* NextEndDoc( );
