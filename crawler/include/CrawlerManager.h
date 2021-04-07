@@ -1,23 +1,43 @@
 #pragma once
-#include "Crawler.h"
-#include "TaskQueue.h"
+#include "ThreadPool.h"
+#include "Frontier.h"
+#include "BloomFilter.h"
 
 // ----- CrawlerManager.h
-// Task Input: None (run forever until interrupted)
-// Task: Pull URLs from the frontier and distribute to crawlers
-// Task Output: URLs to crawlers (via crawlerTaskQueue)
+// Task Input: URLs from crawler / URLs from other machines
+// Task: Distribute URLs according to hash and obey bloom filter
+// Task Output: URLs to frontier / URLs to other machines
 
-class CrawlerManager : public Thread
+class CrawlerManager : public ThreadPool
     {
     public:
-        CrawlerManager( const Thread::Init &init, Frontier *frontier, TaskQueue *crawlerTaskQueue )
-            : Thread( init ), frontier( frontier ), crawlerTaskQueue( crawlerTaskQueue ) { }
-
+        CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited )
+            : ThreadPool( init ), frontier( frontier ), visited( visited ) { }
         ~CrawlerManager( );
 
     private:   
-        void DoTask( TaskQueue::Task *task ) override;
-
         Frontier *frontier;
-        TaskQueue *crawlerTaskQueue;
+        FileBloomfilter *visited;
+    };
+
+class ListenManager : public CrawlerManager 
+    {
+    public:
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )
+            : CrawlerManager( init, frontier, visited ) { }
+        ~ListenManager( );
+
+    private:
+        void DoTask( Task task, size_t threadID ) override;
+    };
+
+class SendManager : public CrawlerManager
+    {
+    public:
+        SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
+            : CrawlerManager( init, frontier, visited ) { }
+        ~SendManager( );
+
+    private:
+        void DoTask( Task task, size_t threadID ) override;
     };

@@ -1,5 +1,46 @@
 #include "CrawlerApp.h"
 
+CrawlerApp::CrawlerApp( const Parameters &param )
+    {
+    MutexInit( &printMutex, nullptr );
+    // Initialize the frontier
+    frontier = Frontier( );
+    visited = FileBloomfilter( );
+    // Initialize the thread pools
+    ThreadPool::Init init;
+    init.printMutex = &printMutex;
+    init.name = "ListenManager";
+    init.numThreads = param.numListenThreads;
+    listenManager = ListenManager( init, &frontier, &visited );
+    init.name = "SendManager";
+    init.numThreads = param.numSendThreads;
+    sendManager = SendManager( init, &frontier, &visited );
+    init.name = "Crawler";
+    init.numThreads = param.numCrawlThreads;
+    crawlers = Crawler( init, &frontier, &visited, &sendManager );
+    }
+
+void CrawlerApp::Start( )
+    {
+    // Start the manager thread pool
+    listenManager.Start();
+    sendManager.Start();
+    // Start the crawler thread pool
+    crawlers.Start();
+    }
+
+void CrawlerApp::Stop( )
+    {
+    // Stop crawling first
+    crawlers.Stop();
+    crawlers.Join();
+    // Then stop URL management
+    sendManager.Stop();
+    listenManager.Stop();
+    sendManager.Join();
+    listenManager.Join();
+    }
+
 int main ( int argc, char **argv )
     {
     // TODO: take application parameters as a file? 

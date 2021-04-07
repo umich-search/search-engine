@@ -1,31 +1,36 @@
 #include "Crawler.h"
 #include <fstream>
 
-Crawler::Crawler( const Thread::Init &init ) : Thread( init ) { }
+Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendManager *manager ) 
+    : ThreadPool( init ), frontier( frontier ), visited( visited ), manager( manager ) { }
 
 Crawler::~Crawler( ) { }
 
-void Crawler::DoTask( TaskQueue::Task *task )
+void Crawler::DoTask( Task task, size_t threadID )
     {
-    // 1. URL is received as a task
-    String *url = (String *) task->args;
-
-    // 2. Retrieve the HTML webpage from the URL
-    ParsedUrl parsedUrl( url->cstr() );
-    String html = LinuxGetHTML( parsedUrl );
-
-    // 3. Parse the HTML for the webpage
-    HtmlParser htmlparser( html.cstr(), html.size() );
-
-    // 4. Send the URLs found in the HTML back to the manager
-    for ( Link& link : htmlparser.links )
+    while ( alive || !frontier->Empty() )
         {
-        Link* newLink = new Link( link );
-        linkTaskQueue->PushTask( (void *) newLink, true );
-        }
+        // 1. Get a URL from the frontier
+        // TODO: add param to PopUrl() that decides whether to refresh PQ when empty
+        String url = frontier->PopUrl( alive );
 
-    // 5. Add the words from the HTML to the index
-    addWordsToIndex( htmlparser );
+        // 2. Retrieve the HTML webpage from the URL
+        ParsedUrl parsedUrl( url.cstr() );
+        String html = LinuxGetHTML( parsedUrl );
+
+        // 3. Parse the HTML for the webpage
+        HtmlParser htmlparser( html.cstr(), html.size() );
+
+        // 4. Send the URLs found in the HTML back to the manager
+        for ( Link& link : htmlparser.links )
+            {
+            Link* newLink = new Link( link );
+            manager->PushTask( (void *) newLink, true );
+            }
+
+        // 5. Add the words from the HTML to the index
+        addWordsToIndex( htmlparser );
+        }
     }
 
 void Crawler::parseRobot( const String& robotUrl )

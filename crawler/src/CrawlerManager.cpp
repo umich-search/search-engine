@@ -1,15 +1,23 @@
 #include "CrawlerManager.h"
 
-void CrawlerManager::DoTask( TaskQueue::Task *task )
+void ListenManager::DoTask( Task task, size_t threadID )
     {
-    while ( !taskQueue->IsHalted() || !frontier->Empty() )
+    while ( alive )
         {
-        // Get a URL from the frontier
-        String url = frontier->PopUrl();
-        // Put the URL on the heap
-        String *args = new String(url);
-        // Send the task to the pool of crawler threads
-        crawlerTaskQueue->PushTask((void *) args, true );
-        // URL will be freed from heap in crawler thread
+        // Listen on a socket for incoming links
+
+        // Verify URL hash
+
+        // Push the URL to the frontier
         }
+    }
+
+void SendManager::DoTask( Task task, size_t threadID )
+    {
+    Link *link = (Link *) task.args;
+    // Send the link to the appropriate machine
+    // machine ID = hash(URL) % N machines
+    // If self, push to frontier
+    if ( task.deleteArgs )
+        delete link;
     }
