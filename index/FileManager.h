@@ -83,6 +83,4 @@ public:
     // get vector of chunk endlocations
     // TODO: Got to change so num words is reset for each chunk
     ::vector<Location> getChunkEndLocations();
-
-    ::vector<Location> getChunkStartLocations();
 };
