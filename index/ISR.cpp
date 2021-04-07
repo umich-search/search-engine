@@ -9,7 +9,7 @@ Post *ISRWord::Next() {
         currPost.SetLocation(delta + currPost.GetLocation());
     } else {
         currChunk += 1;
-        if (currChunk > numChunks-1) throw "out of range";
+        if (currChunk > numChunks-1) throw std::exception();
         termPostingListRaw = manager.GetTermList(term, manager.getChunkStartLocations()[currChunk]);
         Location delta = termPostingListRaw.getPostAtByte(0, currBytes).delta;
         currPost.SetLocation(delta + currPost.GetLocation());
@@ -31,7 +31,7 @@ Post *ISRWord::Seek(size_t target) {
         if (loc == target) {
             currPost.SetLocation(loc);
             currChunk = i;
-            //todo: set currPost
+            //todo: set currBytes
             break;
         }
     }
@@ -49,7 +49,16 @@ Location ISRWord::GetStartLocation() {
 }
 
 Location ISRWord::GetEndLocation() {
-    return -1;
+    GetStartLocation();
+    while (true) {
+        try {
+            Next();
+        }
+        catch(std::exception){
+            break;
+        }
+    }
+    return &currPost;
 }
 
 d_Occurence ISRWord::GetDocumentCount() {
