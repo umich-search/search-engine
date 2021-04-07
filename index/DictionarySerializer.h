@@ -74,7 +74,10 @@ struct SerialTuple
         headerSize = BytesRequired(&p->header);
         syncIndexSize = BytesRequired(&p->syncIndex);
         // TODO: may have to move this posts size if using variable encoding
-        postsSize = p->posts.size() * sizeof(size_t);
+          postsSize = 0;
+        for(unsigned int i = 0; i < p->posts.size(); ++i) {
+           postsSize += UtfBytes(p->posts[i].delta);
+        }
         return headerSize + syncIndexSize + postsSize;
       }
     // Bytes required to encode bucket
@@ -133,8 +136,9 @@ struct SerialTuple
          }
           
           for(size_t i = 0; i < b->tuple.value->posts.size(); ++i) {
-              memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
-              curr += sizeof(size_t);
+              size_t utfBytes = IntToUtf(b->tuple.value->posts[i].delta, (uint8_t*)curr);
+              //memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
+              curr += utfBytes;//sizeof(size_t);
           }
          return buffer + RoundUp( bytes, sizeof( size_t ) );
          }

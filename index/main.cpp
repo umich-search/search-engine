@@ -337,8 +337,10 @@ int main (int argc, char *argv[])
     }
     // Assert post deltas
     for(size_t i = 0; i < 16; ++i) {
-        ASSERT(*(size_t *)dynamicSpace, ==, i);
-        dynamicSpace += sizeof(size_t);
+        size_t bytes = IntBytes((uint8_t *)dynamicSpace);
+        size_t delta = UtfToInt((uint8_t *)dynamicSpace);// dynamicSpace
+        ASSERT(delta, ==, i);
+        dynamicSpace += bytes;
     }
     
     // Caller blob
@@ -376,8 +378,10 @@ int main (int argc, char *argv[])
     }
     // Assert post deltas
     for(size_t i = 0; i < 16; ++i) {
-        ASSERT(*(size_t *)dspace2, ==, i);
-        dspace2 += sizeof(size_t);
+        size_t bytes = IntBytes((uint8_t *)dspace2);
+        size_t delta = UtfToInt((uint8_t *)dspace2);// dynamicSpace
+        ASSERT(delta, ==, i);
+        dspace2 += bytes;
     }
     
     // TEST WRTIE TO HASHTABLE (1 Entry)
@@ -409,8 +413,10 @@ int main (int argc, char *argv[])
     }
     // Assert post deltas
     for(size_t i = 0; i < 26; ++i) {
-        ASSERT(*(size_t *)dspace3, ==, i);
-        dspace3 += sizeof(size_t);
+        size_t bytes = IntBytes((uint8_t *)dspace3);
+        size_t delta = UtfToInt((uint8_t *)dspace3);// dynamicSpace
+        ASSERT(delta, ==, i);
+        dspace3 += bytes;
     }
     
 // TEST INDEX CONSTRUCTOR
