@@ -3,7 +3,6 @@
 
 #include "ISR.h"
 #include "DictionarySerializer.h"
-#include "FileManager.h"
 #include "Global.h"
 
 class Dictionary {
@@ -19,10 +18,12 @@ public:
     // Get number of documents
     Location GetNumberOfDocuments( );
     // constructor
-    Dictionary() {
-        numberOfUniqueWords = 0;
-        numberOfDocuments = 0;
-        numberOfWords = 0;
+    Dictionary(FileManager filemanager) {
+        manager = filemanager;
+        numberOfUniqueWords = filemanager.getIndexUniqueWords();
+        numberOfDocuments = filemanager.getNumDocuments();
+        numberOfWords = filemanager.getIndexWords();
+        numChunks = filemanager.getNumChunks();
     }
 
 private:

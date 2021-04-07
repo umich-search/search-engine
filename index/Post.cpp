@@ -1,10 +1,11 @@
 #include "Post.h"
 
 // Get position in index
-Location Post::GetStartLocation( ) {
+Location Post::GetLocation( ) {
     return loc;
 };
-    // Get position in index
-Location Post::GetEndLocation( ) {
+
+Location Post::SetLocation(Location location) {
+    loc = location;
     return loc;
-};
+}

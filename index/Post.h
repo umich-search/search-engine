@@ -8,9 +8,9 @@ public:
         loc = indexLoc;
     }
     // Get position in index
-    Location GetStartLocation( );
-    // Get position in index
-    Location GetEndLocation( );
+    Location GetLocation();
+    Location SetLocation(Location loc);
+
 private:
     Location loc;
 };

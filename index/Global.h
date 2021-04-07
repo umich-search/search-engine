@@ -9,6 +9,8 @@
 #include "../utility/UTF8Conv.h"
 
 #define NUM_SYNC_POINTS 8
+//TODO: determine NUM_LOW_BITS
+#define NUM_LOW_BITS 4
 #define MAX_SYNC_DISTANCE 100
 #define MAX_WORD_LENGTH 100
 #define MAX_TITLE_LENGTH 512
