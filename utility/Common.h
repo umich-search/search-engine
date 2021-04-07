@@ -38,5 +38,35 @@ bool CompareEqual(const String &L,const String &R) {
     return ret;
 }
 
+size_t IntToUtf(size_t a, uint8_t *buffer, int count) {
+    //return number of Bytes write into buffer
+    size_t numBytes = 0;
+    size_t z = a;
+    for (numBytes = 0; numBytes < 8; numBytes++) {
+        if (a < (1 << (8 * numBytes + 5)))break;
+    }
+    numBytes += 1;
+    if (numBytes > count) return -1;
+    for (size_t i = numBytes - 1; i > 0; i--) {
+        *(buffer + i) = size_t(z & 0xFF);
+        z = z >> 8;
+    }
+    *buffer = z + ((numBytes - 1) << 5);
+    return numBytes;
+}
+
+size_t UtfToInt(size_t *a, const uint8_t *buffer, int count) {
+    size_t numBytes = ((*buffer) & 0xE0) >> 5;
+    numBytes += 1;
+    if (numBytes > count) return -1;
+    *a = 0;
+    *a += ((*buffer) & 0x1F) << ((numBytes - 1) * 8);
+    for (int i = 1; i < numBytes; i++) {
+        *a += (*(buffer + i)) << ((numBytes - i - 1) * 8);
+    }
+    return numBytes;
+}
+
+
 
 extern bool optVerbose;

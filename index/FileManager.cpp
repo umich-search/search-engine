@@ -50,8 +50,13 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
     }
 
     else {
-       blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
-       blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
+        try {
+            blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
+            blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
+        }
+        catch (const char* excp){
+            return -1;
+        }
     }
     close(f_chunk);
     return 0;
@@ -80,7 +85,12 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
                            0 );
     
      for(size_t i = 0; i < docDetails.size(); ++i){
-       docDetailsBlob = DocumentBlob::Write((char *)docDetailsBlob, (char *)docDetailsBlob + DOCUMENT_SIZE, docDetails[i]);
+         try {
+             docDetailsBlob = DocumentBlob::Write((char *)docDetailsBlob, (char *)docDetailsBlob + DOCUMENT_SIZE, docDetails[i]);
+         }
+         catch (const char * excp) {
+             return -1;
+         }
     }
     close(f_doc_details);
     return 0;
@@ -182,7 +192,9 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
 
 // May return refernece
 TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkOffset) {
-    if(chunkOffset == -1)
+    if(chunkOffset == -1) {
+        throw "Error: No chunk initialized";
+    }
     ReadChunk(chunkOffset);
     if(!termIndexBlob) {
         throw "Error: No chunk has been read";

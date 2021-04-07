@@ -6,7 +6,7 @@
 #include "Global.h"
 
 #define INITIAL_HASHTABLE_SIZE 5
-#define WRITE_TO_DISK true
+#define WRITE_TO_DISK false
 
 // Compare C-strings, return true if they are the same.
 

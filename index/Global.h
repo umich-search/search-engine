@@ -5,6 +5,7 @@
 #include "../utility/string.h"
 #include "HashTable.h"
 #include "../utility/SmartPointer.h"
+#include "../utility/UTF8Conv.h"
 
 #define NUM_SYNC_POINTS 8
 #define MAX_SYNC_DISTANCE 100
@@ -16,9 +17,10 @@
 #define CHUNKS_META_FILENAME "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
 #define CHUNK_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
-#define WRITE_TO_DISK true
+#define WRITE_TO_DISK false
 #define INITAL_HASHTABLE_SIZE 5
 #define MAX_PATHNAME_LENGTH 4096
+
 
 typedef size_t Location;
 // Should be large enough to fit max word occurence

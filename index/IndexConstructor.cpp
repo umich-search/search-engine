@@ -27,7 +27,7 @@ int IndexConstructor::Insert( String title, String URL) {
     currDocInfo.reset(numberOfDocuments, endLocation);
     endLocation+=2;
     if(WRITE_TO_DISK) {
-        resolveChunkMem();
+        //resolveChunkMem();
     }
     return 0;
 }
@@ -36,20 +36,40 @@ int IndexConstructor::resolveChunkMem() {
     chunkMemoryAlloc += DOCUMENT_SIZE;
     //if(chunkMemoryAlloc > CHUNK_SIZE_BYTES) {
         createSynchronization();
-    //    optimizeIndex();
-        flushData();
+        optimizeIndex();
+    if(flushData() == 0) {
+        endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+        termIndex = SharedPointer<TermHash>(new TermHash);
+        constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
+        docDetails = ::vector<SharedPointer<DocumentDetails>>();
+        
+        numberOfWords = 0;
+        numberOfDocuments = 0;
+        endLocation = 0;
+        currentChunkNum++;
+        // TODO:: currentChunkNum and number of chunks not the same
+        // TODO: Makre sure variables are set
+    }
+    else {
+        // TODO: Don't crash on failures
+        throw "Error: Writing to disk failed";
+    }
     
-    endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
-    termIndex = SharedPointer<TermHash>(new TermHash);
-    constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
-    docDetails = ::vector<SharedPointer<DocumentDetails>>();
+
+    /*
+    chunksMetadata->numWords = 0;
+    chunksMetadata->numDocs = 0;
+    chunksMetadata->endLocation = 0;
+    chunksMetadata->numUniqueWords = 0;
+    chunksMetadata->endLocation = 0;
+    chunksMetadata->numChunks = 0;
+    */
     
     return 0;
 }
 
 
 int IndexConstructor::Insert( String term, Type type ) {
-    std::cout << "Inserting: " << term.cstr() << std::endl;
     CommonHeader header;
     TermPostingList *postings = nullptr;
     ConstructionData *cd = nullptr;
@@ -115,7 +135,7 @@ int IndexConstructor::flushData() {
     sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
     sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
      */
-    fileManager.WriteChunk(termIndex,
+    return fileManager.WriteChunk(termIndex,
                            endDocPostings,
                            numberOfWords,
                            numberOfUniqueWords,
@@ -125,7 +145,6 @@ int IndexConstructor::flushData() {
                            currentChunkNum,
                            currentChunkNum,
                            currentChunkNum);
-    return 0;
 }
 
 void IndexConstructor::createNewChunk() {

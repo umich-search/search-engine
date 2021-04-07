@@ -40,7 +40,9 @@ int main (int argc, char *argv[])
         TermPostingListRaw rawWorld(ic.fileManager.termIndexBlob->Find("world")->DynamicSpace);
         */
         IndexConstructor ic2;
-        ic2.Insert("dog", Body);
+        for(unsigned int j = 0; j < 3; ++ j) {
+        //for(unsigned int k = 0; k < 5; ++k) {
+            ic2.Insert("dog", Body);
         for(unsigned int i = 0; i < 15; ++i) {
             int gap = i;
             while(gap > 0) {
@@ -50,13 +52,21 @@ int main (int argc, char *argv[])
             
             ic2.Insert("dog", Body);
         }
-        ic2.resolveChunkMem();
+            //ic2.Insert("title","url");
+        //}
+            cout << ic2.endLocation << endl;
+
+            ic2.resolveChunkMem();
+        }
+        ic2.fileManager.GetTermList("dog",1);
+        //ic2.resolveChunkMem();
         //ic2.Insert("title", "url");
         
-        ic2.fileManager.ReadChunk(0);
-        TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog");
+        //ic2.fileManager.ReadChunk(0);
+        for(unsigned int i =0; i < 3; ++i) {
+        TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog",i);
         size_t indexPos = 0;
-        size_t lowBits = getNumLowBits2(120, NUM_SYNC_POINTS);
+        size_t lowBits = getNumLowBits2(121, NUM_SYNC_POINTS);
         ASSERT(rawSync.getHeader()->numOfOccurence, ==, 16);
         size_t loc = seekTermTarget(&rawSync, 0,indexPos, lowBits, NUM_SYNC_POINTS);
         ASSERT(loc,==, 0);
@@ -95,6 +105,8 @@ int main (int argc, char *argv[])
         catch (const char* e){
             ASSERT(indexPos,==,15);
         }
+        }
+         
         return 0;
     }
     
