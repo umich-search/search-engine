@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Global.h"
 #include "Post.h"
-#include "PostingList.h"
+#include "PostingListBlob.h"
 #include "FileManager.h"
 
 typedef size_t Location;
@@ -36,7 +35,10 @@ public:
 //termPostingList.posts = posts;
 class ISRWord : public ISR {
 public:
-    ISRWord(FileManager fileManager) : manager(fileManager),currLoc(0) {
+    ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currBytes(0), term(word),
+                                                         termPostingListRaw(manager.GetTermList(term, 0)),
+                                                         currPost(0) {
+
     }
 
     // Returns next post
@@ -64,7 +66,7 @@ public:
 
 private:
     FileManager manager;
-    const char* term;
+    const char *term;
     size_t currChunk;
     Offset currBytes;
     Post currPost;

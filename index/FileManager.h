@@ -79,7 +79,7 @@ public:
     // get end location of index
     Location getIndexEndLocation();
     // get number of documents in index
-    d_Occurence getNumDocuments;
+    d_Occurence getNumDocuments();
     // get vector of chunk endlocations
     // TODO: Got to change so num words is reset for each chunk
     ::vector<Location> getChunkEndLocations();

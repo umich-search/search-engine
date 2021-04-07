@@ -2,7 +2,7 @@
 
 ISRWord *Dictionary::OpenISRWord(char *word) {
     //construct commonHeader
-    return new ISRWord(manager);
+    return new ISRWord(manager, word);
 }
 
 ISREndDoc *Dictionary::OpenISREndDoc() {
