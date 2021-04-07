@@ -35,7 +35,10 @@ public:
         MutexInit( &mutex, nullptr );
         }
 
-    ~ThreadPool( ) { }
+    ~ThreadPool( )
+        {
+        MutexDestroy(&mutex);
+        }
 
     ThreadPool& operator= ( const ThreadPool& other )
         {
