@@ -13,15 +13,16 @@
 
 struct DocumentDetails {
     DocumentDetails(const char* u, const char* t, Location lengthOfDocument, Location numUniqueWords) :
-                        url(u),
-                        title(t),
                         lengthOfDocument(lengthOfDocument),
-                        numUniqueWords(numUniqueWords)
+                        numUniqueWords(numUniqueWords),
+                        url(u),
+                        title(t)
                         {}
-    String url;
-    String title;
+    // TODO: Reverse or doesn't matter?
     Location lengthOfDocument;
     Location numUniqueWords;
+    String url;
+    String title;
 };
 
 struct DocumentBlob {
@@ -42,7 +43,6 @@ struct DocumentBlob {
         return bytes;
     }
 
-    // TODO: Catch errors or handle them somehow
     static char *Write( char *buffer, char *bufferEnd, const SharedPointer<DocumentDetails> doc){
         if ( !doc ) {
             return buffer;
@@ -95,7 +95,6 @@ class DocumentFile
          // Open the file for reading, map it, check the header,
          // and note the blob address.
 
-         // Your code here.
          int f = open( filename, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
          if ( f == -1 )
             std::cerr << "Error openning file " << filename << " with errno = " << strerror( errno ) << std::endl;
@@ -104,7 +103,6 @@ class DocumentFile
             PROT_READ, MAP_SHARED, f, 0 );
          if ( blob != MAP_FAILED )
             {
-            // TODO: check the blob header ( MagicNumber, Version ) here
             }
          close( f );
          }
@@ -131,14 +129,12 @@ class DocumentFile
              else {
                 std::cerr << "Map failed with errno = " << strerror( errno ) << std::endl;
                 exit(0);
-                // TODO: ADD not exiting status checks
              }
              close( f );
          }
 
       ~DocumentFile( )
          {
-         // Your code here.
          // HashBlob::Discard( blob );
          }
    };

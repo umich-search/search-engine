@@ -10,9 +10,18 @@ struct IPostTerm {
     IPostTerm() {
         delta = -1;
     }
+    
     Location delta;
 };
 
 struct IPostEndDoc {
+    IPostEndDoc(Location d) {
+        delta = d;
+    }
+    
+    IPostEndDoc() {
+        delta = -1;
+    }
+    
     Location delta;
 };

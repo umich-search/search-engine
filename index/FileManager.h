@@ -23,8 +23,7 @@ private:
       w_Occurence numUniqueWords;
       d_Occurence numDocs;
       Location endLocation;
-       Offset numDocDetails;
-      char docDetailsLoc[];
+      char dynamicSpace[];
    };
     
     static int resolveChunkPath(size_t offset, char * pathname);
@@ -43,8 +42,8 @@ public:
    HashBlob * termIndexBlob;
    SerialEndDocs * endDocListBlob;
    ChunksMetadata * chunksMetadata;
-
-   void * docsBlob;
+   const char * docsBlob;
+    
    void * chunkDetails;
     
     FileManager() {
@@ -52,24 +51,23 @@ public:
     }
 
     static int WriteChunk(SharedPointer<TermHash> termIndex, 
-                  SharedPointer<EndDocPostingList> endDocList, 
-                  w_Occurence numWords, 
+                  SharedPointer<EndDocPostingList> endDocList,
+                  w_Occurence numWords,
                   w_Occurence numUniqueWords, 
                   d_Occurence numDocs, 
                   Location endLocation,
                   ::vector<SharedPointer<DocumentDetails>> docDetails,
-                  size_t numChunks,
-                  size_t chunkOffset,
-                  size_t docsOffset);
-
+                  size_t chunkIndex);
     // Bring chunk into memory
-    int ReadChunk(size_t chunkOffset);
+    int ReadChunk(Offset chunkIndex);
     // Bring documents into memory
-    int ReadDocuments(size_t docChunkOffset);
+    int ReadDocuments(Offset docsChunkIndex);
     // Returns term list given term and optional chunk_path
-    TermPostingListRaw GetTermList(const char* term , size_t chunkOffset = 0);
+    TermPostingListRaw GetTermList(const char* term , size_t chunkIndex = 0);
     // Returns end doc list given term and optional chunk_path
-    EndDocPostingListRaw GetEndDocList(size_t chunkOffset = 0);
+    EndDocPostingListRaw GetEndDocList(size_t chunkIndex = 0);
+    // Returns document details of doc index
+    DocumentDetails GetDocumentDetails(Offset docIndex, Offset docsChunkIndex );
     // Get the number of chunks in the index
     Offset getNumChunks();
     // Get total number of words in index
@@ -81,6 +79,5 @@ public:
     // get number of documents in index
     d_Occurence getNumDocuments();
     // get vector of chunk endlocations
-    // TODO: Got to change so num words is reset for each chunk
     ::vector<Location> getChunkEndLocations();
 };

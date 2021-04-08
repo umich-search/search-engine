@@ -25,7 +25,6 @@ IPostTerm TermPostingListRaw::getPostAt(Offset i) {
 }
 
 // byteAfterPost will return the byte offset of 1 after the requested post
-// TODO: Clean
 IPostTerm TermPostingListRaw::getPostAt(Offset i, Offset &byteAfterPost) {
     uint8_t * curr = (uint8_t *)(buffer + postsOffset);
     Offset byteCount = 0;
@@ -41,7 +40,6 @@ IPostTerm TermPostingListRaw::getPostAt(Offset i, Offset &byteAfterPost) {
     }
     throw "Searching for post beyond total posts size";
 }
-// IPostTerm getPostAt(Offset i, Offset numBytes);
 IPostTerm TermPostingListRaw::getPostAtByte(Offset numBytes, Offset &byteAfterPost) {
     uint8_t * curr = (uint8_t *)(buffer + postsOffset) + numBytes;
     size_t bytes = ((*curr) & 0xE0) >> 5;
@@ -151,20 +149,20 @@ Offset EndDocPostingListRaw::getPostLocationAt(Offset i) {
     return *(Offset *)(buffer + postLocationOffset + sizeof(size_t) * i);
 }
 
-IPostTerm EndDocPostingListRaw::getPostAt(Offset i) {
+IPostEndDoc EndDocPostingListRaw::getPostAt(Offset i) {
     uint8_t * curr = (uint8_t *)(buffer + postsOffset);
     for(size_t n = 0; n <= i; ++n) {
         size_t numBytes = ((*curr) & 0xE0) >> 5;
         numBytes += 1;
         if(n == i) {
-            return IPostTerm(UtfToInt(curr));
+            return IPostEndDoc(UtfToInt(curr));
         }
         curr = curr + numBytes;
     }
     throw "Searching for post beyond total posts size";}
 
 // byteAfterPost will return the byte offset of 1 after the requested post
-IPostTerm EndDocPostingListRaw::getPostAt(Offset i, Offset &byteAfterPost) {
+IPostEndDoc EndDocPostingListRaw::getPostAt(Offset i, Offset &byteAfterPost) {
     
     uint8_t * curr = (uint8_t *)(buffer + postsOffset);
     Offset byteCount = 0;
@@ -174,15 +172,13 @@ IPostTerm EndDocPostingListRaw::getPostAt(Offset i, Offset &byteAfterPost) {
         byteCount = numBytes;
         if(n == i) {
             byteAfterPost = byteCount;
-            return IPostTerm(UtfToInt(curr));
+            return IPostEndDoc(UtfToInt(curr));
         }
         curr = curr + numBytes;
     }
     throw "Searching for post beyond total posts size";
      
 }
-// IPostTerm getPostAt(Offset i, Offset numBytes);
-// TODO: Why return IPOST TErm
 IPostTerm EndDocPostingListRaw::getPostAtByte(Offset numBytes, Offset &byteAfterPost) {
     
     uint8_t * curr = (uint8_t *)(buffer + postsOffset) + numBytes;

@@ -63,8 +63,7 @@ struct SerialTuple
       }
       // Bytes required to encode TermPostingList
       static size_t BytesRequired( const TermPostingList *p) {
-         // TODO: Have term in Key and Value, may not need both
-      /* 
+      /*
          TERM POSTING LIST DATA TO SERIALIZE:
          CommonHeader header
          SyncIndex syncIndex
@@ -73,7 +72,6 @@ struct SerialTuple
         size_t headerSize, syncIndexSize, postsSize;
         headerSize = BytesRequired(&p->header);
         syncIndexSize = BytesRequired(&p->syncIndex);
-        // TODO: may have to move this posts size if using variable encoding
           postsSize = 0;
         for(unsigned int i = 0; i < p->posts.size(); ++i) {
            postsSize += UtfBytes(p->posts[i].delta);
@@ -124,7 +122,6 @@ struct SerialTuple
          memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), b->tuple.value->header.term.cstr(), b->tuple.value->header.term.size() + 1);
          curr += BytesRequired(&b->tuple.value->header);
          // Copy syncIndex
-         // TODO: ENCODE HERE
          for(size_t i = 0; i < b->tuple.value->syncIndex.postingsListOffset.size(); ++i) {
              memcpy(curr, &b->tuple.value->syncIndex.postingsListOffset[i], sizeof(size_t));
              curr += sizeof(size_t);
@@ -173,19 +170,13 @@ struct SerialTuple
          Buckets[ Unknown ];
 
       // The SerialTuples will follow immediately after.
-
-
       const SerialTuple *Find( const char *key ) const
          {
          // Search for the key k and return a pointer to the
          // ( key, value ) entry.  If the key is not found,
          // return nullptr.
 
-         // Your code here.
          uint32_t hashValue = fnvHash( key, strlen ( key ) );
-         
-         
-         //uint32_t hashValue = fnvHash( key, strlen( key ) );
          size_t bucket = Buckets[ hashValue % NumberOfBuckets ];
          if ( !bucket )
             return nullptr;
@@ -212,7 +203,6 @@ struct SerialTuple
          // Need space for the header + buckets +
          // all the serialized tuples.
 
-         // Your code here.
          size_t bucketsSize = sizeof( size_t ) * hashTable->numberOfBuckets;
          size_t headerSize = sizeof( HashBlob );
          size_t tupleSize = 0;
@@ -278,7 +268,6 @@ struct SerialTuple
 
       static HashBlob *Create( const SharedPointer<Hash> hashTable )
          {
-         // Your code here.
          size_t bytes = BytesRequired( hashTable );
          char *blobByte = new char[ bytes ];
          HashBlob *blob = ( HashBlob * )blobByte;
@@ -289,7 +278,6 @@ struct SerialTuple
 
       static void Discard( HashBlob *blob )
          {
-         // Your code here.
          char *blobByte = ( char * )blob;
          delete [] blobByte;
          }
@@ -321,7 +309,6 @@ class HashFile
          // Open the file for reading, map it, check the header,
          // and note the blob address.
 
-         // Your code here.
          int f = open( filename, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
          if ( f == -1 )
             std::cerr << "Error openning file " << filename << " with errno = " << strerror( errno ) << std::endl;
@@ -341,7 +328,6 @@ class HashFile
          // the hashtable out as a HashBlob, and note
          // the blob address.
 
-         // Your code here.
          int f = open( filename, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );  // if file not exist, create it
          if ( f == -1)
             {
@@ -362,7 +348,6 @@ class HashFile
 
       ~HashFile( )
          {
-         // Your code here.
          // HashBlob::Discard( blob );
          }
    };

@@ -29,9 +29,8 @@ public:
     static size_t BytesRequired( const SyncIndex *syncIndex) {
        return syncIndex->postingsListOffset.size() * 2 * sizeof(size_t);
     }
-    // Bytes required to encode TermPostingList
+    // Bytes required to encode EndDocPostingList
     static size_t BytesRequired( const SharedPointer<EndDocPostingList> p) {
-       // TODO: Have term in Key and Value, may not need both
     /*
        TERM POSTING LIST DATA TO SERIALIZE:
        CommonHeader header
@@ -41,8 +40,6 @@ public:
       size_t headerSize, syncIndexSize, endDocsSize, memberVarSize;
       headerSize = BytesRequired(&p->header);
       syncIndexSize = BytesRequired(&p->syncIndex);
-      // TODO: may have to move this posts size if using variable encoding
-      //endDocsSize = p->posts.size() * sizeof(size_t);
         endDocsSize = 0;
       for(unsigned int i = 0; i < p->posts.size(); ++i) {
           endDocsSize += UtfBytes(p->posts[i].delta);
@@ -52,25 +49,21 @@ public:
     }
     
     static char *Write( char *buffer, char *bufferEnd, const SharedPointer<EndDocPostingList> p ) {
-        // TODO: Handle null case better?
        if ( !p ) {
-          //SerialTuple *sentinel = new( ( void * )buffer ) SerialTuple;
-          //sentinel->Length = 0;
-           return buffer + RoundUp( sizeof( SerialEndDocs ), sizeof(size_t));//RoundUp( sizeof( SerialTuple ), sizeof( size_t ) );
+           return buffer + RoundUp( sizeof( SerialEndDocs ), sizeof(size_t));
        }
-        size_t bytes = BytesRequired( p );// + sizeof(size_t);
+        size_t bytes = BytesRequired( p );
        if ( bufferEnd - buffer < bytes )
           throw "Not enough memory allocated!";
 
        SerialEndDocs *head = new( ( void * )buffer ) SerialEndDocs;
-        head->Length = bytes;// + sizeof(size_t);
+        head->Length = bytes;
        char * curr = head->DynamicSpace;
         
        // Copy header
        memcpy(curr, &p->header.numOfOccurence, sizeof(w_Occurence));
        memcpy(curr + sizeof(w_Occurence), &p->header.numOfDocument, sizeof(d_Occurence));
        memcpy(curr + sizeof(w_Occurence) + sizeof(d_Occurence), &p->header.type, sizeof(int));
-        // TODO: Should modify header?
        memcpy(curr + sizeof(int) + sizeof(w_Occurence) + sizeof(d_Occurence), p->header.term.cstr(), p->header.term.size() + 1);
        curr += BytesRequired(&p->header);
        for(size_t i = 0; i < p->syncIndex.postingsListOffset.size(); ++i) {
@@ -83,16 +76,8 @@ public:
        }
         for(size_t i = 0; i < p->posts.size(); ++i) {
             size_t utfBytes = IntToUtf(p->posts[i].delta, (uint8_t*)curr);
-            //memcpy(curr, &b->tuple.value->posts[i], sizeof(size_t));
-            curr += utfBytes;//sizeof(size_t);
+            curr += utfBytes;
         }
-        /*
-        for(size_t i = 0; i < p->posts.size(); ++i) {
-            memcpy(curr, &p->posts[i], sizeof(size_t));
-            curr += sizeof(size_t);
-        }
-         //TODO: Remove
-         */
        return buffer + RoundUp( bytes, sizeof( size_t ) );
        }
     

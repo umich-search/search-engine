@@ -67,6 +67,9 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
 int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname ) {
     void * docDetailsBlob;
     size_t docDetailsSize = docDetails.size() * DOCUMENT_SIZE;
+    if(docDetailsSize == 0) {
+        return 0;
+    }
     int f_doc_details = open( pathname,
                               O_CREAT | O_RDWR,
                               S_IRWXU | S_IRWXG | S_IRWXO );
@@ -83,6 +86,9 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
                            MAP_SHARED,
                            f_doc_details,
                            0 );
+    if (docDetailsBlob == MAP_FAILED ) {
+       throw "Mapping failed";
+    }
     
      for(size_t i = 0; i < docDetails.size(); ++i){
          try {
@@ -113,66 +119,78 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
          throw "file open failed";
     }
+    size_t mSize = FileSize(f_metadata);
     if(FileSize(f_metadata) == 0) {
-        ftruncate(f_metadata, sizeof(ChunksMetadata) + sizeof(Location));
+        ftruncate(f_metadata, sizeof(ChunksMetadata) + sizeof(Location) + sizeof(d_Occurence));
         metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
-        metadata->numWords = 0;
-        metadata->numDocs = 0;
-        metadata->endLocation = 0;
-        metadata->numUniqueWords = 0;
-        metadata->numChunks = 0;
-        metadata->numDocDetails = 0;
-        char * curr = ((char*)metadata + sizeof(ChunksMetadata));
-        memcpy(curr, (char*)&endLocation, sizeof(Location));
-    }
-    else {
-        ftruncate(f_metadata, FileSize(f_metadata) + sizeof(Location));
-        metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
+        if (metadata == MAP_FAILED ) {
+           throw "Mapping failed";
+        }
         metadata->numWords = numWords;
         metadata->numDocs = numDocs;
         metadata->endLocation = endLocation;
         metadata->numUniqueWords = numUniqueWords;
-        metadata->numChunks = numChunks;
-        char * curr = (char*)metadata + sizeof(ChunksMetadata) + sizeof(Location) * metadata->numDocDetails;
+        metadata->numChunks = 1;
+        char * curr = ((char*)metadata + sizeof(ChunksMetadata));
         memcpy(curr, (char*)&endLocation, sizeof(Location));
-        metadata->numDocDetails++;
+        memcpy(curr + sizeof(Location), (char*)&numDocs, sizeof(d_Occurence));
+    }
+    else {
+        if(numChunks == 0) {
+            ftruncate(f_metadata, 0);
+        }
+        ftruncate(f_metadata, FileSize(f_metadata) + sizeof(Location) + sizeof(d_Occurence));
+        metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
+        if (mmap == MAP_FAILED ) {
+           throw "Mapping failed";
+        }
+        metadata->numWords = numWords;
+        metadata->numDocs = numDocs;
+        metadata->endLocation = endLocation;
+        metadata->numUniqueWords = numUniqueWords;
+        Location chunkEnd;
+        if(metadata->numChunks == 0) {
+            chunkEnd = endLocation;
+        }
+        else {
+            chunkEnd = *(Location*)((char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(d_Occurence)) * (metadata->numChunks - 1)) + endLocation;
+        }
+        char * curr = (char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(d_Occurence)) * metadata->numChunks;
+        memcpy(curr, (char*)&chunkEnd, sizeof(Location));
+        memcpy(curr + sizeof(Location), (char*)&numDocs, sizeof(d_Occurence));
+        metadata->numChunks = numChunks + 1;
+
+
     }
     close(f_metadata);
     return 0;
-
 }
 
-
 int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> termIndex,
-                  SharedPointer<EndDocPostingList> endDocList, 
-                  w_Occurence numWords, 
+                  SharedPointer<EndDocPostingList> endDocList,
+                  w_Occurence numWords,
                   w_Occurence numUniqueWords, 
                   d_Occurence numDocs, 
                   Location endLocation,
                   ::vector<SharedPointer<DocumentDetails>> docDetails,
-                  size_t numChunks,
-                  size_t chunkOffset,
-                  size_t docsOffset)
+                  size_t numChunks)
    {
-       if(chunkOffset > numChunks) {
-           throw "Error: Attempting to skip chunk";
-       }
        char chunkFile[MAX_PATHNAME_LENGTH];
        char docsFile[MAX_PATHNAME_LENGTH];
-       resolveChunkPath(chunkOffset, chunkFile);
-       resolveDocsChunkPath(docsOffset, docsFile);
+       resolveChunkPath(numChunks, chunkFile);
+       resolveDocsChunkPath(numChunks, docsFile);
        writePostingListsToFile(termIndex, endDocList, chunkFile);
        writeDocsToFile(docDetails, docsFile);
        writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks );
        return 0;
    }
 
-    int FileManager::ReadChunk(size_t chunkOffset) {
-        if(chunkOffset > chunksMetadata->numChunks) {
+    int FileManager::ReadChunk(size_t chunkIndex) {
+        if(chunkIndex > chunksMetadata->numChunks) {
             throw "Error: Attempting to read more than available chunks";
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
-        resolveChunkPath(chunkOffset, chunkFile);
+        resolveChunkPath(chunkIndex, chunkFile);
         void * blob;
         int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
         if (f_chunk == -1 ) {
@@ -181,43 +199,90 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
          }
         size_t fileSize = FileSize(f_chunk);
         blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0);
+        if (blob == MAP_FAILED ) {
+           throw "Mapping failed";
+        }
         endDocListBlob = (SerialEndDocs *)blob;
         size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
         char* curr = (char*)blob + endDocEnd;
         termIndexBlob = (HashBlob *)curr;
         close(f_chunk);
         return 0;
-
     }
+
+int FileManager::ReadDocuments(Offset docsChunkIndex) {
+    if(docsChunkIndex > chunksMetadata->numChunks) {
+        throw "Error: Attempting to read more than available chunks";
+    }
+    char docsChunkFile[MAX_PATHNAME_LENGTH];
+    resolveDocsChunkPath(docsChunkIndex, docsChunkFile);
+    void * blob;
+    int f_doc_chunk = open( docsChunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
+    if (f_doc_chunk == -1 ) {
+        std::cerr << "Error openning file " << docsChunkFile << " with errno = " << strerror( errno ) << std::endl;
+        return -1;
+     }
+    size_t fileSize = FileSize(f_doc_chunk);
+    blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_doc_chunk, 0);
+    if (blob == MAP_FAILED ) {
+       throw "Mapping failed";
+    }
+    docsBlob = (const char *)blob;
+    close(f_doc_chunk);
+    return 0;
+}
 
 // May return refernece
-TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkOffset) {
-    if(chunkOffset == -1) {
+TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkIndex) {
+    if(chunkIndex == -1) {
         throw "Error: No chunk initialized";
     }
-    ReadChunk(chunkOffset);
+    ReadChunk(chunkIndex);
     if(!termIndexBlob) {
         throw "Error: No chunk has been read";
     }
     
     const SerialTuple * tuple = termIndexBlob->Find(term);
     if(!tuple) {
-        return nullptr;
+        throw "Error: Term does not exist";
     }
     else {
         return TermPostingListRaw(tuple->DynamicSpace);
     }
 }
 
-EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkOffset) {
-    if(chunkOffset > chunksMetadata->numChunks) {
+EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
+    if(chunkIndex > chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
-    ReadChunk(chunkOffset);
+    ReadChunk(chunkIndex);
     if(!endDocListBlob) {
         throw "Error: No chunk has been read";
     }
     return EndDocPostingListRaw(endDocListBlob->DynamicSpace);
+}
+
+DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
+    if(docsChunkIndex == -1) {
+        throw "Error: No chunk initalized";
+    }
+    ReadDocuments(docsChunkIndex);
+    if(!docsBlob) {
+        throw "Error: No document chunk has been read";
+    }
+    Offset normalize = 0;
+    if(docsChunkIndex > 0) {
+        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex - 1) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
+    }
+    
+    const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
+    w_Occurence numWords = *(size_t *)curr;
+    w_Occurence numUniqueWords = *(size_t *)(curr + sizeof(w_Occurence));
+    const char * url = curr + 2 * sizeof(w_Occurence);
+    const char * title = curr + 2 * sizeof(w_Occurence) + MAX_URL_LENGTH;
+    
+
+    return DocumentDetails(url, title, numWords, numUniqueWords);
 }
 
 
@@ -232,6 +297,9 @@ int FileManager::ReadMetadata() {
     if(FileSize(f_metadata) == 0) {
         ftruncate(f_metadata, sizeof(ChunksMetadata));
         chunksMetadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
+        if (chunksMetadata == MAP_FAILED ) {
+           throw "Mapping failed";
+        }
         chunksMetadata->numWords = 0;
         chunksMetadata->numDocs = 0;
         chunksMetadata->endLocation = 0;
@@ -241,8 +309,39 @@ int FileManager::ReadMetadata() {
     }
     else {
         chunksMetadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
+        if (chunksMetadata == MAP_FAILED ) {
+           throw "Mapping failed";
+        }
     }
     close(f_metadata);
     return 0;
 }
    
+w_Occurence FileManager::getIndexWords() {
+    return chunksMetadata->numWords;
+}
+
+w_Occurence FileManager::getIndexUniqueWords() {
+    return chunksMetadata->numUniqueWords;
+}
+
+Offset FileManager::getNumChunks() {
+    return chunksMetadata->numChunks;
+}
+
+d_Occurence FileManager::getNumDocuments() {
+    return chunksMetadata->numDocs;
+}
+
+::vector<Location> FileManager::getChunkEndLocations() {
+    ::vector<Location> endLocs;
+    /*
+    Location chunkEnd = *(Location*)((char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(Offset)) * (metadata->numChunks - 1)) + endLocation;
+
+    */
+    
+    for(unsigned int i = 0; i < chunksMetadata->numChunks; ++i) {
+        endLocs.pushBack((*(Location *)(chunksMetadata->dynamicSpace + (sizeof(Location) + sizeof(d_Occurence))* i)));
+    }
+    return endLocs;
+}

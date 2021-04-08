@@ -20,11 +20,11 @@
 #define CHUNKS_META_FILENAME "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
 #define CHUNK_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
-#define WRITE_TO_DISK true
+#define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
+#define WRITE_TO_DISK false
 #define INITAL_HASHTABLE_SIZE 5
 #define MAX_PATHNAME_LENGTH 4096
 
-//TODO: Check offset in different chunk has enough info
 typedef size_t Location;
 // Should be large enough to fit max word occurence
 typedef uint64_t w_Occurence;

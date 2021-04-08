@@ -24,24 +24,8 @@ size_t getNumLowBits2(size_t count, size_t spacing) {
 int main (int argc, char *argv[]) 
 {
     if(WRITE_TO_DISK) {
-        /*
-        IndexConstructor ic;
-        for(unsigned int i = 0; i < 20; ++i) {
-            ic.Insert("hello", Body);
-        }
-        for(unsigned int i = 0; i < 20; ++i) {
-            ic.Insert("world", Title);
-        }
-        ic.Insert("title", "url");
-
-        // TODO: Invalid term handle
-        ic.fileManager.ReadChunk("/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/0.chunk");
-        TermPostingListRaw raw(ic.fileManager.termIndexBlob->Find("hello")->DynamicSpace);
-        TermPostingListRaw rawWorld(ic.fileManager.termIndexBlob->Find("world")->DynamicSpace);
-        */
         IndexConstructor ic2;
         for(unsigned int j = 0; j < 3; ++ j) {
-        //for(unsigned int k = 0; k < 5; ++k) {
             ic2.Insert("dog", Body);
         for(unsigned int i = 0; i < 15; ++i) {
             int gap = i;
@@ -52,61 +36,87 @@ int main (int argc, char *argv[])
             
             ic2.Insert("dog", Body);
         }
-            //ic2.Insert("title","url");
-        //}
-            cout << ic2.endLocation << endl;
-
-            ic2.resolveChunkMem();
+        ic2.resolveChunkMem();
         }
         ic2.fileManager.GetTermList("dog",1);
-        //ic2.resolveChunkMem();
-        //ic2.Insert("title", "url");
-        
-        //ic2.fileManager.ReadChunk(0);
         for(unsigned int i =0; i < 3; ++i) {
-        TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog",i);
-        size_t indexPos = 0;
-        size_t lowBits = getNumLowBits2(121, NUM_SYNC_POINTS);
-        ASSERT(rawSync.getHeader()->numOfOccurence, ==, 16);
-        size_t loc = seekTermTarget(&rawSync, 0,indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 0);
-        ASSERT(indexPos,==,0);
-        
-        loc = seekTermTarget(&rawSync, 2,indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==,3);
-        ASSERT(indexPos,==,2);
-        
-        loc = seekTermTarget(&rawSync, 10, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 10);
-        ASSERT(indexPos,==,4);
-        
-        loc = seekTermTarget(&rawSync, 11, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 15);
-        ASSERT(indexPos,==,5);
-        
-        loc = seekTermTarget(&rawSync, 55, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 55);
-        ASSERT(indexPos,==,10);
-        
-        loc = seekTermTarget(&rawSync, 91, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 91);
-        ASSERT(indexPos,==,13);
-        
-        loc = seekTermTarget(&rawSync, 104, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 105);
-        ASSERT(indexPos,==,14);
-        
-        loc = seekTermTarget(&rawSync, 120, indexPos, lowBits, NUM_SYNC_POINTS);
-        ASSERT(loc,==, 120);
-        ASSERT(indexPos,==,15);
-        try {
-            loc = seekTermTarget(&rawSync, 125, indexPos, lowBits, NUM_SYNC_POINTS);
-        }
-        catch (const char* e){
+            TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog",i);
+            size_t indexPos = 0;
+            size_t lowBits = getNumLowBits2(121, NUM_SYNC_POINTS);
+            ASSERT(rawSync.getHeader()->numOfOccurence, ==, 16);
+            size_t loc = seekTermTarget(&rawSync, 0,indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 0);
+            ASSERT(indexPos,==,0);
+            
+            loc = seekTermTarget(&rawSync, 2,indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==,3);
+            ASSERT(indexPos,==,2);
+            
+            loc = seekTermTarget(&rawSync, 10, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 10);
+            ASSERT(indexPos,==,4);
+            
+            loc = seekTermTarget(&rawSync, 11, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 15);
+            ASSERT(indexPos,==,5);
+            
+            loc = seekTermTarget(&rawSync, 55, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 55);
+            ASSERT(indexPos,==,10);
+            
+            loc = seekTermTarget(&rawSync, 91, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 91);
+            ASSERT(indexPos,==,13);
+            
+            loc = seekTermTarget(&rawSync, 104, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 105);
+            ASSERT(indexPos,==,14);
+            
+            loc = seekTermTarget(&rawSync, 120, indexPos, lowBits, NUM_SYNC_POINTS);
+            ASSERT(loc,==, 120);
             ASSERT(indexPos,==,15);
+            try {
+                loc = seekTermTarget(&rawSync, 125, indexPos, lowBits, NUM_SYNC_POINTS);
+            }
+            catch (const char* e){
+                ASSERT(indexPos,==,15);
+            }
         }
+        ASSERT(ic2.fileManager.getNumDocuments(), ==, 0);
+        ASSERT(ic2.fileManager.getNumChunks(), ==, 3);
+        ASSERT(ic2.fileManager.getIndexWords(), ==, 363);
+        ::vector<Location> v = ic2.fileManager.getChunkEndLocations();
+        ASSERT(v.size(), ==, 3);
+        ASSERT(v[0],==,121);
+        ASSERT(v[1], ==, 242);
+        ASSERT(v[2], ==, 363);
+        
+        
+        IndexConstructor ic3;
+        for(unsigned int i = 0; i < 3; ++i) {
+            for(unsigned int i = 0; i < 5; ++i) {
+                for(unsigned int i = 0;  i < 16; ++i) {
+                    ic3.Insert("dog", Body);
+                }
+                ic3.Insert("title", "url");
+            }
+            ic3.resolveChunkMem();
         }
-         
+        
+        for(unsigned int i = 0; i < 3; ++i) {
+            for (unsigned int j = 0; j < 5; ++j) {
+                if(i == 2 && j == 1) {
+                    
+                }
+                size_t docId = i * 5 + j;
+                DocumentDetails d = ic3.fileManager.GetDocumentDetails(docId, i);
+                cout << "i: " << i << "j: " << j << endl;
+                ASSERT(d.title, ==, "title");
+                ASSERT(d.url, ==, "url");
+                ASSERT(d.numUniqueWords, ==, 1);
+                ASSERT(d.lengthOfDocument, ==, 16);
+            }
+        }
         return 0;
     }
     

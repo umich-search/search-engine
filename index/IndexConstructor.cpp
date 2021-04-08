@@ -42,29 +42,13 @@ int IndexConstructor::resolveChunkMem() {
         termIndex = SharedPointer<TermHash>(new TermHash);
         constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
         docDetails = ::vector<SharedPointer<DocumentDetails>>();
-        
-        numberOfWords = 0;
-        numberOfDocuments = 0;
+        //numberOfDocuments = 0;
         endLocation = 0;
         currentChunkNum++;
-        // TODO:: currentChunkNum and number of chunks not the same
-        // TODO: Makre sure variables are set
     }
     else {
-        // TODO: Don't crash on failures
         throw "Error: Writing to disk failed";
     }
-    
-
-    /*
-    chunksMetadata->numWords = 0;
-    chunksMetadata->numDocs = 0;
-    chunksMetadata->endLocation = 0;
-    chunksMetadata->numUniqueWords = 0;
-    chunksMetadata->endLocation = 0;
-    chunksMetadata->numChunks = 0;
-    */
-    
     return 0;
 }
 
@@ -83,7 +67,6 @@ int IndexConstructor::Insert( String term, Type type ) {
         postings = termTuple->value;
         cd = cdTuple->value;
         delta = endLocation - cd->latestTermLoc;
-
     } else {
         postings = new TermPostingList(NUM_SYNC_POINTS);
         postings->header = header;
@@ -128,13 +111,6 @@ void IndexConstructor::optimizeIndex() {
 }
 
 int IndexConstructor::flushData() {
-    /*
-    char chunkFilename[100];
-    char docsFilename[100];
-    
-    sprintf(chunkFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunk", currentChunkNum);
-    sprintf(docsFilename, "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/%zu.chunkd", currentChunkNum);
-     */
     return fileManager.WriteChunk(termIndex,
                            endDocPostings,
                            numberOfWords,
@@ -142,9 +118,7 @@ int IndexConstructor::flushData() {
                            numberOfDocuments,
                            endLocation,
                            docDetails,
-                           currentChunkNum,
-                           currentChunkNum,
-                           currentChunkNum);
+                            currentChunkNum);
 }
 
 void IndexConstructor::createNewChunk() {

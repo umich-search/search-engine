@@ -57,9 +57,9 @@ struct EndDocPostingListRaw {
     CommonHeaderBlob *getHeader();
     Offset getPostingsListOffsetAt(Offset i);
     Offset getPostLocationAt(Offset i);
-    IPostTerm getPostAt(Offset i);
+    IPostEndDoc getPostAt(Offset i);
     // byteAfterPost will return the byte offset of 1 after the requested post
-    IPostTerm getPostAt(Offset i, Offset &byteAfterPost);
+    IPostEndDoc getPostAt(Offset i, Offset &byteAfterPost);
     // IPostTerm getPostAt(Offset i, Offset numBytes);
     IPostTerm getPostAtByte(Offset numBytes, Offset &byteAfterPost);
 

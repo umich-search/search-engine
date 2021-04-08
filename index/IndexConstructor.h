@@ -49,7 +49,6 @@ public:
     SharedPointer<HashTable< String, TermPostingList*>> termIndex;
     SharedPointer<HashTable< String, ConstructionData*>> constructionData;
     SharedPointer<EndDocPostingList> endDocPostings;
-    //::vector<DocumentDetails *> docDetails;
     ::vector<SharedPointer<DocumentDetails>> docDetails;
     DocumentInfo currDocInfo;
     w_Occurence numberOfUniqueWords;
@@ -67,6 +66,5 @@ public:
 
     int flushData();
     int resolveChunkMem();
-    // TODO: Change public/ private and fix tests accordingly when ready
 };
 
