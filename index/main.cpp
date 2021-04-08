@@ -3,6 +3,7 @@
 #include "../utility/Common.h"
 #include "IndexConstructor.h"
 #include "PostingListBlob.h"
+#include <filesystem>
 #define ASSERT(left,operator,right) { if(!((left) operator (right))){ std::cerr << "ASSERT FAILED: " << #left << #operator << #right << " @ " << __FILE__ << " (" << __LINE__ << "). " << #left << "=" << (left) << "; " << #right << "=" << (right) << std::endl; } }
 
 using namespace std;
@@ -23,7 +24,10 @@ size_t getNumLowBits2(size_t count, size_t spacing) {
 
 int main (int argc, char *argv[]) 
 {
-    if(WRITE_TO_DISK) {
+    if(WRITE_TO_DISK && !USE_CHUNK_LIMIT) {
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+
         IndexConstructor ic2;
         for(unsigned int j = 0; j < 3; ++ j) {
             ic2.Insert("dog", Body);
@@ -92,6 +96,8 @@ int main (int argc, char *argv[])
         ASSERT(v[1], ==, 242);
         ASSERT(v[2], ==, 363);
         
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
         
         IndexConstructor ic3;
         for(unsigned int i = 0; i < 3; ++i) {
@@ -106,18 +112,64 @@ int main (int argc, char *argv[])
         
         for(unsigned int i = 0; i < 3; ++i) {
             for (unsigned int j = 0; j < 5; ++j) {
-                if(i == 2 && j == 1) {
-                    
-                }
                 size_t docId = i * 5 + j;
                 DocumentDetails d = ic3.fileManager.GetDocumentDetails(docId, i);
-                cout << "i: " << i << "j: " << j << endl;
                 ASSERT(d.title, ==, "title");
                 ASSERT(d.url, ==, "url");
                 ASSERT(d.numUniqueWords, ==, 1);
                 ASSERT(d.lengthOfDocument, ==, 16);
             }
         }
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+        IndexConstructor ic4;
+        for(unsigned int k = 0; k < 10; ++k) {
+            for(unsigned int i = 0; i < 5; ++i) {
+                for(unsigned int j = 0; j < 100; ++j) {
+                    ic4.Insert("Dog", Body);
+                    ic4.Insert("Deer", Body);
+                    ic4.Insert("Cat", Title);
+                    ic4.Insert("Dragon", Title);
+                }
+                ic4.Insert("title", "url");
+            }
+            ic4.resolveChunkMem();
+        }
+        for(unsigned int i = 0; i < 10; ++i) {
+            ASSERT(ic4.fileManager.getNumChunks(),==, 10);
+            ASSERT(ic4.fileManager.getIndexWords(),==,20000);
+            ASSERT(ic4.fileManager.getIndexEndLocation(), ==, 20100);
+            ::vector<Location> endLocs2 = ic4.fileManager.getChunkEndLocations();
+            ASSERT(endLocs2.size(),==,10);
+            for(unsigned int i = 0; i < endLocs2.size(); ++i) {
+                ASSERT(endLocs2[0],==,2010);
+            }
+            ASSERT(ic4.fileManager.GetEndDocList(i).getHeader()->numOfDocument, ==, 5);
+        }
+        for(unsigned int i = 0; i < 50; ++i) {
+            Offset chunk = i / 5;
+            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).lengthOfDocument, ==, 400);
+            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).numUniqueWords, ==, 4);
+            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).title, ==, "title");
+            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).url, ==, "url");
+        }
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        return 0;
+    }
+    // Chunk limit tests
+    if(USE_CHUNK_LIMIT) {
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+
+        IndexConstructor ic;
+        for(unsigned int i = 0; i < 30; ++i) {
+            for(unsigned int j = 0; j < 100; ++j){
+                ic.Insert("cat", Body);
+            }
+            ic.Insert("cat_title", "cat.com");
+        }
+        ic.FinishConstruction();
+        
         return 0;
     }
     
@@ -1064,9 +1116,6 @@ int main (int argc, char *argv[])
     catch (const char * e) {
         ASSERT(fisIndex, ==, 7);
     }
-     
-    
-
     return 0; 
 };
 

@@ -20,7 +20,6 @@ public:
     // constructor
     Dictionary(FileManager filemanager) {
         manager = filemanager;
-        numberOfUniqueWords = filemanager.getIndexUniqueWords();
         numberOfDocuments = filemanager.getNumDocuments();
         numberOfWords = filemanager.getIndexWords();
         numChunks = filemanager.getNumChunks();

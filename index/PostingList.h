@@ -58,3 +58,4 @@ int createSeekIndex(TermPostingList *postings, size_t startLoc, size_t numLowBit
 
 int createSeekIndex(SharedPointer<EndDocPostingList> postings, size_t startLoc, size_t numLowBits);
 
+

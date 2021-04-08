@@ -110,7 +110,7 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
     numDocsSize = sizeof(d_Occurence);
     endLocationSize = sizeof(endLocation);
     
-    int f_metadata = open( CHUNKS_META_FILENAME,
+    int f_metadata = open( CHUNKS_METADATA_PATH,
                            O_CREAT |
                            O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
@@ -119,7 +119,6 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
          throw "file open failed";
     }
-    size_t mSize = FileSize(f_metadata);
     if(FileSize(f_metadata) == 0) {
         ftruncate(f_metadata, sizeof(ChunksMetadata) + sizeof(Location) + sizeof(d_Occurence));
         metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
@@ -276,8 +275,8 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     }
     
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
-    w_Occurence numWords = *(size_t *)curr;
-    w_Occurence numUniqueWords = *(size_t *)(curr + sizeof(w_Occurence));
+    w_Occurence numWords = *(w_Occurence *)curr;
+    w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
     const char * url = curr + 2 * sizeof(w_Occurence);
     const char * title = curr + 2 * sizeof(w_Occurence) + MAX_URL_LENGTH;
     
@@ -287,11 +286,11 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 
 
 int FileManager::ReadMetadata() {
-    int f_metadata = open( CHUNKS_META_FILENAME,
+    int f_metadata = open( CHUNKS_METADATA_PATH,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
     if(f_metadata == -1) {
-        std::cerr << "Error openning file " << CHUNKS_META_FILENAME << " with errno = " << strerror( errno ) << std::endl;
+        std::cerr << "Error openning file " << CHUNKS_METADATA_PATH << " with errno = " << strerror( errno ) << std::endl;
         return -1;
     }
     if(FileSize(f_metadata) == 0) {
@@ -321,10 +320,6 @@ w_Occurence FileManager::getIndexWords() {
     return chunksMetadata->numWords;
 }
 
-w_Occurence FileManager::getIndexUniqueWords() {
-    return chunksMetadata->numUniqueWords;
-}
-
 Offset FileManager::getNumChunks() {
     return chunksMetadata->numChunks;
 }
@@ -333,12 +328,12 @@ d_Occurence FileManager::getNumDocuments() {
     return chunksMetadata->numDocs;
 }
 
+Location FileManager::getIndexEndLocation() {
+    return *(Location *)(chunksMetadata->dynamicSpace + (sizeof(Location) + sizeof(d_Occurence))* (chunksMetadata->numChunks - 1));
+}
+
 ::vector<Location> FileManager::getChunkEndLocations() {
     ::vector<Location> endLocs;
-    /*
-    Location chunkEnd = *(Location*)((char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(Offset)) * (metadata->numChunks - 1)) + endLocation;
-
-    */
     
     for(unsigned int i = 0; i < chunksMetadata->numChunks; ++i) {
         endLocs.pushBack((*(Location *)(chunksMetadata->dynamicSpace + (sizeof(Location) + sizeof(d_Occurence))* i)));

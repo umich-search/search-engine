@@ -1,39 +1,47 @@
 
 #pragma once
 
-#include "stdlib.h"
 #include "../utility/Vector.h"
 #include "../utility/string.h"
-#include "HashTable.h"
 #include "../utility/SmartPointer.h"
 #include "../utility/UTF8Conv.h"
+#include "CommonUtil.h"
+#include "stdlib.h"
+#include "HashTable.h"
 
+// Max number of sync points
 #define NUM_SYNC_POINTS 8
-//TODO: determine NUM_LOW_BITS
-#define NUM_LOW_BITS 4
-#define MAX_SYNC_DISTANCE 100
-#define MAX_WORD_LENGTH 100
+// Number of buckets in hashtable during construction
+#define INITAL_HASHTABLE_SIZE 5
+// Size of bytes to write in memory before writing to disk
+#define CHUNK_SIZE_BYTES 10000
+// titles > MAX_TITLE_LENGTH will be cutoff
 #define MAX_TITLE_LENGTH 512
+// Documents with URLs > MAX_URL_LENGTH will be skipped
 #define MAX_URL_LENGTH 2048
+// Document Size = MAX_TITLE_LENGTH + MAX_URL_LENGTH + 2 * sizeof(Location)
 #define DOCUMENT_SIZE 2576
-#define CHUNK_SIZE_BYTES 100
-#define CHUNKS_META_FILENAME "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
+// Maximum length of local machine pathname
+#define MAX_PATHNAME_LENGTH 4096
+// Storage locations
+#define CHUNKS_METADATA_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/chunks_metadata.txt"
 #define CHUNK_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
+// Whether or not to write to disk (set to false for in-memory tests)
 #define WRITE_TO_DISK true
-#define INITAL_HASHTABLE_SIZE 5
-#define MAX_PATHNAME_LENGTH 4096
+// Whether or not to write every chunk bytes ( used for testing)
+#define USE_CHUNK_LIMIT false
 
+// Should be large enough to define unique positions for every single term and endDoc
 typedef size_t Location;
 // Should be large enough to fit max word occurence
 typedef uint64_t w_Occurence;
 // Should be large enough to fit max document occurence
 typedef uint32_t d_Occurence;
-//
+// Should be large enough for offsets, possibly across chunks
 typedef size_t Offset;
-
-
+// Type of document used
 enum Type{
     Document,
     URL,
@@ -41,68 +49,3 @@ enum Type{
     Title,
     Body
 };
-
-static size_t RoundUp( size_t length, size_t boundary )
-   {
-   // Round up to the next multiple of the boundary, which
-   // must be a power of 2.
-
-   static const size_t oneless = boundary - 1,
-      mask = ~( oneless );
-   return ( length + oneless ) & mask;
-   }
-
-// returns number of low bits given total count and number of syncs
-static size_t getNumLowBits(size_t count, size_t spacing) {
-    size_t leftShift = ( count + NUM_SYNC_POINTS - 1 )/ NUM_SYNC_POINTS;
-    int numLowBits=0;
-    leftShift--;
-    while(leftShift)
-    {
-        numLowBits++;
-        leftShift=leftShift>>1;
-    }
-    return numLowBits;
-}
-
-static size_t UtfBytes(size_t a){
-    size_t numBytes = 0;
-    for (numBytes = 0; numBytes < 8; numBytes++) {
-        if (a < (1 << (8 * numBytes + 5)))break;
-    }
-    numBytes += 1;
-    return numBytes;
-}
-
-static size_t IntBytes(uint8_t *buffer) {
-    size_t numBytes = ((*buffer) & 0xE0) >> 5;
-    numBytes += 1;
-    return numBytes;
-}
-// Caller guarantees buffer is large
-static size_t IntToUtf(size_t a, uint8_t *buffer) {
-    //return number of Bytes write into buffer
-    size_t numBytes = 0;
-    size_t z = a;
-    for (numBytes = 0; numBytes < 8; numBytes++) {
-        if (a < (1 << (8 * numBytes + 5)))break;
-    }
-    numBytes += 1;
-    for (size_t i = numBytes - 1; i > 0; i--) {
-        *(buffer + i) = size_t(z & 0xFF);
-        z = z >> 8;
-    }
-    *buffer = z + ((numBytes - 1) << 5);
-    return numBytes;
-}
-
-static size_t UtfToInt(const uint8_t *buffer) {
-    size_t numBytes = ((*buffer) & 0xE0) >> 5;
-    numBytes += 1;
-    size_t a = 0;
-    a += ((*buffer) & 0x1F) << ((numBytes - 1) * 8);
-    for (int i = 1; i < numBytes; i++) {
-        a += (*(buffer + i)) << ((numBytes - i - 1) * 8);
-    }
-    return a;
-}

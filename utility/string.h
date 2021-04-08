@@ -212,18 +212,13 @@ public:
     // EFFECTS: Returns whether all the contents of *this
     //    and other are equal
     bool operator==(const String &other) const {
-        std::cout << (const char*)buffer << std::endl;
-        std::cout << (const char*)other.buffer << std::endl;
         if (length != other.size()) return false;
         else {
-                    std::cout << "length check passd" << std::endl;
-
             for (size_t i = 0; i < length; i++) {
                 if (buffer[i] != other.buffer[i])
                     return false;
             }
         }
-        std::cout << "Returning true" << std::endl;
         return true;
     }
 

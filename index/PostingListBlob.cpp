@@ -62,7 +62,8 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= NUM_SYNC_POINTS) {
-                    throw "seek out of range";
+                    return -1;
+                    //throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
             }
@@ -86,7 +87,8 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
                 }
             }
         }
-        throw "seek out of range";
+        return -1;
+        //throw "seek out of range";
     }
     catch(char *excp) {
         throw "unknown error";

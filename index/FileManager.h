@@ -72,8 +72,6 @@ public:
     Offset getNumChunks();
     // Get total number of words in index
     w_Occurence getIndexWords();
-    // Get total number of unique words in index
-    w_Occurence getIndexUniqueWords();
     // get end location of index
     Location getIndexEndLocation();
     // get number of documents in index

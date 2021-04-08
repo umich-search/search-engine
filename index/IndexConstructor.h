@@ -24,13 +24,13 @@ public:
                         }
     
     IndexConstructor() :
+                        fileManager(),
                         numberOfUniqueWords(0),
-                        numberOfDocuments(0),
-                        numberOfWords(0),
+                        numberOfDocuments(fileManager.getNumDocuments()),
+                        numberOfWords(fileManager.getIndexWords()),
                         firstDocEnd(0),
                         endLocation(0),
-                        currentChunkNum(0),
-                        chunkMemoryAlloc(0)
+                        currentChunkNum(fileManager.getNumChunks())
                         {
                             endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
                             constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
@@ -42,6 +42,7 @@ public:
     
     int Insert ( String title, String URL );
     int Insert( String term, Type type );
+    int FinishConstruction();
 
     
 public:
@@ -58,12 +59,9 @@ public:
     Location endLocation;
     size_t currentChunkNum;
     size_t chunkMemoryAlloc;
-
     void optimizeIndex();
     void createSynchronization();
-    void createHashBlob();
     void createNewChunk();
-
     int flushData();
     int resolveChunkMem();
 };

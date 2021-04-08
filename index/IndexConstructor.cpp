@@ -26,32 +26,13 @@ int IndexConstructor::Insert( String title, String URL) {
     endDocPostings->header.numOfDocument++;
     currDocInfo.reset(numberOfDocuments, endLocation);
     endLocation+=2;
-    if(WRITE_TO_DISK) {
-        //resolveChunkMem();
-    }
-    return 0;
-}
-
-int IndexConstructor::resolveChunkMem() {
+    chunkMemoryAlloc += UtfBytes(lastDoc.delta);
     chunkMemoryAlloc += DOCUMENT_SIZE;
-    //if(chunkMemoryAlloc > CHUNK_SIZE_BYTES) {
-        createSynchronization();
-        optimizeIndex();
-    if(flushData() == 0) {
-        endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
-        termIndex = SharedPointer<TermHash>(new TermHash);
-        constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
-        docDetails = ::vector<SharedPointer<DocumentDetails>>();
-        //numberOfDocuments = 0;
-        endLocation = 0;
-        currentChunkNum++;
-    }
-    else {
-        throw "Error: Writing to disk failed";
+    if(chunkMemoryAlloc > CHUNK_SIZE_BYTES && USE_CHUNK_LIMIT) {
+        resolveChunkMem();
     }
     return 0;
 }
-
 
 int IndexConstructor::Insert( String term, Type type ) {
     CommonHeader header;
@@ -87,7 +68,6 @@ int IndexConstructor::Insert( String term, Type type ) {
         memoryAlloc += NUM_SYNC_POINTS * 2 * sizeof(size_t);
 
     }
-   /// memoryAlloc += sizeof(size_t) * 3;
 
     if(cd->currDoc != currDocInfo.DocID) {
         postings->header.numOfDocument++;
@@ -95,6 +75,7 @@ int IndexConstructor::Insert( String term, Type type ) {
         cd->currDoc = currDocInfo.DocID;
     }
     
+    memoryAlloc += UtfBytes(delta);
     postings->posts.pushBack(IPostTerm(delta));
     postings->header.numOfOccurence++;
     cd->latestTermLoc = endLocation;
@@ -106,8 +87,31 @@ int IndexConstructor::Insert( String term, Type type ) {
     return 0;
 };
 
+int IndexConstructor::FinishConstruction() {
+    return resolveChunkMem();
+}
+
 void IndexConstructor::optimizeIndex() {
     termIndex->Optimize();
+}
+
+
+int IndexConstructor::resolveChunkMem() {
+        createSynchronization();
+        optimizeIndex();
+    if(flushData() == 0) {
+        chunkMemoryAlloc = 0;
+        endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
+        termIndex = SharedPointer<TermHash>(new TermHash);
+        constructionData = SharedPointer<ConstructionHash>(new ConstructionHash);
+        docDetails = ::vector<SharedPointer<DocumentDetails>>();
+        endLocation = 0;
+        currentChunkNum++;
+    }
+    else {
+        throw "Error: Writing to disk failed";
+    }
+    return 0;
 }
 
 int IndexConstructor::flushData() {
@@ -139,3 +143,4 @@ void IndexConstructor::createSynchronization() {
     }
     createSeekIndex(endDocPostings, firstDocEnd, numLowBits);
 }
+
