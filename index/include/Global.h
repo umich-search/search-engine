@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include "../utility/Vector.h"
-#include "../utility/string.h"
-#include "../utility/SmartPointer.h"
-#include "../utility/UTF8Conv.h"
+#include "Vector.h"
+#include "mString.h"
+#include "SmartPointer.h"
 #include "CommonUtil.h"
 #include "stdlib.h"
 #include "HashTable.h"
+#include "Common.h"
 
 // Max number of sync points
 #define NUM_SYNC_POINTS 8
@@ -27,9 +27,9 @@
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
 // Whether or not to write to disk (set to false for in-memory tests)
-#define WRITE_TO_DISK true
+//#define WRITE_TO_DISK true
 // Whether or not to write every chunk bytes ( used for testing)
-#define USE_CHUNK_LIMIT true
+//#define USE_CHUNK_LIMIT false
 
 // Should be large enough to define unique positions for every single term and endDoc
 typedef size_t Location;

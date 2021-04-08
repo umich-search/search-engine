@@ -72,11 +72,7 @@ public:
         : length( other.length ), capacity( other.capacity )
         {
         buffer = new char[ capacity ];
-<<<<<<< HEAD:utility/string.h
         for ( int i = 0; i < length + 1; i++ )
-=======
-        for ( size_t i = 0; i <= length; i++ )
->>>>>>> origin/main:utility/include/mString.h
             buffer[ i ] = other.buffer[ i ];
         }
 

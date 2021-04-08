@@ -1,6 +1,6 @@
 #include "Dictionary.h"
 #include "EndDocSerializer.h"
-#include "../utility/Common.h"
+//#include "../utility/Common.h"
 #include "IndexConstructor.h"
 #include "PostingListBlob.h"
 #include <filesystem>
@@ -25,6 +25,7 @@ size_t getNumLowBits2(size_t count, size_t spacing) {
 int main (int argc, char *argv[]) 
 {
     if(WRITE_TO_DISK && !USE_CHUNK_LIMIT) {
+        cout << "TEST SUITE: WriteToDisk=True, UseChunkLimit=False" << endl;
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
 
@@ -86,6 +87,7 @@ int main (int argc, char *argv[])
                 ASSERT(indexPos,==,15);
             }
         }
+        
         ASSERT(ic2.fileManager.getNumDocuments(), ==, 0);
         ASSERT(ic2.fileManager.getNumChunks(), ==, 3);
         ASSERT(ic2.fileManager.getIndexWords(), ==, 363);
@@ -113,12 +115,13 @@ int main (int argc, char *argv[])
             for (unsigned int j = 0; j < 5; ++j) {
                 size_t docId = i * 5 + j;
                 DocumentDetails d = ic3.fileManager.GetDocumentDetails(docId, i);
-                ASSERT(d.title, ==, "title");
-                ASSERT(d.url, ==, "url");
+                ASSERT(strcmp(d.title.cstr(), "title"), ==, 0);
+                ASSERT(strcmp(d.url.cstr(), "url"), ==, 0);
                 ASSERT(d.numUniqueWords, ==, 1);
                 ASSERT(d.lengthOfDocument, ==, 16);
             }
         }
+        
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
         IndexConstructor ic4;
@@ -134,6 +137,7 @@ int main (int argc, char *argv[])
             }
             ic4.resolveChunkMem();
         }
+        
         ASSERT(ic4.fileManager.getNumChunks(),==, 10);
         ASSERT(ic4.fileManager.getIndexWords(),==,20000);
         ASSERT(ic4.fileManager.getIndexEndLocation(), ==, 20100);
@@ -150,8 +154,8 @@ int main (int argc, char *argv[])
             Offset chunk = i / 5;
             ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).lengthOfDocument, ==, 400);
             ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).numUniqueWords, ==, 4);
-            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).title, ==, "title");
-            ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).url, ==, "url");
+            ASSERT(strcmp(ic4.fileManager.GetDocumentDetails(i, chunk).title.cstr(), "title"), ==, 0);
+            ASSERT(strcmp(ic4.fileManager.GetDocumentDetails(i, chunk).url.cstr(), "url"), ==, 0);
         }
         IndexConstructor ic5;
         ASSERT(ic5.numberOfDocuments,==,50);
@@ -184,14 +188,17 @@ int main (int argc, char *argv[])
             Offset chunk = i / 5;
             ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).lengthOfDocument, ==, 400);
             ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).numUniqueWords, ==, 4);
-            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).title, ==, "title");
-            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).url, ==, "url");
+            ASSERT(strcmp(ic5.fileManager.GetDocumentDetails(i, chunk).title.cstr(), "title"), ==, 0);
+            ASSERT(strcmp(ic5.fileManager.GetDocumentDetails(i, chunk).url.cstr(), "url"), ==, 0);
+
         }
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+        
         return 0;
     }
     // Chunk limit tests
     if(USE_CHUNK_LIMIT) {
+        cout << "TEST SUITE: WriteToDisk=True, UseChunkLimit=True" << endl;
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
 
@@ -206,6 +213,8 @@ int main (int argc, char *argv[])
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         return 0;
     }
+
+    cout << "TEST SUITE: WriteToDisk=False, UseChunkLimit=False" << endl;
     std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
     std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
 

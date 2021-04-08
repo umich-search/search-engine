@@ -1,20 +1,19 @@
 #pragma once
-
-#include "Global.h"
-
+#include "Common.h"
 // Number of buckets in hashtable during construction
 #define INITIAL_HASHTABLE_SIZE 5
 #define WRITE_TO_DISK true
+#define USE_CHUNK_LIMIT true
 typedef uint64_t fnvHash_t;
 
 
 // Compare C-strings, return true if they are the same.
 
-bool CompareEqual( const char *L, const char *R );
+//bool CompareEqual( const char *L, const char *R );
 
-bool CompareEqual(const String &L,const String &R);
+//bool CompareEqual(const String &L,const String &R);
 
-fnvHash_t fnvHash( const char *data, size_t length );
+//fnvHash_t fnvHash( const char *data, size_t length );
 
 
 

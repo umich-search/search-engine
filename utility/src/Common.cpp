@@ -1,7 +1,6 @@
 // Common code used by the various hashing sample applications.
 
-// Nicole Hamilton nham@umich.edu
-
+/*
 #include <fstream>
 #include <vector>
 #include <string.h>
@@ -36,7 +35,7 @@ bool CompareEqual( const char *L, const char *R )
 
 
 // fnv hashing function
-
+/*
 uint32_t fnvHash( const char *data, size_t length ) 
     {
     static const size_t FnvOffsetBasis = 146959810393466560;
@@ -53,7 +52,7 @@ uint32_t fnvHash( const char *data, size_t length )
 
 using Hash = HashTable< const char *, size_t >;
 using Pair = Tuple< const char *, size_t >;
-
+*/
 
 // Build a HashTable of strings and numbers of occurrences, given a vector
 // of strings representing the words.  You may assume the vector and the
@@ -63,7 +62,7 @@ using Pair = Tuple< const char *, size_t >;
 // Common.h.
 
 // Caller is responsible for deleting the Hash.
-
+/*
 Hash *BuildHashTable( const vector< string > &words ) 
     {
     // Your code here.
@@ -134,3 +133,4 @@ void CollectWordsIn(int argc, char **argv, vector<string> &words) {
              endl << endl;
     }
 }
+*/

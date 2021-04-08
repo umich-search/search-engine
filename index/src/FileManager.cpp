@@ -1,7 +1,6 @@
 
 #include "FileManager.h"
 
-
 int FileManager::resolveChunkPath(size_t offset, char * pathname) {
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNK_DIRECTORY);
