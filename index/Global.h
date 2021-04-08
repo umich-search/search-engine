@@ -21,7 +21,7 @@
 #define CHUNK_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
-#define WRITE_TO_DISK false
+#define WRITE_TO_DISK true
 #define INITAL_HASHTABLE_SIZE 5
 #define MAX_PATHNAME_LENGTH 4096
 
@@ -52,6 +52,18 @@ static size_t RoundUp( size_t length, size_t boundary )
    return ( length + oneless ) & mask;
    }
 
+// returns number of low bits given total count and number of syncs
+static size_t getNumLowBits(size_t count, size_t spacing) {
+    size_t leftShift = ( count + NUM_SYNC_POINTS - 1 )/ NUM_SYNC_POINTS;
+    int numLowBits=0;
+    leftShift--;
+    while(leftShift)
+    {
+        numLowBits++;
+        leftShift=leftShift>>1;
+    }
+    return numLowBits;
+}
 
 static size_t UtfBytes(size_t a){
     size_t numBytes = 0;

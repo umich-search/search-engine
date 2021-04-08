@@ -125,18 +125,7 @@ void IndexConstructor::createNewChunk() {
     currentChunkNum++;
 }
 
-// returns number of low bits given total count and number of syncs
-size_t getNumLowBits(size_t count, size_t spacing) {
-    size_t leftShift = ( count + spacing - 1 )/ spacing;
-    int numLowBits=0;
-    leftShift--;
-    while(leftShift)
-    {
-        numLowBits++;
-        leftShift=leftShift>>1;
-    }
-    return numLowBits;
-}
+
 void IndexConstructor::createSynchronization() {
     size_t numLowBits = getNumLowBits(endLocation, NUM_SYNC_POINTS);
     

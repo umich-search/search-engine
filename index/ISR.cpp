@@ -43,14 +43,20 @@ Post *ISRWord::Seek(size_t target) {
         return nullptr;
     }
     size_t index;
+    return &currPost;
+    /*
+     
     Location searchResult = seekTermTarget(&termPostingListRaw, target - chunkEndLocations[currChunk - 1], index,
                                            NUM_LOW_BITS, NUM_SYNC_POINTS);
+     
     //todo: set currBytes to be bytes after Post
     if (searchResult != -1) {
         currPost.SetLocation(searchResult);
         return &currPost;
     }
+    
     else return nullptr;
+     */
 }
 
 Location ISRWord::GetStartLocation() {

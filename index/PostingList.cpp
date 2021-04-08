@@ -1,6 +1,7 @@
 #include "PostingList.h"
 
-size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t numLowBits) {
+size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, size_t chunkSize) {
+    size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
     try {
         Location syncPoint = target >> numLowBits;
 
@@ -41,7 +42,9 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
 };
 
 
-size_t seekEndDocTarget(SharedPointer<EndDocPostingList> postings, size_t target, size_t &index, size_t numLowBits) {
+size_t seekEndDocTarget(SharedPointer<EndDocPostingList> postings, size_t target, size_t &index, size_t chunkSize) {
+    size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
+
     try {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;

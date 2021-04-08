@@ -65,8 +65,8 @@ struct EndDocPostingListRaw {
 
 };
 
-Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
-Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints);
+Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize);
+Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize);
 
 
 

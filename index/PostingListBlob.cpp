@@ -48,18 +48,20 @@ IPostTerm TermPostingListRaw::getPostAtByte(Offset numBytes, Offset &byteAfterPo
     return IPostTerm(UtfToInt(curr));
 }
 
-Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {
+Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize) {
+    size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
+
     try {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
-        if(curr >= numSyncPoints) {
+        if(curr >= NUM_SYNC_POINTS) {
             throw "seek out of range";
         }
         Location loc = raw->getPostLocationAt(syncPoint);
 
         if(loc == -1) {
             while(loc == -1) {
-                if(++curr >= numSyncPoints) {
+                if(++curr >= NUM_SYNC_POINTS) {
                     throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
@@ -91,17 +93,18 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
     }
 }
 
-Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t numLowBits, size_t numSyncPoints) {
+Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize){
+    size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
     try{
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
-        if(curr >= numSyncPoints) {
+        if(curr >= NUM_SYNC_POINTS) {
             throw "seek out of range";
         }
         Location loc = raw->getPostLocationAt(syncPoint);
         if(loc == -1) {
             while(loc == -1) {
-                if(++curr >= numSyncPoints) {
+                if(++curr >= NUM_SYNC_POINTS) {
                     throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
