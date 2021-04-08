@@ -1,12 +1,8 @@
 .vscode/
-<<<<<<< HEAD
-CMakeLists.txt
 cmake-build-debug
 .DS_Store
 index/.DS_Store
-=======
 crawler/FrontierOpt.cpp
 crawler/FrontierOpt.h
 dq/
 frontier/
->>>>>>> origin/main
