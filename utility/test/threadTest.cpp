@@ -1,21 +1,25 @@
-#include "../include/Thread.h"
-#include "../include/Vector.h"
-#include "../include/mString.h"
-#include "../include/TaskQueue.h"
+//#include "../include/Vector.h" // compilation error
+//#include "../include/mString.h" // runtime error
+#include "../include/ThreadPool.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <vector>
 
-class Test : public Thread 
+const int NUM_THREADS = 10;
+
+class Test : public ThreadPool
     {
 public:
+    Test( Init init )
+        : ThreadPool( init ) { }
 private:
-    void DoTask( Task *task ) override
+    void DoTask( ThreadPool::Task task, size_t threadID ) override
         {
-        std::string *args = (std::string *) task->GetArgs();
-        Print(*args);
-        //int test = 1 / 0;
-        if ( task->DeleteArgs() )
+        std::string *args = (std::string *) task.args;
+        Print(*args, threadID);
+        // int test = 1 / 0;
+        if ( task.deleteArgs )
             delete args;
         return;
         }
@@ -23,34 +27,34 @@ private:
 
 int main(int argc, char **argv )
     {
-    TaskQueue taskQueue;
     pthread_mutex_t printMutex;
     pthread_mutex_init(&printMutex, nullptr);
-    vector<Test> threads(100);
+
+    ThreadPool::Init init;
+    init.name = "Test";
+    init.numThreads = 10;
+    init.printMutex = &printMutex;
+    Test test( init );
     // Test thread creation
-    bool startup = true;
-    for ( size_t i = 0; i < threads.size(); ++i )
-        {
-        startup = startup && threads[i].Start( i, &taskQueue, &printMutex );
-        }
-    std::cout << "All threads started: " << startup << std::endl;
+    test.Start();
+    std::cout << "Thread pool alive: " << test.IsAlive() << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
     // Test stack args (no dynamic memory)
     std::string args("Stack");
-    for ( size_t i = 0; i < 1000; ++i )
+    for ( size_t i = 0; i < 10000; ++i )
         {
-        taskQueue.PushTask((void *)&args, false );
+        test.PushTask((void *)&args, false );
         }
-    taskQueue.WaitForEmptyQueue();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
     // Test heap args (dynamic memory)
-    for ( size_t i = 0; i < 1000; ++i )
+    for ( size_t i = 0; i < 10000; ++i )
         {
         std::string* args = new std::string("Heap");
-        taskQueue.PushTask((void *)args, true );
+        test.PushTask((void *)args, true );
         }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    taskQueue.Halt();
-    for ( size_t i = 0; i < threads.size(); ++i )
-        {
-        threads[i].Join();
-        }
+
+    test.Stop();
+    test.Join();
     }

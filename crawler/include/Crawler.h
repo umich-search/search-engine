@@ -1,10 +1,10 @@
 #pragma once
-
 #include <string.h>
 #include <PriorityQueue.h>
 #include <Concurrency.h>
 #include <Vector.h>
-#include <Thread.h>
+#include "CrawlerManager.h"
+#include "ThreadPool.h"
 #include "BloomFilter.h"
 #include "HtmlParser.h"
 #include "GetUrl.h"
@@ -13,30 +13,28 @@
 #define FP_RATE 0.1
 static const char *ROBOT_FILE = "robots.txt";
 
-class Crawler : public Thread
+// ----- Crawler.h
+// Task Input: NONE
+// Task: Pull URL from frontier, Download the HTML, parse the HTML,
+//       add the parsed words to the index
+// Task Output: Parsed URLs to manager
+
+class Crawler : public ThreadPool
     {
     public:
-        Crawler( );
-
+        Crawler( Init init, Frontier *froniter, FileBloomfilter *visited, SendManager *manager );
         ~Crawler( );
 
         void parseRobot( const String& robotUrl );
 
     private:
-
         Frontier *frontier;
         FileBloomfilter *visited;
+        SendManager *manager;
 
-        void DoTask( Task *task ) override;
+        void DoTask( Task task, size_t threadID ) override;
 
         String retrieveWebpage( const ParsedUrl& url );
-
-        // parse the robot.txt
-        // mark urls as unreachable in the frontier
-        // void parseRobot( const String& robotUrl );
-
-        // add not-seen links the frontier
-        void addLinksToFrontier( HtmlParser& htmlparser );
 
         // TODO: ( with the index team ) add words to index
         void addWordsToIndex( const HtmlParser& htmlparser );

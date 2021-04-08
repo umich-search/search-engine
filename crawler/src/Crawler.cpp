@@ -1,29 +1,36 @@
 #include "Crawler.h"
 #include <fstream>
 
-Crawler::Crawler( ){};
+Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendManager *manager ) 
+    : ThreadPool( init ), frontier( frontier ), visited( visited ), manager( manager ) { }
 
-Crawler::~Crawler( ){};
+Crawler::~Crawler( ) { }
 
-void Crawler::DoTask( Task *task )
+void Crawler::DoTask( Task task, size_t threadID )
     {
-    // 1. Get a URL from the frontier
-    String *url = (String *) task->GetArgs();
+    while ( alive || !frontier->Empty() )
+        {
+        // 1. Get a URL from the frontier
+        // TODO: add param to PopUrl() that decides whether to refresh PQ when empty
+        String url = frontier->PopUrl( alive );
 
-    // 2. Check for robots.txt for this domain
-    ParsedUrl parsedUrl( url->cstr() );
+        // 2. Retrieve the HTML webpage from the URL
+        ParsedUrl parsedUrl( url.cstr() );
+        String html = LinuxGetHTML( parsedUrl );
 
-    // 3. Retrieve the HTML webpage from the URL
-    String html = LinuxGetHTML( parsedUrl );
+        // 3. Parse the HTML for the webpage
+        HtmlParser htmlparser( html.cstr(), html.size() );
 
-    // 4. Parse the HTML for the webpage
-    HtmlParser htmlparser( html.cstr(), html.size() );
+        // 4. Send the URLs found in the HTML back to the manager
+        for ( Link& link : htmlparser.links )
+            {
+            Link* newLink = new Link( link );
+            manager->PushTask( (void *) newLink, true );
+            }
 
-    // 5. Add the parsed links to the frontier
-    addLinksToFrontier( htmlparser );
-
-    // 6. Add the words from the HTML to the index
-    addWordsToIndex( htmlparser );
+        // 5. Add the words from the HTML to the index
+        addWordsToIndex( htmlparser );
+        }
     }
 
 void Crawler::parseRobot( const String& robotUrl )
@@ -84,21 +91,6 @@ void Crawler::parseRobot( const String& robotUrl )
         temp += robotFile[i];
         }
         myfile.close();
-    }
-
-// TODO: send URLs back to manager for frontier and bloom filter
-void Crawler::addLinksToFrontier( HtmlParser& htmlparser )
-    {
-    for ( Link& link : htmlparser.links )
-        {
-        bool linkSeen = visited->contains( link.URL );
-        if ( !linkSeen )
-            {
-            // order matters! we don't mind losing a link but we mind duplicates
-            visited->insert( link.URL );
-            frontier->PushUrl( link );
-            }
-        }
     }
 
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser )
