@@ -27,9 +27,9 @@
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
 // Whether or not to write to disk (set to false for in-memory tests)
-#define WRITE_TO_DISK false
+#define WRITE_TO_DISK true
 // Whether or not to write every chunk bytes ( used for testing)
-#define USE_CHUNK_LIMIT false
+#define USE_CHUNK_LIMIT true
 
 // Should be large enough to define unique positions for every single term and endDoc
 typedef size_t Location;
@@ -39,6 +39,8 @@ typedef uint64_t w_Occurence;
 typedef uint32_t d_Occurence;
 // Should be large enough for offsets, possibly across chunks
 typedef size_t Offset;
+// Size of hash value
+typedef uint64_t fnvHash_t;
 // Type of document used
 enum Type{
     Document,

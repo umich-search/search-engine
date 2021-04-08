@@ -4,7 +4,9 @@
 
 // Number of buckets in hashtable during construction
 #define INITIAL_HASHTABLE_SIZE 5
-#define WRITE_TO_DISK false
+#define WRITE_TO_DISK true
+typedef uint64_t fnvHash_t;
+
 
 // Compare C-strings, return true if they are the same.
 
@@ -12,7 +14,7 @@ bool CompareEqual( const char *L, const char *R );
 
 bool CompareEqual(const String &L,const String &R);
 
-uint32_t fnvHash( const char *data, size_t length );
+fnvHash_t fnvHash( const char *data, size_t length );
 
 
 
@@ -47,10 +49,10 @@ template<typename Key, typename Value>
 class Bucket {
 public:
     Bucket *next;
-    uint32_t hashValue;
+    fnvHash_t hashValue;
     Tuple<Key, Value> tuple;
 
-    Bucket(const Key &k, uint32_t h, const Value v) :
+    Bucket(const Key &k, fnvHash_t h, const Value v) :
             tuple(k, v), next(nullptr), hashValue(h) {
     }
 };
@@ -76,7 +78,7 @@ public:
         // ( key, value ) entry.  If the key is not already
         // in the hash, add it with the initial value.
 
-        uint32_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
+        fnvHash_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
         Bucket< Key, Value > *curr = buckets[ hashValue % numberOfBuckets ];
         while ( curr ) 
             {

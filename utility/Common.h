@@ -5,7 +5,7 @@
 
 #include "Vector.h"
 #include "string.h"
-uint32_t fnvHash( const char *data, size_t length )
+fnvHash_t fnvHash( const char *data, size_t length )
     {
     static const size_t FnvOffsetBasis = 146959810393466560;
     static const size_t FnvPrime = 1099511628211ul;

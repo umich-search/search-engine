@@ -392,7 +392,7 @@ int main (int argc, char *argv[])
 
 
     // CREATE SINGLE BUCKET
-    uint32_t hashValue1 = fnvHash(list1.header.term.cstr(), list1.header.term.size() + 1);
+    fnvHash_t hashValue1 = fnvHash(list1.header.term.cstr(), list1.header.term.size() + 1);
     Bucket<String, TermPostingList *> testBucket(list1.header.term, hashValue1, &list1);
     
     

@@ -36,7 +36,7 @@ struct SerialTuple
       // (Actual length is not given but not needed.)
 
       size_t Length;// Value;
-      uint32_t HashValue;
+      fnvHash_t HashValue;
       // Used to place dynmaic size length key, value
       char DynamicSpace[ Unknown ];
 
@@ -88,7 +88,7 @@ struct SerialTuple
             any additional member variables
          */
           size_t hashValueSize, keySize, postingsListSize, memberVarsSize;
-          hashValueSize = sizeof( uint32_t);
+          hashValueSize = sizeof( fnvHash_t);
           keySize = sizeof(strlen(b->tuple.key.cstr()) + 1); 
           postingsListSize = BytesRequired(b->tuple.value);
           memberVarsSize = sizeof(Offset); //+ sizeof(uint32_t);
@@ -176,7 +176,7 @@ struct SerialTuple
          // ( key, value ) entry.  If the key is not found,
          // return nullptr.
 
-         uint32_t hashValue = fnvHash( key, strlen ( key ) );
+         fnvHash_t hashValue = fnvHash( key, strlen ( key ) );
          size_t bucket = Buckets[ hashValue % NumberOfBuckets ];
          if ( !bucket )
             return nullptr;
