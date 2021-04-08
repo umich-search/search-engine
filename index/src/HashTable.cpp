@@ -1,7 +1,3 @@
-// Sample HashTable application
-
-// Nicole Hamilton  nham@umich.edu
-
 #include <cassert>
 #include <iostream>
 #include <fstream>
