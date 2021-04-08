@@ -1,4 +1,5 @@
-#include "../DiskQueue.h"
+#include "DiskQueue.h"
+#include "mString.h"
 #include <iostream>
 
 const char DNAME[] = "./dq";
