@@ -45,6 +45,9 @@ public:
             buffer[i] = cstr[i];
         }
         buffer[length] = '\0';
+        //std::cout << "created cstr with: " << buffer << std::endl;
+        //std::cout << "copied from " << cstr << std::endl;
+
     }
 
     // Buffer Constructor
@@ -69,7 +72,11 @@ public:
         : length( other.length ), capacity( other.capacity )
         {
         buffer = new char[ capacity ];
+<<<<<<< HEAD:utility/string.h
+        for ( int i = 0; i < length + 1; i++ )
+=======
         for ( size_t i = 0; i <= length; i++ )
+>>>>>>> origin/main:utility/include/mString.h
             buffer[ i ] = other.buffer[ i ];
         }
 
@@ -279,11 +286,11 @@ public:
     bool operator>=(const String &other) const {
         return (*this) == other or (*this) > other;
     }
+    char *buffer;
 
 private:
     size_t length;
     size_t capacity;
-    char *buffer;
 
     void expand() {
         char *new_buffer = new char[capacity * 2];
