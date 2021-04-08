@@ -1,7 +1,6 @@
 #include "Global.h"
 #include "DocumentInfo.h"
 
-
 size_t DocumentInfo::getNumberOfUniqueWords() {
     return numUniqueDocWords;
 };

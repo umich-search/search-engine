@@ -46,7 +46,6 @@ int main (int argc, char *argv[])
         for(unsigned int i =0; i < 3; ++i) {
             TermPostingListRaw rawSync = ic2.fileManager.GetTermList("dog",i);
             size_t indexPos = 0;
-            size_t lowBits = getNumLowBits2(121, NUM_SYNC_POINTS);
             size_t chunkSize = 121;
             ASSERT(rawSync.getHeader()->numOfOccurence, ==, 16);
             size_t loc = seekTermTarget(&rawSync, 0,indexPos, chunkSize);
@@ -135,15 +134,16 @@ int main (int argc, char *argv[])
             }
             ic4.resolveChunkMem();
         }
-        for(unsigned int i = 0; i < 10; ++i) {
-            ASSERT(ic4.fileManager.getNumChunks(),==, 10);
-            ASSERT(ic4.fileManager.getIndexWords(),==,20000);
-            ASSERT(ic4.fileManager.getIndexEndLocation(), ==, 20100);
-            ::vector<Location> endLocs2 = ic4.fileManager.getChunkEndLocations();
-            ASSERT(endLocs2.size(),==,10);
-            for(unsigned int i = 0; i < endLocs2.size(); ++i) {
-                ASSERT(endLocs2[0],==,2010);
-            }
+        ASSERT(ic4.fileManager.getNumChunks(),==, 10);
+        ASSERT(ic4.fileManager.getIndexWords(),==,20000);
+        ASSERT(ic4.fileManager.getIndexEndLocation(), ==, 20100);
+        ::vector<Location> endLocs2 = ic4.fileManager.getChunkEndLocations();
+        ASSERT(endLocs2.size(),==,10);
+        ::vector<d_Occurence> docCounts2 = ic4.fileManager.getDocCountsAfterChunk();
+        ASSERT(docCounts2.size(),==,10);
+        for(unsigned int i = 0; i < endLocs2.size(); ++i) {
+            ASSERT(endLocs2[i],==,2010 * (i + 1));
+            ASSERT(docCounts2[i],==, (i + 1) * 5);
             ASSERT(ic4.fileManager.GetEndDocList(i).getHeader()->numOfDocument, ==, 5);
         }
         for(unsigned int i = 0; i < 50; ++i) {
@@ -152,6 +152,40 @@ int main (int argc, char *argv[])
             ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).numUniqueWords, ==, 4);
             ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).title, ==, "title");
             ASSERT(ic4.fileManager.GetDocumentDetails(i, chunk).url, ==, "url");
+        }
+        IndexConstructor ic5;
+        ASSERT(ic5.numberOfDocuments,==,50);
+        for(unsigned int k = 0; k < 5; ++k) {
+            for(unsigned int i = 0; i < 5; ++i) {
+                for(unsigned int j = 0; j < 100; ++j) {
+                    ic5.Insert("Dog", Body);
+                    ic5.Insert("Deer", Body);
+                    ic5.Insert("Cat", Title);
+                    ic5.Insert("Dragon", Title);
+                }
+                ic5.Insert("title", "url");
+            }
+            ic5.resolveChunkMem();
+        }
+        ASSERT(ic5.numberOfDocuments,==,75);
+        ASSERT(ic5.fileManager.getNumChunks(),==, 15);
+        ASSERT(ic5.fileManager.getIndexWords(),==,30000);
+        ASSERT(ic5.fileManager.getIndexEndLocation(), ==, 30150);
+        ::vector<Location> endLocs3 = ic5.fileManager.getChunkEndLocations();
+        ASSERT(endLocs3.size(),==,15);
+        ::vector<d_Occurence> docCounts3 = ic5.fileManager.getDocCountsAfterChunk();
+        ASSERT(docCounts3.size(),==,15);
+        for(unsigned int i = 10; i < 15; ++i) {
+            ASSERT(endLocs3[i],==,2010 * (i + 1));
+            ASSERT(docCounts3[i],==, (i + 1) * 5);
+            ASSERT(ic5.fileManager.GetEndDocList(i).getHeader()->numOfDocument, ==, 5);
+        }
+        for(unsigned int i = 50; i < 75; ++i) {
+            Offset chunk = i / 5;
+            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).lengthOfDocument, ==, 400);
+            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).numUniqueWords, ==, 4);
+            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).title, ==, "title");
+            ASSERT(ic5.fileManager.GetDocumentDetails(i, chunk).url, ==, "url");
         }
         std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         return 0;
@@ -169,10 +203,12 @@ int main (int argc, char *argv[])
             ic.Insert("cat_title", "cat.com");
         }
         ic.FinishConstruction();
-        
+        std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
         return 0;
     }
-    
+    std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+    std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+
     size_t lowBits;
     // CREATE POSTING LIST
     CommonHeader header1;
@@ -1116,6 +1152,8 @@ int main (int argc, char *argv[])
     catch (const char * e) {
         ASSERT(fisIndex, ==, 7);
     }
+    
+    std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
     return 0; 
 };
 

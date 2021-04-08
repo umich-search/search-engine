@@ -13,16 +13,16 @@
 
 struct DocumentDetails {
     DocumentDetails(const char* u, const char* t, Location lengthOfDocument, Location numUniqueWords) :
-                        lengthOfDocument(lengthOfDocument),
-                        numUniqueWords(numUniqueWords),
                         url(u),
-                        title(t)
+                        title(t),
+                        lengthOfDocument(lengthOfDocument),
+                        numUniqueWords(numUniqueWords)
                         {}
-    // TODO: Reverse or doesn't matter?
+    String title;
+    String url;
     Location lengthOfDocument;
     Location numUniqueWords;
-    String url;
-    String title;
+
 };
 
 struct DocumentBlob {

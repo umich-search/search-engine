@@ -11,8 +11,6 @@
 
 // Max number of sync points
 #define NUM_SYNC_POINTS 8
-// Number of buckets in hashtable during construction
-#define INITAL_HASHTABLE_SIZE 5
 // Size of bytes to write in memory before writing to disk
 #define CHUNK_SIZE_BYTES 10000
 // titles > MAX_TITLE_LENGTH will be cutoff
@@ -29,7 +27,7 @@
 #define DOCS_DIRECTORY "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/"
 #define TERM_COUNT_PATH "/Users/andrewjiang/Desktop/s-engine/search-engine/index/gen_files/term_count.map"
 // Whether or not to write to disk (set to false for in-memory tests)
-#define WRITE_TO_DISK true
+#define WRITE_TO_DISK false
 // Whether or not to write every chunk bytes ( used for testing)
 #define USE_CHUNK_LIMIT false
 

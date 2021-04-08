@@ -78,4 +78,6 @@ public:
     d_Occurence getNumDocuments();
     // get vector of chunk endlocations
     ::vector<Location> getChunkEndLocations();
+    // get vector of total doc count up to chunk
+    ::vector<d_Occurence> getDocCountsAfterChunk();
 };

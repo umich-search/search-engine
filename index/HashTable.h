@@ -1,12 +1,10 @@
 #pragma once
 
-#include <cassert>
-#include <iomanip>
-#include <cstdint>
 #include "Global.h"
 
+// Number of buckets in hashtable during construction
 #define INITIAL_HASHTABLE_SIZE 5
-#define WRITE_TO_DISK true
+#define WRITE_TO_DISK false
 
 // Compare C-strings, return true if they are the same.
 
@@ -38,7 +36,7 @@ public:
     }
     
     ~Tuple() {
-        if(WRITE_TO_DISK) {
+        if(WRITE_TO_DISK){
             delete value;
         }
     }

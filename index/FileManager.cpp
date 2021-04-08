@@ -340,3 +340,13 @@ Location FileManager::getIndexEndLocation() {
     }
     return endLocs;
 }
+
+::vector<d_Occurence> FileManager::getDocCountsAfterChunk() {
+    ::vector<d_Occurence> docCounts;
+    
+    for(unsigned int i = 0; i < chunksMetadata->numChunks; ++i) {
+        docCounts.pushBack((*(d_Occurence *)(chunksMetadata->dynamicSpace + (sizeof(Location) + sizeof(d_Occurence)) * i + sizeof(Location))));
+    }
+    return docCounts;
+    
+}
