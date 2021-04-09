@@ -27,6 +27,11 @@ public:
         String name;
         size_t numThreads;
         mutex_t *printMutex;
+        Init( ) { };
+        Init( String s, size_t numT, mutex_t *pm )
+            : name( s ), numThreads( numT ), printMutex( pm )
+            {
+            }
         };
 
     // init.printMutex won't be initialized here
