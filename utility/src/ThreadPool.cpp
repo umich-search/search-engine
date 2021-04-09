@@ -9,6 +9,7 @@ ThreadPool::ThreadPool( ThreadPool::Init init )
 
 ThreadPool::~ThreadPool( )
     {
+    Stop();
     MutexDestroy(&mutex);
     }
 
@@ -39,14 +40,16 @@ void ThreadPool::Start()
 void ThreadPool::Stop()
     {
     CriticalSection s( &mutex );
+    if ( !alive )
+        return;
     taskQueue.WaitUntilEmpty();
     alive = false;
     taskQueue.Block();
+    Join();
     }
 
 void ThreadPool::Join()
     {
-    CriticalSection s( &mutex );
     for ( size_t i = 0; i < threads.size(); ++i )
         pthread_join( threads[i], NULL );
     }

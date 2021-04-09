@@ -33,12 +33,9 @@ void CrawlerApp::Stop( )
     {
     // Stop crawling first
     crawlers.Stop();
-    crawlers.Join();
     // Then stop URL management
     sendManager.Stop();
     listenManager.Stop();
-    sendManager.Join();
-    listenManager.Join();
     }
 
 int main ( int argc, char **argv )

@@ -30,15 +30,17 @@ int main(int argc, char **argv )
 
     ThreadPool::Init init;
     init.name = "Test";
-    init.numThreads = 1000;
+    init.numThreads = 10;
     init.printMutex = &printMutex;
     Test test( init );
     // Test thread creation
     test.Start();
     std::cout << "Thread pool alive: " << test.IsAlive() << std::endl;
+    if ( !test.IsAlive() )
+        return 1;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    vector<std::string> argsVec(100000);
+    vector<std::string> argsVec(1000);
     for ( size_t i = 0; i < argsVec.size(); ++i )
         {
         // Test stack args (no dynamic memory)
@@ -49,5 +51,4 @@ int main(int argc, char **argv )
         test.PushTask((void *)args, true );
         }
     test.Stop();
-    test.Join();
     }
