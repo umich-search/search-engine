@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "Queue.h"
 #include "Concurrency.h"
+#include "mString.h"
 #include <pthread.h>
 #include <atomic>
 #include <iostream>
@@ -23,11 +24,12 @@ public:
 
     struct Init
         {
-        std::string name;
+        String name;
         size_t numThreads;
         mutex_t *printMutex;
         };
 
+    // init.printMutex won't be initialized here
     ThreadPool( Init init )
         : name( init.name ), threads( init.numThreads ), printMutex( init.printMutex ), 
         alive( false ), threadID( 0 )
@@ -35,6 +37,7 @@ public:
         MutexInit( &mutex, nullptr );
         }
 
+    // printMutex won't be destroyed here
     ~ThreadPool( )
         {
         MutexDestroy(&mutex);
@@ -134,7 +137,7 @@ private:
             }
         }
     
-    std::string name;
+    String name;
     mutex_t *printMutex;
     mutex_t mutex;
 

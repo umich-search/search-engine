@@ -147,10 +147,16 @@ void Frontier::PushUrl( Link& link )
     Unlock( poolMutexes[ dqIdx ]);
     }
 
-String Frontier::PopUrl( )
+String Frontier::PopUrl( bool alive )
     {
     Lock( &pqMutex );
-    // if the pq is empty, refills it
+    // if not alive and the pq is empty
+    if ( !alive && urlPq.empty( ) )
+        {
+        Unlock( &pqMutex );
+        return String( "" );
+        }
+    // if alive and the pq is empty, refills it
     if ( urlPq.empty( ) )
         {
         while ( urlPq.size( ) < pqSize )

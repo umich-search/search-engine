@@ -8,6 +8,24 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 
+const size_t NUM_MACHINE = 7;
+
+const char *HOST[ NUM_MACHINE ] = 
+    {
+    "127.0.0.0",
+    "127.0.0.1",
+    "127.0.0.2",
+    "127.0.0.3",
+    "127.0.0.4",
+    "127.0.0.5",
+    "127.0.0.6",
+    };
+
+const uint16_t PORT[ NUM_MACHINE ] =
+    { 80, 80, 80, 80, 80, 80, 80, };
+
+const size_t myIndex = 1;
+
 class CrawlerManager : public ThreadPool
     {
     public:

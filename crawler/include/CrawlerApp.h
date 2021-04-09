@@ -11,6 +11,8 @@ class CrawlerApp
         size_t numListenThreads; // number of threads listening on sockets
         size_t numSendThreads; // number of threads sending on sockets
         // TODO: add frontier parameters
+        size_t numDiskQueue;
+        size_t pqSize;
         };
 
         CrawlerApp( const Parameters &param );
