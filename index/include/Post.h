@@ -4,13 +4,20 @@
 
 class Post {
 public:
-    Post(Location indexLoc) {
-        loc = indexLoc;
-    }
-    // Get position in index
-    Location GetLocation();
-    Location SetLocation(Location loc);
+   Post(Location indexLoc)
+      {
+      start = end = indexLoc;
+      }
+   Post(Location startLoc, Location endLoc) 
+      {
+      start = startLoc;
+      end = endLoc;
+      }
+   // Get position in index
+   Location GetStartLocation();
+   Location GetEndLocation();
+   Location SetLocation(Location loc);
 
 private:
-    Location loc;
+   Location start, end;
 };
