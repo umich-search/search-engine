@@ -24,20 +24,11 @@ public:
     virtual Location GetEndLocation() = 0;
 };
 
-//CommonHeader commonHeader;
-//commonHeader.term = word;
-//commonHeader.numOfDocument = manager.getNumDocuments();
-//commonHeader.numOfOccurence = manager.getIndexWords();
-//
-//size_t syncSize = NUM_SYNC_POINTS;
-//TermPostingList termPostingList(syncSize);
-//termPostingList.header = commonHeader;
-//termPostingList.posts = posts;
 class ISRWord : public ISR {
 public:
-    ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currBytes(0), term(word),
+    ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currIndex(0), term(word),
                                                          termPostingListRaw(manager.GetTermList(term, 0)),
-                                                         currPost(0) {
+                                                         currPost(0),Doc(0) {
 
     }
 
@@ -68,8 +59,9 @@ private:
     FileManager manager;
     const char *term;
     size_t currChunk;
-    Offset currBytes;
+    Offset currIndex;
     Post currPost;
+    Post Doc;
     TermPostingListRaw termPostingListRaw;
 
 
@@ -77,8 +69,9 @@ private:
 
 class ISREndDoc : public ISR {
 public:
-    ISREndDoc(EndDocPostingList endDocPostingList) : currentPost(0), currentPostingsIndex(0),
-                                                     postingList(endDocPostingList) {
+    ISREndDoc(FileManager filemanager) : manager(filemanager), currChunk(0), currBytes(0),
+                                         endDocPostingListRaw(manager.GetEndDocList(0)),
+                                         currPost(0){
     }
 
     Post *Next();
@@ -104,7 +97,9 @@ public:
     unsigned GetUrlLength();
 
 private:
-    EndDocPostingList postingList;
-    size_t currentPostingsIndex;
-    Post currentPost;
+    size_t currChunk;
+    FileManager manager;
+    EndDocPostingListRaw endDocPostingListRaw;
+    Post currPost;
+    Offset currBytes;
 };
