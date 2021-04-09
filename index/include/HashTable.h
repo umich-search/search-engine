@@ -1,27 +1,20 @@
-// Simple hash table template.
-
-// Nicole Hamilton  nham@umich.edu
-
 #pragma once
-
-#include <cassert>
-#include <iostream>
-#include <iomanip>
-#include <cstdint>
-#include <string.h>
-
-#define INITIAL_SIZE 5
-using namespace std;
-
-
-// You may add additional members or helper functions.
+#include "Common.h"
+// Number of buckets in hashtable during construction
+#define INITIAL_HASHTABLE_SIZE 5
+#define WRITE_TO_DISK true
+#define USE_CHUNK_LIMIT true
+typedef uint64_t fnvHash_t;
 
 
 // Compare C-strings, return true if they are the same.
 
-bool CompareEqual( const char *L, const char *R );
+//bool CompareEqual( const char *L, const char *R );
 
-uint32_t fnvHash( const char *data, size_t length );
+//bool CompareEqual(const String &L,const String &R);
+
+//fnvHash_t fnvHash( const char *data, size_t length );
+
 
 
 template<typename Key, typename Value>
@@ -34,15 +27,31 @@ public:
     }
 };
 
+template<typename Key, typename Value>
+class Tuple<Key,Value*> {
+public:
+    Key key;
+    Value* value;
+
+    Tuple(const Key &k, Value* v) : key(k), value(v) {
+    }
+    
+    ~Tuple() {
+        if(WRITE_TO_DISK){
+            delete value;
+        }
+    }
+};
+
 
 template<typename Key, typename Value>
 class Bucket {
 public:
     Bucket *next;
-    uint32_t hashValue;
+    fnvHash_t hashValue;
     Tuple<Key, Value> tuple;
 
-    Bucket(const Key &k, uint32_t h, const Value v) :
+    Bucket(const Key &k, fnvHash_t h, const Value v) :
             tuple(k, v), next(nullptr), hashValue(h) {
     }
 };
@@ -52,7 +61,6 @@ template<typename Key, typename Value>
 class HashTable {
 private:
 
-    // Your code here.
 
     Bucket< Key, Value > **buckets;
     size_t numberOfBuckets, numberOfEntries;
@@ -63,17 +71,15 @@ private:
 
 public:
 
-    Tuple< Key, Value > *Find( const Key k, const Value initialValue ) 
+    Tuple< Key, Value > *Find( const Key &k, const Value initialValue ) 
         {
         // Search for the key k and return a pointer to the
         // ( key, value ) entry.  If the key is not already
         // in the hash, add it with the initial value.
 
-        // Your code here.
-
-        uint32_t hashValue = fnvHash( k, strlen( k ) );
+        fnvHash_t hashValue = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr()  ));
         Bucket< Key, Value > *curr = buckets[ hashValue % numberOfBuckets ];
-        while ( curr )
+        while ( curr ) 
             {
             if ( CompareEqual( curr->tuple.key, k ) )
                 return &curr->tuple;
@@ -81,22 +87,22 @@ public:
                 break;
             else curr = curr->next;
             }
+
         Bucket< Key, Value > *new_bucket = new Bucket< Key, Value >( k, hashValue, initialValue );
         if ( curr )
             curr->next = new_bucket;
         else 
             buckets[ hashValue % numberOfBuckets ] = new_bucket;
         numberOfEntries++;
+
         return &new_bucket->tuple;
         }
 
-    Tuple<Key, Value> *Find(const Key k) const {
+    Tuple<Key, Value> *Find(const Key &k) const {
         // Search for the key k and return a pointer to the
         // ( key, value ) enty.  If the key is not already
         // in the hash, return nullptr.
-
-        // Your code here.
-        size_t index = fnvHash( k, strlen( k ) ) % numberOfBuckets;
+        size_t index = fnvHash( ((String)k).cstr(), strlen( ((String)k).cstr() ) ) % numberOfBuckets;
         Bucket< Key, Value > *curr = buckets[ index ];
         while ( curr ) 
             {
@@ -112,8 +118,7 @@ public:
         // to improve its performance now that you know
         // nothing more is to be added.
 
-        // Your code here.
-        HashTable tmp( numberOfEntries / loading );
+        HashTable tmp( numberOfEntries * loading );
         tmp.numberOfEntries = numberOfEntries;
         // iterate over indexes
         for ( int i = 0; i < numberOfBuckets; ++i )
@@ -147,21 +152,16 @@ public:
     }
 
 
-    // Your constructor may take as many default arguments
-    // as you like.
-
-    HashTable( size_t initBuckets = INITIAL_SIZE ) 
+    HashTable( size_t initBuckets = INITIAL_HASHTABLE_SIZE )
         : numberOfBuckets( initBuckets ), numberOfEntries( 0 )
         {
-        // Your code here.
         buckets = new Bucket< Key, Value > *[ numberOfBuckets ]( );
         }
 
 
     ~HashTable( ) 
         {
-        // Your code here.
-        for ( int i = 0; i < numberOfBuckets; i++ ) 
+        for ( int i = 0; i < numberOfBuckets; i++ )
             {
             Bucket< Key, Value > *curr = buckets[ i ];
             while ( curr ) 
@@ -180,14 +180,12 @@ public:
 
         friend class HashTable;
 
-        // Your code here.
         HashTable *table;
         Bucket< Key, Value > *cur_pointer;
         size_t cur_index;
 
         Iterator( HashTable *table, size_t bucket, Bucket< Key, Value > *b ) 
             {
-            // Your code here.
             this->table = table;
             this->cur_index = bucket;
             this->cur_pointer = b;
@@ -205,28 +203,25 @@ public:
 
         Tuple<Key, Value> &operator*( ) 
             {
-            // Your code here.
             return cur_pointer->tuple;
             }
 
         Tuple<Key, Value> *operator->( ) const 
             {
-            // Your code here.
             return &cur_pointer->tuple;
             }
 
         // Prefix ++
         Iterator &operator++( ) 
             {
-            // Your code here.
-            if ( cur_pointer->next ) 
+            if ( cur_pointer->next )
                 cur_pointer = cur_pointer->next;
             else 
                 {
                 size_t size = table->numberOfBuckets;
                 Bucket< Key, Value > **buckets = table->buckets;
                 bool if_over = true;
-                for ( int i = cur_index + 1; i < size; i++ ) 
+                for ( uint64_t i = cur_index + 1; i < size; i++ ) 
                     {
                     if ( buckets[ i ] ) 
                         {
@@ -249,7 +244,6 @@ public:
         // Postfix ++
         Iterator operator++( int ) 
             {
-            // Your code here.
             Bucket< Key, Value > *prev_pointer = cur_pointer;
             size_t prev_index = cur_index;
             ++( *this );
@@ -258,21 +252,18 @@ public:
 
         bool operator==(const Iterator &rhs) const 
             {
-            // Your code here.
             return cur_pointer == rhs.cur_pointer;
             }
 
         bool operator!=(const Iterator &rhs) const 
             {
-            // Your code here.
             return !( *this == rhs );
             }
     };
 
     Iterator begin() 
         {
-        // Your code here.
-        for ( int i = 0; i < numberOfBuckets; i++ ) 
+        for ( int i = 0; i < numberOfBuckets; i++ )
             if ( buckets[ i ] ) 
                 return Iterator( this, i, buckets[ i ] );
         return Iterator( this, 0, nullptr );
@@ -280,7 +271,6 @@ public:
 
     Iterator end() 
         {
-        // Your code here.
         return Iterator( this, numberOfBuckets, nullptr );
         }
 

@@ -6,6 +6,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
+    cout << "Running Index tests" << endl;
     if (argc != 1) {
         cout << "Usage: " << argv[0] << endl;
         return 1; 

@@ -1,8 +1,8 @@
 // This header file defines custom version of std::unique_ptr and std::shared_ptr
 // UniquePointer guarantees single reference of any type of memory
 // when UniquePointer is a rvalue, it can be assigned to SharedPointer
-// SharedPointer allows multiple refernce to a type of memory by retaining a "count" 
-// variable. Only the last call of dtor will deallocate the memory. 
+// SharedPointer allows multiple refernce to a type of memory by retaining a "count"
+// variable. Only the last call of dtor will deallocate the memory.
 
 #pragma once
 
@@ -25,17 +25,17 @@ class UniquePointer
 
     public:
         // explicit constructor
-        explicit UniquePointer( Type *ptr = nullptr ) : memPtr( ptr ) 
-            { 
+        explicit UniquePointer( Type *ptr = nullptr ) : memPtr( ptr )
+            {
             }
 
         // disable copy constructor
-        UniquePointer( const UniquePointer &other ) = delete;  
+        UniquePointer( const UniquePointer &other ) = delete;
 
         // move constructor
         UniquePointer( UniquePointer&& other ) noexcept
             : memPtr( nullptr )
-            { 
+            {
             this->swap( other );
             }
 
@@ -51,9 +51,9 @@ class UniquePointer
             }
         
         // destructor
-        ~UniquePointer( ) noexcept 
-            { 
-            delete memPtr; 
+        ~UniquePointer( ) noexcept
+            {
+            delete memPtr;
             }
 
 
@@ -65,7 +65,7 @@ class UniquePointer
             return tmp;
             }
 
-        void reset( Type *newPtr = nullptr ) noexcept 
+        void reset( Type *newPtr = nullptr ) noexcept
             {
             Type *oldPtr = memPtr;
             memPtr = newPtr;
@@ -81,8 +81,8 @@ class UniquePointer
         
         // Observers
         Type *get( ) const noexcept
-            { 
-            return memPtr; 
+            {
+            return memPtr;
             }
 
         explicit operator bool ( ) const noexcept
@@ -90,15 +90,15 @@ class UniquePointer
             return memPtr != nullptr;
             }
 
-        Type *operator-> ( ) const noexcept 
-            { 
-            return memPtr; 
+        Type *operator-> ( ) const noexcept
+            {
+            return memPtr;
             }
 
         // may throw  exceptions if Type defines improper *
         Type& operator* ( ) const
             {
-            return *memPtr; 
+            return *memPtr;
             }
 
     };
@@ -174,7 +174,7 @@ class SharedPointer
         int *count;
     public:
         // explict construction
-        explicit SharedPointer( Type *ptr )
+        explicit SharedPointer( Type *ptr = nullptr )
         try  // in case of allocation failure ( not enough space )
             : memPtr( ptr ), count( nullptr )
             {
@@ -193,7 +193,7 @@ class SharedPointer
             : memPtr( other.memPtr ), count( other.count )
             {
             if ( count )
-                ++ *( count );    
+                ++ *( count );
             }
 
         // move constructor

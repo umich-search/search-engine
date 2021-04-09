@@ -16,7 +16,7 @@
 #include <cassert>
 #include <string.h>
 #include <cstdint>
-#include <malloc.h>
+//#include <malloc.h>
 #include <sys/mman.h>
 #include "mString.h"
 
