@@ -24,6 +24,12 @@ public:
         numberOfWords = filemanager.getIndexWords();
         numChunks = filemanager.getNumChunks();
     }
+    // Default constructor
+    Dictionary() {
+        numberOfDocuments = manager.getNumDocuments();
+        numberOfWords = manager.getIndexWords();
+        numChunks = manager.getNumChunks();
+    }
 
 private:
     FileManager manager;
