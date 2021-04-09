@@ -144,7 +144,10 @@ Location ISRWord::GetEndLocation() {
 }
 
 d_Occurence ISRWord::GetDocumentCount() {
-    return manager.getNumDocuments();
+    size_t numChunks = manager.getChunkEndLocations().size();
+    w_Occurence total = 0;
+    for (int i = 0; i < numChunks; i++)total += manager.GetTermList(term, i).getHeader()->numOfDocument;
+    return total;
 }
 
 w_Occurence ISRWord::GetNumberOfOccurrences() {
@@ -160,76 +163,123 @@ Post *ISRWord::GetCurrentPost() {
 
 
 // ISREndDoc Functions
+Post *ISREndDoc::GetCurrentPost(){
+    return &currPost;
+}
+
 Post *ISREndDoc::Next() {
-    size_t numChunks = manager.getChunkEndLocations().size();
-    //todo: should deal with the case when curr term is the last in the chunk
-    if (currPost.GetStartLocation() < manager.getChunkEndLocations()[currChunk]) {
-        Location delta = endDocPostingListRaw.getPostAtByte(currBytes, currBytes).delta;
+    size_t numDoc = endDocPostingListRaw.getHeader()->numOfDocument;
+    if (currIndex < numDoc - 1) {
+        currIndex += 1;
+        Location delta = endDocPostingListRaw.getPostAt(currIndex).delta;
         currPost.SetLocation(delta + currPost.GetStartLocation());
     } else {
-        currChunk += 1;
-        if (currChunk > numChunks - 1) return nullptr;
-        try {
-            endDocPostingListRaw = manager.GetEndDocList(currChunk);
-        }
-        catch (std::string &) {
-            return nullptr;
-        }
-        Location delta = endDocPostingListRaw.getPostAtByte(0, currBytes).delta;
-        currPost.SetLocation(delta + manager.getChunkEndLocations()[currChunk - 1]);
+        Post *post = Seek(currPost.GetStartLocation() + 1);
+        if (post == nullptr) return nullptr;
+        else currPost = *post;
     }
     return &currPost;
 }
 
-Post *ISREndDoc::NextEndDoc() {
-    return nullptr;
+Post *ISREndDoc::NextEndDoc(){
+    return Next();
 }
 
 Post *ISREndDoc::Seek(Location target) {
-    vector<Location> chunkEndLocations = manager.getChunkEndLocations();
-    size_t numChunks = chunkEndLocations.size();
+    vector<Location> endLocs = manager.getChunkEndLocations();
+    size_t numChunks = endLocs.size();
     size_t chunkIndex;
+    Location result = -1;
     for (chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) {
-        if (chunkEndLocations[chunkIndex] >= target) break;
+        if (endLocs[chunkIndex] >= target) break;
     }
     if (chunkIndex >= numChunks) return nullptr;
-    currChunk = chunkIndex;
-    try {
-        endDocPostingListRaw = manager.GetEndDocList(currChunk);
+    for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) {
+        try {
+            EndDocPostingListRaw docraw = manager.GetEndDocList(chunk);
+            size_t temp;
+            Offset chunkSize;
+            size_t offset;
+            size_t searchTarget;
+            if (chunk > 0) {
+                chunkSize = endLocs[chunk] - endLocs[chunk - 1];
+                offset = endLocs[chunk - 1];
+            } else {
+                chunkSize = endLocs[chunk];
+                offset = 0;
+            }
+            if (target < offset) searchTarget = 0;
+            else searchTarget = target - offset;
+            result = seekEndDocTarget(&docraw, searchTarget, temp, chunkSize);
+            if (result == -1) continue;
+            if (chunk != 0)result += endLocs[chunk - 1];
+            currChunk = chunk;
+            endDocPostingListRaw = docraw;
+            currIndex = temp;
+            break;
+        }
+        catch (const char *excep) {
+            continue;
+        }
     }
-    catch (std::string &) {
-        return nullptr;
-    }
-    size_t index;
-    Location searchResult = seekEndDocTarget(&endDocPostingListRaw, target - chunkEndLocations[currChunk - 1], index,
-                                             CHUNK_SIZE_BYTES);
-
-    //todo: set currBytes to be bytes after Post
-    if (searchResult != -1) {
-        currPost.SetLocation(searchResult);
-        return &currPost;
-    } else return nullptr;
+    if (result == -1) return nullptr;
+    currPost.SetLocation(result);
+    return &currPost;
 }
 
 Location ISREndDoc::GetStartLocation() {
-    //return seekEndDocTarget(&postingList, 0, throwaway);
     //fetch termpostinglistraw for the first chunk
-    currChunk = 0;
-    try {
-        endDocPostingListRaw = manager.GetEndDocList(currChunk);
+    vector<Location> endLocs = manager.getChunkEndLocations();
+    size_t numChunks = endLocs.size();
+    Location result = -1;
+    for (size_t chunk = 0; chunk < numChunks; chunk++) {
+        try {
+            EndDocPostingListRaw docRaw = manager.GetEndDocList(chunk);
+            size_t temp;
+            Offset chunkSize;
+            if (chunk > 0) {
+                chunkSize = endLocs[chunk] - endLocs[chunk - 1];
+            } else {
+                chunkSize = endLocs[chunk];
+            }
+            result = seekEndDocTarget(&docRaw, 0, temp, chunkSize);
+            if (chunk != 0)result += endLocs[chunk - 1];
+            return result;
+        }
+        catch (std::string &) {
+            continue;
+        }
     }
-    catch (std::string &) {
-        return -1;
-    }
-    Location delta = endDocPostingListRaw.getPostAtByte(0, currBytes).delta;
-    currPost.SetLocation(delta);
-    currChunk = 0;
-    return delta;
+    return result;
 }
 
 Location ISREndDoc::GetEndLocation() {
     size_t numChunks = manager.getChunkEndLocations().size();
-    return manager.getChunkEndLocations()[numChunks - 1];
+    vector<Location> endLocs = manager.getChunkEndLocations();
+    size_t result = -1;
+    for (size_t chunk = numChunks - 1; chunk >= 0; chunk--) {
+        try {
+            EndDocPostingListRaw docraw = manager.GetEndDocList(chunk);
+            size_t temp;
+            size_t chunkSize;
+            size_t numOccurence = docraw.header->numOfDocument;
+            if (chunk > 0) {
+                chunkSize = endLocs[chunk] - endLocs[chunk - 1];
+            } else {
+                chunkSize = endLocs[chunk];
+            }
+            result = seekEndDocTarget(&docraw, 0, temp, chunkSize);
+            for (int i = 1; i < numOccurence; i++) {
+                result += docraw.getPostAt(i).delta;
+            }
+            if (chunk != 0)result += endLocs[chunk - 1];
+            return result;
+        }
+        catch (std::string &) {
+            continue;
+        }
+    }
+    return result;
 }
 
 unsigned ISREndDoc::GetDocumentLength() {

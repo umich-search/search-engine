@@ -69,14 +69,15 @@ private:
 
 class ISREndDoc : public ISR {
 public:
-    ISREndDoc(FileManager filemanager) : manager(filemanager), currChunk(0), currBytes(0),
+    ISREndDoc(FileManager filemanager) : manager(filemanager), currChunk(0),currIndex(0),
                                          endDocPostingListRaw(manager.GetEndDocList(0)),
                                          currPost(0){
     }
-
-    Post *Next();
+    Post *GetCurrentPost();
 
     Post *NextEndDoc();
+
+    Post *Next();
 
     // Get the first post after the target
     Post *Seek(Location target);
@@ -97,9 +98,9 @@ public:
     unsigned GetUrlLength();
 
 private:
-    size_t currChunk;
     FileManager manager;
-    EndDocPostingListRaw endDocPostingListRaw;
+    size_t currChunk;
+    Offset currIndex;
     Post currPost;
-    Offset currBytes;
+    EndDocPostingListRaw endDocPostingListRaw;
 };

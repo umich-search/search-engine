@@ -67,7 +67,20 @@ int main(int argc, char *argv[]) {
     ASSERT(isrword2.GetStartLocation(), ==, 1);
     ASSERT(isrword2.GetEndLocation(), ==, 5999 + 2 * 29);
 
+    ISREndDoc isrdoc = *dict.OpenISREndDoc();
+    ASSERT(isrdoc.GetStartLocation(), ==, 200);
+    ASSERT(isrdoc.GetEndLocation(), ==, 6058);
+    ASSERT(isrdoc.Seek(0)->GetStartLocation(), ==, 200);
+    ASSERT(isrdoc.Seek(200)->GetStartLocation(), ==, 200);
+    ASSERT(isrdoc.Seek(201)->GetStartLocation(), ==, 402);
+    ASSERT(isrdoc.Seek(402)->GetStartLocation(), ==, 402);
+    ASSERT(isrdoc.Seek(604)->GetStartLocation(), ==, 604);
 
+    ASSERT(isrdoc.Seek(0)->GetStartLocation(), ==, 200);
+    for (unsigned int i = 1; i < 30; i++) {
+        isrdoc.Next();
+        ASSERT(isrdoc.GetCurrentPost()->GetStartLocation(),==,202*i+200);
+    }
     /*
         Three chunks of 50
         seek(150);
