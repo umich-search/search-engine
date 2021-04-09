@@ -6,15 +6,13 @@
 #include <thread>
 #include <vector>
 
-const int NUM_THREADS = 10;
-
 class Test : public ThreadPool
     {
 public:
     Test( Init init )
         : ThreadPool( init ) { }
 private:
-    void DoTask( ThreadPool::Task task, size_t threadID ) override
+    void DoTask( Task task, size_t threadID ) override
         {
         std::string *args = (std::string *) task.args;
         Print(*args, threadID);
@@ -38,23 +36,19 @@ int main(int argc, char **argv )
     // Test thread creation
     test.Start();
     std::cout << "Thread pool alive: " << test.IsAlive() << std::endl;
+    if ( !test.IsAlive() )
+        return 1;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-    // Test stack args (no dynamic memory)
-    std::string args("Stack");
-    for ( size_t i = 0; i < 10000; ++i )
+    vector<std::string> argsVec(1000);
+    for ( size_t i = 0; i < argsVec.size(); ++i )
         {
-        test.PushTask((void *)&args, false );
-        }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-    // Test heap args (dynamic memory)
-    for ( size_t i = 0; i < 10000; ++i )
-        {
-        std::string* args = new std::string("Heap");
+        // Test stack args (no dynamic memory)
+        argsVec[i] = "Stack " + std::to_string(i);
+        test.PushTask((void *)&argsVec[i], false );
+        // Test heap args (dynamic memory)
+        std::string* args = new std::string("Heap " + std::to_string(i));
         test.PushTask((void *)args, true );
         }
-
     test.Stop();
-    test.Join();
     }

@@ -6,7 +6,7 @@ ISRWord *Dictionary::OpenISRWord(char *word) {
 }
 
 ISREndDoc *Dictionary::OpenISREndDoc() {
-    return nullptr;
+    return new ISREndDoc(manager);
 }
 
 Location Dictionary::GetNumberOfWords() {

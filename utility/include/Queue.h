@@ -3,26 +3,19 @@
 #include <pthread.h>
 
 // ----- Queue.h
-// Thread-safe queue
+// Normal queue and Thread-safe queue
+// ----- Thread-safe queue
 // Push: add a value to the queue.
 // Pop: remove a value from the queue. wait if queue is empty.
-// Block: block the queue from push/pop.
+// Block: block the queue from push/pop. awaken threads that are waiting on queue.
 
 template <typename T>
 class Queue
     {
     public:
-        Queue() 
-            {
-            blocked = false;
-            front = nullptr;
-            back = nullptr;
-            size = 0;
-            MutexInit(&mutex, nullptr);
-            CvInit(&cv, nullptr);
-            }
+        Queue() : front( nullptr ), back( nullptr ), size( 0 ) { }
 
-        ~Queue() 
+        ~Queue()
             {
             while ( front != nullptr )
                 {
@@ -30,18 +23,10 @@ class Queue
                 front = front->next;
                 delete temp;
                 }
-            MutexDestroy(&mutex);
-            CvDestroy(&cv);
             }
 
-        bool Push( const T &val ) 
-            { 
-            Lock(&mutex);
-            if ( blocked )
-                {
-                Unlock(&mutex);
-                return false;
-                }
+        void Push( T val )
+            {
             QueueItem *item = new QueueItem( val, nullptr );            
             if ( front == nullptr )
                 front = item;
@@ -49,62 +34,30 @@ class Queue
                 back->next = item;
             back = item;
             ++size;
-            Signal(&cv);
-            Unlock(&mutex);
-            return true;
             }
 
-        bool Pop( T &val ) 
+        bool Pop( T &val )
             {
-            Lock(&mutex);
-            while ( !blocked && ( front == nullptr ) )
-                {
-                Wait(&cv, &mutex);
-                }
             if ( front == nullptr )
-                {
-                Unlock(&mutex);
                 return false;
-                }
             val = front->val;
             QueueItem* temp = front;
             front = temp->next;
             delete temp;
+            if ( front == nullptr )
+                back = nullptr;
             --size;
-            Broadcast(&cv);   
-            Unlock(&mutex);
-            return true;      
+            return true;
             }
 
-        size_t Size()
+        bool Empty( )
             {
-            return size;
-            }
-
-        void WaitUntilEmpty()
-            {
-            Lock(&mutex);
-            while ( !blocked && ( front == nullptr ))
-                {
-                Wait(&cv, &mutex);
-                }
-            Unlock(&mutex);
-            }
-
-        void Block()
-            {
-            Lock(&mutex);
-            blocked = true;
-            Broadcast(&cv);
-            Unlock(&mutex);
+            return size == 0;
             }
         
-        void Unblock()
+        bool Size( )
             {
-            Lock(&mutex);
-            blocked = false;
-            Broadcast(&cv);
-            Unlock(&mutex);
+            return size;
             }
 
     private:
@@ -116,13 +69,76 @@ class Queue
             T val;
             QueueItem *next;
             };
-            
+        size_t size;
         QueueItem *front;
         QueueItem *back;
-        size_t size;
+    };
 
+template <typename T>
+class ThreadSafeQueue
+    {
+    public:
+        ThreadSafeQueue() 
+            {
+            blocked = false;
+            MutexInit(&mutex, nullptr);
+            CvInit(&cv, nullptr);
+            }
+
+        ~ThreadSafeQueue() 
+            {
+            MutexDestroy(&mutex);
+            CvDestroy(&cv);
+            }
+
+        bool Push( T val ) 
+            { 
+            CriticalSection s(&mutex);
+            if ( blocked )
+                return false;
+            queue.Push( val );
+            Signal(&cv);
+            return true;
+            }
+
+        bool Pop( T &val ) 
+            {
+            Lock(&mutex);
+            while ( !blocked && queue.Empty() )
+                Wait(&cv, &mutex);
+            bool ret = queue.Pop( val );
+            Broadcast(&cv);
+            Unlock(&mutex); 
+            return ret;      
+            }
+
+        void WaitUntilEmpty()
+            {
+            Lock(&mutex);
+            while ( !blocked && !queue.Empty() )
+                {
+                Wait(&cv, &mutex);
+                }
+            Unlock(&mutex);
+            }
+
+        void Block()
+            {
+            CriticalSection s(&mutex);
+            blocked = true;
+            Broadcast(&cv);
+            }
+        
+        void Unblock()
+            {
+            CriticalSection s(&mutex);
+            blocked = false;
+            Broadcast(&cv);
+            }
+
+    private:
+        Queue<T> queue;
         mutex_t mutex;
         cv_t cv;
-
         bool blocked;
     };
