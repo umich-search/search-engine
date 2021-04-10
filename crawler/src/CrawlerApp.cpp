@@ -38,11 +38,6 @@ CrawlerApp::CrawlerApp( )
 
 CrawlerApp::~CrawlerApp( )
     {
-    MutexDestroy( &printMutex );
-    }
-
-CrawlerApp::~CrawlerApp( )
-    {
     Stop( );
     MutexDestroy( &printMutex );
     }

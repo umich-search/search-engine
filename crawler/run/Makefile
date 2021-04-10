@@ -44,11 +44,7 @@ LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
-<<<<<<< HEAD:crawler/test/Makefile
-EXEC = main
-=======
 EXEC = CrawlerStart
->>>>>>> 3a3ea56413581246581dd12af99a4c461b6b4784:crawler/run/Makefile
 
 all: $(EXEC)
 

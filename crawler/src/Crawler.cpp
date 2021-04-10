@@ -43,8 +43,8 @@ void Crawler::DoTask( Task task, size_t threadID )
 
 void Crawler::parseRobot( const String& robotUrl )
     {
-    std::ofstream myfile;
-    myfile.open ("test.txt");
+    // std::ofstream myfile;
+    // myfile.open ("test.txt");
     ParsedUrl parsedUrl( robotUrl.cstr() );
     parsedUrl.Path = ROBOT_FILE;
     String robotFile = LinuxGetHTML( parsedUrl );
@@ -92,14 +92,14 @@ void Crawler::parseRobot( const String& robotUrl )
                 temp += robotFile[i++];
             // update the bloom filter
             visited->insert(rootUrl + temp);
-            myfile << rootUrl + temp << '\n';
+            // myfile << rootUrl + temp << '\n';
             temp = "";
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
         temp += robotFile[i];
         }
-        myfile.close();
+        // myfile.close();
     }
 
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )

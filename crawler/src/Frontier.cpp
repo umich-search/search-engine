@@ -1,5 +1,6 @@
 #include "Frontier.h"
 #include "Common.h"
+#include <fstream>
 
 // to use this function, compile with HashTable.cpp
 
@@ -127,8 +128,8 @@ void Frontier::FrontierInit( const char *seedFile )
     ssize_t bytes;
     while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
         {
-        String url ( "https://www." );
-        url += String( linePtr, bytes - 1 );
+        String url ( "https://" );
+        url += String( linePtr, bytes - 2 );
         Link lk( url );  // excluding the trailing '\n'
         PushUrl( lk );
         }

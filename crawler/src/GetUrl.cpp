@@ -139,6 +139,7 @@ String LinuxGetSsl( const ParsedUrl& url )
    int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
 
    // Connect the socket to the host address.
+   // std::cout << url.Host << std::endl;
    int connectResult = connect( socketFD, address->ai_addr, address->ai_addrlen );
 
    // set ssl library
