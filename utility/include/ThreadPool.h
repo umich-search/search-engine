@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "Queue.h"
 #include "Concurrency.h"
+#include "mString.h"
 #include <pthread.h>
 #include <atomic>
 #include <iostream>
@@ -11,9 +12,14 @@ class ThreadPool
 public:
     struct Init
         {
-        std::string name;
+        String name;
         size_t numThreads;
         mutex_t *printMutex;
+        Init( ) { };
+        Init( String s, size_t numT, mutex_t *pm )
+            : name( s ), numThreads( numT ), printMutex( pm )
+            {
+            }
         };
 
     ThreadPool( Init init );

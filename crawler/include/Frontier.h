@@ -61,7 +61,7 @@ class Frontier
         void PushUrl( Link& );
         // return the top url in the urlPq
         // if urlPq is empty, refills it with random sampling
-        String PopUrl( );
+        String PopUrl( bool alive );
 
         // TODO
         bool Empty( ) { return true; }

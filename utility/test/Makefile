@@ -54,5 +54,5 @@ $(EXEC): $(EXEC).o $(UOBJ)
 cleanObj:
 	rm -f $(UOBJ)
 clean:
-	rm -rf $(EXEC) $(EXEC).o
+	rm -rf $(EXEC) *.o
 
