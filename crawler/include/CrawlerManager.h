@@ -8,10 +8,10 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 const size_t numMachine = 7;
-int port = 0;
-size_t queue_size = 1024;
+const int port = 0;
+const size_t queue_size = 1024;
 
-const char *Host[ numMachine ] = 
+static const char *Host[ numMachine ] = 
     {
     "127.0.0.0",
     "127.0.0.1",
@@ -27,7 +27,7 @@ class CrawlerManager : public ThreadPool
     public:
         CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited )
             : ThreadPool( init ), frontier( frontier ), visited( visited ) { }
-        ~CrawlerManager( );
+        ~CrawlerManager( ) { }
 
     protected:
         size_t myIndex;
@@ -38,11 +38,18 @@ class CrawlerManager : public ThreadPool
 class ListenManager : public CrawlerManager 
     {
     public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )
-            : CrawlerManager( init, frontier, visited ) { }
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited );
         ~ListenManager( );
 
     private:
+        int socketFD;
+
+        static void *submitThread( void *arg )
+            {
+            ( ( ListenManager * )arg )->submitConnection( );
+            return nullptr;
+            }
+        void submitConnection( );
         void DoTask( Task task, size_t threadID ) override;
     };
 
@@ -51,7 +58,7 @@ class SendManager : public CrawlerManager
     public:
         SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
             : CrawlerManager( init, frontier, visited ) { }
-        ~SendManager( );
+        ~SendManager( ) { }
 
     private:
         void DoTask( Task task, size_t threadID ) override;

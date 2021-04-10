@@ -3,14 +3,7 @@
 #pragma once
 #include "Vector.h"
 #include <iostream>
-
-template< typename T >
-void Swap( T& x, T& y )
-    {
-    T tmp = x;
-    x = y;
-    y = tmp;
-    }
+#include "Common.h"
 
 template< typename T >
 class PriorityQueue

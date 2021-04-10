@@ -7,14 +7,7 @@
 #pragma once
 
 #include <cstddef>
-
-template< class Type >
-void Swap( Type& x, Type& y ) noexcept
-    {
-    Type tmp = x;
-    x = y;
-    y = tmp;
-    }
+#include "Common.h"
 
 // unique_ptr
 template< class Type >

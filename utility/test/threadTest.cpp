@@ -47,7 +47,7 @@ int main(int argc, char **argv )
         argsVec[i] = "Stack " + std::to_string(i);
         test.PushTask((void *)&argsVec[i], false );
         // Test heap args (dynamic memory)
-        std::string* args = new std::string("Heap " + std::to_string(i));
+     o   std::string* args = new std::string("Heap " + std::to_string(i));
         test.PushTask((void *)args, true );
         }
     test.Stop();

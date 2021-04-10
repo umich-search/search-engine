@@ -1,8 +1,7 @@
 #include "Frontier.h"
+#include "Common.h"
 
 // to use this function, compile with HashTable.cpp
-
-uint32_t fnvHash( const char *data, size_t length );
 
 bool Frontier::url_t::operator== ( const url_t& other ) const
     {
@@ -128,7 +127,9 @@ void Frontier::FrontierInit( const char *seedFile )
     ssize_t bytes;
     while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
         {
-        Link lk( linePtr, bytes - 1 );  // excluding the trailing '\n'
+        String url ( "https://www." );
+        url += String( linePtr, bytes - 1 );
+        Link lk( url );  // excluding the trailing '\n'
         PushUrl( lk );
         }
     free( linePtr );
@@ -174,7 +175,7 @@ String Frontier::PopUrl( bool alive )
                 {
                 String poppedUrl = urlPool[ poolIdx ]->PopFront( );
                 // if the read file pointer is at the EOF of the first file
-                if ( poppedUrl.size( ) == 0 )
+                if ( poppedUrl == String( "https://www." ) )
                     {
                     Unlock( poolMutexes[ poolIdx ] );
                     continue;

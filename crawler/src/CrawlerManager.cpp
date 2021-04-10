@@ -12,7 +12,8 @@ void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);
 void makeListenAddr(struct sockaddr_in *addr, int port);
 int getPort( int sockFd );
 
-void ListenManager::DoTask( Task task, size_t threadID )
+ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )   
+    : CrawlerManager( init, frontier, visited )
     {
     int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
 
@@ -22,13 +23,36 @@ void ListenManager::DoTask( Task task, size_t threadID )
     struct sockaddr_in addr;
     makeListenAddr( &addr, port );
     bind( socketFD, ( sockaddr * ) &addr, sizeof( addr ) );
-    port = getPort( socketFD );
+    // port = getPort( socketFD );
 
     listen( socketFD, queue_size );
+    pthread_t submit;
+    pthread_create( &submit, nullptr, submitThread, this );
+    pthread_detach( submit );
+    }
 
-    int connectionfd = accept( socketFD, 0, 0 );
-    assert ( connectionfd > -1 );
+ListenManager::~ListenManager( )
+    {
+    close( socketFD );
+    }
 
+void ListenManager::submitConnection( )
+    {
+    while ( this->alive )
+        {
+        int connectionfd = accept( socketFD, 0, 0 );
+        if ( connectionfd < 0 )
+            {
+            std::cerr << "Cannot setup connections\n";
+            return;
+            }
+        this->PushTask( ( void * )( new int ( connectionfd ) ), true );
+        }
+    }
+
+void ListenManager::DoTask( Task task, size_t threadID )
+    {
+    int connectionfd = *( ( int * )( task.args ) );
     char msg[ MAX_MESSAGE_SIZE + 1 ];
     memset( msg, 0, sizeof( msg ) );
 

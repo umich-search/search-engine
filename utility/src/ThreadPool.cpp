@@ -70,10 +70,10 @@ bool ThreadPool::IsAlive( )
     return alive;
     }
 
-void ThreadPool::Print( std::string output, size_t threadID )
+void ThreadPool::Print( String output, size_t threadID )
     {
     Lock(printMutex);
-    std::cout << "Thread (" << name << ":" << threadID << "): " 
+    std::cout << "Thread (" << name.cstr() << ":" << threadID << "): " 
                 << output << std::endl;
     Unlock(printMutex);
     }
@@ -92,7 +92,7 @@ void ThreadPool::Work( )
                 }
             catch ( ... )
                 {
-                Print(std::string("Exception"), ID );
+                Print(String("Exception"), ID );
                 }
             }
         }

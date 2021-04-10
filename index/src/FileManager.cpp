@@ -19,6 +19,8 @@ int FileManager::resolveDocsChunkPath(size_t offset, char * pathname) {
 int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                         SharedPointer<EndDocPostingList>
                                          endDocList, const char *pathname){
+    // << "Writing chunks to file:  " << pathname << std::endl;
+
     void * blob;
     int f_chunk = open( pathname,
                         O_CREAT | O_RDWR,
@@ -64,6 +66,7 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
 
 
 int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname ) {
+    // << "Writing docs to file:  " << pathname << std::endl;
     void * docDetailsBlob;
     size_t docDetailsSize = docDetails.size() * DOCUMENT_SIZE;
     if(docDetailsSize == 0) {

@@ -32,6 +32,7 @@ public:
                         endLocation(0),
                         currentChunkNum(fileManager.getNumChunks())
                         {
+                            //std::cout << "Created Index constructor with numDocs: " << numberOfDocuments << " numChunks: " << currentChunkNum << std::endl;
                             endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
                             constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
                             termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
