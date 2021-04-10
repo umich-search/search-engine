@@ -23,6 +23,12 @@ CrawlerApp::CrawlerApp( const Parameters &param )
     MutexInit( &printMutex, nullptr );
     }
 
+CrawlerApp::~CrawlerApp( )
+    {
+    Stop( );
+    MutexDestroy( &printMutex );
+    }
+
 void CrawlerApp::Start( )
     {
     // Start the manager thread pool

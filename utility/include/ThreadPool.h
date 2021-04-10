@@ -39,14 +39,14 @@ protected:
         bool deleteArgs; // Should the tasked thread free the args from memory?
         };
 
-    void Print( std::string output, size_t threadID );
+    void Print( String output, size_t threadID );
     void Join();
 
     // Override this function with the single task a thread should run
     virtual void DoTask( Task task, size_t threadID ) = 0;
 
 private:
-    std::string name;
+    String name;
     mutex_t *printMutex;
     mutex_t mutex;
 

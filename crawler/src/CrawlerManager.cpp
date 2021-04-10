@@ -8,24 +8,8 @@
 
 #define MAX_MESSAGE_SIZE 512
 
-void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);
-void makeListenAddr(struct sockaddr_in *addr, int port);
-int getPort( int sockFd );
-
 void ListenManager::DoTask( Task task, size_t threadID )
     {
-    int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
-
-    int yesval = 1;
-    setsockopt( socketFD, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) );
-
-    struct sockaddr_in addr;
-    makeListenAddr( &addr, port );
-    bind( socketFD, ( sockaddr * ) &addr, sizeof( addr ) );
-    port = getPort( socketFD );
-
-    listen( socketFD, queue_size );
-
     int connectionfd = accept( socketFD, 0, 0 );
     assert ( connectionfd > -1 );
 
