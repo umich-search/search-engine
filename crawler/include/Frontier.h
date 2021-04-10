@@ -64,5 +64,5 @@ class Frontier
         String PopUrl( bool alive );
 
         // TODO
-        bool Empty( ) { return true; }
+        bool Empty( ) { return urlPq.size( ) == 0; }
     };

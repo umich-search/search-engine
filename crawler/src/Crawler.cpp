@@ -4,18 +4,26 @@
 Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendManager *manager ) 
     : ThreadPool( init ), frontier( frontier ), visited( visited ), manager( manager ) { }
 
-Crawler::~Crawler( ) { }
+Crawler::~Crawler( ) { 
+    indexConstructor.resolveChunkMem();
+}
 
+
+// TODO: another thread that pushes URLs to crawler thread pool?
+// Issue: Unsure of rate of crawler ratio to rate of push to thread pool
 void Crawler::DoTask( Task task, size_t threadID )
     {
     while ( alive || !frontier->Empty() )
-        {
+        { 
         // 1. Get a URL from the frontier
-        // TODO: add param to PopUrl() that decides whether to refresh PQ when empty
         String url = frontier->PopUrl( alive );
+
+        // TODO: check for robots.txt
+        this->parseRobot( url );
 
         // 2. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
+
         String html = LinuxGetHTML( parsedUrl );
 
         // 3. Parse the HTML for the webpage
@@ -29,7 +37,7 @@ void Crawler::DoTask( Task task, size_t threadID )
             }
 
         // 5. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser );
+        addWordsToIndex( htmlparser, url );
         }
     }
 
@@ -82,6 +90,7 @@ void Crawler::parseRobot( const String& robotUrl )
             while ( isspace( robotFile[i] ) || robotFile[i] == ':' ) ++i;
             while ( robotFile[i] != '\n' && robotFile[i] != '\r') 
                 temp += robotFile[i++];
+            // update the bloom filter
             visited->insert(rootUrl + temp);
             myfile << rootUrl + temp << '\n';
             temp = "";
@@ -93,8 +102,36 @@ void Crawler::parseRobot( const String& robotUrl )
         myfile.close();
     }
 
-void Crawler::addWordsToIndex( const HtmlParser& htmlparser )
-    {
-    // TODO: implement this function
-    return;
+void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )
+{
+        char title[MAX_TITLE_LENGTH];
+        size_t titleLength = 0;
+        cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
+
+        for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
+            size_t currTitleSize = htmlparser.titleWords[i].size();
+            const char * titleCstr = htmlparser.titleWords[i].cstr();
+            size_t currLoc = 0;
+            size_t startPos = 0;
+            while(titleCstr[currLoc] == '!') {
+                startPos++;
+            }
+            if(startPos != currTitleSize) {
+                indexConstructor.Insert(titleCstr + startPos, Title);
+            }
+            if(titleLength + currTitleSize + 1 < MAX_TITLE_LENGTH) {
+                strcat(title, htmlparser.titleWords[i].cstr());
+                char gap = ' ';
+                strcat(title, &gap);
+                titleLength += currTitleSize + 1;
+            }
+        }
+        for(unsigned int i = 0; i < htmlparser.words.size(); ++i) {
+            indexConstructor.Insert(htmlparser.words[i], Body);
+        }
+        
+        indexConstructor.Insert(String(title), url);
+        cout << "Inserted Document!" << endl;
+
+        return;
     }

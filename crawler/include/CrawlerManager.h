@@ -17,7 +17,7 @@ const size_t numMachine = 7;
 const int port = 0;
 const size_t queue_size = 1024;
 
-const char *Host[ numMachine ] = 
+static const char *Host[ numMachine ] = 
     {
     "127.0.0.0",
     "127.0.0.1",
@@ -37,7 +37,7 @@ class CrawlerManager : public ThreadPool
     public:
         CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited )
             : ThreadPool( init ), frontier( frontier ), visited( visited ) { }
-        ~CrawlerManager( );
+        ~CrawlerManager( ) { }
 
     protected:
         size_t myIndex;
@@ -48,27 +48,18 @@ class CrawlerManager : public ThreadPool
 class ListenManager : public CrawlerManager 
     {
     public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )
-            : CrawlerManager( init, frontier, visited ) 
-            {
-            socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
-            int yesval = 1;
-            setsockopt( socketFD, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) );
-
-            struct sockaddr_in addr;
-            makeListenAddr( &addr, port );
-            bind( socketFD, ( sockaddr * ) &addr, sizeof( addr ) );
-            // int myPort = getPort( socketFD );
-            listen( socketFD, queue_size );
-            }
-
-        ~ListenManager( )
-            {
-            close( socketFD );
-            }
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited );
+        ~ListenManager( );
 
     private:
         int socketFD;
+
+        static void *submitThread( void *arg )
+            {
+            ( ( ListenManager * )arg )->submitConnection( );
+            return nullptr;
+            }
+        void submitConnection( );
         void DoTask( Task task, size_t threadID ) override;
     };
 
@@ -77,7 +68,7 @@ class SendManager : public CrawlerManager
     public:
         SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
             : CrawlerManager( init, frontier, visited ) { }
-        ~SendManager( );
+        ~SendManager( ) { }
 
     private:
         void DoTask( Task task, size_t threadID ) override;

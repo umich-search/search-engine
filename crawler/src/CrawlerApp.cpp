@@ -1,26 +1,44 @@
 #include "CrawlerApp.h"
 
-CrawlerApp::CrawlerApp( const Parameters &param )
+// -- Crawler App Parameters
+const size_t NUM_CRAWL_THREADS = 10;
+const size_t NUM_SEND_THREADS = 10;
+const size_t NUM_LISTEN_THREADS = 10;
+const size_t NUM_DISK_QUEUE = 10;
+const size_t PQ_SIZE = 8;
+const int NUM_OBJECTS = 100000;
+const double FP_RATE = 0.0001;
+const char * FRONTIER_DIR = "frontier";
+const char * FILTER_DIR = "bloomfilter";
+const char * SEEDLIST_FILE = "seedlist.txt";
+
+CrawlerApp::CrawlerApp( )
     : frontier( 
-        param.frontierDir, 
-        param.numDiskQueue,
-        param.pqSize ),
-    visited(
-        param.filterDir,
-        param.numObjects,
-        param.fpRate ),
-    listenManager(
-        { "ListenManager", param.numListenThreads, &printMutex },
+        FRONTIER_DIR, 
+        NUM_DISK_QUEUE, 
+        PQ_SIZE ),
+    visited( 
+        FILTER_DIR, 
+        NUM_OBJECTS, 
+        FP_RATE ),
+    listenManager( 
+        { "ListenManager", NUM_LISTEN_THREADS, &printMutex },
         &frontier, &visited ),
     sendManager(
-        { "SendManager", param.numSendThreads, &printMutex },
+        { "SendManager", NUM_SEND_THREADS, &printMutex },
         &frontier, &visited ),
     crawlers(
-        { "Crawler", param.numCrawlThreads, &printMutex },
-        &frontier, &visited, &sendManager
-    )
+        { "Crawler", NUM_CRAWL_THREADS, &printMutex },
+        &frontier, &visited, &sendManager )
     {
+    std:cout << "Constructing Crawler App..." << std::endl;
     MutexInit( &printMutex, nullptr );
+    frontier.FrontierInit( SEEDLIST_FILE );
+    }
+
+CrawlerApp::~CrawlerApp( )
+    {
+    MutexDestroy( &printMutex );
     }
 
 CrawlerApp::~CrawlerApp( )
@@ -36,6 +54,8 @@ void CrawlerApp::Start( )
     sendManager.Start();
     // Start the crawler thread pool
     crawlers.Start();
+    for ( size_t i = 0; i < NUM_CRAWL_THREADS; ++i )
+        crawlers.PushTask( nullptr, false );
     }
 
 void CrawlerApp::Stop( )
@@ -46,35 +66,3 @@ void CrawlerApp::Stop( )
     sendManager.Stop();
     listenManager.Stop();
     }
-
-// int main ( int argc, char **argv )
-//     {
-//     // TODO: take application parameters as a file? 
-//     if ( argc != 4 )
-//         {
-//         std::cerr << "Usage: " << argv[0] << "numCrawlThreads numListenThreads numSendThreads " 
-//             << "insert frontier params here" << std::endl;
-//         return 1;
-//         }
-//     CrawlerApp::Parameters params;
-//     params.numCrawlThreads = atoi( argv[1] );
-//     params.numListenThreads = atoi( argv[2] );
-//     params.numSendThreads = atoi( argv[3] );
-//     CrawlerApp app( params );
-
-//     // TODO: thread print window simultaneous to user input
-//     char input;
-//     std::cout << "Start crawling? (Y/N): ";
-//     std::cin >> input;
-//     if ( tolower( input ) == 'y' )
-//         app.Start();
-//     else
-//         return;
-//     input = 'n';
-//     while ( tolower( input ) != 'y' )
-//         {
-//         std::cout << "Stop crawling? (Y/N): ";
-//         std::cin >> input;
-//         }
-//     app.Stop();
-//     }

@@ -2,6 +2,7 @@
 
 #include "Global.h"
 #include "IPost.h"
+#include <cstring>
 
 typedef size_t Location;
 
