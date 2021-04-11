@@ -28,6 +28,7 @@ public:
 
     void Start();
     void Stop();
+    void Join();
     bool PushTask( void *args, bool deleteArgs );
     bool IsAlive();
 
@@ -40,7 +41,6 @@ protected:
         };
 
     void Print( String output, size_t threadID );
-    void Join();
 
     // Override this function with the single task a thread should run
     virtual void DoTask( Task task, size_t threadID ) = 0;

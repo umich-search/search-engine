@@ -85,4 +85,5 @@ cleanObj:
 	rm -f $(OBJ) $(UOBJ)
 clean:
 	rm -rf $(EXEC) *.o
-
+cleanStorage:
+	rm -rf frontier/* index_files/* bloomfilter

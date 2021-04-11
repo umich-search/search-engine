@@ -9,7 +9,7 @@ const size_t PQ_SIZE = 8;
 const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
-const char * FILTER_DIR = "bloomfilter";
+const char * BLOOMFILTER_FILE = "bloomfilter";
 const char * SEEDLIST_FILE = "seedlist.txt";
 
 CrawlerApp::CrawlerApp( )
@@ -18,7 +18,7 @@ CrawlerApp::CrawlerApp( )
         NUM_DISK_QUEUE, 
         PQ_SIZE ),
     visited( 
-        FILTER_DIR, 
+        BLOOMFILTER_FILE, 
         NUM_OBJECTS, 
         FP_RATE ),
     listenManager( 
@@ -60,4 +60,11 @@ void CrawlerApp::Stop( )
     // Then stop URL management
     sendManager.Stop();
     listenManager.Stop();
+    }
+
+void CrawlerApp::Join()
+    {
+    sendManager.Join();
+    listenManager.Join();
+    crawlers.Join();
     }

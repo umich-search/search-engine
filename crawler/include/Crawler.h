@@ -24,8 +24,6 @@ class Crawler : public ThreadPool
         Crawler( Init init, Frontier *froniter, FileBloomfilter *visited, SendManager *manager );
         ~Crawler( );
 
-        void parseRobot( const String& robotUrl );
-
     private:
         Frontier *frontier;
         FileBloomfilter *visited;
@@ -35,7 +33,8 @@ class Crawler : public ThreadPool
         void DoTask( Task task, size_t threadID ) override;
 
         String retrieveWebpage( const ParsedUrl& url );
+        void parseRobot( const String& robotUrl );
 
         // TODO: ( with the index team ) add words to index
-        void addWordsToIndex( const HtmlParser& htmlparser, String url );
+        void addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID );
     };
