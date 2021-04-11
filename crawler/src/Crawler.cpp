@@ -11,21 +11,12 @@ Crawler::~Crawler( ) {
 // Issue: Unsure of rate of crawler ratio to rate of push to thread pool
 void Crawler::DoTask( Task task, size_t threadID )
     {
-        IndexConstructor ic(threadID);
+    IndexConstructor ic(threadID);
     while ( alive || !frontier->Empty() )
         { 
         // 1. Get a URL from the frontier
         String url = frontier->PopUrl( alive );
-<<<<<<< HEAD
-
-        // DEBUG USE
-        String pt = this->alive ? "alive " : "dead ";
-        pt += url;
-        this->Print( pt, threadID );
-
-=======
         Print(String("Popped: ") + url, threadID);
->>>>>>> 03b40739fa18a505c329c1e58eedf76344cf435c
         // TODO: check for robots.txt
         this->parseRobot( url );
         Print(String("ParseRobot: ") + url, threadID);
@@ -63,7 +54,7 @@ void Crawler::DoTask( Task task, size_t threadID )
         addWordsToIndex( htmlparser, url, ic );
         Print(String("Inserted in index: ") + url, threadID );
         }
-        ic.resolveChunkMem();
+    ic.resolveChunkMem();
     }
 
 void Crawler::parseRobot( const String& robotUrl )

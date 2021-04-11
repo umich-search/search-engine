@@ -21,7 +21,7 @@ int FileManager::resolveMetadataPath(char * pathname, size_t threadID) {
     strcpy(buffer, CHUNKS_METADATA_DIRECTORY);
     strcat(buffer,"thread-%zu-metadata.mdata");
     sprintf(pathname, buffer, threadID);
-
+    return 0;
 }
 
 int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,

@@ -49,6 +49,8 @@ String LinuxGetUrl( const ParsedUrl& url )
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_protocol = IPPROTO_TCP;
    getaddrinfo( url.Host, "80", &hints, &address );
+   if ( address == nullptr )
+      return "";
    // freeaddrinfo( &hints );
 
    // Create a TCP/IP socket.
@@ -56,6 +58,8 @@ String LinuxGetUrl( const ParsedUrl& url )
 
    // Connect the socket to the host address.
    int connectResult = connect( socketFD, address->ai_addr, address->ai_addrlen );
+   if ( connectResult == -1 )
+      return "";
 
    // Send a GET message.
    String message = "GET /";
@@ -133,6 +137,8 @@ String LinuxGetSsl( const ParsedUrl& url )
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_protocol = IPPROTO_TCP;
    getaddrinfo( url.Host, "443", &hints, &address );
+   if ( address == nullptr )
+      return "";
    // freeaddrinfo( &hints );
 
    // Create a TCP/IP socket.
@@ -141,6 +147,8 @@ String LinuxGetSsl( const ParsedUrl& url )
    // Connect the socket to the host address.
    // std::cout << url.Host << std::endl;
    int connectResult = connect( socketFD, address->ai_addr, address->ai_addrlen );
+   if ( connectResult == -1 )
+      return "";
 
    // set ssl library
    SSL_library_init( );

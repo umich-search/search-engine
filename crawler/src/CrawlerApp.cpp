@@ -12,7 +12,7 @@ const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
 const char * SEEDLIST_FILE = "seedlist.txt";
 
-CrawlerApp::CrawlerApp( )
+CrawlerApp::CrawlerApp( bool frontierInit )
     : frontier( 
         FRONTIER_DIR, 
         NUM_DISK_QUEUE, 
@@ -33,7 +33,11 @@ CrawlerApp::CrawlerApp( )
     {
     std:cout << "Constructing Crawler App..." << std::endl;
     MutexInit( &printMutex, nullptr );
-    frontier.FrontierInit( SEEDLIST_FILE );
+    if ( frontierInit ) 
+        {
+        std::cout << "Constructing frontier using seed list..." << std::endl;
+        frontier.FrontierInit( SEEDLIST_FILE );
+        }
     }
 
 CrawlerApp::~CrawlerApp( )
@@ -44,6 +48,7 @@ CrawlerApp::~CrawlerApp( )
 
 void CrawlerApp::Start( )
     {
+    std:cout << "Starting Crawler App..." << std::endl;
     // Start the manager thread pool
     listenManager.Start();
     sendManager.Start();

@@ -5,7 +5,7 @@
 class CrawlerApp
     {
     public:
-        CrawlerApp( );
+        CrawlerApp( bool frontierInit );
         ~CrawlerApp( );
 
         void Start();
