@@ -6,3 +6,4 @@ crawler/FrontierOpt.cpp
 crawler/FrontierOpt.h
 dq/
 frontier/
+.vs/
