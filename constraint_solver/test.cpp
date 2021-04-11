@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
    ifstream docs;
    docs.open("test.txt");
-   IndexConstructor ic;
+   IndexConstructor ic(0);
    while (docs){
       String term;
       docs >> term;
