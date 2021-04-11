@@ -18,14 +18,14 @@ public:
     // Get number of documents
     Location GetNumberOfDocuments( );
     // constructor
-    Dictionary(FileManager filemanager) {
+    Dictionary(FileManager filemanager, size_t threadID) : manager(threadID) {
         manager = filemanager;
         numberOfDocuments = filemanager.getNumDocuments();
         numberOfWords = filemanager.getIndexWords();
         numChunks = filemanager.getNumChunks();
     }
     // Default constructor
-    Dictionary() {
+    Dictionary(size_t threadID) : manager(threadID){
         numberOfDocuments = manager.getNumDocuments();
         numberOfWords = manager.getIndexWords();
         numChunks = manager.getNumChunks();

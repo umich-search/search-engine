@@ -128,7 +128,8 @@ int IndexConstructor::flushData() {
                            numberOfDocuments,
                            endLocation,
                            docDetails,
-                            currentChunkNum);
+                            currentChunkNum,
+                            threadID);
 }
 
 void IndexConstructor::createNewChunk() {

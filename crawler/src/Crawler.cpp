@@ -5,7 +5,6 @@ Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendM
     : ThreadPool( init ), frontier( frontier ), visited( visited ), manager( manager ) { }
 
 Crawler::~Crawler( ) { 
-    indexConstructor.resolveChunkMem();
 }
 
 
@@ -13,6 +12,7 @@ Crawler::~Crawler( ) {
 // Issue: Unsure of rate of crawler ratio to rate of push to thread pool
 void Crawler::DoTask( Task task, size_t threadID )
     {
+        IndexConstructor ic(threadID);
     while ( alive || !frontier->Empty() )
         { 
         // 1. Get a URL from the frontier
@@ -42,9 +42,10 @@ void Crawler::DoTask( Task task, size_t threadID )
         Print(String("Pushed parsed URLs: ") + url, threadID);
 
         // 5. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser, url, threadID );
+        addWordsToIndex( htmlparser, url, ic );
         Print(String("Inserted in index: ") + url, threadID );
         }
+        ic.resolveChunkMem();
     }
 
 void Crawler::parseRobot( const String& robotUrl )
@@ -108,7 +109,7 @@ void Crawler::parseRobot( const String& robotUrl )
         // myfile.close();
     }
 
-void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID )
+void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &indexConstructor )
 {
         char title[MAX_TITLE_LENGTH];
         size_t titleLength = 0;
