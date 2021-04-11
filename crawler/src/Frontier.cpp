@@ -176,7 +176,7 @@ String Frontier::PopUrl( bool alive )
                 {
                 String poppedUrl = urlPool[ poolIdx ]->PopFront( );
                 // if the read file pointer is at the EOF of the first file
-                if ( poppedUrl == String( "https://www." ) )
+                if ( poppedUrl.size( ) == 0 )
                     {
                     Unlock( poolMutexes[ poolIdx ] );
                     continue;
