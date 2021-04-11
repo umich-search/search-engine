@@ -7,7 +7,6 @@ Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendM
 Crawler::~Crawler( ) { 
 }
 
-
 // TODO: another thread that pushes URLs to crawler thread pool?
 // Issue: Unsure of rate of crawler ratio to rate of push to thread pool
 void Crawler::DoTask( Task task, size_t threadID )
@@ -17,21 +16,38 @@ void Crawler::DoTask( Task task, size_t threadID )
         { 
         // 1. Get a URL from the frontier
         String url = frontier->PopUrl( alive );
+<<<<<<< HEAD
+
+        // DEBUG USE
+        String pt = this->alive ? "alive " : "dead ";
+        pt += url;
+        this->Print( pt, threadID );
+
+=======
         Print(String("Popped: ") + url, threadID);
+>>>>>>> 03b40739fa18a505c329c1e58eedf76344cf435c
         // TODO: check for robots.txt
         this->parseRobot( url );
         Print(String("ParseRobot: ") + url, threadID);
+
+        // Print( "robot parsed", threadID );
 
         // 2. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
         Print(String("ParseURL: ") + url, threadID);
 
+        // Print( String( parsedUrl.Host ), threadID );
+
         String html = LinuxGetHTML( parsedUrl );
         Print(String("GetHTML: ") + url, threadID);
+
+        // this->Print( html, threadID );
 
         // 3. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
         Print(String("HTML parsed: ") + url, threadID);
+
+        // this->Print( "finish parsing html", threadID );
 
         // 4. Send the URLs found in the HTML back to the manager
         for ( Link& link : htmlparser.links )
@@ -40,6 +56,8 @@ void Crawler::DoTask( Task task, size_t threadID )
             manager->PushTask( (void *) newLink, true );
             }
         Print(String("Pushed parsed URLs: ") + url, threadID);
+
+        // this->Print( "I'm here", threadID );
 
         // 5. Add the words from the HTML to the index
         addWordsToIndex( htmlparser, url, ic );
@@ -50,11 +68,15 @@ void Crawler::DoTask( Task task, size_t threadID )
 
 void Crawler::parseRobot( const String& robotUrl )
     {
-    // std::ofstream myfile;
-    // myfile.open ("test.txt");
+    std::ofstream myfile;
+    myfile.open ("test.txt");
     ParsedUrl parsedUrl( robotUrl.cstr() );
     parsedUrl.Path = ROBOT_FILE;
+
+    // Print( "extract robots.txt", 0 );
     String robotFile = LinuxGetHTML( parsedUrl );
+    // Print( "finish downloads", 0 );
+
     String rootUrl = String(parsedUrl.Service) + String("://") + String(parsedUrl.Host);
     if ( *parsedUrl.Port ) rootUrl = rootUrl + ":" + String(parsedUrl.Port);
     String temp = "";
@@ -99,14 +121,14 @@ void Crawler::parseRobot( const String& robotUrl )
                 temp += robotFile[i++];
             // update the bloom filter
             visited->insert(rootUrl + temp);
-            // myfile << rootUrl + temp << '\n';
+            myfile << rootUrl + temp << '\n';
             temp = "";
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
         temp += robotFile[i];
         }
-        // myfile.close();
+        myfile.close();
     }
 
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &indexConstructor )
