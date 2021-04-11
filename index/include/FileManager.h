@@ -26,8 +26,9 @@ private:
       char dynamicSpace[];
    };
     
-    static int resolveChunkPath(size_t offset, char * pathname);
-    static int resolveDocsChunkPath(size_t offset, char * pathname);
+    static int resolveChunkPath(size_t offset, char * pathname, size_t threadID);
+    static int resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID);
+    static int resolveMetadataPath(char * pathname, size_t threadID);
     
     // Reads metadata file
     int ReadMetadata();
@@ -35,7 +36,7 @@ private:
                                 SharedPointer<EndDocPostingList>
                                 endDocList, const char *pathname);
     static int writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname );
-    static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks);
+    static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname);
 
 
 public:
@@ -43,11 +44,12 @@ public:
    SerialEndDocs * endDocListBlob;
    ChunksMetadata * chunksMetadata;
    const char * docsBlob;
-    
    void * chunkDetails;
+   size_t threadID;
     
-    FileManager() {
-        ReadMetadata();
+    FileManager(size_t thread) {
+      threadID = thread;
+      ReadMetadata();
     }
 
     static int WriteChunk(SharedPointer<TermHash> termIndex, 
@@ -57,7 +59,8 @@ public:
                   d_Occurence numDocs, 
                   Location endLocation,
                   ::vector<SharedPointer<DocumentDetails>> docDetails,
-                  size_t chunkIndex);
+                  size_t chunkIndex,
+                  size_t threadID);
     // Bring chunk into memory
     int ReadChunk(Offset chunkIndex);
     // Bring documents into memory

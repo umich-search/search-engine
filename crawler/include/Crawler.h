@@ -28,7 +28,6 @@ class Crawler : public ThreadPool
         Frontier *frontier;
         FileBloomfilter *visited;
         SendManager *manager;
-        IndexConstructor indexConstructor;
 
         void DoTask( Task task, size_t threadID ) override;
 
@@ -36,5 +35,5 @@ class Crawler : public ThreadPool
         void parseRobot( const String& robotUrl );
 
         // TODO: ( with the index team ) add words to index
-        void addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID );
+        void addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &IndexConstructor );
     };
