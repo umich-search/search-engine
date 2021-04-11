@@ -355,4 +355,5 @@ HtmlParser::HtmlParser( const char* buffer, size_t length )
             }
         }
     }
+    int x = 2;
 }

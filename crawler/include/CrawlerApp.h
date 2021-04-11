@@ -10,6 +10,7 @@ class CrawlerApp
 
         void Start();
         void Stop();
+        void Join();
 
     private:
         mutex_t printMutex;

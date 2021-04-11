@@ -36,7 +36,8 @@ class CrawlerManager : public ThreadPool
     {
     public:
         CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited )
-            : ThreadPool( init ), frontier( frontier ), visited( visited ) { }
+            : ThreadPool( init ), frontier( frontier ), visited( visited ),
+            myIndex( 1 ) { }
         ~CrawlerManager( ) { }
 
     protected:

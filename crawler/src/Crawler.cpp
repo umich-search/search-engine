@@ -16,28 +16,36 @@ void Crawler::DoTask( Task task, size_t threadID )
         { 
         // 1. Get a URL from the frontier
         String url = frontier->PopUrl( alive );
+<<<<<<< HEAD
 
         // DEBUG USE
         String pt = this->alive ? "alive " : "dead ";
         pt += url;
         this->Print( pt, threadID );
 
+=======
+        Print(String("Popped: ") + url, threadID);
+>>>>>>> 03b40739fa18a505c329c1e58eedf76344cf435c
         // TODO: check for robots.txt
         this->parseRobot( url );
+        Print(String("ParseRobot: ") + url, threadID);
 
         // Print( "robot parsed", threadID );
 
         // 2. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
+        Print(String("ParseURL: ") + url, threadID);
 
         // Print( String( parsedUrl.Host ), threadID );
 
         String html = LinuxGetHTML( parsedUrl );
+        Print(String("GetHTML: ") + url, threadID);
 
         // this->Print( html, threadID );
 
         // 3. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
+        Print(String("HTML parsed: ") + url, threadID);
 
         // this->Print( "finish parsing html", threadID );
 
@@ -47,11 +55,13 @@ void Crawler::DoTask( Task task, size_t threadID )
             Link* newLink = new Link( link );
             manager->PushTask( (void *) newLink, true );
             }
+        Print(String("Pushed parsed URLs: ") + url, threadID);
 
         // this->Print( "I'm here", threadID );
 
         // 5. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser, url );
+        addWordsToIndex( htmlparser, url, threadID );
+        Print(String("Inserted in index: ") + url, threadID );
         }
     }
 
@@ -84,7 +94,7 @@ void Crawler::parseRobot( const String& robotUrl )
                 temp = "";
                 ++i;
                 while ( isspace( robotFile[i] ) ) ++i;
-                while ( robotFile[i] != '\n' && robotFile[i] != '\r' ) 
+                while ( i < robotFile.size() && robotFile[i] != '\n' && robotFile[i] != '\r' ) 
                     temp += robotFile[i++];
                 if ( temp == "*" ) // found "User-agent: *" line
                     {
@@ -106,7 +116,7 @@ void Crawler::parseRobot( const String& robotUrl )
             {
             temp = "";
             while ( isspace( robotFile[i] ) || robotFile[i] == ':' ) ++i;
-            while ( robotFile[i] != '\n' && robotFile[i] != '\r') 
+            while ( i < robotFile.size() && robotFile[i] != '\n' && robotFile[i] != '\r' ) 
                 temp += robotFile[i++];
             // update the bloom filter
             visited->insert(rootUrl + temp);
@@ -120,11 +130,11 @@ void Crawler::parseRobot( const String& robotUrl )
         myfile.close();
     }
 
-void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )
+void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID )
 {
         char title[MAX_TITLE_LENGTH];
         size_t titleLength = 0;
-        cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
+        //cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
 
         for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
             size_t currTitleSize = htmlparser.titleWords[i].size();
@@ -149,7 +159,7 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )
         }
         
         indexConstructor.Insert(String(title), url);
-        cout << "Inserted Document!" << endl;
+        //cout << "Inserted Document!" << endl;
 
         return;
     }
