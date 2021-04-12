@@ -104,7 +104,7 @@ Location ISRWord::GetStartLocation() {
                 return result;
             }
         }
-        catch (std::string &) {
+        catch (const char *excep) {
             continue;
         }
     }
@@ -136,7 +136,7 @@ Location ISRWord::GetEndLocation() {
                 return result;
             }
         }
-        catch (std::string &) {
+        catch (const char *excep) {
             continue;
         }
     }
@@ -146,14 +146,28 @@ Location ISRWord::GetEndLocation() {
 d_Occurence ISRWord::GetDocumentCount() {
     size_t numChunks = manager.getChunkEndLocations().size();
     w_Occurence total = 0;
-    for (int i = 0; i < numChunks; i++)total += manager.GetTermList(term, i).getHeader()->numOfDocument;
+    for (int i = 0; i < numChunks; i++) {
+        try {
+            total += manager.GetTermList(term, i).getHeader()->numOfDocument;
+        }
+        catch(const char* excep){
+            continue;
+        }
+    }
     return total;
 }
 
 w_Occurence ISRWord::GetNumberOfOccurrences() {
     size_t numChunks = manager.getChunkEndLocations().size();
     w_Occurence total = 0;
-    for (int i = 0; i < numChunks; i++)total += manager.GetTermList(term, i).getHeader()->numOfOccurence;
+    for (int i = 0; i < numChunks; i++) {
+        try {
+            total += manager.GetTermList(term, i).getHeader()->numOfOccurence;
+        }
+        catch(const char* excep){
+            continue;
+        }
+    }
     return total;
 }
 
@@ -218,7 +232,7 @@ Post *ISREndDoc::Seek(Location target) {
             currIndex = temp;
             break;
         }
-        catch (const char *excep) {
+        catch (const char * excep) {
             continue;
         }
     }
@@ -246,7 +260,7 @@ Location ISREndDoc::GetStartLocation() {
             if (chunk != 0)result += endLocs[chunk - 1];
             return result;
         }
-        catch (std::string &) {
+        catch (const char* exception) {
             continue;
         }
     }
@@ -275,7 +289,7 @@ Location ISREndDoc::GetEndLocation() {
             if (chunk != 0)result += endLocs[chunk - 1];
             return result;
         }
-        catch (std::string &) {
+        catch (const char * exception) {
             continue;
         }
     }
