@@ -11,14 +11,14 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
    ifstream docs;
-   docs.open("test.txt");
+   docs.open("testdoc.txt");
    IndexConstructor ic(0);
    String term;
    char term0[10];
    char* pos=term0;
-   while (docs){
-      char charr;
-      docs >> charr;
+   char charr;
+   while (docs.get(charr))
+      {
       if (charr == '#')
          break;
       else if (charr == '/')
@@ -41,15 +41,19 @@ int main(int argc, char *argv[]) {
 
    // helper: create three ISRWord items
    ISREndDoc *EndDoc = dict.OpenISREndDoc();
-   ISRWord *word_quick = new ISRWord(manager, "quick\0");
-   ISRWord *word_brown = new ISRWord(manager, "brown\0");
-   ISRWord *word_fox = new ISRWord(manager, "fox\0");
+   char quick[] = {'q', 'u', 'i', 'c', 'k', '\0'};
+   char brown[] = {'b', 'r', 'o', 'w', 'n', '\0'};
+   char fox[] = {'f', 'o', 'x', '\0'};
+
+   ISRWord *word_quick = dict.OpenISRWord(quick);
+   ISRWord *word_brown = dict.OpenISRWord(brown);
+   ISRWord *word_fox = dict.OpenISRWord(fox);
 
 // query 1: quick | fox
    ISR *terms_q1[] = {word_quick, word_fox};
    ISROr *q1 = new ISROr(terms_q1, 2);
    ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
-   cout << "Results:" << endl;
+   cout << "q1 Results:" << endl;
    for (unsigned i = 0; i < result1.size(); ++i)
       {
       cout << result1[i]->GetStartLocation() << " " << result1[i]->GetEndLocation() << endl;
@@ -59,7 +63,7 @@ int main(int argc, char *argv[]) {
   ISR *terms_q2[] = {word_quick, word_brown, word_quick};
    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
    ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
-   cout << "Results:" << endl;
+   cout << "q2 Results:" << endl;
    for (unsigned i = 0; i < result2.size(); ++i)
       {
       cout << result2[i]->GetStartLocation() << " " << result2[i]->GetEndLocation() << endl;
@@ -69,7 +73,7 @@ int main(int argc, char *argv[]) {
    ISR *terms_q3[] = {word_quick, word_fox};
    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
    ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
-   cout << "Results:" << endl;
+   cout << "q3 Results:" << endl;
    for (unsigned i = 0; i < result3.size(); ++i)
       {
       cout << result3[i]->GetStartLocation() << " " << result3[i]->GetEndLocation() << endl;
@@ -81,7 +85,7 @@ int main(int argc, char *argv[]) {
    ISR *terms_q4[] = {word_quick};
    ISROr *q4 = new ISROr(terms_q4, 1);
    ::vector<Post*> result4 = *ConstraintSolver(EndDoc, q4);
-   cout << "Results:" << endl;
+   cout << "q4 Results:" << endl;
    for (unsigned i = 0; i < result4.size(); ++i)
       {
       cout << result4[i]->GetStartLocation() << " " << result4[i]->GetEndLocation() << endl;
