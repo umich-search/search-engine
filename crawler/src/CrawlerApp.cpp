@@ -30,7 +30,7 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
         { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID },
         &frontier, &visited, &sendManager )
     {
-    std:cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
+    std::cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
@@ -49,7 +49,7 @@ CrawlerApp::~CrawlerApp( )
 
 void CrawlerApp::Start( )
     {
-    std:cout << "Starting Crawler App..." << std::endl;
+    std::cout << "Starting Crawler App..." << std::endl;
     // Start the manager thread pool
     listenManager.Start();
     sendManager.Start();

@@ -6,7 +6,6 @@
 #include "Concurrency.h"
 #include <string.h>
 #include <openssl/md5.h>
-using namespace std;
 
 class Bloomfilter {
 public:
