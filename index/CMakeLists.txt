@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(search_engine_index)
 
-set(SOURCES 	test/main.cpp 
+set(SOURCES 	test/test.cpp
 		src/Dictionary.cpp		
 		src/FileManager.cpp		
 		src/ISR.cpp			
@@ -33,7 +33,7 @@ set(HEADERS	include/CommonUtil.h
 		include/PostingList.h
 		../utility/include/Common.h
 
-)
+		test/test.cpp)
 
 project(search_engine)
 

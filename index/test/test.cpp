@@ -81,6 +81,7 @@ int main(int argc, char *argv[]) {
         isrdoc.Next();
         ASSERT(isrdoc.GetCurrentPost()->GetStartLocation(),==,202*i+200);
     }
+    cout<<"hhhhhh"<<endl;
     /*
         Three chunks of 50
         seek(150);
