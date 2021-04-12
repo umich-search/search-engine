@@ -1,2 +1,2 @@
-quick	brown	fox	/	quick	brown	quick	brown	quick	/	#
-0	1	2	3	4	5	6	7	8	9	10
+quick	brown	fox	/	quick	brown	quick	brown	quick	/	fox	brown	quick	fox	/	#
+0	1	2	3	5	6	7	8	9	10	12	13	14	15	16	18

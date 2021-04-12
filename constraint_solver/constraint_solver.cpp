@@ -7,17 +7,21 @@
 #include "../utility/include/Vector.h"
 #include "../index/include/Dictionary.h"
 
+// FOR TESTING ONLY!
+using namespace std;
+
 ::vector<Post*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
     {
-    // TODO: assumed index start at location 1
     Location currentLocation = 0;
     Post* match = nullptr;
     ::vector<Post*>* posts = new ::vector<Post*>(); 
     while ( match = queryRoot->Seek(currentLocation) )
         {
         EndDoc->Seek(match->GetStartLocation());
-        currentLocation = EndDoc->GetEndLocation();
+        cout<<"EndDoc start: "<<EndDoc->GetStartLocation()<<" EndDoc end: "<<EndDoc->GetEndLocation()<<endl;
+        currentLocation = EndDoc->GetStartLocation();
         Location startLocation = currentLocation - EndDoc->GetDocumentLength();
+        cout << " DocLength: " << EndDoc->GetDocumentLength() << " Start: " << startLocation << ", End: " << currentLocation << endl;
         Post* document = new Post(startLocation, currentLocation);
         posts->pushBack(document);
         }
