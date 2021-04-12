@@ -1,8 +1,9 @@
 #include "Frontier.h"
+#include "Common.h"
+#include "BloomFilter.h"
+#include <fstream>
 
 // to use this function, compile with HashTable.cpp
-
-uint32_t fnvHash( const char *data, size_t length );
 
 bool Frontier::url_t::operator== ( const url_t& other ) const
     {
@@ -120,7 +121,7 @@ Frontier::~Frontier( )
         }
     }
 
-void Frontier::FrontierInit( const char *seedFile )
+void Frontier::FrontierInit( const char *seedFile, FileBloomfilter *filter )
     {
     FILE *fp = fopen( seedFile, "r" );
     char *linePtr = nullptr;
@@ -128,7 +129,10 @@ void Frontier::FrontierInit( const char *seedFile )
     ssize_t bytes;
     while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
         {
-        Link lk( linePtr, bytes - 1 );  // excluding the trailing '\n'
+        String url ( "https://" );
+        url += String( linePtr, bytes - 2 ); // excluding the trailing '\n'
+        filter->insert( url );
+        Link lk( url );  
         PushUrl( lk );
         }
     free( linePtr );
@@ -147,10 +151,16 @@ void Frontier::PushUrl( Link& link )
     Unlock( poolMutexes[ dqIdx ]);
     }
 
-String Frontier::PopUrl( )
+String Frontier::PopUrl( bool alive )
     {
     Lock( &pqMutex );
-    // if the pq is empty, refills it
+    // if not alive and the pq is empty
+    if ( !alive && urlPq.empty( ) )
+        {
+        Unlock( &pqMutex );
+        return String( "" );
+        }
+    // if alive and the pq is empty, refills it
     if ( urlPq.empty( ) )
         {
         while ( urlPq.size( ) < pqSize )

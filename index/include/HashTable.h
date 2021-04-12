@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.h"
+#include <cstring>
 // Number of buckets in hashtable during construction
 #define INITIAL_HASHTABLE_SIZE 5
 #define WRITE_TO_DISK true

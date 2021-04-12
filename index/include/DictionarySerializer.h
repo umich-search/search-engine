@@ -177,6 +177,9 @@ struct SerialTuple
          // return nullptr.
 
          fnvHash_t hashValue = fnvHash( key, strlen ( key ) );
+         if(NumberOfBuckets == 0) {
+            return nullptr;
+         }
          size_t bucket = Buckets[ hashValue % NumberOfBuckets ];
          if ( !bucket )
             return nullptr;

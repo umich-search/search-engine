@@ -46,6 +46,9 @@ int IndexConstructor::Insert( String term, Type type ) {
 
     if(termTuple) {
         postings = termTuple->value;
+        if(!cdTuple) {
+            constructionData->Find( term );
+        }
         cd = cdTuple->value;
         delta = endLocation - cd->latestTermLoc;
     } else {
@@ -66,6 +69,9 @@ int IndexConstructor::Insert( String term, Type type ) {
         numberOfUniqueWords++;
         memoryAlloc += sizeof(w_Occurence) + sizeof(d_Occurence) + sizeof(type) + strlen(term.cstr()) + 1;
         memoryAlloc += NUM_SYNC_POINTS * 2 * sizeof(size_t);
+        if(termIndex->Find(term) == nullptr || constructionData->Find(term) == nullptr) {
+            throw "Unable to add term or cosntruction data";
+        }
 
     }
 
@@ -122,7 +128,8 @@ int IndexConstructor::flushData() {
                            numberOfDocuments,
                            endLocation,
                            docDetails,
-                            currentChunkNum);
+                            currentChunkNum,
+                            threadID);
 }
 
 void IndexConstructor::createNewChunk() {
@@ -136,6 +143,9 @@ void IndexConstructor::createSynchronization() {
     for (  TermHash::Iterator iterator = termIndex->begin();
             iterator != termIndex->end( );
             ++iterator ) {
+                if(constructionData->Find(iterator->key) == nullptr) {
+                    constructionData->Find(iterator->key);
+                }
                         createSeekIndex(iterator->value,
                             constructionData->Find(iterator->key)->value->firstTermLoc,
                             numLowBits

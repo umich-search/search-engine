@@ -1,7 +1,7 @@
 // Abstract ISR definition.
 #include<limits>
-#include "../index/dictionary.h"
-#include "abstractISR.h"
+#include "../index/include/Dictionary.h"
+#include "AbstractISR.h"
 
 size_t min(size_t a, size_t b)
    {
@@ -13,12 +13,10 @@ size_t max(size_t a, size_t b)
    return a > b ? a : b;
    }
 
-ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms)
+ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
+      NumberOfTerms(NumberOfTerms), nearestTerm(0), nearestStartLocation(0),
+      nearestEndLocation(0)
    {
-   EndDoc = Dictionary::OpenISREndDoc();
-   nearestTerm = 0;
-   nearestStartLocation = 0;
-   nearestEndLocation = 0;
    }
 
 Location ISROr::GetStartLocation( )
@@ -91,26 +89,40 @@ Post* ISROr::Next( )
    return ISROr::Seek( nearestStartLocation );
    }
 
-Post* ISROr::NextDocument( )
-   {
-   // Seek all the ISRs to the first occurrence just past
-   // the end of this document.
+// Post* ISROr::NextDocument( )
+//    {
+//    // Seek all the ISRs to the first occurrence just past
+//    // the end of this document.
    
-   // return (start, end) of first match
+//    // return (start, end) of first match
 
-   // TODO: DocEnd + 1 need ot be checked
-   // TODO: whether use document post or match post?
-   return Seek( EndDoc->Seek(nearestEndLocation)->GetEndLocation( ) );
-   }
+//    // TODO: DocEnd + 1 need ot be checked
+//    // TODO: whether use document post or match post?
+//    return Seek( EndDoc->Seek(nearestEndLocation)->GetEndLocation( ) );
+//    }
 
+ Post* ISROr::NextEndDoc()
+    {
+    return nullptr;
+    }
 
-ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms) 
+ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(Terms), NumberOfTerms(NumberOfTerms) 
    {
-   EndDoc = Dictionary::OpenISREndDoc();
+   EndDoc = dict->OpenISREndDoc();
    nearestTerm = 0;
    farthestTerm = 0;
    nearestStartLocation = 0;
    nearestEndLocation = 0;
+   }
+
+Location ISRAnd::GetStartLocation( )
+   {
+   return nearestStartLocation;
+   }
+
+Location ISRAnd::GetEndLocation( )
+   {
+   return nearestEndLocation;
    }
 
 Post* ISRAnd::Seek( Location target )
@@ -192,21 +204,35 @@ Post* ISRAnd::Next( )
    return ISRAnd::Seek( nearestStartLocation );
    }
 
-Post* ISRAnd::NextDocument( )
+// Post* ISRAnd::NextDocument( )
+//    {
+//    // Seek all the ISRs to the first occurrence just past
+//    // the end of this document.
+
+//    // return (start, end) of first match
+
+//    // TODO: DocEnd + 1 need ot be checked
+//    // TODO: whether use document post or match post?
+//    return Seek( EndDoc->Seek(nearestEndLocation)->GetEndLocation( ) );
+//    }
+
+Post* ISRAnd::NextEndDoc()
    {
-   // Seek all the ISRs to the first occurrence just past
-   // the end of this document.
-
-   // return (start, end) of first match
-
-   // TODO: DocEnd + 1 need ot be checked
-   // TODO: whether use document post or match post?
-   return Seek( EndDoc->Seek(nearestEndLocation)->GetEndLocation( ) );
+   return nullptr;
    }
 
 ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)
    {
-   EndDoc = Dictionary::OpenISREndDoc();
+   }
+
+Location ISRPhrase::GetStartLocation( )
+   {
+   return nearestStartLocation;
+   }
+
+Location ISRPhrase::GetEndLocation( )
+   {
+   return nearestStartLocation + NumberOfTerms - 1;
    }
 
 Post* ISRPhrase::Seek( Location target )
@@ -225,7 +251,7 @@ Post* ISRPhrase::Seek( Location target )
    // used algorithm on textbook
    do
       {
-      for (size_t i = 0, i < NumberOfTerms; ++i)
+      for (size_t i = 0; i < NumberOfTerms; ++i)
          {
          ISR *Term = *(Terms + i);
          Post* nextPost = Term->Seek(target);
@@ -236,7 +262,7 @@ Post* ISRPhrase::Seek( Location target )
             target = nextPost->GetStartLocation();
          }
       Location nextStartLocation = target - NumberOfTerms;
-      for (size_t i = 0, i < NumberOfTerms; ++i)
+      for (size_t i = 0; i < NumberOfTerms; ++i)
          {
          ISR *Term = *(Terms + i);
          Location desiredLocation = nextStartLocation + i + 1;
@@ -259,18 +285,24 @@ Post* ISRPhrase::Next( )
    return Seek( nearestStartLocation );
    }
 
-Post* ISRPhrase::NextDocument( )
-   {
-   // Seek all the ISRs to the first occurrence just past
-   // the end of this document.
+// Post* ISRPhrase::NextDocument( )
+//    {
+//    // Seek all the ISRs to the first occurrence just past
+//    // the end of this document.
    
-   // return (start, end) of first match
+//    // return (start, end) of first match
 
-   // TODO: DocEnd + 1 need ot be checked
-   // TODO: whether use document post or match post?
-   return Seek( EndDoc->Seek(nearestStartLocation)->GetEndLocation( ) );
+//    // TODO: DocEnd + 1 need ot be checked
+//    // TODO: whether use document post or match post?
+//    return Seek( EndDoc->Seek(nearestStartLocation)->GetEndLocation( ) );
+//    }
+
+Post* ISRPhrase::NextEndDoc()
+   {
+   return nullptr;
    }
 
+   /*
 Post* ISRContainer::Seek( Location target )
    {
    // 1. Seek all the included ISRs to the first occurrence beginning at
@@ -292,4 +324,4 @@ Post* ISRContainer::Next( )
    {
    Seek( Contained[ nearestContained]->GetStartlocation( ) + 1 );
    }
-
+*/

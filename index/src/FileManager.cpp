@@ -1,24 +1,34 @@
 
 #include "FileManager.h"
 
-int FileManager::resolveChunkPath(size_t offset, char * pathname) {
+int FileManager::resolveChunkPath(size_t offset, char * pathname, size_t threadID) {
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNK_DIRECTORY);
-    strcat(buffer, "%zu.chunk");
-    sprintf(pathname, buffer, offset);
+    strcat(buffer, "thread-%zu-%zu.chunk");
+    sprintf(pathname, buffer, threadID, offset);
     return 0;
 }
-int FileManager::resolveDocsChunkPath(size_t offset, char * pathname) {
+int FileManager::resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID) {
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNK_DIRECTORY);
-    strcat(buffer, "%zu.dchunk");
-    sprintf(pathname, buffer, offset);
+    strcat(buffer, "thread-%zu-%zu.dchunk");
+    sprintf(pathname, buffer, threadID, offset);
+    return 0;
+}
+
+int FileManager::resolveMetadataPath(char * pathname, size_t threadID) {
+    char buffer[MAX_PATHNAME_LENGTH];
+    strcpy(buffer, CHUNKS_METADATA_DIRECTORY);
+    strcat(buffer,"thread-%zu-metadata.mdata");
+    sprintf(pathname, buffer, threadID);
     return 0;
 }
 
 int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                         SharedPointer<EndDocPostingList>
                                          endDocList, const char *pathname){
+    // << "Writing chunks to file:  " << pathname << std::endl;
+
     void * blob;
     int f_chunk = open( pathname,
                         O_CREAT | O_RDWR,
@@ -64,6 +74,7 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
 
 
 int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname ) {
+    // << "Writing docs to file:  " << pathname << std::endl;
     void * docDetailsBlob;
     size_t docDetailsSize = docDetails.size() * DOCUMENT_SIZE;
     if(docDetailsSize == 0) {
@@ -101,7 +112,7 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
     return 0;
 }
 
-int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks) {
+int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname) {
     ChunksMetadata *metadata;
     size_t numWordsSize, numUniqueWordsSize, numDocsSize, endLocationSize;
     numWordsSize = sizeof(w_Occurence);
@@ -109,7 +120,7 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
     numDocsSize = sizeof(d_Occurence);
     endLocationSize = sizeof(endLocation);
     
-    int f_metadata = open( CHUNKS_METADATA_PATH,
+    int f_metadata = open( pathname,
                            O_CREAT |
                            O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
@@ -171,15 +182,18 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
                   d_Occurence numDocs, 
                   Location endLocation,
                   ::vector<SharedPointer<DocumentDetails>> docDetails,
-                  size_t numChunks)
+                  size_t numChunks,
+                  size_t threadID)
    {
        char chunkFile[MAX_PATHNAME_LENGTH];
        char docsFile[MAX_PATHNAME_LENGTH];
-       resolveChunkPath(numChunks, chunkFile);
-       resolveDocsChunkPath(numChunks, docsFile);
+       char metadataFile[MAX_PATHNAME_LENGTH];
+       resolveChunkPath(numChunks, chunkFile, threadID);
+       resolveDocsChunkPath(numChunks, docsFile, threadID);
+       resolveMetadataPath(metadataFile, threadID );
        writePostingListsToFile(termIndex, endDocList, chunkFile);
        writeDocsToFile(docDetails, docsFile);
-       writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks );
+       writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks, metadataFile );
        return 0;
    }
 
@@ -188,7 +202,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
             throw "Error: Attempting to read more than available chunks";
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
-        resolveChunkPath(chunkIndex, chunkFile);
+        resolveChunkPath(chunkIndex, chunkFile, threadID);
         void * blob;
         int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
         if (f_chunk == -1 ) {
@@ -213,7 +227,7 @@ int FileManager::ReadDocuments(Offset docsChunkIndex) {
         throw "Error: Attempting to read more than available chunks";
     }
     char docsChunkFile[MAX_PATHNAME_LENGTH];
-    resolveDocsChunkPath(docsChunkIndex, docsChunkFile);
+    resolveDocsChunkPath(docsChunkIndex, docsChunkFile, threadID);
     void * blob;
     int f_doc_chunk = open( docsChunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
     if (f_doc_chunk == -1 ) {
@@ -285,11 +299,13 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 
 
 int FileManager::ReadMetadata() {
-    int f_metadata = open( CHUNKS_METADATA_PATH,
+    char metadataFile[MAX_PATHNAME_LENGTH];
+    resolveMetadataPath(metadataFile, threadID);
+    int f_metadata = open( metadataFile,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
     if(f_metadata == -1) {
-        std::cerr << "Error openning file " << CHUNKS_METADATA_PATH << " with errno = " << strerror( errno ) << std::endl;
+        std::cerr << "Error openning file " << metadataFile << " with errno = " << strerror( errno ) << std::endl;
         return -1;
     }
     if(FileSize(f_metadata) == 0) {

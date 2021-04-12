@@ -1,13 +1,15 @@
+// Constraint solver function
+// Input: ISR Tree from query compiler "queryRoot"
+// Output: Array of Post with (start, end) of all matching documents "posts"
 #include <iostream>
-#include "ISR.h"
-#include "../utility/HashTable.h"
-#include "../utility/Common.h"
-#include "../index/dictionary.h"
+#include "../index/include/ISR.h"
+#include "AbstractISR.h"
+#include "../utility/include/Vector.h"
+#include "../index/include/Dictionary.h"
 
-::vector<Post*>* ConstraintSolver(ISR* queryRoot)
+::vector<Post*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
     {
     // TODO: assumed index start at location 1
-    ISR* EndDoc = Dictionary::OpenISREndDoc();
     Location currentLocation = 0;
     Post* match = nullptr;
     ::vector<Post*>* posts = new ::vector<Post*>(); 

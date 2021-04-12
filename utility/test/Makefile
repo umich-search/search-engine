@@ -25,7 +25,7 @@ LIBCRYPTO_CFLAGS = -I/usr/local/include
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 
 # TODO: add the name of the main source file here
-EXEC = SmartPointerTest
+EXEC = threadTest
 
 all: $(EXEC)
 
@@ -54,5 +54,5 @@ $(EXEC): $(EXEC).o $(UOBJ)
 cleanObj:
 	rm -f $(UOBJ)
 clean:
-	rm -rf $(EXEC) $(EXEC).o
+	rm -rf $(EXEC) *.o
 

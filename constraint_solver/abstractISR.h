@@ -1,17 +1,18 @@
 // Abstract ISR declaration.
-#include "ISR.h"
-#include "Post.h"
-#include "PostingList.h"
+#include "../index/include/Dictionary.h"
+#include "../index/include/ISR.h"
+#include "../index/include/Post.h"
+#include "../index/include/PostingList.h"
 #pragma once
 
-class AbstractISR: public ISR
-   {
-   public:
-      //Get post of next matching document
-      virtual Post* NextDocument( ) = 0;
-   }
+// class AbstractISR: public ISR
+//    {
+//    public:
+//       //Get post of next matching document
+//       virtual Post* NextDocument( ) = 0;
+//    };
 
-class ISROr: public AbstractISR
+class ISROr: public ISR
    {
    public:
       ISR **Terms;
@@ -31,7 +32,9 @@ class ISROr: public AbstractISR
       Post *Next( );
       // Seek all the ISRs to the first occurrence just past
       // the end of this document.
-      Post *NextDocument( );
+      // Post *NextDocument( );
+
+      Post *NextEndDoc();
 
 
    private:
@@ -41,28 +44,34 @@ class ISROr: public AbstractISR
       Location nearestStartLocation, nearestEndLocation;
    };
 
-class ISRAnd: public AbstractISR
+class ISRAnd: public ISR
    {
    public:
       ISR **Terms;
       unsigned NumberOfTerms;
       ISREndDoc *EndDoc;
 
-      ISRAnd( ISR **Terms, unsigned NumberOfTerms );
+      ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict );
+
+      Location GetStartLocation( );
+
+      Location GetEndLocation( );
 
       Post *Seek( Location target );
 
       Post *Next( );
       // Seek all the ISRs to the first occurrence just past
       // the end of this document.
-      Post *NextDocument( );
+      // Post *NextDocument( );
+
+      Post *NextEndDoc();
 
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
    };
 
-class ISRPhrase: public AbstractISR
+class ISRPhrase: public ISR
    {
    public:
       ISR **Terms;
@@ -70,17 +79,24 @@ class ISRPhrase: public AbstractISR
 
       ISRPhrase( ISR **Terms, unsigned NumberOfTerms );
 
+      Location GetStartLocation( );
+
+      Location GetEndLocation( );
+
       Post *Seek( Location target );
 
       Post *Next( );
 
-      Post *NextDocument( );
+      // Post *NextDocument( );
+
+      Post *NextEndDoc();
 
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation;
    };
 
+/*
 class ISRContainer: public AbstractISR
    {
    public:
@@ -96,4 +112,4 @@ class ISRContainer: public AbstractISR
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
-   };
+   };*/

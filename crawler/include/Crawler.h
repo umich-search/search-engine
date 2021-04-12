@@ -9,8 +9,7 @@
 #include "HtmlParser.h"
 #include "GetUrl.h"
 #include "Frontier.h"
-#define NUM_OBJECTS 1000
-#define FP_RATE 0.1
+#include "IndexConstructor.h"
 static const char *ROBOT_FILE = "robots.txt";
 
 // ----- Crawler.h
@@ -25,17 +24,17 @@ class Crawler : public ThreadPool
         Crawler( Init init, Frontier *froniter, FileBloomfilter *visited, SendManager *manager );
         ~Crawler( );
 
-        void parseRobot( const String& robotUrl );
-
     private:
         Frontier *frontier;
         FileBloomfilter *visited;
         SendManager *manager;
 
         void DoTask( Task task, size_t threadID ) override;
+        void Crawl( IndexConstructor &ic, size_t threadID );
 
         String retrieveWebpage( const ParsedUrl& url );
+        void parseRobot( const String& robotUrl );
 
         // TODO: ( with the index team ) add words to index
-        void addWordsToIndex( const HtmlParser& htmlparser );
+        void addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &IndexConstructor );
     };

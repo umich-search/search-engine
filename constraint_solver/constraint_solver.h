@@ -1,5 +1,5 @@
-#include "ISR.h"
-#include "../utility/Common.h"
-#include "../utility/Vector.h"
+#include "../index/include/ISR.h"
+#include "../utility/include/Common.h"
+#include "../utility/include/Vector.h"
 
-::vector<Post*>* ConstraintSolver(ISR* queryRoot);
+::vector<Post*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot);

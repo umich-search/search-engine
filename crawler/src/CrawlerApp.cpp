@@ -1,74 +1,76 @@
 #include "CrawlerApp.h"
 
-CrawlerApp::CrawlerApp( const Parameters &param )
+// -- Crawler App Parameters
+const size_t NUM_CRAWL_THREADS = 1;  // 10
+const size_t NUM_SEND_THREADS = 2;  // 10
+const size_t NUM_LISTEN_THREADS = 2;  // 10
+const size_t NUM_DISK_QUEUE = 2;
+const size_t PQ_SIZE = 8;
+const int NUM_OBJECTS = 100000;
+const double FP_RATE = 0.0001;
+const char * FRONTIER_DIR = "frontier";
+const char * BLOOMFILTER_FILE = "bloomfilter";
+
+CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
+    : frontier( 
+        FRONTIER_DIR, 
+        NUM_DISK_QUEUE, 
+        PQ_SIZE ),
+    visited( 
+        BLOOMFILTER_FILE, 
+        NUM_OBJECTS, 
+        FP_RATE ),
+    listenManager( 
+        { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID },
+        &frontier, &visited ),
+    sendManager(
+        { "SendManager", NUM_SEND_THREADS, &printMutex, machineID },
+        &frontier, &visited ),
+    crawlers(
+        { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID },
+        &frontier, &visited, &sendManager )
     {
+    std::cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
     MutexInit( &printMutex, nullptr );
-    // Initialize the frontier
-    frontier = Frontier( );
-    visited = FileBloomfilter( );
-    // Initialize the thread pools
-    ThreadPool::Init init;
-    init.printMutex = &printMutex;
-    init.name = "ListenManager";
-    init.numThreads = param.numListenThreads;
-    listenManager = ListenManager( init, &frontier, &visited );
-    init.name = "SendManager";
-    init.numThreads = param.numSendThreads;
-    sendManager = SendManager( init, &frontier, &visited );
-    init.name = "Crawler";
-    init.numThreads = param.numCrawlThreads;
-    crawlers = Crawler( init, &frontier, &visited, &sendManager );
+    if ( frontierInit ) 
+        {
+        //String seedFile = "seedlist/test.txt";
+        String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
+        std::cout << "Constructing frontier using seed list..." << std::endl;
+        frontier.FrontierInit( seedFile.cstr(), &visited );
+        }
+    }
+
+CrawlerApp::~CrawlerApp( )
+    {
+    Stop( );
+    MutexDestroy( &printMutex );
     }
 
 void CrawlerApp::Start( )
     {
+    std::cout << "Starting Crawler App..." << std::endl;
     // Start the manager thread pool
     listenManager.Start();
     sendManager.Start();
     // Start the crawler thread pool
     crawlers.Start();
+    for ( size_t i = 0; i < NUM_CRAWL_THREADS; ++i )
+        crawlers.PushTask( nullptr, false );
     }
 
 void CrawlerApp::Stop( )
     {
     // Stop crawling first
     crawlers.Stop();
-    crawlers.Join();
     // Then stop URL management
     sendManager.Stop();
     listenManager.Stop();
-    sendManager.Join();
-    listenManager.Join();
     }
 
-int main ( int argc, char **argv )
+void CrawlerApp::Join()
     {
-    // TODO: take application parameters as a file? 
-    if ( argc != 4 )
-        {
-        std::cerr << "Usage: " << argv[0] << "numCrawlThreads numListenThreads numSendThreads " 
-            << "insert frontier params here" << std::endl;
-        return 1;
-        }
-    CrawlerApp::Parameters params;
-    params.numCrawlThreads = atoi( argv[1] );
-    params.numListenThreads = atoi( argv[2] );
-    params.numSendThreads = atoi( argv[3] );
-    CrawlerApp app( params );
-
-    // TODO: thread print window simultaneous to user input
-    char input;
-    std::cout << "Start crawling? (Y/N): ";
-    std::cin >> input;
-    if ( tolower( input ) == 'y' )
-        app.Start();
-    else
-        return;
-    input = 'n';
-    while ( tolower( input ) != 'y' )
-        {
-        std::cout << "Stop crawling? (Y/N): ";
-        std::cin >> input;
-        }
-    app.Stop();
+    sendManager.Join();
+    listenManager.Join();
+    crawlers.Join();
     }

@@ -11,7 +11,6 @@
 #include <iostream>
 #include <fstream>
 #include "../include/HtmlParser.h"
-using namespace std;
 
 enum class Options
    {
@@ -31,58 +30,58 @@ void PrintParse( HtmlParser &parser )
       case Options::PrintSimplePage:
          // Print a simplified page
 
-         cout << "<!DOCTYPE html>" << endl << "<html>" << endl;
+         std::cout << "<!DOCTYPE html>" << std::endl << "<html>" << std::endl;
          
-         cout << "<title>" << endl;
+         std::cout << "<title>" << std::endl;
          for ( auto w : parser.titleWords )
-            cout << w << " ";
-         cout << endl << "</title>" << endl << endl;
+            std::cout << w << " ";
+         std::cout << std::endl << "</title>" << std::endl << std::endl;
 
-         cout << "<body style=\"font-family:Verdana,Arial,Helvetica,sans-serif;font-size:0.9em\">"
-               << endl << "<h2>" << endl << "Body text" << endl << "</h2>" << endl;
+         std::cout << "<body style=\"font-family:Verdana,Arial,Helvetica,sans-serif;font-size:0.9em\">"
+               << std::endl << "<h2>" << std::endl << "Body text" << std::endl << "</h2>" << std::endl;
          
-         cout << "<p>" << endl;
+         std::cout << "<p>" << std::endl;
          for ( auto w : parser.words )
-            cout << w << " ";
-         cout << endl << "<p>" << endl << endl;
+            std::cout << w << " ";
+         std::cout << std::endl << "<p>" << std::endl << std::endl;
 
-         cout << "<h2>" << endl << "Base = " << "<a href=\"" << parser.base <<
-            "\">" << parser.base << "</a>" << endl << "</h2>" << endl << endl;
+         std::cout << "<h2>" << std::endl << "Base = " << "<a href=\"" << parser.base <<
+            "\">" << parser.base << "</a>" << std::endl << "</h2>" << std::endl << std::endl;
 
-         cout << "<h2>" << endl << "Links" << endl << "</h2>" << endl;
+         std::cout << "<h2>" << std::endl << "Links" << std::endl << "</h2>" << std::endl;
          for ( auto link : parser.links )
             {
-            cout << "<p>" << endl << "<a href=\"" << link.URL << "\">" << link.URL << "</a> ( " ;
+            std::cout << "<p>" << std::endl << "<a href=\"" << link.URL << "\">" << link.URL << "</a> ( " ;
             for ( auto w : link.anchorText )
-               cout << w << " ";
-            cout << ")" << endl << "</p>" <<  endl;
+               std::cout << w << " ";
+            std::cout << ")" << std::endl << "</p>" <<  std::endl;
             }
 
-         cout << "</body>" << endl << "</html>" << endl;
+         std::cout << "</body>" << std::endl << "</html>" << std::endl;
          break;
 
       case Options::PrintWords:
          for ( auto w : parser.words )
-            cout << w << endl;
+            std::cout << w << std::endl;
          break;
 
       case Options::PrintTitleWords:
          for ( auto w : parser.titleWords )
-            cout << w << endl;
+            std::cout << w << std::endl;
          break;
 
       case Options::PrintLinks:
          for ( auto link : parser.links )
             {
-            cout << link.URL << " ( ";
+            std::cout << link.URL << " ( ";
             for ( auto w : link.anchorText )
-               cout << w << " ";
-            cout << ")" << endl;
+               std::cout << w << " ";
+            std::cout << ")" << std::endl;
             }
          break;
 
       case Options::PrintBase:
-         cout << parser.base << endl;
+         std::cout << parser.base << std::endl;
       }
    }
 
@@ -141,16 +140,16 @@ int main( int argc, char **argv )
    {
    if ( !( argc == 2 || argc == 3 && ValidOption( argv[ 1 ] ) ) )
       {
-      cout << "Usage:  HtmlParser [wtab] filename" << endl <<
-              endl <<
-              "By default, prints a simplified HTML page.  Options allow" << endl <<
-              "for only a section of the content to be printed.  Only one" << endl <<
-              "wtab option allowed at a time." << endl <<
-              endl <<
-              "   w  List the words, one per line." << endl <<
-              "   t  List the title words, one per line." << endl << 
-              "   a  list the links as URL( anchor text ), one per line." << endl <<
-              "   b  Print any base that was found." << endl;
+      std::cout << "Usage:  HtmlParser [wtab] filename" << std::endl <<
+              std::endl <<
+              "By default, prints a simplified HTML page.  Options allow" << std::endl <<
+              "for only a section of the content to be printed.  Only one" << std::endl <<
+              "wtab option allowed at a time." << std::endl <<
+              std::endl <<
+              "   w  List the words, one per line." << std::endl <<
+              "   t  List the title words, one per line." << std::endl << 
+              "   a  list the links as URL( anchor text ), one per line." << std::endl <<
+              "   b  Print any base that was found." << std::endl;
       exit( 1 );
       }
 
@@ -158,7 +157,7 @@ int main( int argc, char **argv )
    char *buffer = ReadFile( argv[ 1 + ( argc == 3 ) ], fileSize );
    if ( !buffer )
       {
-      cerr << "Could not open the file." << endl;
+      cerr << "Could not open the file." << std::endl;
       exit( 1 );
       }
 

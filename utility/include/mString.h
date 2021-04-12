@@ -55,6 +55,14 @@ public:
     // MODIFIES: *this
     // EFFECTS: Creates a String with equivalent contents to cstr
     String(const char *cstr, const size_t len) {
+        if ( len == 0 )
+            {
+            length = 0;
+            capacity = 1;
+            buffer = new char [ 1 ];
+            buffer[ 0 ] = '\0';
+            return;
+            }
         length=len;
         capacity = length * 2;
         buffer = new char[capacity];

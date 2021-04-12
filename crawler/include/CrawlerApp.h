@@ -5,19 +5,12 @@
 class CrawlerApp
     {
     public:
-        struct Parameters
-        {
-        size_t numCrawlThreads; // number of crawler threads
-        size_t numListenThreads; // number of threads listening on sockets
-        size_t numSendThreads; // number of threads sending on sockets
-        // TODO: add frontier parameters
-        };
-
-        CrawlerApp( const Parameters &param );
+        CrawlerApp( size_t machineID, bool frontierInit );
         ~CrawlerApp( );
 
         void Start();
         void Stop();
+        void Join();
 
     private:
         mutex_t printMutex;

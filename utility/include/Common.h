@@ -1,7 +1,8 @@
 #pragma once
 // Common code used by the various hashing sample applications.
-#include <vector>
-#include <string>
+#include "Vector.h"
+#include "mString.h"
+#include <cstring>
 typedef uint64_t fnvHash_t;
 // You may define additional helper routines here and in
 // Common.cpp.
@@ -61,6 +62,14 @@ static bool CompareEqual(const String &L,const String &R) {
     //cout << "Returning with : " << ret << endl;
     return ret;
 }
+
+template< class Type >
+void Swap( Type& x, Type& y ) noexcept
+    {
+    Type tmp = x;
+    x = y;
+    y = tmp;
+    }
 
 
 extern bool optVerbose;

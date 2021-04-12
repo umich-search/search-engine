@@ -48,14 +48,28 @@ String LinuxGetUrl( const ParsedUrl& url )
    hints.ai_family = AF_INET;
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_protocol = IPPROTO_TCP;
-   getaddrinfo( url.Host, "80", &hints, &address );
-   // freeaddrinfo( &hints );
+   int error = getaddrinfo( url.Host, "80", &hints, &address );
+   if ( error )
+      {
+      throw String("GetHTML: Error getting addr info");
+      }
 
    // Create a TCP/IP socket.
    int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+   if ( socketFD == -1 )
+      {
+      freeaddrinfo( address );
+      throw String("GetHTML: Error creating socket");
+      }
 
    // Connect the socket to the host address.
    int connectResult = connect( socketFD, address->ai_addr, address->ai_addrlen );
+   if ( connectResult == -1 )
+      {
+      freeaddrinfo( address );
+      close( socketFD );
+      throw String("GetHTML: Error connecting to host");
+      }
 
    // Send a GET message.
    String message = "GET /";
@@ -132,22 +146,41 @@ String LinuxGetSsl( const ParsedUrl& url )
    hints.ai_family = AF_INET;
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_protocol = IPPROTO_TCP;
-   getaddrinfo( url.Host, "443", &hints, &address );
-   // freeaddrinfo( &hints );
+   int error = getaddrinfo( url.Host, "443", &hints, &address );
+   if ( error )
+      {
+      throw String("GetHTML: Error getting addr info");
+      }
 
    // Create a TCP/IP socket.
    int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+   if ( socketFD == -1 )
+      {
+      freeaddrinfo( address );
+      throw String("GetHTML: Error creating socket");
+      }
 
    // Connect the socket to the host address.
    int connectResult = connect( socketFD, address->ai_addr, address->ai_addrlen );
+   if ( connectResult == -1 )
+      {
+      freeaddrinfo( address );
+      close( socketFD );
+      throw String("GetHTML: Error connecting to host");
+      }
 
    // set ssl library
    SSL_library_init( );
    SSL_CTX *ctx = SSL_CTX_new( SSLv23_method( ) );
    SSL *ssl = SSL_new( ctx );
    SSL_set_fd( ssl, socketFD );
-
-   SSL_connect( ssl );
+   connectResult = SSL_connect( ssl );
+   if ( connectResult != 1 )
+      {
+      freeaddrinfo( address );
+      close( socketFD );
+      throw String("GetHTML: Error connecting on SSL");
+      }
 
    // Send a GET message.
    String message = "GET /";
@@ -222,6 +255,5 @@ String LinuxGetHTML( const ParsedUrl& url )
       return LinuxGetSsl( url );
    else if ( !strncmp( url.Service, "http", 4 ) )
       return LinuxGetUrl( url );
-   std::cerr << "Don't support protocol " << url.Service << std::endl;
-   return "";
+   throw String("GetHTML: unknown service: ") + String(url.Service);
    }

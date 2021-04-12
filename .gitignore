@@ -5,4 +5,9 @@ index/.DS_Store
 crawler/FrontierOpt.cpp
 crawler/FrontierOpt.h
 dq/
-frontier/
+frontier/*
+.vs/
+crawler/run/index_files/*
+crawler/run/bloomfilter
+crawler/run/.FirstCrawl
+*.o

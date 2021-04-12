@@ -26,22 +26,33 @@ _SRC = $(filter-out $(SDIR)/FrontierOpt.cpp,$(_SRC_))
 SRC = $(filter-out $(SDIR)/HtmlParserDemo.cpp,$(_SRC))
 OBJ = $(patsubst $(SDIR)/%.cpp,$(ODIR)/%.o,$(SRC))
 
+# index
+IIDIR = ../../index/include
+ISDIR = ../../index/src
+IODIR = ../../index/obj
+
+IHEADERS = $(wildcard $(IIDIR)/*.h)
+ISRC = $(wildcard $(ISDIR)/*.cpp)
+IOBJ = $(patsubst $(ISDIR)/%.cpp, $(IODIR)/%.o, $(ISRC))
+
 #####################################################
 # 	compile commands
 #####################################################
 CXX = g++
-CXXFLAGS = -std=c++11 -g -I$(IDIR) -I$(UIDIR)
+CXXFLAGS = -std=c++11 -g -I$(IDIR) -I$(UIDIR) -I$(IIDIR)
 LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
-EXEC = FrontierTest
+EXEC = managerTestM1
 
 all: $(EXEC)
 
 utilityObj: $(UOBJ)
 
 crawlerObj: $(OBJ)
+
+indexObj: $(IOBJ)
 
 #############################################################################
 # update dependencies if any of the lib header or source file change
@@ -55,6 +66,9 @@ $(UODIR)/%.o: $(USDIR)/%.cpp $(UHEADERS)
 $(ODIR)/%.o: $(SDIR)/%.cpp $(UHEADERS) $(HEADERS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
+$(IODIR)/%.o: $(ISDIR)/%.cpp $(UHEADERS) $(IHEADERS)
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
 #############################################################################
 #  compile the main function and link to all the other files
 #############################################################################
@@ -62,7 +76,7 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(UHEADERS) $(HEADERS)
 $(EXEC).o: $(EXEC).cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ $^
 
-$(EXEC): $(EXEC).o $(OBJ) $(UOBJ)
+$(EXEC): $(EXEC).o $(OBJ) $(UOBJ) $(IOBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
 .PHONY: clean cleanObj utilityObj crawlerObj all
@@ -70,5 +84,6 @@ $(EXEC): $(EXEC).o $(OBJ) $(UOBJ)
 cleanObj:
 	rm -f $(OBJ) $(UOBJ)
 clean:
-	rm -rf $(EXEC) $(EXEC).o
-
+	rm -rf $(EXEC) *.o
+cleanStorage:
+	rm -rf frontier/* index_files/* bloomfilter

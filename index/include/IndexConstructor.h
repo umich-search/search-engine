@@ -10,6 +10,7 @@
 class IndexConstructor {
 public:
     IndexConstructor(w_Occurence uniqueWords, d_Occurence numDocs, w_Occurence numWords, Location firstDocEnd, Location endLocation, Location end, size_t currChunkNum) :
+                        fileManager(0),
                         numberOfUniqueWords(uniqueWords),
                         numberOfDocuments(numDocs),
                         numberOfWords(numWords),
@@ -23,15 +24,18 @@ public:
                             termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
                         }
     
-    IndexConstructor() :
-                        fileManager(),
+    IndexConstructor(size_t threadID = 0) :
+                        fileManager(threadID),
                         numberOfUniqueWords(0),
                         numberOfDocuments(fileManager.getNumDocuments()),
                         numberOfWords(fileManager.getIndexWords()),
                         firstDocEnd(0),
                         endLocation(0),
-                        currentChunkNum(fileManager.getNumChunks())
+                        currentChunkNum(fileManager.getNumChunks()),
+                        threadID(threadID),
+                        chunkMemoryAlloc(0)
                         {
+                            //std::cout << "Created Index constructor with numDocs: " << numberOfDocuments << " numChunks: " << currentChunkNum << std::endl;
                             endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
                             constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
                             termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
@@ -59,6 +63,7 @@ public:
     Location endLocation;
     size_t currentChunkNum;
     size_t chunkMemoryAlloc;
+    size_t threadID;
     void optimizeIndex();
     void createSynchronization();
     void createNewChunk();
