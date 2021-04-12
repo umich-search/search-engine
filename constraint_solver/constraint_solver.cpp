@@ -7,10 +7,9 @@
 #include "../utility/include/Vector.h"
 #include "../index/include/Dictionary.h"
 
-::vector<Post*>* ConstraintSolver(Dictionary* dict, ISR* queryRoot)
+::vector<Post*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
     {
     // TODO: assumed index start at location 1
-    ISREndDoc* EndDoc = dict->OpenISREndDoc();
     Location currentLocation = 0;
     Post* match = nullptr;
     ::vector<Post*>* posts = new ::vector<Post*>(); 

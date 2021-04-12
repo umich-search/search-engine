@@ -4,30 +4,43 @@
 #include "abstractISR.h"
 #include "../index/include/IndexConstructor.h"
 #include "../index/include/Dictionary.h"
+#include "../utility/include/mString.h"
 #include <filesystem>
+#include <string>
 using namespace std;
 
 int main(int argc, char *argv[]) {
    ifstream docs;
    docs.open("test.txt");
    IndexConstructor ic(0);
+   String term;
+   char term0[10];
+   char* pos=term0;
    while (docs){
-      String term;
-      docs >> term;
-      if (term == "#")
+      char charr;
+      docs >> charr;
+      if (charr == '#')
          break;
-      if (term == "/")
+      else if (charr == '/')
          ic.Insert("cat_title", "cat.com");
-      else
+      else if (charr != '\t')
+         *pos++ = charr;
+      else if (pos != term0)
+         {
+         *pos = 0;
+         pos = term0;
+         String term(term0);
          ic.Insert(term, Body);
+         }
       }
    ic.FinishConstruction();
    FileManager manager = ic.fileManager;
-   Dictionary dict(manager);
-   char word[] = {'c', 'a', 't', '\0'};
-   ISRWord word = *dict.OpenISRWord(word);
+   Dictionary dict(0);
+   // char word[] = {'c', 'a', 't', '\0'};
+   // ISRWord isrword = *dict.OpenISRWord(word);
 
    // helper: create three ISRWord items
+   ISREndDoc *EndDoc = dict.OpenISREndDoc();
    ISRWord *word_quick = new ISRWord(manager, "quick\0");
    ISRWord *word_brown = new ISRWord(manager, "brown\0");
    ISRWord *word_fox = new ISRWord(manager, "fox\0");
@@ -35,7 +48,7 @@ int main(int argc, char *argv[]) {
 // query 1: quick | fox
    ISR *terms_q1[] = {word_quick, word_fox};
    ISROr *q1 = new ISROr(terms_q1, 2);
-   ::vector<Post*> result1 = *ConstraintSolver(&dict, q1);
+   ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
    cout << "Results:" << endl;
    for (unsigned i = 0; i < result1.size(); ++i)
       {
@@ -45,8 +58,7 @@ int main(int argc, char *argv[]) {
 // query 2: "quick brown quick"
   ISR *terms_q2[] = {word_quick, word_brown, word_quick};
    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
-   ConstraintSolver(q2);
-   ::vector<Post*> result2 = *ConstraintSolver(&dict, q2);
+   ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
    cout << "Results:" << endl;
    for (unsigned i = 0; i < result2.size(); ++i)
       {
@@ -55,9 +67,8 @@ int main(int argc, char *argv[]) {
 
 // query 3: quick fox
    ISR *terms_q3[] = {word_quick, word_fox};
-   ISRAnd *q3 = new ISRAnd(terms_q3, 2);
-   ConstraintSolver(q3);
-   ::vector<Post*> result3 = *ConstraintSolver(&dict, q3);
+   ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
+   ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
    cout << "Results:" << endl;
    for (unsigned i = 0; i < result3.size(); ++i)
       {
@@ -69,12 +80,17 @@ int main(int argc, char *argv[]) {
 // query 4: quick
    ISR *terms_q4[] = {word_quick};
    ISROr *q4 = new ISROr(terms_q4, 1);
-   ::vector<Post*> result4 = *ConstraintSolver(&dict, q4);
+   ::vector<Post*> result4 = *ConstraintSolver(EndDoc, q4);
    cout << "Results:" << endl;
    for (unsigned i = 0; i < result4.size(); ++i)
       {
       cout << result4[i]->GetStartLocation() << " " << result4[i]->GetEndLocation() << endl;
       }
+
+// TODO: Seek tests
+
+// TODO: Next tests
+
 
    delete(q1);
    delete (q2);

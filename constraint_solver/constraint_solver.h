@@ -2,4 +2,4 @@
 #include "../utility/include/Common.h"
 #include "../utility/include/Vector.h"
 
-::vector<Post*>* ConstraintSolver(ISR* queryRoot);
+::vector<Post*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot);
