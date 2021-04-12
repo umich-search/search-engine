@@ -14,10 +14,11 @@ public:
         {
         String name;
         size_t numThreads;
+        size_t machineID;
         mutex_t *printMutex;
         Init( ) { };
-        Init( String s, size_t numT, mutex_t *pm )
-            : name( s ), numThreads( numT ), printMutex( pm )
+        Init( String s, size_t numT, mutex_t *pm, size_t mID )
+            : name( s ), numThreads( numT ), printMutex( pm ), machineID( mID )
             {
             }
         };
@@ -47,6 +48,7 @@ protected:
 
 private:
     String name;
+    size_t machineID;
     mutex_t *printMutex;
     mutex_t mutex;
 

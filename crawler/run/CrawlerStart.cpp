@@ -8,6 +8,11 @@ int main ( int argc, char **argv )
         return 1;
         }
     size_t machineID = atoi( argv[1] );
+    if ( machineID < 0 || machineID > 6 )
+        {
+        std::cerr << "Invalid machine ID: " << machineID << std::endl;
+        return 1;
+        }
     bool frontierInit = strncmp( argv[2], "1", 1 ) == 0;
     CrawlerApp app( machineID, frontierInit );
     app.Start();

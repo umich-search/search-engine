@@ -12,8 +12,8 @@ void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);
 void makeListenAddr(struct sockaddr_in *addr, int port);
 int getPort( int sockFd );
 
-ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t machineID )   
-    : CrawlerManager( init, frontier, visited, machineID )
+ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )   
+    : CrawlerManager( init, frontier, visited )
     {
     int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
 

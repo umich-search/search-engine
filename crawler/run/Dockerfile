@@ -1,14 +1,15 @@
-ARG MACHINE_ID=0
-
 FROM ubuntu:latest
 RUN apt-get -y update && apt-get install -y
 RUN apt-get install -y git make gcc g++ openssl libssl-dev
 
+# TODO: change the machine ID
+ARG MACHINE_ID=0
+RUN echo "Machine ID: $MACHINE_ID"
 RUN mkdir crawler
-COPY CrawlerStart /crawler
-COPY DockerStart.sh /crawler
-COPY seedlist.txt /crawler
-
 WORKDIR /crawler
-RUN mkdir frontier index_files
-CMD ["sh DockerStart"]
+RUN mkdir frontier index_files seedlist 
+COPY CrawlerStart .
+COPY DockerStart.sh .
+COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
+
+CMD ["./DockerStart.sh", "$MACHINE_ID"]

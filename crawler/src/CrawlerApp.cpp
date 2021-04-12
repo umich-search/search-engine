@@ -10,9 +10,8 @@ const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
-const char * SEEDLIST_FILE = "seedlist/seedM1.txt";
 
-CrawlerApp::CrawlerApp(size_t machineID, bool frontierInit )
+CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     : frontier( 
         FRONTIER_DIR, 
         NUM_DISK_QUEUE, 
@@ -22,21 +21,23 @@ CrawlerApp::CrawlerApp(size_t machineID, bool frontierInit )
         NUM_OBJECTS, 
         FP_RATE ),
     listenManager( 
-        { "ListenManager", NUM_LISTEN_THREADS, &printMutex },
-        &frontier, &visited, machineID ),
+        { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID },
+        &frontier, &visited ),
     sendManager(
-        { "SendManager", NUM_SEND_THREADS, &printMutex },
-        &frontier, &visited, machineID ),
+        { "SendManager", NUM_SEND_THREADS, &printMutex, machineID },
+        &frontier, &visited ),
     crawlers(
-        { "Crawler", NUM_CRAWL_THREADS, &printMutex },
+        { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID },
         &frontier, &visited, &sendManager )
     {
     std:cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
+        //String seedFile = "seedlist/test.txt";
+        String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
         std::cout << "Constructing frontier using seed list..." << std::endl;
-        frontier.FrontierInit( SEEDLIST_FILE );
+        frontier.FrontierInit( seedFile.cstr() );
         }
     }
 

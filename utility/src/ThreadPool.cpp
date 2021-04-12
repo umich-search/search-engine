@@ -2,7 +2,7 @@
 
 ThreadPool::ThreadPool( ThreadPool::Init init )
     : name( init.name ), threads( init.numThreads ), printMutex( init.printMutex ), 
-    alive( false ), threadID( 0 )
+    machineID( init.machineID), alive( false ), threadID( 0 )
     {
     MutexInit( &mutex, nullptr );
     }
@@ -73,7 +73,7 @@ bool ThreadPool::IsAlive( )
 void ThreadPool::Print( String output, size_t threadID )
     {
     Lock(printMutex);
-    std::cout << "Thread (" << name.cstr() << ":" << threadID << "): " 
+    std::cout << "M:" << machineID << " Thread(" << name.cstr() << ":" << threadID << "): " 
                 << output << std::endl;
     Unlock(printMutex);
     }

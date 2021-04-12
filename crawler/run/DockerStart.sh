@@ -1,5 +1,5 @@
 #!/bin/bash
-MACHINE_ID=0
+MACHINE_ID=$1
 if [ -f ".FirstCrawl" ]; then
     echo "Re-starting docker script..."
     ./CrawlerStart $MACHINE_ID 0

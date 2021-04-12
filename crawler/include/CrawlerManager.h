@@ -35,9 +35,9 @@ int getPort( int sockFd );
 class CrawlerManager : public ThreadPool
     {
     public:
-        CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t machineID )
+        CrawlerManager( Init init, Frontier *frontier, FileBloomfilter *visited )
             : ThreadPool( init ), frontier( frontier ), visited( visited ),
-            myIndex( machineID ) { }
+            myIndex( init.machineID ) { }
         ~CrawlerManager( ) { }
 
     protected:
@@ -49,7 +49,7 @@ class CrawlerManager : public ThreadPool
 class ListenManager : public CrawlerManager 
     {
     public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t machineID );
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited );
         ~ListenManager( );
 
     private:
@@ -67,8 +67,8 @@ class ListenManager : public CrawlerManager
 class SendManager : public CrawlerManager
     {
     public:
-        SendManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t machineID )
-            : CrawlerManager( init, frontier, visited, machineID ) { }
+        SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
+            : CrawlerManager( init, frontier, visited ) { }
         ~SendManager( ) { }
 
     private:
