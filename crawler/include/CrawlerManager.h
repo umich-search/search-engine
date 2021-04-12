@@ -13,19 +13,14 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 
-const size_t numMachine = 7;
-const int port = 0;
+const size_t numMachine = 2;
+const int port = 8888;
 const size_t queue_size = 1024;
 
 static const char *Host[ numMachine ] = 
     {
-    "127.0.0.0",
-    "127.0.0.1",
-    "127.0.0.2",
-    "127.0.0.3",
-    "127.0.0.4",
-    "127.0.0.5",
-    "127.0.0.6",
+    "172.27.70.45",  // hzy's ip address
+    "127.0.0.1",  // zmh's ip address
     };
 
 void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);

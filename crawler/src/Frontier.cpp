@@ -1,5 +1,6 @@
 #include "Frontier.h"
 #include "Common.h"
+#include "BloomFilter.h"
 #include <fstream>
 
 // to use this function, compile with HashTable.cpp
@@ -120,7 +121,7 @@ Frontier::~Frontier( )
         }
     }
 
-void Frontier::FrontierInit( const char *seedFile )
+void Frontier::FrontierInit( const char *seedFile, FileBloomfilter *filter )
     {
     FILE *fp = fopen( seedFile, "r" );
     char *linePtr = nullptr;
@@ -129,8 +130,9 @@ void Frontier::FrontierInit( const char *seedFile )
     while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
         {
         String url ( "https://" );
-        url += String( linePtr, bytes - 2 );
-        Link lk( url );  // excluding the trailing '\n'
+        url += String( linePtr, bytes - 2 ); // excluding the trailing '\n'
+        filter->insert( url );
+        Link lk( url );  
         PushUrl( lk );
         }
     free( linePtr );

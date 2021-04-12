@@ -10,6 +10,7 @@
 #include "Concurrency.h"
 #include "DiskQueue.h"
 #include "Vector.h"
+#include "BloomFilter.h"
 #include "GetUrl.h"
 #include "HtmlParser.h"
 
@@ -56,7 +57,7 @@ class Frontier
         // dtor
         ~Frontier( );
         // initialize the frontier with the seed list file
-        void FrontierInit( const char *seedFile );
+        void FrontierInit( const char *seedFile, FileBloomfilter *filter );
         // push the url into the frontier; the url has to be unseen
         void PushUrl( Link& );
         // return the top url in the urlPq

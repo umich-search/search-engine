@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <cassert>
 #include "CrawlerManager.h"
 #include "Common.h"
 #include "HtmlParser.h"
@@ -28,7 +29,12 @@ ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *vi
     listen( socketFD, queue_size );
     pthread_t submit;
     pthread_create( &submit, nullptr, submitThread, this );
+
+    std::cout << "Listenning thread created! socketfd = " << socketFD << std::endl;
+
     pthread_detach( submit );
+
+    std::cout << "Listenning thread detahced\n";
     }
 
 ListenManager::~ListenManager( )
@@ -69,14 +75,20 @@ void ListenManager::DoTask( Task task, size_t threadID )
     while ( rval > 0 );  // recv() returns 0 when client closes
     close( connectionfd );
 
+    String pt = "Listen: Message received = ";
+    pt += String( msg );
+    Print( pt, threadID );
+
     // Verify URL hash
     uint32_t hash = fnvHash( ( const char * )msg, recvd );
     if ( hash % numMachine == this->myIndex ) 
-        {
-        // Push the URL to the frontier
-        Link lk ( msg );
-        this->frontier->PushUrl( lk );
-        }
+        if ( !this->visited->contains( msg ) )
+            {
+            // Push the URL to the frontier
+            this->visited->insert( msg );
+            Link lk ( msg );
+            this->frontier->PushUrl( lk );
+            }
     else
         std::cerr << "Sent to the wrong machine: " << this->myIndex << " where it supposed to be " << hash % numMachine << std::endl; 
     }
@@ -84,13 +96,27 @@ void ListenManager::DoTask( Task task, size_t threadID )
 void SendManager::DoTask( Task task, size_t threadID )
     {
     Link *link = ( Link * ) task.args;
+    assert( link->URL[ link->URL.size( ) - 1 ] != '\n' );
     
     size_t mID = fnvHash( link->URL.cstr( ), link->URL.size( ) ) % numMachine;
     
     if ( mID == myIndex )
-        this->frontier->PushUrl( *link );
+        if ( !this->visited->contains( link->URL ) )
+            {
+            this->visited->insert( link->URL );
+            this->frontier->PushUrl( *link );
+
+            String pt = "Send: My own url = ";
+            pt += link->URL;
+            Print( pt + ltos( pt.size( ) ), threadID );
+
+            }
     else
         {
+        String pt = "Send: other's url = ";
+        pt += link->URL;
+        Print( pt, threadID );
+
         int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
         struct sockaddr_in addr;
         makeSendAddr( &addr, Host[ mID ], port );

@@ -134,33 +134,39 @@ void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
     while ( alive || !frontier->Empty() )
         { 
         // 1. Get a URL from the frontier
+        // if alive but frontier(pq) is empty, block until the urls
+        // in the disk queue refills the pq
         String url = frontier->PopUrl( alive );
         Print(String("Popped: ") + url, threadID);
 
         // 2. check for robots.txt
-        this->parseRobot( url );
-        Print(String("ParseRobot: ") + url, threadID);
+        // this->parseRobot( url );
+        // Print(String("ParseRobot: ") + url, threadID);
 
         // 3. Retrieve the HTML webpage from the URL
-        ParsedUrl parsedUrl( url.cstr() );
-        Print(String("ParseURL: ") + url, threadID);
-        String html = LinuxGetHTML( parsedUrl );
-        Print(String("GetHTML: ") + url, threadID);
+        // ParsedUrl parsedUrl( url.cstr() );
+        // Print(String("ParseURL: ") + url, threadID);
+        // String html = LinuxGetHTML( parsedUrl );
+        // Print(String("GetHTML: ") + url, threadID);
 
         // 4. Parse the HTML for the webpage
-        HtmlParser htmlparser( html.cstr(), html.size() );
-        Print(String("HTML parsed: ") + url, threadID);
+        // HtmlParser htmlparser( html.cstr(), html.size() );
+        // Print(String("HTML parsed: ") + url, threadID);
 
         // 5. Send the URLs found in the HTML back to the manager
-        for ( Link& link : htmlparser.links )
-            {
-            Link* newLink = new Link( link );
-            manager->PushTask( (void *) newLink, true );
-            }
-        Print(String("Pushed parsed URLs: ") + url, threadID);
+        // for ( Link& link : htmlparser.links )
+        //     {
+        //     Link* newLink = new Link( link );
+        //     manager->PushTask( (void *) newLink, true );
+        //     }
+        // Print(String("Pushed parsed URLs: ") + url, threadID);
 
         // 6. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser, url, ic );
-        Print(String("Inserted in index: ") + url, threadID );
+        // addWordsToIndex( htmlparser, url, ic );
+        // Print(String("Inserted in index: ") + url, threadID );
+
+        Link *newLink = new Link( url );
+        manager->PushTask( ( void * ) newLink, true );
+        Print( String( "Pushed url: " ) + url, threadID );
         }
     }
