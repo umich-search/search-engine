@@ -19,8 +19,8 @@ const size_t queue_size = 1024;
 
 static const char *Host[ numMachine ] = 
     {
-    "172.27.70.45",  // hzy's ip address
-    "127.0.0.1",  // zmh's ip address
+    "172.21.159.128", 
+    "192.168.2.11", 
     };
 
 void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);
