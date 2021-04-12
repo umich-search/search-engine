@@ -32,7 +32,8 @@ public:
                         firstDocEnd(0),
                         endLocation(0),
                         currentChunkNum(fileManager.getNumChunks()),
-                        threadID(threadID)
+                        threadID(threadID),
+                        chunkMemoryAlloc(0)
                         {
                             //std::cout << "Created Index constructor with numDocs: " << numberOfDocuments << " numChunks: " << currentChunkNum << std::endl;
                             endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));

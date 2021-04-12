@@ -12,7 +12,7 @@ const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
 const char * SEEDLIST_FILE = "seedlist/seedM1.txt";
 
-CrawlerApp::CrawlerApp( bool frontierInit )
+CrawlerApp::CrawlerApp(size_t machineID, bool frontierInit )
     : frontier( 
         FRONTIER_DIR, 
         NUM_DISK_QUEUE, 
@@ -23,15 +23,15 @@ CrawlerApp::CrawlerApp( bool frontierInit )
         FP_RATE ),
     listenManager( 
         { "ListenManager", NUM_LISTEN_THREADS, &printMutex },
-        &frontier, &visited ),
+        &frontier, &visited, machineID ),
     sendManager(
         { "SendManager", NUM_SEND_THREADS, &printMutex },
-        &frontier, &visited ),
+        &frontier, &visited, machineID ),
     crawlers(
         { "Crawler", NUM_CRAWL_THREADS, &printMutex },
         &frontier, &visited, &sendManager )
     {
-    std:cout << "Constructing Crawler App..." << std::endl;
+    std:cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {

@@ -1,5 +1,10 @@
 #!/bin/bash
-echo "first crawl:" $FIRST_CRAWL
-first=$FIRST_CRAWL
-export FIRST_CRAWL=0
-./CrawlerStart $first
+MACHINE_ID=0
+if [ -f ".FirstCrawl" ]; then
+    echo "Re-starting docker script..."
+    ./CrawlerStart $MACHINE_ID 0
+else
+    echo "Starting docker script for first time..."
+    touch .FirstCrawl
+    ./CrawlerStart $MACHINE_ID 1
+fi

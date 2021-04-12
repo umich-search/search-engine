@@ -30,6 +30,7 @@ class Crawler : public ThreadPool
         SendManager *manager;
 
         void DoTask( Task task, size_t threadID ) override;
+        void Crawl( IndexConstructor &ic, size_t threadID );
 
         String retrieveWebpage( const ParsedUrl& url );
         void parseRobot( const String& robotUrl );

@@ -2,13 +2,14 @@
 
 int main ( int argc, char **argv )
     {
-    if ( argc != 2 )
+    if ( argc != 3 )
         {
-        std::cerr << "Usage: " << argv[0] << " frontierInit(0/1) " << std::endl;
+        std::cerr << "Usage: " << argv[0] << " machineID(0-6) frontierInit(0/1) " << std::endl;
         return 1;
         }
-    bool frontierInit = strncmp(argv[1], "1", 1) == 0;
-    CrawlerApp app( frontierInit );
+    size_t machineID = atoi( argv[1] );
+    bool frontierInit = strncmp( argv[2], "1", 1 ) == 0;
+    CrawlerApp app( machineID, frontierInit );
     app.Start();
     app.Join();
     return 0;

@@ -4,55 +4,28 @@
 Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, SendManager *manager ) 
     : ThreadPool( init ), frontier( frontier ), visited( visited ), manager( manager ) { }
 
-Crawler::~Crawler( ) { 
-}
+Crawler::~Crawler( ) { }
 
 // TODO: another thread that pushes URLs to crawler thread pool?
 // Issue: Unsure of rate of crawler ratio to rate of push to thread pool
+// Solution: limit the crawler task queue to N number of URLs?
 void Crawler::DoTask( Task task, size_t threadID )
     {
     IndexConstructor ic(threadID);
-    while ( alive || !frontier->Empty() )
-        { 
-        // 1. Get a URL from the frontier
-        String url = frontier->PopUrl( alive );
-        Print(String("Popped: ") + url, threadID);
-        // TODO: check for robots.txt
-        this->parseRobot( url );
-        Print(String("ParseRobot: ") + url, threadID);
-
-        // Print( "robot parsed", threadID );
-
-        // 2. Retrieve the HTML webpage from the URL
-        ParsedUrl parsedUrl( url.cstr() );
-        Print(String("ParseURL: ") + url, threadID);
-
-        // Print( String( parsedUrl.Host ), threadID );
-
-        String html = LinuxGetHTML( parsedUrl );
-        Print(String("GetHTML: ") + url, threadID);
-
-        // this->Print( html, threadID );
-
-        // 3. Parse the HTML for the webpage
-        HtmlParser htmlparser( html.cstr(), html.size() );
-        Print(String("HTML parsed: ") + url, threadID);
-
-        // this->Print( "finish parsing html", threadID );
-
-        // 4. Send the URLs found in the HTML back to the manager
-        for ( Link& link : htmlparser.links )
+    while ( alive )
+        {
+        try 
             {
-            Link* newLink = new Link( link );
-            manager->PushTask( (void *) newLink, true );
+            Crawl( ic, threadID );
             }
-        Print(String("Pushed parsed URLs: ") + url, threadID);
-
-        // this->Print( "I'm here", threadID );
-
-        // 5. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser, url, ic );
-        Print(String("Inserted in index: ") + url, threadID );
+        catch ( String e )
+            {
+            Print(String("Exception: ") + e, threadID );
+            }
+        catch ( ... )
+            {
+            Print("Uncaught exception", threadID);
+            }
         }
     ic.resolveChunkMem();
     }
@@ -154,4 +127,40 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexCo
         //cout << "Inserted Document!" << endl;
 
         return;
+    }
+
+void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
+    {
+    while ( alive || !frontier->Empty() )
+        { 
+        // 1. Get a URL from the frontier
+        String url = frontier->PopUrl( alive );
+        Print(String("Popped: ") + url, threadID);
+
+        // 2. check for robots.txt
+        this->parseRobot( url );
+        Print(String("ParseRobot: ") + url, threadID);
+
+        // 3. Retrieve the HTML webpage from the URL
+        ParsedUrl parsedUrl( url.cstr() );
+        Print(String("ParseURL: ") + url, threadID);
+        String html = LinuxGetHTML( parsedUrl );
+        Print(String("GetHTML: ") + url, threadID);
+
+        // 4. Parse the HTML for the webpage
+        HtmlParser htmlparser( html.cstr(), html.size() );
+        Print(String("HTML parsed: ") + url, threadID);
+
+        // 5. Send the URLs found in the HTML back to the manager
+        for ( Link& link : htmlparser.links )
+            {
+            Link* newLink = new Link( link );
+            manager->PushTask( (void *) newLink, true );
+            }
+        Print(String("Pushed parsed URLs: ") + url, threadID);
+
+        // 6. Add the words from the HTML to the index
+        addWordsToIndex( htmlparser, url, ic );
+        Print(String("Inserted in index: ") + url, threadID );
+        }
     }

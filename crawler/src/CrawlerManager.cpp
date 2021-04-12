@@ -12,8 +12,8 @@ void makeSendAddr(struct sockaddr_in *addr, const char *hostname, int port);
 void makeListenAddr(struct sockaddr_in *addr, int port);
 int getPort( int sockFd );
 
-ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )   
-    : CrawlerManager( init, frontier, visited )
+ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t machineID )   
+    : CrawlerManager( init, frontier, visited, machineID )
     {
     int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
 
@@ -43,8 +43,7 @@ void ListenManager::submitConnection( )
         int connectionfd = accept( socketFD, 0, 0 );
         if ( connectionfd < 0 )
             {
-            std::cerr << "Cannot setup connections\n";
-            return;
+            throw "Cannot setup connections";
             }
         this->PushTask( ( void * )( new int ( connectionfd ) ), true );
         }
