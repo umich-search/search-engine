@@ -10,7 +10,7 @@ const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
-const char * SEEDLIST_FILE = "seedlist.txt";
+const char * SEEDLIST_FILE = "seedlist/seedM1.txt";
 
 CrawlerApp::CrawlerApp( bool frontierInit )
     : frontier( 
