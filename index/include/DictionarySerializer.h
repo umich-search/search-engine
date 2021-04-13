@@ -89,7 +89,7 @@ struct SerialTuple
          */
           size_t hashValueSize, keySize, postingsListSize, memberVarsSize;
           hashValueSize = sizeof( fnvHash_t);
-          keySize = sizeof(strlen(b->tuple.key.cstr()) + 1); 
+          keySize = strlen(b->tuple.key.cstr()) + 1; 
           postingsListSize = BytesRequired(b->tuple.value);
           memberVarsSize = sizeof(Offset); //+ sizeof(uint32_t);
           return hashValueSize + keySize + postingsListSize + memberVarsSize;
