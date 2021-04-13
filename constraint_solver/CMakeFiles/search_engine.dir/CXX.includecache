@@ -6,28 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/AbstractISR.h
-../index/include/Dictionary.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Dictionary.h
-../index/include/ISR.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/ISR.h
-../index/include/Post.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Post.h
-../index/include/PostingList.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/PostingList.h
-
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/constraint_solver.cpp
-iostream
--
-../index/include/ISR.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/ISR.h
-AbstractISR.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/AbstractISR.h
-../utility/include/Vector.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/utility/include/Vector.h
-../index/include/Dictionary.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Dictionary.h
-
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/CommonUtil.h
 Global.h
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Global.h
@@ -35,14 +13,6 @@ stddef.h
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/stddef.h
 stdint.h
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/stdint.h
-
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Dictionary.h
-ISR.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/ISR.h
-DictionarySerializer.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/DictionarySerializer.h
-Global.h
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/Global.h
 
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/DictionarySerializer.h
 sys/types.h
@@ -181,6 +151,10 @@ IPost.h
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/IPost.h
 cstring
 -
+
+/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/src/ISR.cpp
+../include/ISR.h
+/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/index/include/ISR.h
 
 /mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/utility/include/Common.h
 Vector.h
