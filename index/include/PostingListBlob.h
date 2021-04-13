@@ -20,6 +20,7 @@ struct TermPostingListRaw {
     Offset postsOffset;
     const char* buffer;
 
+    TermPostingListRaw() {}
     TermPostingListRaw(const char * b) {
         buffer = b + strlen(b) + 1;
         header = (CommonHeaderBlob *)buffer;
