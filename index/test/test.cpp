@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     }
     ic.FinishConstruction();
     FileManager manager = ic.fileManager;
-    Dictionary dict(manager);
+    Dictionary dict(manager,0);
     char word[] = {'c', 'a', 't', '\0'};
     ISRWord isrword = *dict.OpenISRWord(word);
 
@@ -81,6 +81,12 @@ int main(int argc, char *argv[]) {
         isrdoc.Next();
         ASSERT(isrdoc.GetCurrentPost()->GetStartLocation(),==,202*i+200);
     }
+    char word3[] = {'d', 'o','\0'};
+    ISRWord isrword3 = *dict.OpenISRWord(word3);
+    ASSERT(isrword3.GetDocumentCount(), ==, 0);
+//    ASSERT(isrword3.GetNumberOfOccurrences(), ==, 0);
+//    ASSERT(isrword3.GetStartLocation(), ==, -1);
+    cout<<"hhhhhh"<<endl;
     /*
         Three chunks of 50
         seek(150);
