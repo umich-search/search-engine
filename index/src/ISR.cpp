@@ -297,13 +297,52 @@ Location ISREndDoc::GetEndLocation() {
 }
 
 unsigned ISREndDoc::GetDocumentLength() {
-    return DOCUMENT_SIZE;
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    
+    size_t currChunk = 0;
+    for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) {
+        if(currIndex < docOccurenceAfterChunk[currChunk]) {
+            break;
+        }
+    }
+    if(currChunk == docOccurenceAfterChunk.size()) {
+        return -1;
+    }
+    else {
+        return manager.GetDocumentDetails(currIndex, currChunk).lengthOfDocument;
+    }
 }
+
 
 unsigned ISREndDoc::GetTitleLength() {
-    return MAX_TITLE_LENGTH;
-}
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    
+    size_t currChunk = 0;
+    for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) {
+        if(currIndex < docOccurenceAfterChunk[currChunk]) {
+            break;
+        }
+    }
+    if(currChunk == docOccurenceAfterChunk.size()) {
+        return -1;
+    }
+    else {
+        return strlen(manager.GetDocumentDetails(currIndex, currChunk).title.cstr());
+    }
+ }
 
 unsigned ISREndDoc::GetUrlLength() {
-    return MAX_URL_LENGTH;
-}
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    
+    size_t currChunk = 0;
+    for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) {
+        if(currIndex < docOccurenceAfterChunk[currChunk]) {
+            break;
+        }
+    }
+    if(currChunk == docOccurenceAfterChunk.size()) {
+        return -1;
+    }
+    else {
+        return strlen(manager.GetDocumentDetails(currIndex, currChunk).url.cstr());
+    }}
