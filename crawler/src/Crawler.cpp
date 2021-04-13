@@ -69,7 +69,7 @@ void Crawler::parseRobot( const String& robotUrl )
                     }
                 }
             }
-        temp += robotFile[i];
+        if ( i < robotFile.size() )temp += robotFile[i];
         }
     for ( ; i < robotFile.size(); ++i )
         { // have found userAgent = *
@@ -92,7 +92,7 @@ void Crawler::parseRobot( const String& robotUrl )
             continue;
             }
         else if (temp == "User-agent") break; // finished parsing User-Agent='*'
-        temp += robotFile[i];
+        if ( i  < robotFile.size() ) temp += robotFile[i];
         }
         myfile.close();
     }
