@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.15)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 project(search_engine_index)
 
-set(SOURCES 	test/test.cpp
+set(SOURCES 	../constraint_solver/test.cpp
+../constraint_solver/abstractISR.cpp
+../constraint_solver/constraint_solver.cpp
 		src/Dictionary.cpp		
 		src/FileManager.cpp		
 		src/ISR.cpp			
@@ -32,8 +36,10 @@ set(HEADERS	include/CommonUtil.h
 		include/IndexConstructor.h	
 		include/PostingList.h
 		../utility/include/Common.h
+		../constraint_solver/abstractISR.h
+../constraint_solver/constraint_solver.h
 
-		test/test.cpp)
+		)
 
 project(search_engine)
 
