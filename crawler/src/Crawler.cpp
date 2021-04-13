@@ -58,7 +58,8 @@ void Crawler::parseRobot( const String& robotUrl )
                 {
                 temp = "";
                 ++i;
-                while ( isspace( robotFile[i] ) ) ++i;
+                while ( i < robotFile.size() && isspace( robotFile[i] ) ) ++i;
+                if ( i == robotFile.size() ) break;
                 while ( i < robotFile.size() && robotFile[i] != '\n' && robotFile[i] != '\r' ) 
                     temp += robotFile[i++];
                 if ( temp == "*" ) // found "User-agent: *" line
