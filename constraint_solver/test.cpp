@@ -10,6 +10,9 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
+   // __fs::filesystem::remove_all(CHUNK_DIRECTORY);
+   // __fs::filesystem::create_directory(CHUNK_DIRECTORY);
+
    ifstream docs;
    docs.open("testdoc.txt");
    IndexConstructor ic(0);
@@ -21,8 +24,11 @@ int main(int argc, char *argv[]) {
       {
       if (charr == '#')
          break;
-      else if (charr == '/')
+      else if (charr == '/') 
+         {
          ic.Insert("cat_title", "cat.com");
+         // cout<<"Inserted!\n";
+         }
       else if (charr != '\t')
          *pos++ = charr;
       else if (pos != term0)
@@ -31,6 +37,7 @@ int main(int argc, char *argv[]) {
          pos = term0;
          String term(term0);
          ic.Insert(term, Body);
+         // cout<<"Inserted!1\n";
          }
       }
    ic.FinishConstruction();
@@ -70,28 +77,52 @@ int main(int argc, char *argv[]) {
       cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
       }
 
-   cout<<"constraint solver output:"<<endl;
-   ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
-   for (unsigned i = 0; i < result1.size(); ++i)
+   // cout<<"constraint solver output:"<<endl;
+   // ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
+   // for (unsigned i = 0; i < result1.size(); ++i)
+   //    {
+   //    cout << result1[i]->GetStartLocation() << " " << result1[i]->GetEndLocation() << endl;
+   //    delete result1[i];
+   //    }
+
+// query 2: "quick brown quick"
+   ISR *terms_q2[] = {word_quick, word_brown, word_quick};
+   ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
+
+   cout<<"ISRPhrase Seek tests:"<<endl;
+   for( int i = 0; i < 14; ++i )
       {
-      cout << result1[i]->GetStartLocation() << " " << result1[i]->GetEndLocation() << endl;
-      delete result1[i];
+      cout << "ISRPhrase Seek("<<i<<"): ";
+      res = q2->Seek(i);
+      if (res)
+         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
+      delete res;
       }
 
-// // query 2: "quick brown quick"
-//   ISR *terms_q2[] = {word_quick, word_brown, word_quick};
-//    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
-//    ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
-//    cout << "q2 Results:" << endl;
-//    for (unsigned i = 0; i < result2.size(); ++i)
-//       {
-//       cout << result2[i]->GetStartLocation() << " " << result2[i]->GetEndLocation() << endl;
-//       delete result2[i];
-//       }
+   // ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
+   // cout << "q2 Results:" << endl;
+   // for (unsigned i = 0; i < result2.size(); ++i)
+   //    {
+   //    cout << result2[i]->GetStartLocation() << " " << result2[i]->GetEndLocation() << endl;
+   //    delete result2[i];
+   //    }
+      
 
-// // query 3: quick fox
-//    ISR *terms_q3[] = {word_quick, word_fox};
-//    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
+// query 3: quick fox
+   ISR *terms_q3[] = {word_quick, word_fox};
+   ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
+
+   cout<<"ISRAnd Seek tests:"<<endl;
+   for( int i = 0; i < 14; ++i )
+      {
+      cout << "ISRAnd Seek("<<i<<"): ";
+      res = q3->Seek(i);
+      if (res)
+         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
+      }
+
+
+   
 //    ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
 //    cout << "q3 Results:" << endl;
 //    for (unsigned i = 0; i < result3.size(); ++i)

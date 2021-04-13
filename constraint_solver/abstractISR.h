@@ -4,6 +4,7 @@
 #include "../index/include/Post.h"
 #include "../index/include/PostingList.h"
 #pragma once
+#define MAX_SIZE 18446744073709551615
 
 // class AbstractISR: public ISR
 //    {

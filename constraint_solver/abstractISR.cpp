@@ -3,6 +3,10 @@
 #include "../index/include/Dictionary.h"
 #include "AbstractISR.h"
 
+// FOR TEST ONLY!!!
+#include<iostream>
+using namespace std;
+
 size_t min(size_t a, size_t b)
    {
    return a < b ? a : b;
@@ -64,29 +68,33 @@ Post* ISROr::Seek( Location target )
 Post* ISROr::Next( )
    {
    // // update nearest term
-   // *(Terms + nearestTerm)->Next();
+   // (*(Terms + nearestTerm))->Next();
 
    // Location minLoc = SIZE_MAX;
-   // // Location maxLoc = 0;
+   // bool noNext = true;
+   // Location termStartLocation;
    // for (unsigned i = 0; i < NumberOfTerms; ++i )
    //    {
    //    ISR* Term = *(Terms + i);
-   //    Location termStartLocation = Term->Next()->GetStartLocation();
-   //    // Location nextEndLocation = Term->Next()->GetEndLocation();
+   //    // Post* nextTerm = Term->Next();
+   //    termStartLocation = Term->GetStartLocation();
+   //    if ( termStartLocation != SIZE_MAX )
+   //       noNext = false;
    //    if ( termStartLocation < minLoc )
    //       {
    //       minLoc = termStartLocation;
    //       nearestTerm = i;
    //       }
    //    }
+   // if (noNext)
+   //    return nullptr;
+   // // update nearest term locations (class invariants)
+   // nearestStartLocation = minLoc;
+   // nearestEndLocation = (*(Terms + nearestTerm))->GetEndLocation();
 
-   // // update nearest term locations
-   // nearestStartLocation = *(Terms + nearestTerm)->GetStartLocation();
-   // nearestEndLocation = *(Terms + nearestTerm)->GetEndLocation();
-
-   // Post nearestMatch = Post(minLoc);   // destruction??
-   // return &nearestMatch;
-   return ISROr::Seek( nearestStartLocation );
+   // Post* nearestMatch = new Post(minLoc, nearestEndLocation);
+   // return nearestMatch;
+   return ISROr::Seek(nearestStartLocation + 1);
    }
 
 // Post* ISROr::NextDocument( )
@@ -163,12 +171,15 @@ Post* ISRAnd::Seek( Location target )
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.   
       // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
-      EndDoc->Seek(maxLoc);
-      Location docEndLocation = EndDoc->GetEndLocation();
-      Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength();
+      Post* endDoc = EndDoc->Seek(maxLoc);
+      Location docEndLocation = endDoc->GetEndLocation();
+      cout<<"docend: "<<docEndLocation<<endl;
+      // TODO: doc length
+      Location docStartLocation = docEndLocation -  1;
       Location minLoc = SIZE_MAX, maxLoc = 0;
 
       // 3. Seek all the other terms to past the document begin.
+      bool flag = false;   // check if any term is past the enddoc
       for (size_t i = 0; i < NumberOfTerms; ++i)
          {
          ISR *Term = *(Terms + i);
@@ -191,17 +202,25 @@ Post* ISRAnd::Seek( Location target )
             maxLoc = nextEndLocation;
             // 4. If any term is past the document end, return to step 2.
             if (maxLoc > docEndLocation)
-               continue;
+               {
+               flag = true;
+               break;
+               }
             }
          }
-      Post nearestMatch = Post(minLoc, maxLoc);   // destruction??
-      return &nearestMatch;
+      if (flag)
+         {
+         target = maxLoc + 1;
+         continue;
+         }
+      Post* nearestMatch = new Post(minLoc, maxLoc);
+      return nearestMatch;
       } while (1);
    }
 
 Post* ISRAnd::Next( )
    {
-   return ISRAnd::Seek( nearestStartLocation );
+   return ISRAnd::Seek( nearestStartLocation + 1 );
    }
 
 // Post* ISRAnd::NextDocument( )
@@ -247,7 +266,7 @@ Post* ISRPhrase::Seek( Location target )
    // to step 2.
    // 4. If any ISR reaches the end, there is no match.
    
-   // return first match of phrase in range [ target + 1, inf )
+   // return first match of phrase in range [ target, inf )
    // used algorithm on textbook
    do
       {
@@ -258,31 +277,34 @@ Post* ISRPhrase::Seek( Location target )
          if (!nextPost)
             return nullptr;
          else
-            // TODO: whether target should +1
-            target = nextPost->GetStartLocation();
+            target = nextPost->GetStartLocation() + 1;
          }
       Location nextStartLocation = target - NumberOfTerms;
+      bool flag = 0;
       for (size_t i = 0; i < NumberOfTerms; ++i)
          {
          ISR *Term = *(Terms + i);
-         Location desiredLocation = nextStartLocation + i + 1;
-         if (Term->Seek(desiredLocation - 1)->GetStartLocation() != desiredLocation)
+         Location desiredLocation = nextStartLocation + i;
+         if (Term->Seek(desiredLocation)->GetStartLocation() != desiredLocation)
             {
             target = nextStartLocation + 1;
-            continue;
+            flag = 1;
+            break;
             }
          }
-      nearestStartLocation = nextStartLocation + 1;
-      Post nearestMatch = Post(nearestStartLocation, nextStartLocation + NumberOfTerms);   // destruction??
-      return &nearestMatch;
+      if (flag)
+         continue;
+      nearestStartLocation = nextStartLocation;
+      //cout<<nearestStartLocation<<' '<< nextStartLocation + NumberOfTerms - 1<<endl;
+      Post* nearestMatch = new Post(nearestStartLocation, nextStartLocation + NumberOfTerms - 1 );
+      return nearestMatch;
       } while (1);
    }
 
 Post* ISRPhrase::Next( )
    {
    // Finds overlapping phrase matches.
-   // TODO: check +1 or not?
-   return Seek( nearestStartLocation );
+   return Seek( nearestStartLocation + 1 );
    }
 
 // Post* ISRPhrase::NextDocument( )

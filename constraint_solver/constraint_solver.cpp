@@ -15,15 +15,15 @@ using namespace std;
     Location currentLocation = 0;
     Post* match = nullptr;
     ::vector<Post*>* posts = new ::vector<Post*>(); 
-    while ( match = queryRoot->Seek(currentLocation) )
-        {
-        EndDoc->Seek(match->GetStartLocation());
-        cout<<"EndDoc start: "<<EndDoc->GetStartLocation()<<" EndDoc end: "<<EndDoc->GetEndLocation()<<endl;
-        currentLocation = EndDoc->GetStartLocation();
-        Location startLocation = currentLocation - EndDoc->GetDocumentLength();
-        cout << " DocLength: " << EndDoc->GetDocumentLength() << " Start: " << startLocation << ", End: " << currentLocation << endl;
-        Post* document = new Post(startLocation, currentLocation);
-        posts->pushBack(document);
-        }
+    // while ( match = queryRoot->Seek(currentLocation) )
+    //     {
+    //     Post* endDoc = EndDoc->Seek(match->GetStartLocation());
+    //     cout<<"EndDoc start: "<<endDoc->GetStartLocation()<<" EndDoc end: "<<endDoc->GetEndLocation()<<endl;
+    //     currentLocation = endDoc->GetStartLocation();
+    //     Location startLocation = currentLocation - endDoc->GetDocumentLength();
+    //     cout << " DocLength: " << endDoc->GetDocumentLength() << " Start: " << startLocation << ", End: " << currentLocation << endl;
+    //     Post* document = new Post(startLocation, currentLocation);
+    //     posts->pushBack(document);
+    //     }
     return posts;
     }
