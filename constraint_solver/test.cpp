@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
       else if (charr == '/') 
          {
          ic.Insert("cat_title", "cat.com");
-         // cout<<"Inserted!\n";
+          cout<<"Inserted!\n";
          }
       else if (charr != '\t')
          *pos++ = charr;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
          pos = term0;
          String term(term0);
          ic.Insert(term, Body);
-         // cout<<"Inserted!1\n";
+          cout<<"Inserted "<<term0<<"\n";
          }
       }
    ic.FinishConstruction();
@@ -123,13 +123,13 @@ int main(int argc, char *argv[]) {
 
 
    
-//    ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
-//    cout << "q3 Results:" << endl;
-//    for (unsigned i = 0; i < result3.size(); ++i)
-//       {
-//       cout << result3[i]->GetStartLocation() << " " << result3[i]->GetEndLocation() << endl;
-//       delete result3[i];
-//       }
+   // ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
+   // cout << "q3 Results:" << endl;
+   // for (unsigned i = 0; i < result3.size(); ++i)
+   //    {
+   //    cout << result3[i]->GetStartLocation() << " " << result3[i]->GetEndLocation() << endl;
+   //    delete result3[i];
+   //    }
 
 
 

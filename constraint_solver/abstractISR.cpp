@@ -3,19 +3,10 @@
 #include "../index/include/Dictionary.h"
 #include "AbstractISR.h"
 
-// FOR TEST ONLY!!!
-#include<iostream>
-using namespace std;
+// // FOR TEST ONLY!!!
+// #include<iostream>
+// using namespace std;
 
-size_t min(size_t a, size_t b)
-   {
-   return a < b ? a : b;
-   }
-
-size_t max(size_t a, size_t b)
-   {
-   return a > b ? a : b;
-   }
 
 ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
       NumberOfTerms(NumberOfTerms), nearestTerm(0), nearestStartLocation(0),
@@ -47,21 +38,27 @@ Post* ISROr::Seek( Location target )
       ISR* Term = *(Terms + i); 
       Post* nextPost = Term->Seek(target);
       // this term has no next match
-      if (!nextPost)
+      if (!nextPost) {
+         std::cout << "skipped" << std::endl;
          continue;
+      }
       Location nextLocation = nextPost->GetStartLocation();
+      std::cout << nextLocation << std::endl;
       if (nextLocation < minLoc)
          {
+            std::cout << "hehe" << std:: endl;
          nearestTerm = i;
          firstPost = nextPost;
          minLoc = nextLocation;
          }
       }
+   std::cout << nearestTerm << std::endl;
    if (firstPost)
       {
       nearestStartLocation = firstPost->GetStartLocation();
       nearestEndLocation = firstPost->GetEndLocation(); 
       }
+   std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
    return firstPost;
    }
 
@@ -173,10 +170,10 @@ Post* ISRAnd::Seek( Location target )
       // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
       Post* endDoc = EndDoc->Seek(maxLoc);
       Location docEndLocation = endDoc->GetEndLocation();
-      cout<<"docend: "<<docEndLocation<<endl;
       // TODO: doc length
-      Location docStartLocation = docEndLocation -  1;
-      Location minLoc = SIZE_MAX, maxLoc = 0;
+      Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength();
+      minLoc = SIZE_MAX;
+      maxLoc = 0;
 
       // 3. Seek all the other terms to past the document begin.
       bool flag = false;   // check if any term is past the enddoc
@@ -209,10 +206,7 @@ Post* ISRAnd::Seek( Location target )
             }
          }
       if (flag)
-         {
-         target = maxLoc + 1;
          continue;
-         }
       Post* nearestMatch = new Post(minLoc, maxLoc);
       return nearestMatch;
       } while (1);
