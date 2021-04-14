@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
       else if (charr == '/') 
          {
          ic.Insert("cat_title", "cat.com");
-          cout<<"Inserted!\n";
+          cout<<"URL Inserted!\n";
          }
       else if (charr != '\t')
          *pos++ = charr;
@@ -56,6 +56,11 @@ int main(int argc, char *argv[]) {
    ISRWord *word_brown = dict.OpenISRWord(brown);
    ISRWord *word_fox = dict.OpenISRWord(fox);
 
+   std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   while(word_quick->Next()) {
+      std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   }
+
    Post* res = nullptr;
 // query 1: quick | fox
    cout << "q1 Results:" << endl;
@@ -70,12 +75,12 @@ int main(int argc, char *argv[]) {
       if (res)
          cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
       }
-   q1->Seek(0);
-   cout<<"ISROr Next tests:"<<endl;
-   while ( res = q1->Next() )
-      {
-      cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      }
+   // q1->Seek(0);
+   // cout<<"ISROr Next tests:"<<endl;
+   // while ( res = q1->Next() )
+   //    {
+   //    cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
+   //    }
 
    // cout<<"constraint solver output:"<<endl;
    // ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
@@ -86,18 +91,18 @@ int main(int argc, char *argv[]) {
    //    }
 
 // query 2: "quick brown quick"
-   ISR *terms_q2[] = {word_quick, word_brown, word_quick};
-   ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
+   // ISR *terms_q2[] = {word_quick, word_brown, word_quick};
+   // ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
 
-   cout<<"ISRPhrase Seek tests:"<<endl;
-   for( int i = 0; i < 14; ++i )
-      {
-      cout << "ISRPhrase Seek("<<i<<"): ";
-      res = q2->Seek(i);
-      if (res)
-         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      delete res;
-      }
+   // cout<<"ISRPhrase Seek tests:"<<endl;
+   // for( int i = 0; i < 10; ++i )
+   //    {
+   //    cout << "ISRPhrase Seek("<<2*i<<"): ";
+   //    res = q2->Seek(2*i);
+   //    if (res)
+   //       cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
+   //    delete res;
+   //    }
 
    // ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
    // cout << "q2 Results:" << endl;
@@ -113,10 +118,10 @@ int main(int argc, char *argv[]) {
    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
 
    cout<<"ISRAnd Seek tests:"<<endl;
-   for( int i = 0; i < 14; ++i )
+   for( int i = 0; i < 10; ++i )
       {
-      cout << "ISRAnd Seek("<<i<<"): ";
-      res = q3->Seek(i);
+      cout << "ISRAnd Seek("<<2*i<<"): ";
+      res = q3->Seek(2*i);
       if (res)
          cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
       }
@@ -149,9 +154,9 @@ int main(int argc, char *argv[]) {
 // TODO: Next tests
 
 
-   delete(q1);
+   //delete(q1);
    // delete (q2);
-   // delete (q3);
+    delete (q3);
    // delete (q4);
 
    delete (word_quick);
