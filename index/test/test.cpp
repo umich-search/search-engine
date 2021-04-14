@@ -111,3 +111,61 @@ int main(int argc, char *argv[]) {
     */
     return 0;
 }
+// TEST FROM CONSTRAINT SOLVER SUITE
+/*
+
+   cout << word_quick->GetCurrentPost()->GetStartLocation() << " ";
+   while(word_quick->Next()) {
+      cout << word_quick->GetCurrentPost()->GetStartLocation() << " ";
+   }
+   cout << endl;
+   cout << word_brown->GetCurrentPost()->GetStartLocation() << " ";
+
+   while(word_brown->Next()) {
+      cout << word_brown->GetCurrentPost()->GetStartLocation() << " ";
+   }
+   cout << endl;
+   cout << word_fox->GetCurrentPost()->GetStartLocation() << " ";
+
+   while(word_fox->Next()) {
+      cout << word_fox->GetCurrentPost()->GetStartLocation() << " ";
+   }
+   cout << endl;
+   cout << "End Doc" << endl;
+   cout << EndDoc->GetCurrentPost()->GetStartLocation() << " ";
+   while(EndDoc->Next()) {
+      cout << EndDoc->GetCurrentPost()->GetStartLocation() << " ";
+   }
+
+   cout << "Seek for quick" << endl;
+   for(unsigned int i = 0; i < 25; ++i) {
+      Post * p = word_quick->Seek(i);
+      if(p) {
+         cout << p->GetStartLocation() << " "; 
+      }
+   }
+
+   cout << "Seek for brown" << endl;
+   for(unsigned int i = 0; i < 25; ++i) {
+      Post * p = word_brown->Seek(i);
+      if(p) {
+         cout << p->GetStartLocation() << " "; 
+      }
+   }
+
+   cout << "Seek for fox" << endl;
+   for(unsigned int i = 0; i < 25; ++i) {
+      Post * p = word_fox->Seek(i);
+      if(p) {
+         cout << p->GetStartLocation() << " "; 
+      }
+   }
+
+   cout << "End Doc" << endl;
+   for(unsigned int i = 0; i < 25; ++i) {
+      Post * p = EndDoc->Seek(i);
+      if(p) {
+         cout << p->GetStartLocation() << " "; 
+      }
+   }
+*/

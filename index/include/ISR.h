@@ -27,9 +27,9 @@ public:
 class ISRWord : public ISR {
 public:
     ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currIndex(0), term(word),
-                                                         termPostingListRaw(manager.GetTermList(term, 0)),
                                                          currPost(0),Doc(0) {
-
+            // Initalize with term seek to 0
+            Seek(0);
     }
 
     // Returns next post
@@ -72,6 +72,7 @@ public:
     ISREndDoc(FileManager filemanager) : manager(filemanager), currChunk(0),currIndex(0),
                                          endDocPostingListRaw(manager.GetEndDocList(0)),
                                          currPost(0){
+            Seek(0);
     }
     Post *GetCurrentPost();
 

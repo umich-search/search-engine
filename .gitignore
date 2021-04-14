@@ -9,5 +9,6 @@ frontier/*
 .vs/
 crawler/run/index_files/*
 crawler/run/bloomfilter
+crawler/run/frontier
 crawler/run/.FirstCrawl
 *.o
