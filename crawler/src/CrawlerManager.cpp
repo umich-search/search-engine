@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <cassert>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "CrawlerManager.h"
 #include "Common.h"
 #include "HtmlParser.h"
@@ -58,6 +61,7 @@ void ListenManager::submitConnection( )
 void ListenManager::DoTask( Task task, size_t threadID )
     {
     int connectionfd = *( ( int * )( task.args ) );
+    Print(String("Listen: connection: ") + ltos(connectionfd), threadID);
     char msg[ MAX_MESSAGE_SIZE + 1 ];
     memset( msg, 0, sizeof( msg ) );
 
@@ -82,6 +86,7 @@ void ListenManager::DoTask( Task task, size_t threadID )
     // Verify URL hash
     uint32_t hash = fnvHash( ( const char * )msg, recvd );
     if ( hash % numMachine == this->myIndex ) 
+        {
         if ( !this->visited->contains( msg ) )
             {
             // Push the URL to the frontier
@@ -89,6 +94,7 @@ void ListenManager::DoTask( Task task, size_t threadID )
             Link lk ( msg );
             this->frontier->PushUrl( lk );
             }
+        }
     else
         std::cerr << "Sent to the wrong machine: " << this->myIndex << " where it supposed to be " << hash % numMachine << std::endl; 
     }
@@ -101,6 +107,7 @@ void SendManager::DoTask( Task task, size_t threadID )
     size_t mID = fnvHash( link->URL.cstr( ), link->URL.size( ) ) % numMachine;
     
     if ( mID == myIndex )
+        {
         if ( !this->visited->contains( link->URL ) )
             {
             this->visited->insert( link->URL );
@@ -109,8 +116,8 @@ void SendManager::DoTask( Task task, size_t threadID )
             String pt = "Send: My own url = ";
             pt += link->URL;
             Print( pt + ltos( pt.size( ) ), threadID );
-
             }
+        }
     else
         {
         String pt = "Send: other's url = ";
@@ -120,8 +127,11 @@ void SendManager::DoTask( Task task, size_t threadID )
         int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
         struct sockaddr_in addr;
         makeSendAddr( &addr, Host[ mID ], port );
-        connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) );
-        send( sockfd, link->URL.cstr( ), link->URL.size( ), 0 );
+        Print(String("Send: send to address: ") + String(inet_ntoa(addr.sin_addr)), threadID );
+        int result = connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) );
+        Print(String("Send: connect result: ") + ltos(result), threadID);
+        result = send( sockfd, link->URL.cstr( ), link->URL.size( ), 0 );
+        Print(String("Send: sent bytes: ") + ltos(result), threadID);
         close( sockfd );
         }
 
