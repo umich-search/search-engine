@@ -1,6 +1,7 @@
 FROM ubuntu:latest
 RUN apt-get -y update && apt-get install -y
 RUN apt-get install -y git make gcc g++ openssl libssl-dev
+EXPOSE 8888
 
 # TODO: change the machine ID
 ARG MACHINE_ID=0
@@ -12,4 +13,5 @@ COPY CrawlerStart .
 COPY DockerStart.sh .
 COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
 
-CMD ["./DockerStart.sh", "$MACHINE_ID"]
+# TODO: change the machine ID
+CMD ["./DockerStart.sh", "0"]

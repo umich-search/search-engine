@@ -1,5 +1,5 @@
 
-#include "FileManager.h"
+#include "../include/FileManager.h"
 
 int FileManager::resolveChunkPath(size_t offset, char * pathname, size_t threadID) {
     char buffer[MAX_PATHNAME_LENGTH];
@@ -113,13 +113,14 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
 }
 
 int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname) {
+    std::cout << "WRITING TO METADAAT FILE" << std::endl;
     ChunksMetadata *metadata;
     size_t numWordsSize, numUniqueWordsSize, numDocsSize, endLocationSize;
     numWordsSize = sizeof(w_Occurence);
     numUniqueWordsSize = sizeof(w_Occurence);
     numDocsSize = sizeof(d_Occurence);
     endLocationSize = sizeof(endLocation);
-    
+    //std::cout << "Opening metadata files " << pathname << std::endl;
     int f_metadata = open( pathname,
                            O_CREAT |
                            O_RDWR,
@@ -129,6 +130,7 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
          throw "file open failed";
     }
+    std::cout << "Next end doc in metadata write: " << endLocation << std::endl;
     if(FileSize(f_metadata) == 0) {
         ftruncate(f_metadata, sizeof(ChunksMetadata) + sizeof(Location) + sizeof(d_Occurence));
         metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
@@ -301,10 +303,12 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 int FileManager::ReadMetadata() {
     char metadataFile[MAX_PATHNAME_LENGTH];
     resolveMetadataPath(metadataFile, threadID);
+    //std::cout << "ATTEMPTING TO WRITE METADATA() ON PATH " << metadataFile << std::endl;
     int f_metadata = open( metadataFile,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
     if(f_metadata == -1) {
+        std::cout << "WRITE FAILED" << std::endl;
         std::cerr << "Error openning file " << metadataFile << " with errno = " << strerror( errno ) << std::endl;
         return -1;
     }

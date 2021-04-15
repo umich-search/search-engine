@@ -52,11 +52,14 @@ void CrawlerApp::Start( )
     std::cout << "Starting Crawler App..." << std::endl;
     // Start the manager thread pool
     listenManager.Start();
+    std::cout << "Listen Manager alive: " << listenManager.IsAlive() << std::endl;
     sendManager.Start();
+    std::cout << "Send Manager alive: " << sendManager.IsAlive() << std::endl;
     // Start the crawler thread pool
     crawlers.Start();
     for ( size_t i = 0; i < NUM_CRAWL_THREADS; ++i )
         crawlers.PushTask( nullptr, false );
+    std::cout << "Crawlers alive: " << crawlers.IsAlive() << std::endl;
     }
 
 void CrawlerApp::Stop( )

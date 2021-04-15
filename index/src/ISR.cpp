@@ -1,4 +1,4 @@
-#include "ISR.h"
+#include "../include/ISR.h"
 
 // ISRWord Functions
 
@@ -9,7 +9,10 @@ Post *ISRWord::Next() {
         Location delta = termPostingListRaw.getPostAt(currIndex).delta;
         currPost.SetLocation(delta + currPost.GetStartLocation());
     } else {
+                std::cout << "Reseeking" << std::endl;
+
         Post *post = Seek(currPost.GetStartLocation() + 1);
+        if(post == nullptr) { std::cout << "post not found after reseek" << std::endl;}
         if (post == nullptr) return nullptr;
         else currPost = *post;
     }
@@ -39,12 +42,20 @@ Post *ISRWord::NextEndDoc() {
 Post *ISRWord::Seek(size_t target) {
     vector<Location> endLocs = manager.getChunkEndLocations();
     size_t numChunks = endLocs.size();
+    std::cout << "numChunks: " << numChunks << std::endl;
     size_t chunkIndex;
     Location result = -1;
+    for(unsigned int i = 0; i < endLocs.size(); ++i) {
+        std::cout << endLocs[i] << " ";
+    }
+    std::cout << std::endl;
     for (chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) {
         if (endLocs[chunkIndex] >= target) break;
     }
-    if (chunkIndex >= numChunks) return nullptr;
+    if (chunkIndex >= numChunks) {
+        std::cout << "chunkIndex greater than num chunks: " << chunkIndex << " " << numChunks << std::endl;
+        return nullptr;
+    }
     for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) {
         try {
             TermPostingListRaw termraw = manager.GetTermList(term, chunk);
@@ -346,3 +357,7 @@ unsigned ISREndDoc::GetUrlLength() {
     else {
         return strlen(manager.GetDocumentDetails(currIndex, currChunk).url.cstr());
     }}
+
+Offset ISREndDoc::GetCurrIndex() {
+    return currIndex;
+}

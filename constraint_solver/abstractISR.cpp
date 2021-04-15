@@ -7,6 +7,10 @@
 // #include<iostream>
 // using namespace std;
 
+Location max( Location locx, Location locy )
+   {
+     return (locx > locy)?locx:locy;
+   }
 
 ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
       NumberOfTerms(NumberOfTerms), nearestTerm(0), nearestStartLocation(0),
@@ -39,26 +43,26 @@ Post* ISROr::Seek( Location target )
       Post* nextPost = Term->Seek(target);
       // this term has no next match
       if (!nextPost) {
-         std::cout << "skipped" << std::endl;
+         // std::cout << "skipped" << std::endl;
          continue;
       }
       Location nextLocation = nextPost->GetStartLocation();
-      std::cout << nextLocation << std::endl;
+      // std::cout << nextLocation << std::endl;
       if (nextLocation < minLoc)
          {
-            std::cout << "hehe" << std:: endl;
+         //std::cout << "hehe" << std:: endl;
          nearestTerm = i;
          firstPost = nextPost;
          minLoc = nextLocation;
          }
       }
-   std::cout << nearestTerm << std::endl;
+   //std::cout << nearestTerm << std::endl;
    if (firstPost)
       {
       nearestStartLocation = firstPost->GetStartLocation();
       nearestEndLocation = firstPost->GetEndLocation(); 
       }
-   std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
+   //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
    return firstPost;
    }
 
@@ -136,7 +140,7 @@ Post* ISRAnd::Seek( Location target )
    // the target location.
    // 2. Move the document end ISR to just past the furthest
    // word, then calculate the document begin location.
-   // 3. Seek all the other terms to past the document begin.
+   // 3. Seek all the other terms to past the document begin and the target location.
    // 4. If any term is past the document end, return to
    // step 2.
    // 5. If any ISR reaches the end, there is no match.
@@ -163,6 +167,7 @@ Post* ISRAnd::Seek( Location target )
          maxLoc = nextEndLocation;
          }
       }
+      //std::cout<<nearestTerm<<" " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
    do
       {
       // 2. Move the document end ISR to just past the furthest
@@ -172,6 +177,7 @@ Post* ISRAnd::Seek( Location target )
       Location docEndLocation = endDoc->GetEndLocation();
       // TODO: doc length
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength();
+      //std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
       maxLoc = 0;
 
@@ -180,7 +186,7 @@ Post* ISRAnd::Seek( Location target )
       for (size_t i = 0; i < NumberOfTerms; ++i)
          {
          ISR *Term = *(Terms + i);
-         Post *nextPost = Term->Seek(docStartLocation);
+         Post *nextPost = Term->Seek(max(docStartLocation, target));
          // If any ISR reaches the end, there is no match.
          if (!nextPost)
             return nullptr;

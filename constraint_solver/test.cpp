@@ -7,11 +7,12 @@
 #include "../utility/include/mString.h"
 #include <filesystem>
 #include <string>
+#define ASSERT(left,operator,right) { if(!((left) operator (right))){ std::cerr << "ASSERT FAILED: " << #left << #operator << #right << " @ " << __FILE__ << " (" << __LINE__ << "). " << #left << "=" << (left) << "; " << #right << "=" << (right) << std::endl; } }
 using namespace std;
 
 int main(int argc, char *argv[]) {
-   // __fs::filesystem::remove_all(CHUNK_DIRECTORY);
-   // __fs::filesystem::create_directory(CHUNK_DIRECTORY);
+   filesystem::remove_all(CHUNK_DIRECTORY);
+   filesystem::create_directory(CHUNK_DIRECTORY);
 
    ifstream docs;
    docs.open("testdoc.txt");
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
       else if (charr == '/') 
          {
          ic.Insert("cat_title", "cat.com");
-          cout<<"Inserted!\n";
+         // cout<<"URL Inserted!\n";
          }
       else if (charr != '\t')
          *pos++ = charr;
@@ -37,7 +38,13 @@ int main(int argc, char *argv[]) {
          pos = term0;
          String term(term0);
          ic.Insert(term, Body);
-          cout<<"Inserted "<<term0<<"\n";
+         // cout<<"Inserted "<<term0<<"\n";
+         // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
+         ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
+         // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
+         //    std::cout << chunkEnds[i] ;
+         // }
+         // std::cout << std::endl;
          }
       }
    ic.FinishConstruction();
@@ -56,6 +63,11 @@ int main(int argc, char *argv[]) {
    ISRWord *word_brown = dict.OpenISRWord(brown);
    ISRWord *word_fox = dict.OpenISRWord(fox);
 
+   //std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   // while(word_quick->Next()) {
+   //    std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   // }
+
    Post* res = nullptr;
 // query 1: quick | fox
    cout << "q1 Results:" << endl;
@@ -63,73 +75,98 @@ int main(int argc, char *argv[]) {
    ISROr *q1 = new ISROr(terms_q1, 2);
 
    cout<<"ISROr Seek tests:"<<endl;
-   for( int i = 0; i < 10; ++i )
-      {
-      cout << "ISROr Seek("<<2*i<<"): ";
-      res = q1->Seek(2*i);
-      if (res)
-         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      }
-   q1->Seek(0);
-   cout<<"ISROr Next tests:"<<endl;
-   while ( res = q1->Next() )
-      {
-      cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      }
+   res = q1->Seek(0);
+   ASSERT(res->GetStartLocation(), ==, 0);
+   res = q1->Seek(2);
+   ASSERT(res->GetStartLocation(), ==, 2);
+   res = q1->Seek(4);
+   ASSERT(res->GetStartLocation(), ==, 5);
+   res = q1->Seek(10);
+   ASSERT(res->GetStartLocation(), ==, 12);
+   res = q1->Seek(20);
+   ASSERT(res->GetStartLocation(), ==, 21);
+   res = q1->Seek(30);
+   ASSERT(res, ==, nullptr);
 
-   // cout<<"constraint solver output:"<<endl;
-   // ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
-   // for (unsigned i = 0; i < result1.size(); ++i)
-   //    {
-   //    cout << result1[i]->GetStartLocation() << " " << result1[i]->GetEndLocation() << endl;
-   //    delete result1[i];
-   //    }
+   cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
+   // [0,1,2,3,4]
+   ::vector<Offset> result1 = *ConstraintSolver(EndDoc, q1);
+   for (unsigned i = 0; i < result1.size(); ++i)
+      cout << result1[i] << endl;
+
 
 // query 2: "quick brown quick"
    ISR *terms_q2[] = {word_quick, word_brown, word_quick};
    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
 
+   cout << "q2 Results:" << endl;
    cout<<"ISRPhrase Seek tests:"<<endl;
-   for( int i = 0; i < 14; ++i )
-      {
-      cout << "ISRPhrase Seek("<<i<<"): ";
-      res = q2->Seek(i);
-      if (res)
-         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      delete res;
-      }
+   res = q2->Seek(0);
+   ASSERT(res->GetStartLocation(), ==, 5);
+   ASSERT(res->GetEndLocation(), ==, 7);
+   delete res;
+   res = q2->Seek(4);
+   ASSERT(res->GetStartLocation(), ==, 5);
+   ASSERT(res->GetEndLocation(), ==, 7);
+   delete res;
+   res = q2->Seek(6);
+   ASSERT(res->GetStartLocation(), ==, 7);
+   ASSERT(res->GetEndLocation(), ==, 9);
+   delete res;
+   res = q2->Seek(7);
+   ASSERT(res->GetStartLocation(), ==, 7);
+   ASSERT(res->GetEndLocation(), ==, 9);
+   delete res;
+   res = q2->Seek(9);
+   ASSERT(res->GetStartLocation(), ==, 19);
+   ASSERT(res->GetEndLocation(), ==, 21);
+   delete res;
+   res = q2->Seek(20);
+   ASSERT(res, ==, nullptr);
 
-   // ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
-   // cout << "q2 Results:" << endl;
-   // for (unsigned i = 0; i < result2.size(); ++i)
-   //    {
-   //    cout << result2[i]->GetStartLocation() << " " << result2[i]->GetEndLocation() << endl;
-   //    delete result2[i];
-   //    }
+   cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
+   // [1,3]
+   ::vector<Offset> result2 = *ConstraintSolver(EndDoc, q2);
+   for (unsigned i = 0; i < result2.size(); ++i)
+      cout << result2[i] << endl;
       
 
 // query 3: quick fox
+   cout << "q3 Results:" << endl;
    ISR *terms_q3[] = {word_quick, word_fox};
    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
 
    cout<<"ISRAnd Seek tests:"<<endl;
-   for( int i = 0; i < 14; ++i )
-      {
-      cout << "ISRAnd Seek("<<i<<"): ";
-      res = q3->Seek(i);
-      if (res)
-         cout << res->GetStartLocation() << ' ' << res->GetEndLocation() << endl;
-      }
+   res = q3->Seek(0);
+   ASSERT(res->GetStartLocation(), ==, 0);
+   ASSERT(res->GetEndLocation(), ==, 2);
+   delete res;
+   res = q3->Seek(4);
+   ASSERT(res->GetStartLocation(), ==, 12);
+   ASSERT(res->GetEndLocation(), ==, 14);
+   delete res;
+   res = q3->Seek(12);
+   ASSERT(res->GetStartLocation(), ==, 12);
+   ASSERT(res->GetEndLocation(), ==, 14);
+   delete res;
+   res = q3->Seek(13);
+   ASSERT(res->GetStartLocation(), ==, 14);
+   ASSERT(res->GetEndLocation(), ==, 15);
+   delete res;
+   res = q3->Seek(15);
+   ASSERT(res->GetStartLocation(), ==, 18);
+   ASSERT(res->GetEndLocation(), ==, 19);
+   delete res;
+   res = q2->Seek(19);
+   ASSERT(res, ==, nullptr);
+   res = q2->Seek(29);
+   ASSERT(res, ==, nullptr);
 
-
-   
-   // ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
-   // cout << "q3 Results:" << endl;
-   // for (unsigned i = 0; i < result3.size(); ++i)
-   //    {
-   //    cout << result3[i]->GetStartLocation() << " " << result3[i]->GetEndLocation() << endl;
-   //    delete result3[i];
-   //    }
+   cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
+   // [0,2,3]
+   ::vector<Offset> result3 = *ConstraintSolver(EndDoc, q3);
+   for (unsigned i = 0; i < result3.size(); ++i)
+      cout << result3[i] << endl;
 
 
 
@@ -144,15 +181,13 @@ int main(int argc, char *argv[]) {
 //       delete result4[i];
 //       }
 
-// TODO: Seek tests
-
-// TODO: Next tests
-
-
+   // delete(result1);
+   // delete(result2);
+   // delete(result3);
    delete(q1);
-   // delete (q2);
-   // delete (q3);
-   // delete (q4);
+   delete (q2);
+   delete (q3);
+   //delete (q4);
 
    delete (word_quick);
    delete (word_brown);
