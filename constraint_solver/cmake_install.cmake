@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/tiger/OneDrive/eecs440/search-engine/search-engine/constraint_solver/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
