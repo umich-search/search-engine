@@ -357,3 +357,7 @@ unsigned ISREndDoc::GetUrlLength() {
     else {
         return strlen(manager.GetDocumentDetails(currIndex, currChunk).url.cstr());
     }}
+
+Offset ISREndDoc::GetCurrIndex() {
+    return currIndex;
+}

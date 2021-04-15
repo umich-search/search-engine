@@ -63,8 +63,6 @@ private:
     Post currPost;
     Post Doc;
     TermPostingListRaw termPostingListRaw;
-
-
 };
 
 class ISREndDoc : public ISR {
@@ -88,6 +86,9 @@ public:
 
     // Get position of last term
     Location GetEndLocation();
+
+    // Get doc index 
+    Offset GetCurrIndex();
 
     // get length of document
     unsigned GetDocumentLength();
