@@ -141,11 +141,7 @@ void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
         String url = frontier->PopUrl( alive );
         Print(String("Popped: ") + url, threadID);
 
-<<<<<<< HEAD
-        // 2. check for robots.txt
-=======
         // // 2. check for robots.txt
->>>>>>> 4be9884a71be68dd37da88f88be05dacf6835a5b
         // this->parseRobot( url );
         // Print(String("ParseRobot: ") + url, threadID);
 

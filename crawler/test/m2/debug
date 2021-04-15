@@ -1,0 +1,2447 @@
+Listenning thread created! socketfd = 3
+Listening on port 8000
+Listenning thread detahced
+Send manager send to port 8888
+Constructing Crawler App (machineID:1)...
+Constructing frontier using seed list...
+Starting Crawler App...
+Listen Manager alive: 1
+Send Manager alive: 1
+Crawlers alive: 1
+M:1 Thread(Crawler:0): Popped: https://vk.com
+M:1 Thread(Crawler:0): Pushed url: https://vk.com
+M:1 Thread(Crawler:0): Popped: https://jd.com
+M:1 Thread(SendManager:0): Send: other's url = https://jd.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(Crawler:0): Pushed url: https://jd.com
+M:1 Thread(Crawler:0): Popped: https://tmall.com
+M:1 Thread(SendManager:0): Send: other's url = https://tmall.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://tmall.com
+M:1 Thread(Crawler:0): Popped: https://yandex.ru
+M:1 Thread(Crawler:0): Pushed url: https://yandex.ru
+M:1 Thread(Crawler:0): Popped: https://google.cn
+M:1 Thread(Crawler:0): Pushed url: https://google.cn
+M:1 Thread(Crawler:0): Popped: https://yahoo.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://yahoo.co.jp
+M:1 Thread(Crawler:0): Popped: https://facebook.com
+M:1 Thread(SendManager:0): Send: other's url = https://facebook.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://facebook.com
+M:1 Thread(Crawler:0): Popped: https://bongacams.com
+M:1 Thread(Crawler:0): Pushed url: https://bongacams.com
+M:1 Thread(Crawler:0): Popped: https://sogou.com
+M:1 Thread(Crawler:0): Pushed url: https://sogou.com
+M:1 Thread(Crawler:0): Popped: https://office.com
+M:1 Thread(SendManager:0): Send: other's url = https://office.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://office.com
+M:1 Thread(Crawler:0): Popped: https://paypal.com
+M:1 Thread(Crawler:0): Pushed url: https://paypal.com
+M:1 Thread(Crawler:0): Popped: https://pexels.com
+M:1 Thread(Crawler:0): Pushed url: https://pexels.com
+M:1 Thread(Crawler:0): Popped: https://hotstar.com
+M:1 Thread(Crawler:0): Pushed url: https://hotstar.com
+M:1 Thread(Crawler:0): Popped: https://jiameng.com
+M:1 Thread(Crawler:0): Pushed url: https://jiameng.com
+M:1 Thread(Crawler:0): Popped: https://netflix.com
+M:1 Thread(SendManager:0): Send: other's url = https://netflix.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Pushed url: https://netflix.com
+M:1 Thread(Crawler:0): Popped: https://sina.com.cn
+M:1 Thread(SendManager:0): Send: other's url = https://sina.com.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Pushed url: https://sina.com.cn
+M:1 Thread(Crawler:0): Popped: https://so.com
+M:1 Thread(SendManager:0): Send: other's url = https://so.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(Crawler:0): Pushed url: https://so.com
+M:1 Thread(Crawler:0): Popped: https://usps.com
+M:1 Thread(SendManager:0): Send: My own url = https://usps.com
+36
+M:1 Thread(Crawler:0): Pushed url: https://usps.com
+M:1 Thread(Crawler:0): Popped: https://zhanqi.tv
+M:1 Thread(SendManager:0): Send: other's url = https://zhanqi.tv
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://zhanqi.tv
+M:1 Thread(Crawler:0): Popped: https://ltn.com.tw
+M:1 Thread(SendManager:0): Send: My own url = https://ltn.com.tw
+38
+M:1 Thread(Crawler:0): Pushed url: https://ltn.com.tw
+M:1 Thread(Crawler:0): Popped: https://aliyun.com
+M:1 Thread(SendManager:0): Send: other's url = https://aliyun.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://aliyun.com
+M:1 Thread(Crawler:0): Popped: https://liputan6.com
+M:1 Thread(Crawler:0): Pushed url: https://liputan6.com
+M:1 Thread(Crawler:0): Popped: https://google.com.hk
+M:1 Thread(SendManager:0): Send: other's url = https://google.com.hk
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Pushed url: https://google.com.hk
+M:1 Thread(Crawler:0): Popped: https://livejasmin.com
+M:1 Thread(SendManager:0): Send: other's url = https://livejasmin.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(Crawler:0): Pushed url: https://livejasmin.com
+M:1 Thread(Crawler:0): Popped: https://redd.it
+M:1 Thread(Crawler:0): Pushed url: https://redd.it
+M:1 Thread(Crawler:0): Popped: https://google.es
+M:1 Thread(SendManager:0): Send: other's url = https://google.es
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://google.es
+M:1 Thread(Crawler:0): Popped: https://padlet.com
+M:1 Thread(SendManager:0): Send: other's url = https://padlet.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://padlet.com
+M:1 Thread(Crawler:0): Popped: https://flipkart.com
+M:1 Thread(Crawler:0): Pushed url: https://flipkart.com
+M:1 Thread(Crawler:0): Popped: https://alnaharegypt.com
+M:1 Thread(SendManager:0): Send: other's url = https://alnaharegypt.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 24
+M:1 Thread(Crawler:0): Pushed url: https://alnaharegypt.com
+M:1 Thread(Crawler:0): Popped: https://researchgate.net
+M:1 Thread(SendManager:0): Send: other's url = https://researchgate.net
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 24
+M:1 Thread(Crawler:0): Pushed url: https://researchgate.net
+M:1 Thread(Crawler:0): Popped: https://coinmarketcap.com
+M:1 Thread(SendManager:0): Send: My own url = https://coinmarketcap.com
+45
+M:1 Thread(Crawler:0): Pushed url: https://coinmarketcap.com
+M:1 Thread(Crawler:0): Popped: https://manoramaonline.com
+M:1 Thread(Crawler:0): Pushed url: https://manoramaonline.com
+M:1 Thread(Crawler:0): Popped: https://in.gr
+M:1 Thread(Crawler:0): Pushed url: https://in.gr
+M:1 Thread(Crawler:0): Popped: https://ups.com
+M:1 Thread(SendManager:0): Send: other's url = https://ups.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(Crawler:0): Pushed url: https://ups.com
+M:1 Thread(Crawler:0): Popped: https://dell.com
+M:1 Thread(Crawler:0): Pushed url: https://dell.com
+M:1 Thread(Crawler:0): Popped: https://fedex.com
+M:1 Thread(SendManager:0): Send: other's url = https://fedex.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://fedex.com
+M:1 Thread(Crawler:0): Popped: https://linktr.ee
+M:1 Thread(Crawler:0): Pushed url: https://linktr.ee
+M:1 Thread(Crawler:0): Popped: https://pixabay.com
+M:1 Thread(SendManager:0): Send: other's url = https://pixabay.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Pushed url: https://pixabay.com
+M:1 Thread(Crawler:0): Popped: https://google.com.eg
+M:1 Thread(Crawler:0): Pushed url: https://google.com.eg
+M:1 Thread(Crawler:0): Popped: https://theguardian.com
+M:1 Thread(SendManager:0): Send: other's url = https://theguardian.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(Crawler:0): Pushed url: https://theguardian.com
+M:1 Thread(Crawler:0): Popped: https://efu.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://efu.com.cn
+M:1 Thread(Crawler:0): Popped: https://360doc.com
+M:1 Thread(SendManager:0): Send: My own url = https://360doc.com
+38
+M:1 Thread(Crawler:0): Pushed url: https://360doc.com
+M:1 Thread(Crawler:0): Popped: https://aporasal.net
+M:1 Thread(Crawler:0): Pushed url: https://aporasal.net
+M:1 Thread(Crawler:0): Popped: https://mediafire.com
+M:1 Thread(SendManager:0): Send: other's url = https://mediafire.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Pushed url: https://mediafire.com
+M:1 Thread(Crawler:0): Popped: https://google.com.mx
+M:1 Thread(SendManager:0): Send: other's url = https://google.com.mx
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Pushed url: https://google.com.mx
+M:1 Thread(Crawler:0): Popped: https://tripadvisor.com
+M:1 Thread(Crawler:0): Pushed url: https://tripadvisor.com
+M:1 Thread(Crawler:0): Popped: https://shutterstock.com
+M:1 Thread(Crawler:0): Pushed url: https://shutterstock.com
+M:1 Thread(Crawler:0): Popped: https://washingtonpost.com
+M:1 Thread(SendManager:0): Send: other's url = https://washingtonpost.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 26
+M:1 Thread(Crawler:0): Pushed url: https://washingtonpost.com
+M:1 Thread(Crawler:0): Popped: https://qoo10.sg
+M:1 Thread(Crawler:0): Pushed url: https://qoo10.sg
+M:1 Thread(Crawler:0): Popped: https://azure.com
+M:1 Thread(Crawler:0): Pushed url: https://azure.com
+M:1 Thread(Crawler:0): Popped: https://webmd.com
+M:1 Thread(SendManager:0): Send: My own url = https://webmd.com
+37
+M:1 Thread(Crawler:0): Pushed url: https://webmd.com
+M:1 Thread(Crawler:0): Popped: https://costco.com
+M:1 Thread(Crawler:0): Pushed url: https://costco.com
+M:1 Thread(Crawler:0): Popped: https://sberbank.ru
+M:1 Thread(SendManager:0): Send: other's url = https://sberbank.ru
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Pushed url: https://sberbank.ru
+M:1 Thread(Crawler:0): Popped: https://google.co.th
+M:1 Thread(SendManager:0): Send: other's url = https://google.co.th
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://google.co.th
+M:1 Thread(Crawler:0): Popped: https://varzesh3.com
+M:1 Thread(SendManager:0): Send: other's url = https://varzesh3.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://varzesh3.com
+M:1 Thread(Crawler:0): Popped: https://gosuslugi.ru
+M:1 Thread(SendManager:0): Send: other's url = https://gosuslugi.ru
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://gosuslugi.ru
+M:1 Thread(Crawler:0): Popped: https://rt.com
+M:1 Thread(SendManager:0): Send: other's url = https://rt.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(Crawler:0): Pushed url: https://rt.com
+M:1 Thread(Crawler:0): Popped: https://google.gr
+M:1 Thread(Crawler:0): Pushed url: https://google.gr
+M:1 Thread(Crawler:0): Popped: https://twimg.com
+M:1 Thread(SendManager:0): Send: other's url = https://twimg.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://twimg.com
+M:1 Thread(Crawler:0): Popped: https://laodong.vn
+M:1 Thread(Crawler:0): Pushed url: https://laodong.vn
+M:1 Thread(Crawler:0): Popped: https://pinimg.com
+M:1 Thread(Crawler:0): Pushed url: https://pinimg.com
+M:1 Thread(Crawler:0): Popped: https://huaban.com
+M:1 Thread(SendManager:0): Send: other's url = https://pinimg.com
+M:1 Thread(Crawler:0): Pushed url: https://huaban.com
+M:1 Thread(Crawler:0): Popped: https://mehrnews.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://mehrnews.com
+M:1 Thread(Crawler:0): Popped: https://proiezionidiborsa.it
+M:1 Thread(Crawler:0): Pushed url: https://proiezionidiborsa.it
+M:1 Thread(SendManager:0): Send: other's url = https://proiezionidiborsa.it
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 28
+M:1 Thread(Crawler:0): Popped: https://ih5.cn
+M:1 Thread(Crawler:0): Pushed url: https://ih5.cn
+M:1 Thread(Crawler:0): Popped: https://ytmp3.cc
+M:1 Thread(SendManager:0): Send: other's url = https://ih5.cn
+M:1 Thread(Crawler:0): Pushed url: https://ytmp3.cc
+M:1 Thread(Crawler:0): Popped: https://lowes.com
+M:1 Thread(Crawler:0): Pushed url: https://lowes.com
+M:1 Thread(Crawler:0): Popped: https://ebay.com.au
+M:1 Thread(Crawler:0): Pushed url: https://ebay.com.au
+M:1 Thread(Crawler:0): Popped: https://softonic.com
+M:1 Thread(Crawler:0): Pushed url: https://softonic.com
+M:1 Thread(Crawler:0): Popped: https://akamaized.net
+M:1 Thread(Crawler:0): Pushed url: https://akamaized.net
+M:1 Thread(Crawler:0): Popped: https://premierleague.com
+M:1 Thread(Crawler:0): Pushed url: https://premierleague.com
+M:1 Thread(Crawler:0): Popped: https://babyschool.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://babyschool.com.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://lowes.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:1): Send: other's url = https://ytmp3.cc
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(Crawler:0): Popped: https://104.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://104.com.tw
+M:1 Thread(SendManager:0): Send: other's url = https://104.com.tw
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://powerbi.com
+M:1 Thread(Crawler:0): Pushed url: https://powerbi.com
+M:1 Thread(Crawler:0): Popped: https://expedia.com
+M:1 Thread(Crawler:0): Pushed url: https://expedia.com
+M:1 Thread(Crawler:0): Popped: https://dianping.com
+M:1 Thread(Crawler:0): Pushed url: https://dianping.com
+M:1 Thread(Crawler:0): Popped: https://pchome.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://pchome.com.tw
+M:1 Thread(Crawler:0): Popped: https://royalbank.com
+M:1 Thread(Crawler:0): Pushed url: https://royalbank.com
+M:1 Thread(Crawler:0): Popped: https://breitbart.com
+M:1 Thread(Crawler:0): Pushed url: https://breitbart.com
+M:1 Thread(Crawler:0): Popped: https://rakuten-bank.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://rakuten-bank.co.jp
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://powerbi.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://expedia.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://dianping.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://rakuten-bank.co.jp
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 26
+M:1 Thread(Crawler:0): Popped: https://wp.pl
+M:1 Thread(Crawler:0): Pushed url: https://wp.pl
+M:1 Thread(Crawler:0): Popped: https://india.com
+M:1 Thread(Crawler:0): Pushed url: https://india.com
+M:1 Thread(Crawler:0): Popped: https://rediff.com
+M:1 Thread(Crawler:0): Pushed url: https://rediff.com
+M:1 Thread(Crawler:0): Popped: https://elpais.com
+M:1 Thread(Crawler:0): Pushed url: https://elpais.com
+M:1 Thread(Crawler:0): Popped: https://shopee.co.th
+M:1 Thread(Crawler:0): Pushed url: https://shopee.co.th
+M:1 Thread(Crawler:0): Popped: https://epicgames.com
+M:1 Thread(Crawler:0): Pushed url: https://epicgames.com
+M:1 Thread(SendManager:1): Send: other's url = https://rediff.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: other's url = https://wp.pl
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 13
+M:1 Thread(SendManager:0): Send: other's url = https://elpais.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://epicgames.com
+M:1 Thread(Crawler:0): Popped: https://beijing.gov.cn
+M:1 Thread(SendManager:0): Send: other's url = https://beijing.gov.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Pushed url: https://beijing.gov.cn
+M:1 Thread(Crawler:0): Popped: https://arzdigital.com
+M:1 Thread(Crawler:0): Pushed url: https://arzdigital.com
+M:1 Thread(Crawler:0): Popped: https://go.com
+M:1 Thread(Crawler:0): Pushed url: https://go.com
+M:1 Thread(Crawler:0): Popped: https://skroutz.gr
+M:1 Thread(Crawler:0): Pushed url: https://skroutz.gr
+M:1 Thread(Crawler:0): Popped: https://news18.com
+M:1 Thread(Crawler:0): Pushed url: https://news18.com
+M:1 Thread(Crawler:0): Popped: https://jawapos.com
+M:1 Thread(Crawler:0): Pushed url: https://jawapos.com
+M:1 Thread(Crawler:0): Popped: https://asriran.com
+M:1 Thread(Crawler:0): Pushed url: https://asriran.com
+M:1 Thread(Crawler:0): Popped: https://afip.gob.ar
+M:1 Thread(Crawler:0): Pushed url: https://afip.gob.ar
+M:1 Thread(Crawler:0): Popped: https://beytoote.com
+M:1 Thread(Crawler:0): Pushed url: https://beytoote.com
+M:1 Thread(Crawler:0): Popped: https://marriott.com
+M:1 Thread(Crawler:0): Pushed url: https://marriott.com
+M:1 Thread(Crawler:0): Popped: https://258.com
+M:1 Thread(Crawler:0): Pushed url: https://258.com
+M:1 Thread(Crawler:0): Popped: https://sapo.pt
+M:1 Thread(Crawler:0): Pushed url: https://sapo.pt
+M:1 Thread(Crawler:0): Popped: https://qiita.com
+M:1 Thread(Crawler:0): Pushed url: https://qiita.com
+M:1 Thread(Crawler:0): Popped: https://harvard.edu
+M:1 Thread(Crawler:0): Pushed url: https://harvard.edu
+M:1 Thread(Crawler:0): Popped: https://subscene.com
+M:1 Thread(Crawler:0): Pushed url: https://subscene.com
+M:1 Thread(Crawler:0): Popped: https://blizzard.com
+M:1 Thread(Crawler:0): Pushed url: https://blizzard.com
+M:1 Thread(Crawler:0): Popped: https://businessinsider.com
+M:1 Thread(Crawler:0): Pushed url: https://businessinsider.com
+M:1 Thread(Crawler:0): Popped: https://brasilescola.uol.com.br
+M:1 Thread(Crawler:0): Pushed url: https://brasilescola.uol.com.br
+M:1 Thread(SendManager:0): Send: other's url = https://go.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://skroutz.gr
+M:1 Thread(Crawler:0): Popped: https://vrbo.com
+M:1 Thread(Crawler:0): Pushed url: https://vrbo.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://wiley.com
+M:1 Thread(Crawler:0): Pushed url: https://wiley.com
+M:1 Thread(Crawler:0): Popped: https://trulia.com
+M:1 Thread(Crawler:0): Pushed url: https://trulia.com
+M:1 Thread(Crawler:0): Popped: https://shopify.com
+M:1 Thread(Crawler:0): Pushed url: https://shopify.com
+M:1 Thread(Crawler:0): Popped: https://cpic.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://cpic.com.cn
+M:1 Thread(Crawler:0): Popped: https://livedoor.jp
+M:1 Thread(Crawler:0): Pushed url: https://livedoor.jp
+M:1 Thread(Crawler:0): Popped: https://uidai.gov.in
+M:1 Thread(Crawler:0): Pushed url: https://uidai.gov.in
+M:1 Thread(Crawler:0): Popped: https://banesconline.com
+M:1 Thread(Crawler:0): Pushed url: https://banesconline.com
+M:1 Thread(Crawler:0): Popped: https://blog.jp
+M:1 Thread(Crawler:0): Pushed url: https://blog.jp
+M:1 Thread(Crawler:0): Popped: https://gh0089.com
+M:1 Thread(Crawler:0): Pushed url: https://gh0089.com
+M:1 Thread(Crawler:0): Popped: https://jagran.com
+M:1 Thread(Crawler:0): Pushed url: https://jagran.com
+M:1 Thread(Crawler:0): Popped: https://corriere.it
+M:1 Thread(Crawler:0): Pushed url: https://corriere.it
+M:1 Thread(Crawler:0): Popped: https://southcn.com
+M:1 Thread(Crawler:0): Pushed url: https://southcn.com
+M:1 Thread(Crawler:0): Popped: https://hespress.com
+M:1 Thread(Crawler:0): Pushed url: https://hespress.com
+M:1 Thread(Crawler:0): Popped: https://urdupoint.com
+M:1 Thread(Crawler:0): Pushed url: https://urdupoint.com
+M:1 Thread(Crawler:0): Popped: https://bancodevenezuela.com
+M:1 Thread(Crawler:0): Pushed url: https://bancodevenezuela.com
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://news18.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: other's url = https://asriran.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://afip.gob.ar
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://marriott.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://sapo.pt
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 15
+M:1 Thread(SendManager:1): Send: other's url = https://qiita.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 17
+M:1 Thread(SendManager:1): Send: other's url = https://subscene.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: My own url = https://beytoote.com
+40
+M:1 Thread(SendManager:0): Send: other's url = https://blizzard.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://businessinsider.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://brasilescola.uol.com.br
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 27
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: other's url = https://wiley.com
+M:1 Thread(SendManager:0): Send: sent bytes: 31
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: other's url = https://shopify.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: other's url = https://cpic.com.cn
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: other's url = https://uidai.gov.in
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://gh0089.com
+M:1 Thread(SendManager:0): Send: other's url = https://southcn.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://urdupoint.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Popped: https://as.com
+M:1 Thread(Crawler:0): Pushed url: https://as.com
+M:1 Thread(SendManager:0): Send: other's url = https://as.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://cnki.net
+M:1 Thread(Crawler:0): Pushed url: https://cnki.net
+M:1 Thread(Crawler:0): Popped: https://ameba.jp
+M:1 Thread(Crawler:0): Pushed url: https://ameba.jp
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:1): Send: My own url = https://ameba.jp
+36
+M:1 Thread(Crawler:0): Popped: https://cisco.com
+M:1 Thread(Crawler:0): Pushed url: https://cisco.com
+M:1 Thread(Crawler:0): Popped: https://gamer.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://gamer.com.tw
+M:1 Thread(Crawler:0): Popped: https://gmarket.co.kr
+M:1 Thread(Crawler:0): Pushed url: https://gmarket.co.kr
+M:1 Thread(Crawler:0): Popped: https://greatandhra.com
+M:1 Thread(Crawler:0): Pushed url: https://greatandhra.com
+M:1 Thread(Crawler:0): Popped: https://ourbestnews.com
+M:1 Thread(Crawler:0): Pushed url: https://ourbestnews.com
+M:1 Thread(SendManager:1): Send: My own url = https://gamer.com.tw
+40
+M:1 Thread(SendManager:0): Send: My own url = https://cisco.com
+37
+M:1 Thread(Crawler:0): Popped: https://bbb.org
+M:1 Thread(Crawler:0): Pushed url: https://bbb.org
+M:1 Thread(Crawler:0): Popped: https://kayak.com
+M:1 Thread(Crawler:0): Pushed url: https://kayak.com
+M:1 Thread(Crawler:0): Popped: https://neobux.com
+M:1 Thread(Crawler:0): Pushed url: https://neobux.com
+M:1 Thread(Crawler:0): Popped: https://sbisec.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://sbisec.co.jp
+M:1 Thread(Crawler:0): Popped: https://memurlar.net
+M:1 Thread(Crawler:0): Pushed url: https://memurlar.net
+M:1 Thread(Crawler:0): Popped: https://gmanetwork.com
+M:1 Thread(Crawler:0): Pushed url: https://gmanetwork.com
+M:1 Thread(Crawler:0): Popped: https://collegeboard.org
+M:1 Thread(Crawler:0): Pushed url: https://collegeboard.org
+M:1 Thread(Crawler:0): Popped: https://bestlifeonline.com
+M:1 Thread(Crawler:0): Pushed url: https://bestlifeonline.com
+M:1 Thread(SendManager:0): Send: other's url = https://sbisec.co.jp
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: My own url = https://neobux.com
+38
+M:1 Thread(SendManager:1): Send: other's url = https://collegeboard.org
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 24
+M:1 Thread(Crawler:0): Popped: https://suumo.jp
+M:1 Thread(Crawler:0): Pushed url: https://suumo.jp
+M:1 Thread(Crawler:0): Popped: https://kohls.com
+M:1 Thread(Crawler:0): Pushed url: https://kohls.com
+M:1 Thread(Crawler:0): Popped: https://hitbtc.com
+M:1 Thread(Crawler:0): Pushed url: https://hitbtc.com
+M:1 Thread(Crawler:0): Popped: https://webatam.com
+M:1 Thread(Crawler:0): Pushed url: https://webatam.com
+M:1 Thread(Crawler:0): Popped: https://custhelp.com
+M:1 Thread(Crawler:0): Pushed url: https://custhelp.com
+M:1 Thread(Crawler:0): Popped: https://yektanet.com
+M:1 Thread(Crawler:0): Pushed url: https://yektanet.com
+M:1 Thread(Crawler:0): Popped: https://shareasale.com
+M:1 Thread(Crawler:0): Pushed url: https://shareasale.com
+M:1 Thread(Crawler:0): Popped: https://kizlarsoruyor.com
+M:1 Thread(Crawler:0): Pushed url: https://kizlarsoruyor.com
+M:1 Thread(SendManager:1): Send: other's url = https://suumo.jp
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(SendManager:1): Send: other's url = https://hitbtc.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: My own url = https://memurlar.net
+40
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://custhelp.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://kizlarsoruyor.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 25
+M:1 Thread(Crawler:0): Popped: https://emalls.ir
+M:1 Thread(Crawler:0): Pushed url: https://emalls.ir
+M:1 Thread(Crawler:0): Popped: https://gucci.com
+M:1 Thread(SendManager:1): Send: other's url = https://emalls.ir
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: My own url = https://gucci.com
+37
+M:1 Thread(Crawler:0): Pushed url: https://gucci.com
+M:1 Thread(Crawler:0): Popped: https://51auto.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://51auto.com
+M:1 Thread(Crawler:0): Popped: https://groupon.com
+M:1 Thread(Crawler:0): Pushed url: https://groupon.com
+M:1 Thread(Crawler:0): Popped: https://ltcminer.com
+M:1 Thread(Crawler:0): Pushed url: https://ltcminer.com
+M:1 Thread(Crawler:0): Popped: https://qualtrics.com
+M:1 Thread(Crawler:0): Pushed url: https://qualtrics.com
+M:1 Thread(Crawler:0): Popped: https://yinyuetai.com
+M:1 Thread(Crawler:0): Pushed url: https://yinyuetai.com
+M:1 Thread(SendManager:1): Send: other's url = https://groupon.com
+M:1 Thread(SendManager:0): Send: My own url = https://51auto.com
+38
+M:1 Thread(SendManager:0): Send: other's url = https://ltcminer.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://smartrecruiters.com
+M:1 Thread(Crawler:0): Pushed url: https://smartrecruiters.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://qualtrics.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://ed.gov
+M:1 Thread(Crawler:0): Pushed url: https://ed.gov
+M:1 Thread(Crawler:0): Popped: https://9978.cn
+M:1 Thread(Crawler:0): Pushed url: https://9978.cn
+M:1 Thread(Crawler:0): Popped: https://isna.ir
+M:1 Thread(Crawler:0): Pushed url: https://isna.ir
+M:1 Thread(Crawler:0): Popped: https://weibo.cn
+M:1 Thread(Crawler:0): Pushed url: https://weibo.cn
+M:1 Thread(Crawler:0): Popped: https://natro.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Pushed url: https://natro.com
+M:1 Thread(Crawler:0): Popped: https://lawtime.cn
+M:1 Thread(Crawler:0): Pushed url: https://lawtime.cn
+M:1 Thread(Crawler:0): Popped: https://onlinedown.net
+M:1 Thread(Crawler:0): Pushed url: https://onlinedown.net
+M:1 Thread(Crawler:0): Popped: https://e-taxes.gov.az
+M:1 Thread(Crawler:0): Pushed url: https://e-taxes.gov.az
+M:1 Thread(SendManager:0): Send: My own url = https://yinyuetai.com
+41
+M:1 Thread(SendManager:0): Send: My own url = https://smartrecruiters.com
+47
+M:1 Thread(SendManager:0): Send: other's url = https://ed.gov
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://weibo.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://natro.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Popped: https://fril.jp
+M:1 Thread(Crawler:0): Pushed url: https://fril.jp
+M:1 Thread(Crawler:0): Popped: https://att.net
+M:1 Thread(Crawler:0): Pushed url: https://att.net
+M:1 Thread(Crawler:0): Popped: https://oneindia.com
+M:1 Thread(Crawler:0): Pushed url: https://oneindia.com
+M:1 Thread(Crawler:0): Popped: https://haberturk.com
+M:1 Thread(Crawler:0): Pushed url: https://haberturk.com
+M:1 Thread(Crawler:0): Popped: https://cdiscount.com
+M:1 Thread(Crawler:0): Pushed url: https://cdiscount.com
+M:1 Thread(Crawler:0): Popped: https://nbatopshot.com
+M:1 Thread(Crawler:0): Pushed url: https://nbatopshot.com
+M:1 Thread(Crawler:0): Popped: https://lotterypost.com
+M:1 Thread(Crawler:0): Pushed url: https://lotterypost.com
+M:1 Thread(Crawler:0): Popped: https://americanas.com.br
+M:1 Thread(SendManager:0): Send: My own url = https://onlinedown.net
+42
+M:1 Thread(SendManager:0): Send: other's url = https://fril.jp
+M:1 Thread(Crawler:0): Pushed url: https://americanas.com.br
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(SendManager:0): Send: My own url = https://oneindia.com
+40
+M:1 Thread(SendManager:0): Send: other's url = https://haberturk.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://pnc.com
+M:1 Thread(Crawler:0): Pushed url: https://pnc.com
+M:1 Thread(Crawler:0): Popped: https://xtx6.com
+M:1 Thread(Crawler:0): Pushed url: https://xtx6.com
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://cdiscount.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://gusto.com
+M:1 Thread(Crawler:0): Pushed url: https://gusto.com
+M:1 Thread(Crawler:0): Popped: https://minds.com
+M:1 Thread(Crawler:0): Pushed url: https://minds.com
+M:1 Thread(Crawler:0): Popped: https://eenadu.net
+M:1 Thread(Crawler:0): Pushed url: https://eenadu.net
+M:1 Thread(Crawler:0): Popped: https://ems.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://ems.com.cn
+M:1 Thread(Crawler:0): Popped: https://audible.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://nbatopshot.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:0): Send: other's url = https://americanas.com.br
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 25
+M:1 Thread(SendManager:0): Send: other's url = https://xtx6.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://gusto.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: other's url = https://eenadu.net
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://ems.com.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://audible.com
+M:1 Thread(Crawler:0): Pushed url: https://audible.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Popped: https://linksynergy.com
+M:1 Thread(Crawler:0): Pushed url: https://linksynergy.com
+M:1 Thread(Crawler:0): Popped: https://ml.com
+M:1 Thread(Crawler:0): Pushed url: https://ml.com
+M:1 Thread(Crawler:0): Popped: https://126.com
+M:1 Thread(Crawler:0): Pushed url: https://126.com
+M:1 Thread(Crawler:0): Popped: https://52pk.com
+M:1 Thread(Crawler:0): Pushed url: https://52pk.com
+M:1 Thread(Crawler:0): Popped: https://backlog.jp
+M:1 Thread(Crawler:0): Pushed url: https://backlog.jp
+M:1 Thread(Crawler:0): Popped: https://chetor.com
+M:1 Thread(Crawler:0): Pushed url: https://chetor.com
+M:1 Thread(Crawler:0): Popped: https://wappalyzer.com
+M:1 Thread(Crawler:0): Pushed url: https://wappalyzer.com
+M:1 Thread(Crawler:0): Popped: https://hawaaworld.com
+M:1 Thread(Crawler:0): Pushed url: https://hawaaworld.com
+M:1 Thread(Crawler:0): Popped: https://mercadolibre.com
+M:1 Thread(Crawler:0): Pushed url: https://mercadolibre.com
+M:1 Thread(SendManager:0): Send: other's url = https://52pk.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://backlog.jp
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: My own url = https://126.com
+35
+M:1 Thread(Crawler:0): Popped: https://walmart.ca
+M:1 Thread(Crawler:0): Pushed url: https://walmart.ca
+M:1 Thread(Crawler:0): Popped: https://marketo.com
+M:1 Thread(SendManager:1): Send: other's url = https://hawaaworld.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://marketo.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://cretgate.com
+M:1 Thread(Crawler:0): Pushed url: https://cretgate.com
+M:1 Thread(Crawler:0): Popped: https://discuss.com.hk
+M:1 Thread(Crawler:0): Pushed url: https://discuss.com.hk
+M:1 Thread(Crawler:0): Popped: https://business.com.tm
+M:1 Thread(Crawler:0): Pushed url: https://business.com.tm
+M:1 Thread(Crawler:0): Popped: https://argentina.gob.ar
+M:1 Thread(Crawler:0): Pushed url: https://argentina.gob.ar
+M:1 Thread(Crawler:0): Popped: https://elintransigente.com
+M:1 Thread(Crawler:0): Pushed url: https://elintransigente.com
+M:1 Thread(SendManager:0): Send: My own url = https://mercadolibre.com
+44
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(Crawler:0): Popped: https://portenttwinehypothetically.com
+M:1 Thread(Crawler:0): Pushed url: https://portenttwinehypothetically.com
+M:1 Thread(SendManager:0): Send: My own url = https://cretgate.com
+40
+M:1 Thread(SendManager:0): Send: other's url = https://elintransigente.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 27
+M:1 Thread(SendManager:0): Send: other's url = https://portenttwinehypothetically.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 38
+M:1 Thread(SendManager:1): Send: My own url = https://discuss.com.hk
+42
+M:1 Thread(Crawler:0): Popped: https://wired.com
+M:1 Thread(Crawler:0): Pushed url: https://wired.com
+M:1 Thread(Crawler:0): Popped: https://google.ie
+M:1 Thread(Crawler:0): Pushed url: https://google.ie
+M:1 Thread(SendManager:0): Send: other's url = https://google.ie
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Popped: https://yandex.com
+M:1 Thread(Crawler:0): Pushed url: https://yandex.com
+M:1 Thread(Crawler:0): Popped: https://almaany.com
+M:1 Thread(Crawler:0): Pushed url: https://almaany.com
+M:1 Thread(Crawler:0): Popped: https://anydesk.com
+M:1 Thread(Crawler:0): Pushed url: https://anydesk.com
+M:1 Thread(Crawler:0): Popped: https://kino-teatr.ru
+M:1 Thread(Crawler:0): Pushed url: https://kino-teatr.ru
+M:1 Thread(SendManager:1): Send: other's url = https://kino-teatr.ru
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(Crawler:0): Popped: https://bytedance.net
+M:1 Thread(Crawler:0): Pushed url: https://bytedance.net
+M:1 Thread(Crawler:0): Popped: https://urbandictionary.com
+M:1 Thread(Crawler:0): Pushed url: https://urbandictionary.com
+M:1 Thread(SendManager:0): Send: other's url = https://urbandictionary.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 27
+M:1 Thread(Crawler:0): Popped: https://sporx.com
+M:1 Thread(Crawler:0): Pushed url: https://sporx.com
+M:1 Thread(SendManager:1): Send: other's url = https://sporx.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://mokahr.com
+M:1 Thread(Crawler:0): Pushed url: https://mokahr.com
+M:1 Thread(Crawler:0): Popped: https://pardot.com
+M:1 Thread(Crawler:0): Pushed url: https://pardot.com
+M:1 Thread(Crawler:0): Popped: https://b2clogin.com
+M:1 Thread(Crawler:0): Pushed url: https://b2clogin.com
+M:1 Thread(Crawler:0): Popped: https://get-bitco.in
+M:1 Thread(Crawler:0): Pushed url: https://get-bitco.in
+M:1 Thread(Crawler:0): Popped: https://indiegogo.com
+M:1 Thread(Crawler:0): Pushed url: https://indiegogo.com
+M:1 Thread(Crawler:0): Popped: https://dikaiologitika.gr
+M:1 Thread(Crawler:0): Pushed url: https://dikaiologitika.gr
+M:1 Thread(Crawler:0): Popped: https://britishcouncil.org
+M:1 Thread(Crawler:0): Pushed url: https://britishcouncil.org
+M:1 Thread(SendManager:0): Send: other's url = https://mokahr.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://pardot.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 17
+M:1 Thread(SendManager:1): Send: other's url = https://b2clogin.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://get-bitco.in
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: My own url = https://indiegogo.com
+41
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: My own url = https://britishcouncil.org
+46
+M:1 Thread(Crawler:0): Popped: https://cndhl.com
+M:1 Thread(Crawler:0): Pushed url: https://cndhl.com
+M:1 Thread(Crawler:0): Popped: https://trknex.com
+M:1 Thread(Crawler:0): Pushed url: https://trknex.com
+M:1 Thread(SendManager:0): Send: other's url = https://trknex.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://imiker.com
+M:1 Thread(Crawler:0): Pushed url: https://imiker.com
+M:1 Thread(Crawler:0): Popped: https://zulily.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: My own url = https://imiker.com
+38
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://zulily.com
+M:1 Thread(Crawler:0): Popped: https://jkforum.net
+M:1 Thread(Crawler:0): Pushed url: https://jkforum.net
+M:1 Thread(Crawler:0): Popped: https://3dmgame.com
+M:1 Thread(SendManager:1): Send: other's url = https://jkforum.net
+M:1 Thread(Crawler:0): Pushed url: https://3dmgame.com
+M:1 Thread(Crawler:0): Popped: https://dangbei.com
+M:1 Thread(SendManager:0): Send: other's url = https://3dmgame.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://dangbei.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://dangbei.com
+M:1 Thread(Crawler:0): Popped: https://ssl-images-amazon.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Pushed url: https://ssl-images-amazon.com
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://ssl-images-amazon.com
+M:1 Thread(Crawler:0): Popped: https://irna.ir
+M:1 Thread(Crawler:0): Pushed url: https://irna.ir
+M:1 Thread(Crawler:0): Popped: https://cibc.com
+M:1 Thread(Crawler:0): Pushed url: https://cibc.com
+M:1 Thread(Crawler:0): Popped: https://bisnis.com
+M:1 Thread(Crawler:0): Pushed url: https://bisnis.com
+M:1 Thread(Crawler:0): Popped: https://iefimerida.gr
+M:1 Thread(Crawler:0): Pushed url: https://iefimerida.gr
+M:1 Thread(Crawler:0): Popped: https://kompasiana.com
+M:1 Thread(Crawler:0): Pushed url: https://kompasiana.com
+M:1 Thread(Crawler:0): Popped: https://myfreecams.com
+M:1 Thread(Crawler:0): Pushed url: https://myfreecams.com
+M:1 Thread(Crawler:0): Popped: https://standardbank.co.za
+M:1 Thread(Crawler:0): Pushed url: https://standardbank.co.za
+M:1 Thread(Crawler:0): Popped: https://immobilienscout24.de
+M:1 Thread(Crawler:0): Pushed url: https://immobilienscout24.de
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://irna.ir
+M:1 Thread(Crawler:0): Popped: https://turbo.az
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://turbo.az
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://usaa.com
+M:1 Thread(Crawler:0): Pushed url: https://usaa.com
+M:1 Thread(Crawler:0): Popped: https://2345.com
+M:1 Thread(Crawler:0): Pushed url: https://2345.com
+M:1 Thread(Crawler:0): Popped: https://game8.jp
+M:1 Thread(Crawler:0): Pushed url: https://game8.jp
+M:1 Thread(Crawler:0): Popped: https://gazeta.pl
+M:1 Thread(Crawler:0): Pushed url: https://gazeta.pl
+M:1 Thread(Crawler:0): Popped: https://jugantor.com
+M:1 Thread(Crawler:0): Pushed url: https://jugantor.com
+M:1 Thread(Crawler:0): Popped: https://kalerkantho.com
+M:1 Thread(Crawler:0): Pushed url: https://kalerkantho.com
+M:1 Thread(Crawler:0): Popped: https://successfactors.com
+M:1 Thread(Crawler:0): Pushed url: https://successfactors.com
+M:1 Thread(Crawler:0): Popped: https://ria.com
+M:1 Thread(Crawler:0): Pushed url: https://ria.com
+M:1 Thread(Crawler:0): Popped: https://upstox.com
+M:1 Thread(Crawler:0): Pushed url: https://upstox.com
+M:1 Thread(Crawler:0): Popped: https://getemoji.com
+M:1 Thread(Crawler:0): Pushed url: https://getemoji.com
+M:1 Thread(Crawler:0): Popped: https://mmfilmeshd.tv
+M:1 Thread(Crawler:0): Pushed url: https://mmfilmeshd.tv
+M:1 Thread(Crawler:0): Popped: https://tarafdari.com
+M:1 Thread(Crawler:0): Pushed url: https://tarafdari.com
+M:1 Thread(Crawler:0): Popped: https://allrecipes.com
+M:1 Thread(Crawler:0): Pushed url: https://allrecipes.com
+M:1 Thread(Crawler:0): Popped: https://btctrademart.com
+M:1 Thread(Crawler:0): Pushed url: https://btctrademart.com
+M:1 Thread(Crawler:0): Popped: https://chat-message.live
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Pushed url: https://chat-message.live
+M:1 Thread(SendManager:1): Send: sent bytes: 15
+M:1 Thread(SendManager:1): Send: My own url = https://cibc.com
+36
+M:1 Thread(SendManager:1): Send: other's url = https://bisnis.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://kompasiana.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(Crawler:0): Popped: https://jobinja.ir
+M:1 Thread(Crawler:0): Pushed url: https://jobinja.ir
+M:1 Thread(Crawler:0): Popped: https://rappler.com
+M:1 Thread(Crawler:0): Pushed url: https://rappler.com
+M:1 Thread(Crawler:0): Popped: https://studfile.net
+M:1 Thread(Crawler:0): Pushed url: https://studfile.net
+M:1 Thread(Crawler:0): Popped: https://class101.net
+M:1 Thread(Crawler:0): Pushed url: https://class101.net
+M:1 Thread(Crawler:0): Popped: https://thethao247.vn
+M:1 Thread(Crawler:0): Pushed url: https://thethao247.vn
+M:1 Thread(Crawler:0): Popped: https://webinarjam.com
+M:1 Thread(Crawler:0): Pushed url: https://webinarjam.com
+M:1 Thread(Crawler:0): Popped: https://techtudo.com.br
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Pushed url: https://techtudo.com.br
+M:1 Thread(Crawler:0): Popped: https://rollingstone.com
+M:1 Thread(Crawler:0): Pushed url: https://rollingstone.com
+M:1 Thread(SendManager:0): Send: sent bytes: 29
+M:1 Thread(SendManager:1): Send: other's url = https://myfreecams.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://oa.com
+M:1 Thread(Crawler:0): Pushed url: https://oa.com
+M:1 Thread(Crawler:0): Popped: https://bronav.com
+M:1 Thread(Crawler:0): Pushed url: https://bronav.com
+M:1 Thread(Crawler:0): Popped: https://coupang.com
+M:1 Thread(Crawler:0): Pushed url: https://coupang.com
+M:1 Thread(Crawler:0): Popped: https://gearbest.com
+M:1 Thread(Crawler:0): Pushed url: https://gearbest.com
+M:1 Thread(Crawler:0): Popped: https://ancestry.com
+M:1 Thread(Crawler:0): Pushed url: https://ancestry.com
+M:1 Thread(Crawler:0): Popped: https://listindiario.com
+M:1 Thread(Crawler:0): Pushed url: https://listindiario.com
+M:1 Thread(Crawler:0): Popped: https://resellerclub.com
+M:1 Thread(Crawler:0): Pushed url: https://resellerclub.com
+M:1 Thread(Crawler:0): Popped: https://leagueofgraphs.com
+M:1 Thread(Crawler:0): Pushed url: https://leagueofgraphs.com
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(Crawler:0): Popped: https://texas.gov
+M:1 Thread(Crawler:0): Pushed url: https://texas.gov
+M:1 Thread(Crawler:0): Popped: https://diply.com
+M:1 Thread(Crawler:0): Pushed url: https://diply.com
+M:1 Thread(Crawler:0): Popped: https://yna.co.kr
+M:1 Thread(Crawler:0): Pushed url: https://yna.co.kr
+M:1 Thread(Crawler:0): Popped: https://youjizz.com
+M:1 Thread(Crawler:0): Pushed url: https://youjizz.com
+M:1 Thread(Crawler:0): Popped: https://edmunds.com
+M:1 Thread(Crawler:0): Pushed url: https://edmunds.com
+M:1 Thread(Crawler:0): Popped: https://echo.msk.ru
+M:1 Thread(Crawler:0): Pushed url: https://echo.msk.ru
+M:1 Thread(Crawler:0): Popped: https://toasttab.com
+M:1 Thread(Crawler:0): Pushed url: https://toasttab.com
+M:1 Thread(Crawler:0): Popped: https://chicagotribune.com
+M:1 Thread(Crawler:0): Pushed url: https://chicagotribune.com
+M:1 Thread(Crawler:0): Popped: https://jut.su
+M:1 Thread(Crawler:0): Pushed url: https://jut.su
+M:1 Thread(Crawler:0): Popped: https://tny.so
+M:1 Thread(Crawler:0): Pushed url: https://tny.so
+M:1 Thread(Crawler:0): Popped: https://12306.cn
+M:1 Thread(Crawler:0): Pushed url: https://12306.cn
+M:1 Thread(Crawler:0): Popped: https://google.fi
+M:1 Thread(Crawler:0): Pushed url: https://google.fi
+M:1 Thread(Crawler:0): Popped: https://crisp.chat
+M:1 Thread(Crawler:0): Pushed url: https://crisp.chat
+M:1 Thread(Crawler:0): Popped: https://jamaran.news
+M:1 Thread(Crawler:0): Pushed url: https://jamaran.news
+M:1 Thread(Crawler:0): Popped: https://emirates.com
+M:1 Thread(Crawler:0): Pushed url: https://emirates.com
+M:1 Thread(Crawler:0): Popped: https://aftership.com
+M:1 Thread(Crawler:0): Pushed url: https://aftership.com
+M:1 Thread(SendManager:1): Send: other's url = https://turbo.az
+M:1 Thread(SendManager:0): Send: My own url = https://standardbank.co.za
+46
+M:1 Thread(SendManager:0): Send: other's url = https://usaa.com
+M:1 Thread(Crawler:0): Popped: https://te.eg
+M:1 Thread(Crawler:0): Pushed url: https://te.eg
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(Crawler:0): Popped: https://blog.ir
+M:1 Thread(SendManager:0): Send: other's url = https://2345.com
+M:1 Thread(Crawler:0): Pushed url: https://blog.ir
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://imooc.com
+M:1 Thread(Crawler:0): Pushed url: https://imooc.com
+M:1 Thread(Crawler:0): Popped: https://sonyliv.com
+M:1 Thread(Crawler:0): Pushed url: https://sonyliv.com
+M:1 Thread(Crawler:0): Popped: https://lifewire.com
+M:1 Thread(Crawler:0): Pushed url: https://lifewire.com
+M:1 Thread(Crawler:0): Popped: https://yomiuri.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://yomiuri.co.jp
+M:1 Thread(Crawler:0): Popped: https://weheartit.com
+M:1 Thread(Crawler:0): Pushed url: https://weheartit.com
+M:1 Thread(Crawler:0): Popped: https://greenplasticdua.com
+M:1 Thread(Crawler:0): Pushed url: https://greenplasticdua.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(Crawler:0): Popped: https://rg.ru
+M:1 Thread(Crawler:0): Pushed url: https://rg.ru
+M:1 Thread(Crawler:0): Popped: https://dior.com
+M:1 Thread(SendManager:0): Send: other's url = https://jugantor.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://dior.com
+M:1 Thread(Crawler:0): Popped: https://arcot.com
+M:1 Thread(Crawler:0): Pushed url: https://arcot.com
+M:1 Thread(Crawler:0): Popped: https://kinokrad.co
+M:1 Thread(Crawler:0): Pushed url: https://kinokrad.co
+M:1 Thread(Crawler:0): Popped: https://sketchup.com
+M:1 Thread(Crawler:0): Pushed url: https://sketchup.com
+M:1 Thread(Crawler:0): Popped: https://cyberleninka.ru
+M:1 Thread(Crawler:0): Pushed url: https://cyberleninka.ru
+M:1 Thread(Crawler:0): Popped: https://quickconnect.to
+M:1 Thread(Crawler:0): Pushed url: https://quickconnect.to
+M:1 Thread(Crawler:0): Popped: https://get-express-vpn.online
+M:1 Thread(Crawler:0): Pushed url: https://get-express-vpn.online
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://digg.com
+M:1 Thread(Crawler:0): Pushed url: https://digg.com
+M:1 Thread(Crawler:0): Popped: https://afi-b.com
+M:1 Thread(Crawler:0): Pushed url: https://afi-b.com
+M:1 Thread(Crawler:0): Popped: https://heroku.com
+M:1 Thread(Crawler:0): Pushed url: https://heroku.com
+M:1 Thread(SendManager:0): Send: other's url = https://kalerkantho.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://webassign.net
+M:1 Thread(Crawler:0): Pushed url: https://webassign.net
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(SendManager:0): Send: other's url = https://ria.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(SendManager:0): Send: My own url = https://upstox.com
+38
+M:1 Thread(SendManager:0): Send: other's url = https://getemoji.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://kaspersky.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://kaspersky.com
+M:1 Thread(Crawler:0): Popped: https://dantri.com.vn
+M:1 Thread(Crawler:0): Pushed url: https://dantri.com.vn
+M:1 Thread(Crawler:0): Popped: https://yayoi-kk.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://yayoi-kk.co.jp
+M:1 Thread(Crawler:0): Popped: https://brunarosso.com
+M:1 Thread(Crawler:0): Pushed url: https://brunarosso.com
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(SendManager:1): Send: other's url = https://tarafdari.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: other's url = https://allrecipes.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(SendManager:1): Send: My own url = https://chat-message.live
+45
+M:1 Thread(SendManager:1): Send: other's url = https://rappler.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://ibb.co
+M:1 Thread(Crawler:0): Pushed url: https://ibb.co
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://studfile.net
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://6789.com
+M:1 Thread(Crawler:0): Pushed url: https://6789.com
+M:1 Thread(Crawler:0): Popped: https://grifo210.com
+M:1 Thread(Crawler:0): Pushed url: https://grifo210.com
+M:1 Thread(Crawler:0): Popped: https://dogemate.com
+M:1 Thread(Crawler:0): Pushed url: https://dogemate.com
+M:1 Thread(Crawler:0): Popped: https://streamable.com
+M:1 Thread(Crawler:0): Pushed url: https://streamable.com
+M:1 Thread(Crawler:0): Popped: https://digistore24.com
+M:1 Thread(Crawler:0): Pushed url: https://digistore24.com
+M:1 Thread(Crawler:0): Popped: https://businesstoday.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://businesstoday.com.tw
+M:1 Thread(Crawler:0): Popped: https://interactivebrokers.com
+M:1 Thread(Crawler:0): Pushed url: https://interactivebrokers.com
+M:1 Thread(Crawler:0): Popped: https://elle.com
+M:1 Thread(Crawler:0): Pushed url: https://elle.com
+M:1 Thread(Crawler:0): Popped: https://gulte.com
+M:1 Thread(Crawler:0): Pushed url: https://gulte.com
+M:1 Thread(Crawler:0): Popped: https://bestbuy.ca
+M:1 Thread(Crawler:0): Pushed url: https://bestbuy.ca
+M:1 Thread(Crawler:0): Popped: https://bitchute.com
+M:1 Thread(Crawler:0): Pushed url: https://bitchute.com
+M:1 Thread(Crawler:0): Popped: https://faucetpay.io
+M:1 Thread(Crawler:0): Pushed url: https://faucetpay.io
+M:1 Thread(Crawler:0): Popped: https://securecafe.com
+M:1 Thread(Crawler:0): Pushed url: https://securecafe.com
+M:1 Thread(Crawler:0): Popped: https://diamondfaucet.space
+M:1 Thread(Crawler:0): Pushed url: https://diamondfaucet.space
+M:1 Thread(Crawler:0): Popped: https://business-standard.com
+M:1 Thread(Crawler:0): Pushed url: https://business-standard.com
+M:1 Thread(SendManager:0): Send: My own url = https://mmfilmeshd.tv
+41
+M:1 Thread(SendManager:0): Send: other's url = https://class101.net
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://uc.pt
+M:1 Thread(Crawler:0): Pushed url: https://uc.pt
+M:1 Thread(Crawler:0): Popped: https://fda.gov
+M:1 Thread(Crawler:0): Pushed url: https://fda.gov
+M:1 Thread(Crawler:0): Popped: https://qhdsny.com
+M:1 Thread(Crawler:0): Pushed url: https://qhdsny.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://togetter.com
+M:1 Thread(Crawler:0): Pushed url: https://togetter.com
+M:1 Thread(Crawler:0): Popped: https://overleaf.com
+M:1 Thread(Crawler:0): Pushed url: https://overleaf.com
+M:1 Thread(Crawler:0): Popped: https://reallifecam.com
+M:1 Thread(Crawler:0): Pushed url: https://reallifecam.com
+M:1 Thread(Crawler:0): Popped: https://service-public.fr
+M:1 Thread(Crawler:0): Pushed url: https://service-public.fr
+M:1 Thread(Crawler:0): Popped: https://cryptotabbrowser.com
+M:1 Thread(Crawler:0): Pushed url: https://cryptotabbrowser.com
+M:1 Thread(Crawler:0): Popped: https://jimdo.com
+M:1 Thread(Crawler:0): Pushed url: https://jimdo.com
+M:1 Thread(Crawler:0): Popped: https://jotform.com
+M:1 Thread(Crawler:0): Pushed url: https://jotform.com
+M:1 Thread(Crawler:0): Popped: https://homes.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://homes.co.jp
+M:1 Thread(Crawler:0): Popped: https://rarbggo.org
+M:1 Thread(Crawler:0): Pushed url: https://rarbggo.org
+M:1 Thread(Crawler:0): Popped: https://leroymerlin.ru
+M:1 Thread(Crawler:0): Pushed url: https://leroymerlin.ru
+M:1 Thread(Crawler:0): Popped: https://xiaohongshu.com
+M:1 Thread(Crawler:0): Pushed url: https://xiaohongshu.com
+M:1 Thread(Crawler:0): Popped: https://onlinekhabar.com
+M:1 Thread(Crawler:0): Pushed url: https://onlinekhabar.com
+M:1 Thread(Crawler:0): Popped: https://sport-express.ru
+M:1 Thread(Crawler:0): Pushed url: https://sport-express.ru
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://webinarjam.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://techtudo.com.br
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://ovh.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 23
+M:1 Thread(SendManager:1): Send: other's url = https://rollingstone.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://ovh.com
+M:1 Thread(Crawler:0): Popped: https://nbc.com
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:0): Send: other's url = https://oa.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://bronav.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://resellerclub.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 24
+M:1 Thread(SendManager:0): Send: other's url = https://texas.gov
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: other's url = https://diply.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: other's url = https://yna.co.kr
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: other's url = https://youjizz.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://edmunds.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://echo.msk.ru
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://toasttab.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://jut.su
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://tny.so
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://12306.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: My own url = https://google.fi
+37
+M:1 Thread(SendManager:0): Send: other's url = https://crisp.chat
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://jamaran.news
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://emirates.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://aftership.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://te.eg
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 13
+M:1 Thread(SendManager:0): Send: other's url = https://blog.ir
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(SendManager:0): Send: other's url = https://sonyliv.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: My own url = https://yomiuri.co.jp
+41
+M:1 Thread(SendManager:0): Send: My own url = https://weheartit.com
+41
+M:1 Thread(SendManager:0): Send: other's url = https://dior.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://kinokrad.co
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: My own url = https://quickconnect.to
+43
+M:1 Thread(SendManager:0): Send: other's url = https://get-express-vpn.online
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 30
+M:1 Thread(SendManager:0): Send: other's url = https://heroku.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:0): Send: other's url = https://dantri.com.vn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://brunarosso.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:0): Send: other's url = https://ibb.co
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://6789.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://grifo210.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://dogemate.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://streamable.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:0): Send: other's url = https://digistore24.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(SendManager:0): Send: other's url = https://businesstoday.com.tw
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 28
+M:1 Thread(SendManager:0): Send: other's url = https://interactivebrokers.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 30
+M:1 Thread(SendManager:0): Send: other's url = https://elle.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: My own url = https://bestbuy.ca
+38
+M:1 Thread(SendManager:0): Send: other's url = https://bitchute.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(Crawler:0): Pushed url: https://nbc.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://mec.gov.br
+M:1 Thread(Crawler:0): Pushed url: https://mec.gov.br
+M:1 Thread(Crawler:0): Popped: https://viabcp.com
+M:1 Thread(Crawler:0): Pushed url: https://viabcp.com
+M:1 Thread(Crawler:0): Popped: https://womply.com
+M:1 Thread(Crawler:0): Pushed url: https://womply.com
+M:1 Thread(Crawler:0): Popped: https://flaticon.com
+M:1 Thread(Crawler:0): Pushed url: https://flaticon.com
+M:1 Thread(Crawler:0): Popped: https://biccamera.com
+M:1 Thread(Crawler:0): Pushed url: https://biccamera.com
+M:1 Thread(Crawler:0): Popped: https://lotsnippier.cam
+M:1 Thread(Crawler:0): Pushed url: https://lotsnippier.cam
+M:1 Thread(SendManager:0): Send: other's url = https://securecafe.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 22
+M:1 Thread(SendManager:0): Send: other's url = https://business-standard.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 29
+M:1 Thread(SendManager:0): Send: other's url = https://fda.gov
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://sc.com
+M:1 Thread(SendManager:1): Send: sent bytes: 24
+M:1 Thread(SendManager:1): Send: My own url = https://qhdsny.com
+38
+M:1 Thread(SendManager:1): Send: other's url = https://togetter.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://sc.com
+M:1 Thread(Crawler:0): Popped: https://ipko.pl
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://overleaf.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://service-public.fr
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 25
+M:1 Thread(SendManager:1): Send: other's url = https://cryptotabbrowser.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 28
+M:1 Thread(SendManager:1): Send: other's url = https://leroymerlin.ru
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(SendManager:1): Send: My own url = https://xiaohongshu.com
+43
+M:1 Thread(SendManager:1): Send: other's url = https://onlinekhabar.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 24
+M:1 Thread(SendManager:1): Send: My own url = https://sport-express.ru
+44
+M:1 Thread(SendManager:1): Send: other's url = https://mec.gov.br
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://womply.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://flaticon.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://sc.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 14
+M:1 Thread(SendManager:1): Send: other's url = https://ipko.pl
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 15
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(Crawler:0): Pushed url: https://ipko.pl
+M:1 Thread(Crawler:0): Popped: https://sbicard.com
+M:1 Thread(Crawler:0): Pushed url: https://sbicard.com
+M:1 Thread(SendManager:1): Send: other's url = https://sbicard.com
+M:1 Thread(Crawler:0): Popped: https://etnet.com.hk
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://etnet.com.hk
+M:1 Thread(Crawler:0): Popped: https://ellitoral.com
+M:1 Thread(Crawler:0): Pushed url: https://ellitoral.com
+M:1 Thread(SendManager:0): Send: other's url = https://ellitoral.com
+M:1 Thread(Crawler:0): Popped: https://tizianafausti.com
+M:1 Thread(Crawler:0): Pushed url: https://tizianafausti.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://banquepopulaire.fr
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Pushed url: https://banquepopulaire.fr
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://tizianafausti.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 25
+M:1 Thread(SendManager:0): Send: other's url = https://banquepopulaire.fr
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 26
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(Crawler:0): Popped: https://thepiratefilmestorrent.tv
+M:1 Thread(Crawler:0): Pushed url: https://thepiratefilmestorrent.tv
+M:1 Thread(Crawler:0): Popped: https://dan.com
+M:1 Thread(Crawler:0): Pushed url: https://dan.com
+M:1 Thread(Crawler:0): Popped: https://gjirafa.com
+M:1 Thread(Crawler:0): Pushed url: https://gjirafa.com
+M:1 Thread(Crawler:0): Popped: https://bauhaus.info
+M:1 Thread(Crawler:0): Pushed url: https://bauhaus.info
+M:1 Thread(Crawler:0): Popped: https://dailyhunt.in
+M:1 Thread(Crawler:0): Pushed url: https://dailyhunt.in
+M:1 Thread(Crawler:0): Popped: https://domestika.org
+M:1 Thread(Crawler:0): Pushed url: https://domestika.org
+M:1 Thread(Crawler:0): Popped: https://wondershare.cn
+M:1 Thread(Crawler:0): Pushed url: https://wondershare.cn
+M:1 Thread(Crawler:0): Popped: https://dutchycorp.space
+M:1 Thread(Crawler:0): Pushed url: https://dutchycorp.space
+M:1 Thread(Crawler:0): Popped: https://educacao.mg.gov.br
+M:1 Thread(Crawler:0): Pushed url: https://educacao.mg.gov.br
+M:1 Thread(Crawler:0): Popped: https://dhl.com
+M:1 Thread(Crawler:0): Pushed url: https://dhl.com
+M:1 Thread(Crawler:0): Popped: https://orbitz.com
+M:1 Thread(Crawler:0): Pushed url: https://orbitz.com
+M:1 Thread(Crawler:0): Popped: https://btkitty.bid
+M:1 Thread(Crawler:0): Pushed url: https://btkitty.bid
+M:1 Thread(Crawler:0): Popped: https://wideads.com
+M:1 Thread(Crawler:0): Pushed url: https://wideads.com
+M:1 Thread(Crawler:0): Popped: https://xiazaiba.com
+M:1 Thread(Crawler:0): Pushed url: https://xiazaiba.com
+M:1 Thread(Crawler:0): Popped: https://wowkeren.com
+M:1 Thread(Crawler:0): Pushed url: https://wowkeren.com
+M:1 Thread(Crawler:0): Popped: https://bnieuropa.pt
+M:1 Thread(Crawler:0): Pushed url: https://bnieuropa.pt
+M:1 Thread(Crawler:0): Popped: https://icy-veins.com
+M:1 Thread(Crawler:0): Pushed url: https://icy-veins.com
+M:1 Thread(Crawler:0): Popped: https://exe.io
+M:1 Thread(Crawler:0): Pushed url: https://exe.io
+M:1 Thread(Crawler:0): Popped: https://trend.az
+M:1 Thread(Crawler:0): Pushed url: https://trend.az
+M:1 Thread(Crawler:0): Popped: https://mockplus.cn
+M:1 Thread(Crawler:0): Pushed url: https://mockplus.cn
+M:1 Thread(Crawler:0): Popped: https://animestc.net
+M:1 Thread(Crawler:0): Pushed url: https://animestc.net
+M:1 Thread(Crawler:0): Popped: https://daraz.com.bd
+M:1 Thread(Crawler:0): Pushed url: https://daraz.com.bd
+M:1 Thread(Crawler:0): Popped: https://doostihaa.com
+M:1 Thread(Crawler:0): Pushed url: https://doostihaa.com
+M:1 Thread(Crawler:0): Popped: https://videohive.net
+M:1 Thread(Crawler:0): Pushed url: https://videohive.net
+M:1 Thread(Crawler:0): Popped: https://livechatinc.com
+M:1 Thread(Crawler:0): Pushed url: https://livechatinc.com
+M:1 Thread(Crawler:0): Popped: https://mps.it
+M:1 Thread(Crawler:0): Pushed url: https://mps.it
+M:1 Thread(Crawler:0): Popped: https://java.com
+M:1 Thread(Crawler:0): Pushed url: https://java.com
+M:1 Thread(Crawler:0): Popped: https://visual.ly
+M:1 Thread(Crawler:0): Pushed url: https://visual.ly
+M:1 Thread(Crawler:0): Popped: https://tmtpost.com
+M:1 Thread(Crawler:0): Pushed url: https://tmtpost.com
+M:1 Thread(Crawler:0): Popped: https://virginia.gov
+M:1 Thread(Crawler:0): Pushed url: https://virginia.gov
+M:1 Thread(Crawler:0): Popped: https://rackspace.com
+M:1 Thread(Crawler:0): Pushed url: https://rackspace.com
+M:1 Thread(Crawler:0): Popped: https://foursquare.com
+M:1 Thread(Crawler:0): Pushed url: https://foursquare.com
+M:1 Thread(Crawler:0): Popped: https://cloudwaysapps.com
+M:1 Thread(Crawler:0): Pushed url: https://cloudwaysapps.com
+M:1 Thread(Crawler:0): Popped: https://bmi.ir
+M:1 Thread(Crawler:0): Pushed url: https://bmi.ir
+M:1 Thread(Crawler:0): Popped: https://zg6.com
+M:1 Thread(Crawler:0): Pushed url: https://zg6.com
+M:1 Thread(Crawler:0): Popped: https://qhyhgf.com
+M:1 Thread(Crawler:0): Pushed url: https://qhyhgf.com
+M:1 Thread(Crawler:0): Popped: https://hclips.com
+M:1 Thread(Crawler:0): Pushed url: https://hclips.com
+M:1 Thread(Crawler:0): Popped: https://soy502.com
+M:1 Thread(Crawler:0): Pushed url: https://soy502.com
+M:1 Thread(Crawler:0): Popped: https://adshort.live
+M:1 Thread(Crawler:0): Pushed url: https://adshort.live
+M:1 Thread(Crawler:0): Popped: https://neilpatel.com
+M:1 Thread(Crawler:0): Pushed url: https://neilpatel.com
+M:1 Thread(Crawler:0): Popped: https://yifysubtitles.org
+M:1 Thread(Crawler:0): Pushed url: https://yifysubtitles.org
+M:1 Thread(Crawler:0): Popped: https://adsy.pw
+M:1 Thread(Crawler:0): Pushed url: https://adsy.pw
+M:1 Thread(Crawler:0): Popped: https://ca800.com
+M:1 Thread(Crawler:0): Pushed url: https://ca800.com
+M:1 Thread(Crawler:0): Popped: https://neoldu.com
+M:1 Thread(Crawler:0): Pushed url: https://neoldu.com
+M:1 Thread(Crawler:0): Popped: https://juming.com
+M:1 Thread(Crawler:0): Pushed url: https://juming.com
+M:1 Thread(Crawler:0): Popped: https://sheypoor.com
+M:1 Thread(Crawler:0): Pushed url: https://sheypoor.com
+M:1 Thread(Crawler:0): Popped: https://mobalytics.gg
+M:1 Thread(Crawler:0): Pushed url: https://mobalytics.gg
+M:1 Thread(Crawler:0): Popped: https://epochtimes.com
+M:1 Thread(Crawler:0): Pushed url: https://epochtimes.com
+M:1 Thread(Crawler:0): Popped: https://turkmenistan.gov.tm
+M:1 Thread(Crawler:0): Pushed url: https://turkmenistan.gov.tm
+M:1 Thread(Crawler:0): Popped: https://ning.com
+M:1 Thread(Crawler:0): Pushed url: https://ning.com
+M:1 Thread(Crawler:0): Popped: https://blogimg.jp
+M:1 Thread(Crawler:0): Pushed url: https://blogimg.jp
+M:1 Thread(Crawler:0): Popped: https://mhtwyat.com
+M:1 Thread(Crawler:0): Pushed url: https://mhtwyat.com
+M:1 Thread(Crawler:0): Popped: https://fandango.com
+M:1 Thread(Crawler:0): Pushed url: https://fandango.com
+M:1 Thread(Crawler:0): Popped: https://cardekho.com
+M:1 Thread(Crawler:0): Pushed url: https://cardekho.com
+M:1 Thread(Crawler:0): Popped: https://raiffeisen.at
+M:1 Thread(Crawler:0): Pushed url: https://raiffeisen.at
+M:1 Thread(Crawler:0): Popped: https://sparknotes.com
+M:1 Thread(Crawler:0): Pushed url: https://sparknotes.com
+M:1 Thread(Crawler:0): Popped: https://secureinternetbank.com
+M:1 Thread(Crawler:0): Pushed url: https://secureinternetbank.com
+M:1 Thread(Crawler:0): Popped: https://ufsc.br
+M:1 Thread(Crawler:0): Pushed url: https://ufsc.br
+M:1 Thread(Crawler:0): Popped: https://celine.com
+M:1 Thread(Crawler:0): Pushed url: https://celine.com
+M:1 Thread(Crawler:0): Popped: https://unity3d.com
+M:1 Thread(Crawler:0): Pushed url: https://unity3d.com
+M:1 Thread(Crawler:0): Popped: https://syosetu.com
+M:1 Thread(Crawler:0): Pushed url: https://syosetu.com
+M:1 Thread(Crawler:0): Popped: https://infowars.com
+M:1 Thread(Crawler:0): Pushed url: https://infowars.com
+M:1 Thread(Crawler:0): Popped: https://skladchik.com
+M:1 Thread(Crawler:0): Pushed url: https://skladchik.com
+M:1 Thread(Crawler:0): Popped: https://poupainvest.com
+M:1 Thread(Crawler:0): Pushed url: https://poupainvest.com
+M:1 Thread(Crawler:0): Popped: https://onlinemektep.org
+M:1 Thread(Crawler:0): Pushed url: https://onlinemektep.org
+M:1 Thread(Crawler:0): Popped: https://locan.to
+M:1 Thread(Crawler:0): Pushed url: https://locan.to
+M:1 Thread(Crawler:0): Popped: https://nykaa.com
+M:1 Thread(Crawler:0): Pushed url: https://nykaa.com
+M:1 Thread(Crawler:0): Popped: https://sunbiz.org
+M:1 Thread(Crawler:0): Pushed url: https://sunbiz.org
+M:1 Thread(Crawler:0): Popped: https://699pic.com
+M:1 Thread(Crawler:0): Pushed url: https://699pic.com
+M:1 Thread(Crawler:0): Popped: https://ablestar.co
+M:1 Thread(Crawler:0): Pushed url: https://ablestar.co
+M:1 Thread(Crawler:0): Popped: https://tinkercad.com
+M:1 Thread(Crawler:0): Pushed url: https://tinkercad.com
+M:1 Thread(Crawler:0): Popped: https://interpark.com
+M:1 Thread(Crawler:0): Pushed url: https://interpark.com
+M:1 Thread(Crawler:0): Popped: https://coschedule.com
+M:1 Thread(Crawler:0): Pushed url: https://coschedule.com
+M:1 Thread(Crawler:0): Popped: https://narod.ru
+M:1 Thread(Crawler:0): Pushed url: https://narod.ru
+M:1 Thread(Crawler:0): Popped: https://nest.com
+M:1 Thread(Crawler:0): Pushed url: https://nest.com
+M:1 Thread(Crawler:0): Popped: https://avast.com
+M:1 Thread(Crawler:0): Pushed url: https://avast.com
+M:1 Thread(Crawler:0): Popped: https://bithumb.com
+M:1 Thread(Crawler:0): Pushed url: https://bithumb.com
+M:1 Thread(Crawler:0): Popped: https://pcgamesn.com
+M:1 Thread(Crawler:0): Pushed url: https://pcgamesn.com
+M:1 Thread(Crawler:0): Popped: https://100count.net
+M:1 Thread(Crawler:0): Pushed url: https://100count.net
+M:1 Thread(Crawler:0): Popped: https://downphanmem.com
+M:1 Thread(Crawler:0): Pushed url: https://downphanmem.com
+M:1 Thread(Crawler:0): Popped: https://easyhindityping.com
+M:1 Thread(Crawler:0): Pushed url: https://easyhindityping.com
+M:1 Thread(Crawler:0): Popped: https://keepa.com
+M:1 Thread(Crawler:0): Pushed url: https://keepa.com
+M:1 Thread(Crawler:0): Popped: https://chinaz.com
+M:1 Thread(Crawler:0): Pushed url: https://chinaz.com
+M:1 Thread(Crawler:0): Popped: https://yaklass.ru
+M:1 Thread(Crawler:0): Pushed url: https://yaklass.ru
+M:1 Thread(Crawler:0): Popped: https://jss.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://jss.com.cn
+M:1 Thread(Crawler:0): Popped: https://yoshare.net
+M:1 Thread(Crawler:0): Pushed url: https://yoshare.net
+M:1 Thread(Crawler:0): Popped: https://cprapid.com
+M:1 Thread(Crawler:0): Pushed url: https://cprapid.com
+M:1 Thread(Crawler:0): Popped: https://letras.mus.br
+M:1 Thread(Crawler:0): Pushed url: https://letras.mus.br
+M:1 Thread(Crawler:0): Popped: https://globalnoticias.online
+M:1 Thread(Crawler:0): Pushed url: https://globalnoticias.online
+M:1 Thread(Crawler:0): Popped: https://akurat.co
+M:1 Thread(Crawler:0): Pushed url: https://akurat.co
+M:1 Thread(Crawler:0): Popped: https://toolszap.com
+M:1 Thread(Crawler:0): Pushed url: https://toolszap.com
+M:1 Thread(Crawler:0): Popped: https://trademe.co.nz
+M:1 Thread(Crawler:0): Pushed url: https://trademe.co.nz
+M:1 Thread(Crawler:0): Popped: https://feebee.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://feebee.com.tw
+M:1 Thread(Crawler:0): Popped: https://rapidgator.net
+M:1 Thread(Crawler:0): Pushed url: https://rapidgator.net
+M:1 Thread(Crawler:0): Popped: https://behindwoods.com
+M:1 Thread(Crawler:0): Pushed url: https://behindwoods.com
+M:1 Thread(Crawler:0): Popped: https://paycomonline.net
+M:1 Thread(Crawler:0): Pushed url: https://paycomonline.net
+M:1 Thread(Crawler:0): Popped: https://powerofpositivity.com
+M:1 Thread(Crawler:0): Pushed url: https://powerofpositivity.com
+M:1 Thread(Crawler:0): Popped: https://eljur.ru
+M:1 Thread(Crawler:0): Pushed url: https://eljur.ru
+M:1 Thread(Crawler:0): Popped: https://hupu.com
+M:1 Thread(Crawler:0): Pushed url: https://hupu.com
+M:1 Thread(Crawler:0): Popped: https://mlit.go.jp
+M:1 Thread(Crawler:0): Pushed url: https://mlit.go.jp
+M:1 Thread(Crawler:0): Popped: https://daily.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://daily.co.jp
+M:1 Thread(Crawler:0): Popped: https://bankinter.com
+M:1 Thread(Crawler:0): Pushed url: https://bankinter.com
+M:1 Thread(Crawler:0): Popped: https://stockcharts.com
+M:1 Thread(Crawler:0): Pushed url: https://stockcharts.com
+M:1 Thread(Crawler:0): Popped: https://carsales.com.au
+M:1 Thread(Crawler:0): Pushed url: https://carsales.com.au
+M:1 Thread(Crawler:0): Popped: https://optinmonster.com
+M:1 Thread(Crawler:0): Pushed url: https://optinmonster.com
+M:1 Thread(Crawler:0): Popped: https://uhc.com
+M:1 Thread(Crawler:0): Pushed url: https://uhc.com
+M:1 Thread(Crawler:0): Popped: https://backlog.com
+M:1 Thread(Crawler:0): Pushed url: https://backlog.com
+M:1 Thread(Crawler:0): Popped: https://logrocket.com
+M:1 Thread(Crawler:0): Pushed url: https://logrocket.com
+M:1 Thread(Crawler:0): Popped: https://amplitude.com
+M:1 Thread(Crawler:0): Pushed url: https://amplitude.com
+M:1 Thread(Crawler:0): Popped: https://ninja-sign.com
+M:1 Thread(Crawler:0): Pushed url: https://ninja-sign.com
+M:1 Thread(Crawler:0): Popped: https://bitcoinclix.net
+M:1 Thread(Crawler:0): Pushed url: https://bitcoinclix.net
+M:1 Thread(Crawler:0): Popped: https://bajajfinserv.in
+M:1 Thread(Crawler:0): Pushed url: https://bajajfinserv.in
+M:1 Thread(Crawler:0): Popped: https://transfermarkt.de
+M:1 Thread(Crawler:0): Pushed url: https://transfermarkt.de
+M:1 Thread(Crawler:0): Popped: https://taag.com
+M:1 Thread(Crawler:0): Pushed url: https://taag.com
+M:1 Thread(Crawler:0): Popped: https://clideo.com
+M:1 Thread(Crawler:0): Pushed url: https://clideo.com
+M:1 Thread(Crawler:0): Popped: https://nodejs.org
+M:1 Thread(Crawler:0): Pushed url: https://nodejs.org
+M:1 Thread(Crawler:0): Popped: https://tineye.com
+M:1 Thread(Crawler:0): Pushed url: https://tineye.com
+M:1 Thread(Crawler:0): Popped: https://netbk.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://netbk.co.jp
+M:1 Thread(Crawler:0): Popped: https://tatasky.com
+M:1 Thread(Crawler:0): Pushed url: https://tatasky.com
+M:1 Thread(Crawler:0): Popped: https://indodax.com
+M:1 Thread(Crawler:0): Pushed url: https://indodax.com
+M:1 Thread(Crawler:0): Popped: https://telugustop.com
+M:1 Thread(Crawler:0): Pushed url: https://telugustop.com
+M:1 Thread(Crawler:0): Popped: https://sme.sk
+M:1 Thread(Crawler:0): Pushed url: https://sme.sk
+M:1 Thread(Crawler:0): Popped: https://ap.gov.in
+M:1 Thread(Crawler:0): Pushed url: https://ap.gov.in
+M:1 Thread(Crawler:0): Popped: https://vitkac.com
+M:1 Thread(Crawler:0): Pushed url: https://vitkac.com
+M:1 Thread(Crawler:0): Popped: https://pinterest.fr
+M:1 Thread(Crawler:0): Pushed url: https://pinterest.fr
+M:1 Thread(Crawler:0): Popped: https://flannels.com
+M:1 Thread(Crawler:0): Pushed url: https://flannels.com
+M:1 Thread(Crawler:0): Popped: https://dealmoon.com
+M:1 Thread(Crawler:0): Pushed url: https://dealmoon.com
+M:1 Thread(Crawler:0): Popped: https://refersion.com
+M:1 Thread(Crawler:0): Pushed url: https://refersion.com
+M:1 Thread(Crawler:0): Popped: https://fanfiction.net
+M:1 Thread(Crawler:0): Pushed url: https://fanfiction.net
+M:1 Thread(Crawler:0): Popped: https://cnnturk.com
+M:1 Thread(Crawler:0): Pushed url: https://cnnturk.com
+M:1 Thread(Crawler:0): Popped: https://kinoprofi.vip
+M:1 Thread(Crawler:0): Pushed url: https://kinoprofi.vip
+M:1 Thread(Crawler:0): Popped: https://jeuxvideo.com
+M:1 Thread(Crawler:0): Pushed url: https://jeuxvideo.com
+M:1 Thread(Crawler:0): Popped: https://pdfescape.com
+M:1 Thread(Crawler:0): Pushed url: https://pdfescape.com
+M:1 Thread(Crawler:0): Popped: https://moneymake.site
+M:1 Thread(Crawler:0): Pushed url: https://moneymake.site
+M:1 Thread(Crawler:0): Popped: https://doubleclick.net
+M:1 Thread(Crawler:0): Pushed url: https://doubleclick.net
+M:1 Thread(Crawler:0): Popped: https://straitstimes.com
+M:1 Thread(Crawler:0): Pushed url: https://straitstimes.com
+M:1 Thread(Crawler:0): Popped: https://ulifestyle.com.hk
+M:1 Thread(Crawler:0): Pushed url: https://ulifestyle.com.hk
+M:1 Thread(Crawler:0): Popped: https://droplink.co
+M:1 Thread(Crawler:0): Pushed url: https://droplink.co
+M:1 Thread(Crawler:0): Popped: https://niniban.com
+M:1 Thread(Crawler:0): Pushed url: https://niniban.com
+M:1 Thread(Crawler:0): Popped: https://royanews.tv
+M:1 Thread(Crawler:0): Pushed url: https://royanews.tv
+M:1 Thread(Crawler:0): Popped: https://eepw.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://eepw.com.cn
+M:1 Thread(Crawler:0): Popped: https://coupons.com
+M:1 Thread(Crawler:0): Pushed url: https://coupons.com
+M:1 Thread(Crawler:0): Popped: https://sweetwater.com
+M:1 Thread(Crawler:0): Pushed url: https://sweetwater.com
+M:1 Thread(Crawler:0): Popped: https://wealthsimple.com
+M:1 Thread(Crawler:0): Pushed url: https://wealthsimple.com
+M:1 Thread(Crawler:0): Popped: https://collinsdictionary.com
+M:1 Thread(Crawler:0): Pushed url: https://collinsdictionary.com
+M:1 Thread(Crawler:0): Popped: https://big.az
+M:1 Thread(Crawler:0): Pushed url: https://big.az
+M:1 Thread(Crawler:0): Popped: https://cvent.com
+M:1 Thread(Crawler:0): Pushed url: https://cvent.com
+M:1 Thread(Crawler:0): Popped: https://seo.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://seo.com.cn
+M:1 Thread(Crawler:0): Popped: https://merojax.me
+M:1 Thread(Crawler:0): Pushed url: https://merojax.me
+M:1 Thread(Crawler:0): Popped: https://utarget.ru
+M:1 Thread(Crawler:0): Pushed url: https://utarget.ru
+M:1 Thread(Crawler:0): Popped: https://appmedia.jp
+M:1 Thread(Crawler:0): Pushed url: https://appmedia.jp
+M:1 Thread(Crawler:0): Popped: https://chefkoch.de
+M:1 Thread(Crawler:0): Pushed url: https://chefkoch.de
+M:1 Thread(Crawler:0): Popped: https://startminer.com
+M:1 Thread(Crawler:0): Pushed url: https://startminer.com
+M:1 Thread(Crawler:0): Popped: https://plurk.com
+M:1 Thread(Crawler:0): Pushed url: https://plurk.com
+M:1 Thread(Crawler:0): Popped: https://joneslot.com
+M:1 Thread(Crawler:0): Pushed url: https://joneslot.com
+M:1 Thread(Crawler:0): Popped: https://dlroozane.net
+M:1 Thread(Crawler:0): Pushed url: https://dlroozane.net
+M:1 Thread(Crawler:0): Popped: https://citibank.co.in
+M:1 Thread(Crawler:0): Pushed url: https://citibank.co.in
+M:1 Thread(Crawler:0): Popped: https://anglobal.co.ao
+M:1 Thread(Crawler:0): Pushed url: https://anglobal.co.ao
+M:1 Thread(Crawler:0): Popped: https://comunidaderh.com
+M:1 Thread(Crawler:0): Pushed url: https://comunidaderh.com
+M:1 Thread(Crawler:0): Popped: https://scotiabank.com.mx
+M:1 Thread(Crawler:0): Pushed url: https://scotiabank.com.mx
+M:1 Thread(Crawler:0): Popped: https://sucursalelectronica.com
+M:1 Thread(Crawler:0): Pushed url: https://sucursalelectronica.com
+M:1 Thread(Crawler:0): Popped: https://super.cz
+M:1 Thread(Crawler:0): Pushed url: https://super.cz
+M:1 Thread(Crawler:0): Popped: https://rivals.com
+M:1 Thread(Crawler:0): Pushed url: https://rivals.com
+M:1 Thread(Crawler:0): Popped: https://laposte.net
+M:1 Thread(Crawler:0): Pushed url: https://laposte.net
+M:1 Thread(Crawler:0): Popped: https://coinbit.cash
+M:1 Thread(Crawler:0): Pushed url: https://coinbit.cash
+M:1 Thread(Crawler:0): Popped: https://parcelsapp.com
+M:1 Thread(Crawler:0): Pushed url: https://parcelsapp.com
+M:1 Thread(Crawler:0): Popped: https://convert2mp3.net
+M:1 Thread(Crawler:0): Pushed url: https://convert2mp3.net
+M:1 Thread(Crawler:0): Popped: https://directpaper.name
+M:1 Thread(Crawler:0): Pushed url: https://directpaper.name
+M:1 Thread(Crawler:0): Popped: https://connexion-mabanque.bnpparibas
+M:1 Thread(Crawler:0): Pushed url: https://connexion-mabanque.bnpparibas
+M:1 Thread(Crawler:0): Popped: https://sport.cz
+M:1 Thread(Crawler:0): Pushed url: https://sport.cz
+M:1 Thread(Crawler:0): Popped: https://yes24.com
+M:1 Thread(Crawler:0): Pushed url: https://yes24.com
+M:1 Thread(Crawler:0): Popped: https://cnyes.com
+M:1 Thread(Crawler:0): Pushed url: https://cnyes.com
+M:1 Thread(Crawler:0): Popped: https://vitals.co
+M:1 Thread(Crawler:0): Pushed url: https://vitals.co
+M:1 Thread(Crawler:0): Popped: https://topnaz.com
+M:1 Thread(Crawler:0): Pushed url: https://topnaz.com
+M:1 Thread(Crawler:0): Popped: https://newsmax.com
+M:1 Thread(Crawler:0): Pushed url: https://newsmax.com
+M:1 Thread(Crawler:0): Popped: https://computerbild.de
+M:1 Thread(Crawler:0): Pushed url: https://computerbild.de
+M:1 Thread(Crawler:0): Popped: https://yalla-shoot-new.com
+M:1 Thread(Crawler:0): Pushed url: https://yalla-shoot-new.com
+M:1 Thread(Crawler:0): Popped: https://doc88.com
+M:1 Thread(Crawler:0): Pushed url: https://doc88.com
+M:1 Thread(Crawler:0): Popped: https://tracxn.com
+M:1 Thread(Crawler:0): Pushed url: https://tracxn.com
+M:1 Thread(Crawler:0): Popped: https://bimstore.co
+M:1 Thread(Crawler:0): Pushed url: https://bimstore.co
+M:1 Thread(Crawler:0): Popped: https://mihanwp.com
+M:1 Thread(Crawler:0): Pushed url: https://mihanwp.com
+M:1 Thread(Crawler:0): Popped: https://pharmeasy.in
+M:1 Thread(Crawler:0): Pushed url: https://pharmeasy.in
+M:1 Thread(Crawler:0): Popped: https://debutify.com
+M:1 Thread(Crawler:0): Pushed url: https://debutify.com
+M:1 Thread(Crawler:0): Popped: https://traveloka.com
+M:1 Thread(Crawler:0): Pushed url: https://traveloka.com
+M:1 Thread(Crawler:0): Popped: https://vietnamnet.vn
+M:1 Thread(Crawler:0): Pushed url: https://vietnamnet.vn
+M:1 Thread(Crawler:0): Popped: https://voi.id
+M:1 Thread(Crawler:0): Pushed url: https://voi.id
+M:1 Thread(Crawler:0): Popped: https://entekhab.ir
+M:1 Thread(Crawler:0): Pushed url: https://entekhab.ir
+M:1 Thread(Crawler:0): Popped: https://repretel.com
+M:1 Thread(Crawler:0): Pushed url: https://repretel.com
+M:1 Thread(Crawler:0): Popped: https://newsbeast.gr
+M:1 Thread(Crawler:0): Pushed url: https://newsbeast.gr
+M:1 Thread(Crawler:0): Popped: https://foxsports.com
+M:1 Thread(Crawler:0): Pushed url: https://foxsports.com
+M:1 Thread(Crawler:0): Popped: https://tnt-online.ru
+M:1 Thread(Crawler:0): Pushed url: https://tnt-online.ru
+M:1 Thread(Crawler:0): Popped: https://forocoches.com
+M:1 Thread(Crawler:0): Pushed url: https://forocoches.com
+M:1 Thread(Crawler:0): Popped: https://collective-buyer.com
+M:1 Thread(Crawler:0): Pushed url: https://collective-buyer.com
+M:1 Thread(Crawler:0): Popped: https://qz.com
+M:1 Thread(Crawler:0): Pushed url: https://qz.com
+M:1 Thread(Crawler:0): Popped: https://nj.com
+M:1 Thread(Crawler:0): Pushed url: https://nj.com
+M:1 Thread(Crawler:0): Popped: https://bayt.com
+M:1 Thread(Crawler:0): Pushed url: https://bayt.com
+M:1 Thread(Crawler:0): Popped: https://adyen.com
+M:1 Thread(Crawler:0): Pushed url: https://adyen.com
+M:1 Thread(Crawler:0): Popped: https://makeshop.jp
+M:1 Thread(Crawler:0): Pushed url: https://makeshop.jp
+M:1 Thread(Crawler:0): Popped: https://tiancity.com
+M:1 Thread(Crawler:0): Pushed url: https://tiancity.com
+M:1 Thread(Crawler:0): Popped: https://tokyvideo.com
+M:1 Thread(Crawler:0): Pushed url: https://tokyvideo.com
+M:1 Thread(Crawler:0): Popped: https://lowtyroguer.com
+M:1 Thread(Crawler:0): Pushed url: https://lowtyroguer.com
+M:1 Thread(Crawler:0): Popped: https://mn.co
+M:1 Thread(Crawler:0): Pushed url: https://mn.co
+M:1 Thread(Crawler:0): Popped: https://huxiu.com
+M:1 Thread(Crawler:0): Pushed url: https://huxiu.com
+M:1 Thread(Crawler:0): Popped: https://seneweb.com
+M:1 Thread(Crawler:0): Pushed url: https://seneweb.com
+M:1 Thread(Crawler:0): Popped: https://semawur.com
+M:1 Thread(Crawler:0): Pushed url: https://semawur.com
+M:1 Thread(Crawler:0): Popped: https://ablebits.com
+M:1 Thread(Crawler:0): Pushed url: https://ablebits.com
+M:1 Thread(Crawler:0): Popped: https://alaskaair.com
+M:1 Thread(Crawler:0): Pushed url: https://alaskaair.com
+M:1 Thread(Crawler:0): Popped: https://bobibanking.com
+M:1 Thread(Crawler:0): Pushed url: https://bobibanking.com
+M:1 Thread(Crawler:0): Popped: https://wondershare.com.br
+M:1 Thread(Crawler:0): Pushed url: https://wondershare.com.br
+M:1 Thread(Crawler:0): Popped: https://usg.edu
+M:1 Thread(Crawler:0): Pushed url: https://usg.edu
+M:1 Thread(Crawler:0): Popped: https://s1-n.com
+M:1 Thread(Crawler:0): Pushed url: https://s1-n.com
+M:1 Thread(Crawler:0): Popped: https://stihi.ru
+M:1 Thread(Crawler:0): Pushed url: https://stihi.ru
+M:1 Thread(Crawler:0): Popped: https://1111.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://1111.com.tw
+M:1 Thread(Crawler:0): Popped: https://livedoor.biz
+M:1 Thread(Crawler:0): Pushed url: https://livedoor.biz
+M:1 Thread(Crawler:0): Popped: https://topflownews.com
+M:1 Thread(Crawler:0): Pushed url: https://topflownews.com
+M:1 Thread(Crawler:0): Popped: https://superdelivery.com
+M:1 Thread(Crawler:0): Pushed url: https://superdelivery.com
+M:1 Thread(Crawler:0): Popped: https://diariopanorama.com
+M:1 Thread(Crawler:0): Pushed url: https://diariopanorama.com
+M:1 Thread(Crawler:0): Popped: https://uff.br
+M:1 Thread(Crawler:0): Pushed url: https://uff.br
+M:1 Thread(Crawler:0): Popped: https://mtime.com
+M:1 Thread(Crawler:0): Pushed url: https://mtime.com
+M:1 Thread(Crawler:0): Popped: https://baresi.xyz
+M:1 Thread(Crawler:0): Pushed url: https://baresi.xyz
+M:1 Thread(Crawler:0): Popped: https://earthlink.net
+M:1 Thread(Crawler:0): Pushed url: https://earthlink.net
+M:1 Thread(Crawler:0): Popped: https://wigetmedia.com
+M:1 Thread(Crawler:0): Pushed url: https://wigetmedia.com
+M:1 Thread(Crawler:0): Popped: https://drivereasy.com
+M:1 Thread(Crawler:0): Pushed url: https://drivereasy.com
+M:1 Thread(Crawler:0): Popped: https://expandcart.com
+M:1 Thread(Crawler:0): Pushed url: https://expandcart.com
+M:1 Thread(Crawler:0): Popped: https://standardchartered.com
+M:1 Thread(Crawler:0): Pushed url: https://standardchartered.com
+M:1 Thread(SendManager:1): Send: other's url = https://gjirafa.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://bauhaus.info
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://dailyhunt.in
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://domestika.org
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: other's url = https://wondershare.cn
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(SendManager:1): Send: other's url = https://dutchycorp.space
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://iu.edu
+M:1 Thread(Crawler:0): Pushed url: https://iu.edu
+M:1 Thread(Crawler:0): Popped: https://hit.az
+M:1 Thread(Crawler:0): Pushed url: https://hit.az
+M:1 Thread(Crawler:0): Popped: https://china.cn
+M:1 Thread(Crawler:0): Pushed url: https://china.cn
+M:1 Thread(Crawler:0): Popped: https://ranker.com
+M:1 Thread(Crawler:0): Pushed url: https://ranker.com
+M:1 Thread(Crawler:0): Popped: https://hdhole.com
+M:1 Thread(SendManager:0): Send: My own url = https://thepiratefilmestorrent.tv
+53
+M:1 Thread(SendManager:0): Send: other's url = https://educacao.mg.gov.br
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://hdhole.com
+M:1 Thread(Crawler:0): Popped: https://radiozet.pl
+M:1 Thread(Crawler:0): Pushed url: https://radiozet.pl
+M:1 Thread(Crawler:0): Popped: https://grainger.com
+M:1 Thread(Crawler:0): Pushed url: https://grainger.com
+M:1 Thread(Crawler:0): Popped: https://ferret-plus.com
+M:1 Thread(Crawler:0): Pushed url: https://ferret-plus.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 26
+M:1 Thread(SendManager:0): Send: other's url = https://dhl.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 15
+M:1 Thread(SendManager:0): Send: other's url = https://orbitz.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Popped: https://dcode.fr
+M:1 Thread(Crawler:0): Pushed url: https://dcode.fr
+M:1 Thread(Crawler:0): Popped: https://evenads.com
+M:1 Thread(Crawler:0): Pushed url: https://evenads.com
+M:1 Thread(Crawler:0): Popped: https://porndoe.com
+M:1 Thread(Crawler:0): Pushed url: https://porndoe.com
+M:1 Thread(Crawler:0): Popped: https://cepi-edu.tech
+M:1 Thread(Crawler:0): Pushed url: https://cepi-edu.tech
+M:1 Thread(Crawler:0): Popped: https://bjhjyd.gov.cn
+M:1 Thread(Crawler:0): Pushed url: https://bjhjyd.gov.cn
+M:1 Thread(Crawler:0): Popped: https://vanityfair.com
+M:1 Thread(Crawler:0): Pushed url: https://vanityfair.com
+M:1 Thread(Crawler:0): Popped: https://wondershare.jp
+M:1 Thread(Crawler:0): Pushed url: https://wondershare.jp
+M:1 Thread(Crawler:0): Popped: https://redirect2719.com
+M:1 Thread(Crawler:0): Pushed url: https://redirect2719.com
+M:1 Thread(Crawler:0): Popped: https://dcloud.io
+M:1 Thread(Crawler:0): Pushed url: https://dcloud.io
+M:1 Thread(Crawler:0): Popped: https://fishki.net
+M:1 Thread(Crawler:0): Pushed url: https://fishki.net
+M:1 Thread(Crawler:0): Popped: https://ricardo.ch
+M:1 Thread(Crawler:0): Pushed url: https://ricardo.ch
+M:1 Thread(Crawler:0): Popped: https://gib.gov.tr
+M:1 Thread(Crawler:0): Pushed url: https://gib.gov.tr
+M:1 Thread(Crawler:0): Popped: https://jutarnji.hr
+M:1 Thread(Crawler:0): Pushed url: https://jutarnji.hr
+M:1 Thread(Crawler:0): Popped: https://watermine.io
+M:1 Thread(Crawler:0): Pushed url: https://watermine.io
+M:1 Thread(Crawler:0): Popped: https://computerhope.com
+M:1 Thread(Crawler:0): Pushed url: https://computerhope.com
+M:1 Thread(Crawler:0): Popped: https://clevelandclinic.org
+M:1 Thread(Crawler:0): Pushed url: https://clevelandclinic.org
+M:1 Thread(Crawler:0): Popped: https://tutu.ru
+M:1 Thread(Crawler:0): Pushed url: https://tutu.ru
+M:1 Thread(Crawler:0): Popped: https://lllpg.com
+M:1 Thread(Crawler:0): Pushed url: https://lllpg.com
+M:1 Thread(Crawler:0): Popped: https://gem.gov.in
+M:1 Thread(Crawler:0): Pushed url: https://gem.gov.in
+M:1 Thread(Crawler:0): Popped: https://afterpay.com
+M:1 Thread(Crawler:0): Pushed url: https://afterpay.com
+M:1 Thread(Crawler:0): Popped: https://nespresso.com
+M:1 Thread(Crawler:0): Pushed url: https://nespresso.com
+M:1 Thread(Crawler:0): Popped: https://kooralive.info
+M:1 Thread(Crawler:0): Pushed url: https://kooralive.info
+M:1 Thread(Crawler:0): Popped: https://ozbargain.com.au
+M:1 Thread(Crawler:0): Pushed url: https://ozbargain.com.au
+M:1 Thread(Crawler:0): Popped: https://mp3-youtube.download
+M:1 Thread(Crawler:0): Pushed url: https://mp3-youtube.download
+M:1 Thread(SendManager:0): Send: other's url = https://wowkeren.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://bnieuropa.pt
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://mockplus.cn
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://animestc.net
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://daraz.com.bd
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://doostihaa.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://livechatinc.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(SendManager:0): Send: other's url = https://mps.it
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:0): Send: other's url = https://java.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://visual.ly
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: other's url = https://virginia.gov
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://bmi.ir
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 14
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 24
+M:1 Thread(SendManager:1): Send: other's url = https://soy502.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://adshort.live
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://neilpatel.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: other's url = https://ca800.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Popped: https://mtv.com
+M:1 Thread(Crawler:0): Pushed url: https://mtv.com
+M:1 Thread(Crawler:0): Popped: https://bao315.com
+M:1 Thread(Crawler:0): Pushed url: https://bao315.com
+M:1 Thread(Crawler:0): Popped: https://techspot.com
+M:1 Thread(Crawler:0): Pushed url: https://techspot.com
+M:1 Thread(SendManager:0): Send: My own url = https://zg6.com
+35
+M:1 Thread(SendManager:0): Send: other's url = https://juming.com
+M:1 Thread(Crawler:0): Popped: https://lankasri.com
+M:1 Thread(Crawler:0): Pushed url: https://lankasri.com
+M:1 Thread(Crawler:0): Popped: https://seemorgh.com
+M:1 Thread(Crawler:0): Pushed url: https://seemorgh.com
+M:1 Thread(Crawler:0): Popped: https://canarabank.in
+M:1 Thread(Crawler:0): Pushed url: https://canarabank.in
+M:1 Thread(Crawler:0): Popped: https://cplusplus.com
+M:1 Thread(Crawler:0): Pushed url: https://cplusplus.com
+M:1 Thread(Crawler:0): Popped: https://libretexts.org
+M:1 Thread(Crawler:0): Pushed url: https://libretexts.org
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://aigei.com
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Pushed url: https://aigei.com
+M:1 Thread(Crawler:0): Popped: https://hmv.co.jp
+M:1 Thread(Crawler:0): Pushed url: https://hmv.co.jp
+M:1 Thread(Crawler:0): Popped: https://cheshi.com
+M:1 Thread(Crawler:0): Pushed url: https://cheshi.com
+M:1 Thread(Crawler:0): Popped: https://parade.com
+M:1 Thread(Crawler:0): Pushed url: https://parade.com
+M:1 Thread(Crawler:0): Popped: https://shop-pro.jp
+M:1 Thread(Crawler:0): Pushed url: https://shop-pro.jp
+M:1 Thread(Crawler:0): Popped: https://duitang.com
+M:1 Thread(Crawler:0): Pushed url: https://duitang.com
+M:1 Thread(Crawler:0): Popped: https://gu-global.com
+M:1 Thread(Crawler:0): Pushed url: https://gu-global.com
+M:1 Thread(Crawler:0): Popped: https://fazenda.sp.gov.br
+M:1 Thread(Crawler:0): Pushed url: https://fazenda.sp.gov.br
+M:1 Thread(SendManager:0): Send: My own url = https://sheypoor.com
+40
+M:1 Thread(SendManager:0): Send: other's url = https://mobalytics.gg
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: My own url = https://neoldu.com
+38
+M:1 Thread(SendManager:1): Send: other's url = https://ning.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(SendManager:1): Send: other's url = https://blogimg.jp
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://mhtwyat.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://fandango.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://raiffeisen.at
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: other's url = https://sparknotes.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 22
+M:1 Thread(SendManager:1): Send: other's url = https://secureinternetbank.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 30
+M:1 Thread(SendManager:1): Send: other's url = https://ufsc.br
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 15
+M:1 Thread(SendManager:1): Send: other's url = https://celine.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://unity3d.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://syosetu.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:1): Send: other's url = https://skladchik.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://inosmi.ru
+M:1 Thread(Crawler:0): Pushed url: https://inosmi.ru
+M:1 Thread(Crawler:0): Popped: https://mcgill.ca
+M:1 Thread(Crawler:0): Pushed url: https://mcgill.ca
+M:1 Thread(Crawler:0): Popped: https://lesechos.fr
+M:1 Thread(Crawler:0): Pushed url: https://lesechos.fr
+M:1 Thread(Crawler:0): Popped: https://yunzhijia.com
+M:1 Thread(Crawler:0): Pushed url: https://yunzhijia.com
+M:1 Thread(Crawler:0): Popped: https://cakeresume.com
+M:1 Thread(Crawler:0): Pushed url: https://cakeresume.com
+M:1 Thread(Crawler:0): Popped: https://couponbirds.com
+M:1 Thread(Crawler:0): Pushed url: https://couponbirds.com
+M:1 Thread(Crawler:0): Popped: https://tax.service.gov.uk
+M:1 Thread(Crawler:0): Pushed url: https://tax.service.gov.uk
+M:1 Thread(Crawler:0): Popped: https://filmesonlinegratisbr.com
+M:1 Thread(Crawler:0): Pushed url: https://filmesonlinegratisbr.com
+M:1 Thread(Crawler:0): Popped: https://hardees.qa
+M:1 Thread(Crawler:0): Pushed url: https://hardees.qa
+M:1 Thread(Crawler:0): Popped: https://omegle.com
+M:1 Thread(Crawler:0): Pushed url: https://omegle.com
+M:1 Thread(Crawler:0): Popped: https://tecmarket.it
+M:1 Thread(Crawler:0): Pushed url: https://tecmarket.it
+M:1 Thread(Crawler:0): Popped: https://manual.canon
+M:1 Thread(Crawler:0): Pushed url: https://manual.canon
+M:1 Thread(Crawler:0): Popped: https://macromill.com
+M:1 Thread(Crawler:0): Pushed url: https://macromill.com
+M:1 Thread(Crawler:0): Popped: https://minerstat.com
+M:1 Thread(Crawler:0): Pushed url: https://minerstat.com
+M:1 Thread(Crawler:0): Popped: https://tlauncher.org
+M:1 Thread(Crawler:0): Pushed url: https://tlauncher.org
+M:1 Thread(Crawler:0): Popped: https://theme-fusion.com
+M:1 Thread(Crawler:0): Pushed url: https://theme-fusion.com
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: My own url = https://turkmenistan.gov.tm
+47
+M:1 Thread(SendManager:0): Send: other's url = https://poupainvest.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://vlive.tv
+M:1 Thread(Crawler:0): Pushed url: https://vlive.tv
+M:1 Thread(Crawler:0): Popped: https://news1.kr
+M:1 Thread(Crawler:0): Pushed url: https://news1.kr
+M:1 Thread(Crawler:0): Popped: https://bmex.vip
+M:1 Thread(Crawler:0): Pushed url: https://bmex.vip
+M:1 Thread(Crawler:0): Popped: https://sport.es
+M:1 Thread(Crawler:0): Pushed url: https://sport.es
+M:1 Thread(Crawler:0): Popped: https://godic.net
+M:1 Thread(Crawler:0): Pushed url: https://godic.net
+M:1 Thread(Crawler:0): Popped: https://thechive.com
+M:1 Thread(Crawler:0): Pushed url: https://thechive.com
+M:1 Thread(Crawler:0): Popped: https://bankofbaroda.in
+M:1 Thread(Crawler:0): Pushed url: https://bankofbaroda.in
+M:1 Thread(Crawler:0): Popped: https://guitarcenter.com
+M:1 Thread(Crawler:0): Pushed url: https://guitarcenter.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(Crawler:0): Popped: https://ufmg.br
+M:1 Thread(Crawler:0): Pushed url: https://ufmg.br
+M:1 Thread(Crawler:0): Popped: https://vivo.com.br
+M:1 Thread(Crawler:0): Pushed url: https://vivo.com.br
+M:1 Thread(Crawler:0): Popped: https://ithome.com.tw
+M:1 Thread(Crawler:0): Pushed url: https://ithome.com.tw
+M:1 Thread(Crawler:0): Popped: https://stackshare.io
+M:1 Thread(Crawler:0): Pushed url: https://stackshare.io
+M:1 Thread(Crawler:0): Popped: https://195sports.com
+M:1 Thread(Crawler:0): Pushed url: https://195sports.com
+M:1 Thread(Crawler:0): Popped: https://yalla-shoot.us
+M:1 Thread(Crawler:0): Pushed url: https://yalla-shoot.us
+M:1 Thread(Crawler:0): Popped: https://sanfoundry.com
+M:1 Thread(Crawler:0): Pushed url: https://sanfoundry.com
+M:1 Thread(Crawler:0): Popped: https://karanmovie.org
+M:1 Thread(Crawler:0): Pushed url: https://karanmovie.org
+M:1 Thread(SendManager:0): Send: other's url = https://onlinemektep.org
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://s.to
+M:1 Thread(Crawler:0): Pushed url: https://s.to
+M:1 Thread(Crawler:0): Popped: https://icai.org
+M:1 Thread(Crawler:0): Pushed url: https://icai.org
+M:1 Thread(Crawler:0): Popped: https://renater.fr
+M:1 Thread(Crawler:0): Pushed url: https://renater.fr
+M:1 Thread(Crawler:0): Popped: https://practo.com
+M:1 Thread(Crawler:0): Pushed url: https://practo.com
+M:1 Thread(Crawler:0): Popped: https://just.edu.cn
+M:1 Thread(Crawler:0): Pushed url: https://just.edu.cn
+M:1 Thread(Crawler:0): Popped: https://osaka.lg.jp
+M:1 Thread(Crawler:0): Pushed url: https://osaka.lg.jp
+M:1 Thread(Crawler:0): Popped: https://zoominfo.com
+M:1 Thread(Crawler:0): Pushed url: https://zoominfo.com
+M:1 Thread(Crawler:0): Popped: https://mirrormedia.mg
+M:1 Thread(Crawler:0): Pushed url: https://mirrormedia.mg
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 24
+M:1 Thread(Crawler:0): Popped: https://vogue.com
+M:1 Thread(Crawler:0): Pushed url: https://vogue.com
+M:1 Thread(Crawler:0): Popped: https://hsbc.com.mx
+M:1 Thread(Crawler:0): Pushed url: https://hsbc.com.mx
+M:1 Thread(Crawler:0): Popped: https://lianbang.io
+M:1 Thread(Crawler:0): Pushed url: https://lianbang.io
+M:1 Thread(Crawler:0): Popped: https://aeroflot.ru
+M:1 Thread(Crawler:0): Pushed url: https://aeroflot.ru
+M:1 Thread(SendManager:0): Send: My own url = https://locan.to
+36
+M:1 Thread(Crawler:0): Popped: https://vetogate.com
+M:1 Thread(Crawler:0): Pushed url: https://vetogate.com
+M:1 Thread(Crawler:0): Popped: https://pelisplus.me
+M:1 Thread(Crawler:0): Pushed url: https://pelisplus.me
+M:1 Thread(Crawler:0): Popped: https://studopedia.ru
+M:1 Thread(Crawler:0): Pushed url: https://studopedia.ru
+M:1 Thread(Crawler:0): Popped: https://erisdemo.wordpress.com
+M:1 Thread(Crawler:0): Pushed url: https://erisdemo.wordpress.com
+M:1 Thread(SendManager:0): Send: other's url = https://nykaa.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://ut.ac.id
+M:1 Thread(Crawler:0): Pushed url: https://ut.ac.id
+M:1 Thread(Crawler:0): Popped: https://mrooms.net
+M:1 Thread(Crawler:0): Pushed url: https://mrooms.net
+M:1 Thread(Crawler:0): Popped: https://eldorado.ru
+M:1 Thread(Crawler:0): Pushed url: https://eldorado.ru
+M:1 Thread(Crawler:0): Popped: https://wccftech.com
+M:1 Thread(Crawler:0): Pushed url: https://wccftech.com
+M:1 Thread(Crawler:0): Popped: https://peraichi.com
+M:1 Thread(Crawler:0): Pushed url: https://peraichi.com
+M:1 Thread(Crawler:0): Popped: https://tradestation.com
+M:1 Thread(Crawler:0): Pushed url: https://tradestation.com
+M:1 Thread(Crawler:0): Popped: https://boardgamegeek.com
+M:1 Thread(Crawler:0): Pushed url: https://boardgamegeek.com
+M:1 Thread(Crawler:0): Popped: https://betgorebysson.club
+M:1 Thread(Crawler:0): Pushed url: https://betgorebysson.club
+M:1 Thread(SendManager:1): Send: sent bytes: 21
+M:1 Thread(SendManager:1): Send: other's url = https://sunbiz.org
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Popped: https://aeon.com
+M:1 Thread(Crawler:0): Pushed url: https://aeon.com
+M:1 Thread(Crawler:0): Popped: https://qunar.com
+M:1 Thread(Crawler:0): Pushed url: https://qunar.com
+M:1 Thread(Crawler:0): Popped: https://xueqiu.com
+M:1 Thread(Crawler:0): Pushed url: https://xueqiu.com
+M:1 Thread(Crawler:0): Popped: https://roocket.ir
+M:1 Thread(Crawler:0): Pushed url: https://roocket.ir
+M:1 Thread(Crawler:0): Popped: https://wpmudev.com
+M:1 Thread(Crawler:0): Pushed url: https://wpmudev.com
+M:1 Thread(Crawler:0): Popped: https://nicepage.com
+M:1 Thread(Crawler:0): Pushed url: https://nicepage.com
+M:1 Thread(Crawler:0): Popped: https://creditmutuel.fr
+M:1 Thread(Crawler:0): Pushed url: https://creditmutuel.fr
+M:1 Thread(Crawler:0): Popped: https://kopilkaurokov.ru
+M:1 Thread(Crawler:0): Pushed url: https://kopilkaurokov.ru
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: other's url = https://699pic.com
+M:1 Thread(Crawler:0): Popped: https://more.tv
+M:1 Thread(Crawler:0): Pushed url: https://more.tv
+M:1 Thread(Crawler:0): Popped: https://blic.rs
+M:1 Thread(Crawler:0): Pushed url: https://blic.rs
+M:1 Thread(Crawler:0): Popped: https://bella.tw
+M:1 Thread(Crawler:0): Pushed url: https://bella.tw
+M:1 Thread(Crawler:0): Popped: https://abanca.com
+M:1 Thread(Crawler:0): Pushed url: https://abanca.com
+M:1 Thread(Crawler:0): Popped: https://briefly.co.za
+M:1 Thread(Crawler:0): Pushed url: https://briefly.co.za
+M:1 Thread(Crawler:0): Popped: https://msdmanuals.com
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Pushed url: https://msdmanuals.com
+M:1 Thread(Crawler:0): Popped: https://cruzeirodosul.edu.br
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(SendManager:0): Send: My own url = https://ablestar.co
+39
+M:1 Thread(SendManager:0): Send: other's url = https://interpark.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 21
+M:1 Thread(SendManager:0): Send: other's url = https://narod.ru
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://nest.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 16
+M:1 Thread(SendManager:0): Send: other's url = https://pcgamesn.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://100count.net
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 20
+M:1 Thread(SendManager:0): Send: other's url = https://downphanmem.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(SendManager:0): Send: other's url = https://keepa.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 17
+M:1 Thread(Crawler:0): Pushed url: https://cruzeirodosul.edu.br
+M:1 Thread(Crawler:0): Popped: https://santillanacompartir.com
+M:1 Thread(Crawler:0): Pushed url: https://santillanacompartir.com
+M:1 Thread(SendManager:0): Send: other's url = https://yaklass.ru
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://vokrug.tv
+M:1 Thread(Crawler:0): Pushed url: https://vokrug.tv
+M:1 Thread(SendManager:0): Send: sent bytes: 18
+M:1 Thread(SendManager:1): Send: sent bytes: 18
+M:1 Thread(Crawler:0): Popped: https://fritz.box
+M:1 Thread(Crawler:0): Pushed url: https://fritz.box
+M:1 Thread(Crawler:0): Popped: https://spdb.com.cn
+M:1 Thread(Crawler:0): Pushed url: https://spdb.com.cn
+M:1 Thread(SendManager:1): Send: other's url = https://toolszap.com
+M:1 Thread(SendManager:0): Send: My own url = https://trademe.co.nz
+41
+M:1 Thread(Crawler:0): Popped: https://indeed.com.pe
+M:1 Thread(Crawler:0): Pushed url: https://indeed.com.pe
+M:1 Thread(Crawler:0): Popped: https://commerzbank.de
+M:1 Thread(Crawler:0): Pushed url: https://commerzbank.de
+M:1 Thread(Crawler:0): Popped: https://prestashop.com
+M:1 Thread(Crawler:0): Pushed url: https://prestashop.com
+M:1 Thread(Crawler:0): Popped: https://manatoki95.net
+M:1 Thread(Crawler:0): Pushed url: https://manatoki95.net
+M:1 Thread(Crawler:0): Popped: https://optimizesrv.com
+M:1 Thread(Crawler:0): Pushed url: https://optimizesrv.com
+M:1 Thread(SendManager:0): Send: My own url = https://rapidgator.net
+42
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 20
+M:1 Thread(SendManager:1): Send: other's url = https://paycomonline.net
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: other's url = https://behindwoods.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(SendManager:0): Send: sent bytes: 23
+M:1 Thread(SendManager:0): Send: other's url = https://powerofpositivity.com
+M:1 Thread(SendManager:0): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: sent bytes: 24
+M:1 Thread(SendManager:0): Send: connect result: 0
+M:1 Thread(Crawler:0): Popped: https://money.pl
+M:1 Thread(SendManager:0): Send: sent bytes: 29
+M:1 Thread(SendManager:1): Send: other's url = https://eljur.ru
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(SendManager:1): Send: other's url = https://hupu.com
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 16
+M:1 Thread(SendManager:1): Send: other's url = https://daily.co.jp
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138
+M:1 Thread(Crawler:0): Pushed url: https://money.pl
+M:1 Thread(Crawler:0): Popped: https://tovima.gr
+M:1 Thread(SendManager:1): Send: connect result: 0
+M:1 Thread(SendManager:1): Send: sent bytes: 19
+M:1 Thread(SendManager:0): Send: other's url = https://bankinter.com
+M:1 Thread(Crawler:0): Pushed url: https://tovima.gr
+M:1 Thread(Crawler:0): Popped: https://gestion.pe
+M:1 Thread(Crawler:0): Pushed url: https://gestion.pe
+M:1 Thread(SendManager:1): Send: other's url = https://carsales.com.au
+M:1 Thread(SendManager:1): Send: send to address: 127.0.0.1:47138

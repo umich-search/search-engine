@@ -75,6 +75,7 @@ void ThreadPool::Print( String output, size_t threadID )
     Lock(printMutex);
     std::cout << "M:" << machineID << " Thread(" << name.cstr() << ":" << threadID << "): " 
                 << output << std::endl;
+    fflush( stdout );
     Unlock(printMutex);
     }
 

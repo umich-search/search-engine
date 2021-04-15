@@ -11,7 +11,7 @@ const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
 
-CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
+CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit, int listenPort, int sendPort )
     : frontier( 
         FRONTIER_DIR, 
         NUM_DISK_QUEUE, 
@@ -22,10 +22,10 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
         FP_RATE ),
     listenManager( 
         { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID },
-        &frontier, &visited ),
+        &frontier, &visited, listenPort ),
     sendManager(
         { "SendManager", NUM_SEND_THREADS, &printMutex, machineID },
-        &frontier, &visited ),
+        &frontier, &visited, sendPort ),
     crawlers(
         { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID },
         &frontier, &visited, &sendManager )

@@ -5,7 +5,7 @@
 class CrawlerApp
     {
     public:
-        CrawlerApp( size_t machineID, bool frontierInit );
+        CrawlerApp( size_t machineID, bool frontierInit, int listenPort, int sendPort );
         ~CrawlerApp( );
 
         void Start();

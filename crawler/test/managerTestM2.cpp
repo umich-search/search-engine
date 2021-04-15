@@ -7,10 +7,18 @@ using namespace std;
 
 int main( )
     {
-    CrawlerApp c( 1, true );
-    // c.Start() will crawl the frontier, getting urls down
-    // from the internet and sending appropriate ones to
-    // machine 1. 
-    c.Start( );
-    // c.Stop();
+    try
+    {
+        CrawlerApp c( 0, false, 8888, 8000 );
+        c.Start( );
+        c.Join( );
+    } catch( const char *ct )
+    {
+    std::cout << "Exception " <<  ct << std::endl;
+    return 1;
+    }
+    // c.Start() will have crawler blocked waiting for enough
+    // url inserted into pq with listen manager listening and 
+    // send manager waiting(blocked) for tasks to send 
+
     }
