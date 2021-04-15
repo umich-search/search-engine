@@ -14,7 +14,7 @@
 
 // ----- Listen Manager
 
-ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port )
+ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )
     : CrawlerManager( init, frontier, visited )
     {
     }
@@ -137,7 +137,7 @@ String ListenManager::handleConnect( int fd, size_t threadID )
 
 // ----- Send Manager
 
-SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port )
+SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
         : CrawlerManager( init, frontier, visited )
         {
         }
