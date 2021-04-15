@@ -57,7 +57,7 @@ const HtmlTag TagsRecognized[ ] =
    { "!--",          DesiredAction::Discard },
    { "!doctype",     DesiredAction::Discard },
 
-   //{ "a",            DesiredAction::Anchor },
+   { "a",            DesiredAction::Anchor },
 
    { "abbr",         DesiredAction::Discard },
    { "acronym",      DesiredAction::Discard },
@@ -69,7 +69,7 @@ const HtmlTag TagsRecognized[ ] =
    { "audio",        DesiredAction::Discard },
    { "b",            DesiredAction::Discard },
 
-   //{ "base",         DesiredAction::Base },
+   { "base",         DesiredAction::Base },
 
    { "basefont",     DesiredAction::Discard },
    { "bdi",          DesiredAction::Discard },
@@ -102,7 +102,7 @@ const HtmlTag TagsRecognized[ ] =
    { "dt",           DesiredAction::Discard },
    { "em",           DesiredAction::Discard },
 
-   //{ "embed",        DesiredAction::Embed },
+   { "embed",        DesiredAction::Embed },
 
    { "fieldset",     DesiredAction::Discard },
    { "figcaption",   DesiredAction::Discard },

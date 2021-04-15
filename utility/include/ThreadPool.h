@@ -10,17 +10,18 @@
 class ThreadPool
     {
 public:
+    enum PoolType { TaskPool, LoopPool };
     struct Init
         {
         String name;
         size_t numThreads;
         size_t machineID;
         mutex_t *printMutex;
+        PoolType type;
         Init( ) { };
-        Init( String s, size_t numT, mutex_t *pm, size_t mID )
-            : name( s ), numThreads( numT ), printMutex( pm ), machineID( mID )
-            {
-            }
+        Init( String s, size_t numT, mutex_t *pm, size_t mID, PoolType type )
+            : name( s ), numThreads( numT ), printMutex( pm ), machineID( mID ),
+              type( type ) { }
         };
 
     ThreadPool( Init init );
@@ -40,13 +41,16 @@ protected:
         void *args;
         bool deleteArgs; // Should the tasked thread free the args from memory?
         };
-
     void Print( String output, size_t threadID );
 
-    // Override this function with the single task a thread should run
-    virtual void DoTask( Task task, size_t threadID ) = 0;
+    // --- Define the behavior of the thread pool here
+    // TaskPool: Override this function with the single task a thread should run
+    virtual void DoTask( Task task, size_t threadID ) { };
+    // LoopPool: Override this function with the loop the thread should run
+    virtual void DoLoop( size_t threadID ) { };
 
 private:
+    PoolType type;
     String name;
     size_t machineID;
     mutex_t *printMutex;

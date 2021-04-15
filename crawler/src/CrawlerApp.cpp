@@ -3,15 +3,17 @@
 // -- Crawler App Parameters
 const size_t NUM_CRAWL_THREADS = 1;  // 10
 const size_t NUM_SEND_THREADS = 2;  // 10
-const size_t NUM_LISTEN_THREADS = 2;  // 10
+const size_t NUM_LISTEN_THREADS = 1;  // 10
 const size_t NUM_DISK_QUEUE = 2;
 const size_t PQ_SIZE = 8;
 const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
+const int LISTEN_PORT = 8888;
+const int SEND_PORT = 8080;
 
-CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit, int listenPort, int sendPort )
+CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     : frontier( 
         FRONTIER_DIR, 
         NUM_DISK_QUEUE, 
@@ -21,21 +23,21 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit, int listenPort, int
         NUM_OBJECTS, 
         FP_RATE ),
     listenManager( 
-        { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID },
-        &frontier, &visited, listenPort ),
+        { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID, ThreadPool::LoopPool },
+        &frontier, &visited, LISTEN_PORT ),
     sendManager(
-        { "SendManager", NUM_SEND_THREADS, &printMutex, machineID },
-        &frontier, &visited, sendPort ),
+        { "SendManager", NUM_SEND_THREADS, &printMutex, machineID, ThreadPool::TaskPool },
+        &frontier, &visited, SEND_PORT ),
     crawlers(
-        { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID },
+        { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID, ThreadPool::LoopPool },
         &frontier, &visited, &sendManager )
     {
     std::cout << "Constructing Crawler App (machineID:" << machineID << ")..." << std::endl;
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
-        //String seedFile = "seedlist/test.txt";
-        String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
+        String seedFile = "seedlist/test.txt";
+        //String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
         std::cout << "Constructing frontier using seed list..." << std::endl;
         frontier.FrontierInit( seedFile.cstr(), &visited );
         }
@@ -52,14 +54,9 @@ void CrawlerApp::Start( )
     std::cout << "Starting Crawler App..." << std::endl;
     // Start the manager thread pool
     listenManager.Start();
-    std::cout << "Listen Manager alive: " << listenManager.IsAlive() << std::endl;
     sendManager.Start();
-    std::cout << "Send Manager alive: " << sendManager.IsAlive() << std::endl;
     // Start the crawler thread pool
     crawlers.Start();
-    for ( size_t i = 0; i < NUM_CRAWL_THREADS; ++i )
-        crawlers.PushTask( nullptr, false );
-    std::cout << "Crawlers alive: " << crawlers.IsAlive() << std::endl;
     }
 
 void CrawlerApp::Stop( )

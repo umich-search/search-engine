@@ -2,7 +2,7 @@
 
 ThreadPool::ThreadPool( ThreadPool::Init init )
     : name( init.name ), threads( init.numThreads ), printMutex( init.printMutex ), 
-    machineID( init.machineID), alive( false ), threadID( 0 )
+    machineID( init.machineID), alive( false ), threadID( 0 ), type( init.type )
     {
     MutexInit( &mutex, nullptr );
     }
@@ -56,6 +56,8 @@ void ThreadPool::Join()
 
 bool ThreadPool::PushTask( void *args, bool deleteArgs )
     {
+    if ( type != TaskPool )
+        return false;
     CriticalSection s( &mutex );
     if ( !alive )
         return false;
@@ -82,18 +84,25 @@ void ThreadPool::Print( String output, size_t threadID )
 void ThreadPool::Work( )
     {
     size_t ID = threadID++;
-    while ( alive ) 
+    if ( type == LoopPool ) 
         {
-        Task task;
-        if ( taskQueue.Pop( task ) )
+        DoLoop( ID );
+        }
+    else if ( type == TaskPool )
+        {
+        while ( alive ) 
             {
-            try 
+            Task task;
+            if ( taskQueue.Pop( task ) )
                 {
-                DoTask( task, ID );
-                }
-            catch ( ... )
-                {
-                Print(String("Exception"), ID );
+                try 
+                    {
+                    DoTask( task, ID );
+                    }
+                catch ( ... )
+                    {
+                    Print(String("Exception"), ID );
+                    }
                 }
             }
         }

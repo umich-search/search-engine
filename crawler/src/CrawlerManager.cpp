@@ -12,179 +12,134 @@
 
 #define MAX_MESSAGE_SIZE 512
 
-// ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port )   
-//     : CrawlerManager( init, frontier, visited ), listenPort( port ), submitPtr( new pthread_t )
-//     {
-//     int socketFD = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
-
-//     int yesval = 1;
-//     setsockopt( socketFD, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) );
-
-//     struct sockaddr_in addr;
-//     makeListenAddr( &addr, port );
-//     bind( socketFD, ( sockaddr * ) &addr, sizeof( addr ) );
-//     // port = getPort( socketFD );
-
-//     listen( socketFD, queue_size );
-//     pthread_create( submitPtr, nullptr, submitThread, this );
-
-//     std::cout << "Listenning thread created! socketfd = " << socketFD << std::endl;
-//     std::cout << "Listening on host " << inet_ntoa( addr.sin_addr ) << ":" << ntohs( addr.sin_port ) << std::endl;
-
-//     // pthread_detach( *submitPtr );
-
-//     // std::cout << "Listenning thread detahced\n";
-//     }
-
-// ListenManager::~ListenManager( )
-//     {
-//     delete submitPtr;
-//     close( socketFD );
-//     }
-
-// void ListenManager::submitConnection( )
-//     {
-//     while ( true )
-//         {
-//         Print( String( "Waiting for connection" ), 0 );
-//         int connectionfd = accept( socketFD, 0, 0 );
-//         Print( String( "connection accepted!" ), 0 );
-//         if ( connectionfd < 0 )
-//             {
-//             throw "Cannot setup connections";
-//             }
-//         this->PushTask( ( void * )( new int ( connectionfd ) ), true );
-//         Print( String( "Connectionfd" ) + ltos( connectionfd ) + String( "was pushed to task queue "), 233 );
-//         }
-//     }
-
-// void ListenManager::DoTask( Task task, size_t threadID )
-//     {
-//     int connectionfd = *( ( int * )( task.args ) );
-//     Print(String("Listen: connection: ") + ltos(connectionfd), threadID);
-//     char msg[ MAX_MESSAGE_SIZE + 1 ];
-//     memset( msg, 0, sizeof( msg ) );
-
-//     // Call recv() enough times to consume all the data the client sends.
-//     size_t recvd = 0;
-//     ssize_t rval;
-//     do 
-//         {
-//         // Receive as many additional bytes as we can in one call to recv()
-//         // (while not exceeding MAX_MESSAGE_SIZE bytes in total).
-//         rval = recv( connectionfd, msg + recvd, MAX_MESSAGE_SIZE - recvd, 0 );
-//         assert ( rval > -1 );
-//         recvd += rval;
-//         } 
-//     while ( rval > 0 );  // recv() returns 0 when client closes
-//     close( connectionfd );
-
-//     String pt = "Listen: Message received = ";
-//     pt += String( msg );
-//     Print( pt, threadID );
-
-//     // Verify URL hash
-//     uint32_t hash = fnvHash( ( const char * )msg, recvd );
-//     if ( hash % numMachine == this->myIndex ) 
-//         {
-//         if ( !this->visited->contains( msg ) )
-//             {
-//             // Push the URL to the frontier
-//             this->visited->insert( msg );
-//             Link lk ( msg );
-//             this->frontier->PushUrl( lk );
-//             }
-//         }
-//     else
-//         std::cerr << "Sent to the wrong machine: " << this->myIndex << " where it supposed to be " << hash % numMachine << std::endl; 
-//     }
-
+// ----- Listen Manager
 
 ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port )
-    : CrawlerManager( init, frontier, visited ), listenPort( port ), threadPtr( new pthread_t )
+    : CrawlerManager( init, frontier, visited )
     {
-    pthread_create( threadPtr, nullptr, listenThread, ( void * )this );
-    pthread_detach( *threadPtr );
     }
 
 ListenManager::~ListenManager( )
     {
-    delete threadPtr;
     }
 
-int ListenManager::startServer( )
+void ListenManager::DoLoop( size_t threadID )
+    {
+    while ( alive )
+        {
+        try
+            {
+            int sockfd = startServer( threadID );
+            runServer( sockfd, threadID );
+            }
+        catch ( String e )
+            {
+            Print( e, threadID );
+            }
+        catch ( ... )
+            {
+            Print("Uncaught exception", threadID);
+            }
+        }
+    }
+
+int ListenManager::startServer( size_t threadID )
     {
     // (1) Create socket
 	int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
 	if ( sockfd == -1 ) 
-        {
-		std::cerr << "Error opening stream socket\n";
-		return -1;
-	    }
+        throw String("Error opening stream socket");
 
 	// (2) Set the "reuse port" socket option
 	int yesval = 1;
 	if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
-        {
-		std::cerr << "Error setting socket options\n";
-		return -1;
-	    }
+        throw String("Error setting socket options");
 
 	// (3) Create a sockaddr_in struct for the proper port and bind() to it.
 	struct sockaddr_in addr;
-	if ( makeListenAddr( &addr, listenPort ) == -1 ) 
-        {
-		return -1;
-	    }
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons( PORT );
 
 	// (3b) Bind to the port.
 	if ( bind( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
-        {
-		std::cerr << "Error binding stream socket\n";
-		return -1;
-	    }
+        throw String("Error binding stream socket");
 
 	// (3c) Detect which port was chosen.
-	int port = getPort( sockfd );
-	printf( "Server listening on port %d...\n", listenPort );
+	socklen_t length = sizeof( addr );
+	if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
+		throw String("Error detecting port");
+    if ( ntohs( addr.sin_port ) != PORT )
+        throw String("Error incorrect listen port");
+        
+    return sockfd;
+    }
 
+void ListenManager::runServer( int sockfd, size_t threadID )
+    {
 	// (4) Begin listening for incoming connections.
-	listen( sockfd, queue_size );
+	if ( listen( sockfd, QUEUE_SIZE ) == -1 )
+        throw String("Error listening on socket");
+    
+    String output = "Listening on port ";
+    output += ltos( PORT );
+	Print( output, threadID );
 
 	// (5) Serve incoming connections one by one forever.
-	while ( true ) 
+	while ( alive ) 
         {
         int connectionfd = accept( sockfd, 0, 0 );
 		if ( connectionfd == -1 ) 
+            throw String("Error accepting connection");
+        try 
             {
-			std::cerr << "Error accepting connection\n";
-			return -1;
+            String message = handleConnect( connectionfd, threadID );
+            String output = "URL received: ";
+            output += message;
+            Print( output, threadID );
+            // Insert the link into the frontier (we can assume that hash is correct)
+            if ( !visited->contains( message ) )
+                {
+                visited->insert( message );
+                Link link( message );
+                frontier->PushUrl( link );
+                }
             }
-
-		if ( handleConnect( connectionfd ) == -1)
-			return -1;
+        catch ( String e )
+            {
+            Print( e, threadID );
+            }		
         }
     }
 
-int ListenManager::handleConnect( int fd )
+String ListenManager::handleConnect( int fd, size_t threadID )
     {
-    std::cout << "Connection received!\n";
     char msg[ MAX_MESSAGE_SIZE + 1 ];
     memset( msg, 0, MAX_MESSAGE_SIZE + 1 );
-
     size_t cumsum = 0;
-    ssize_t bytes;
-    while ( ( bytes = read( fd, msg + cumsum, MAX_MESSAGE_SIZE - cumsum ) ) > 0 )
-        {
-        
-        }
-    
+    ssize_t bytes = 0;
+	do {
+		bytes = recv(fd, msg + cumsum, MAX_MESSAGE_SIZE - cumsum, 0);
+		if (bytes == -1)
+            {
+            close( fd );
+			throw String("Error reading byte stream");
+            }
+		cumsum += bytes;
+	} while ( bytes > 0 );
+
+    close( fd );
+    if ( cumsum == 0 )
+        throw String("Error empty message");
+
+    return String( msg, cumsum );
     }
 
+// ----- Send Manager
+
 SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port )
-        : CrawlerManager( init, frontier, visited ), sendPort( port )
+        : CrawlerManager( init, frontier, visited )
         {
-        std::cout << "Send manager send to port " << sendPort << std::endl;
         }
 
 void SendManager::DoTask( Task task, size_t threadID )
@@ -192,68 +147,76 @@ void SendManager::DoTask( Task task, size_t threadID )
     Link *link = ( Link * ) task.args;
     assert( link->URL[ link->URL.size( ) - 1 ] != '\n' );
     
-    size_t mID = fnvHash( link->URL.cstr( ), link->URL.size( ) ) % numMachine;
+    size_t mID = fnvHash( link->URL.cstr( ), link->URL.size( ) ) % NUM_MACHINES;
     
-    if ( mID == myIndex )
+    String output = "URL sent (";
+    output += ltos( myID );
+    output += "->";
+    output += ltos( mID );
+    output += "): ";
+    output += link->URL;
+    if ( mID == myID )
         {
         if ( !this->visited->contains( link->URL ) )
             {
             this->visited->insert( link->URL );
             this->frontier->PushUrl( *link );
-
-            String pt = "Send: My own url = ";
-            pt += link->URL;
-            Print( pt + ltos( pt.size( ) ), threadID );
             }
+        Print( output, threadID );
         }
     else
         {
-        String pt = "Send: other's url = ";
-        pt += link->URL;
-        Print( pt, threadID );
-
-        int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
-        struct sockaddr_in addr;
-        makeSendAddr( &addr, Host[ mID ], sendPort );
-        Print(String("Send: send to address: ") + String(inet_ntoa(addr.sin_addr)) + String( ":" ) 
-            + ltos( (int)ntohs( addr.sin_port ) ), threadID );
-        int result = connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) );
-        Print(String("Send: connect result: ") + ltos(result), threadID);
-        result = send( sockfd, link->URL.cstr( ), link->URL.size( ), 0 );
-        Print(String("Send: sent bytes: ") + ltos(result), threadID);
-        close( sockfd );
+        try 
+            {
+            sendURL( link->URL, mID, threadID );
+            Print( output, threadID );
+            }
+        catch ( String e )
+            {
+            Print( e, threadID ); 
+            }
+        catch ( ... )
+            {
+            Print( "Uncaught exception", threadID );
+            }
         }
 
     if ( task.deleteArgs )
         delete link;
     }
 
-void makeSendAddr( struct sockaddr_in *addr, const char *hostname, int port ) 
+void SendManager::sendURL( String url, size_t machineID, size_t threadID )
     {
-	addr->sin_family = AF_INET;
-	struct hostent *host = gethostbyname( hostname );
+    int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+    if ( sockfd == -1 )
+        throw String("Error opening stream socket");
+
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+	struct hostent *host = gethostbyname( HOST[ machineID ] );
 	if ( !host )
-		std::cerr << "Unknown host.\n";
-	memcpy( &( addr->sin_addr ), host->h_addr, host->h_length );
-	addr->sin_port = htons( port );
-    }
-
-int makeListenAddr(struct sockaddr_in *addr, int port) 
-    {
-	addr->sin_family = AF_INET;
-	addr->sin_addr.s_addr = INADDR_ANY;
-	addr->sin_port = htons(port);
-    return 0;
-    }
-
- int getPort( int sockfd ) {
- 	struct sockaddr_in addr;
-	socklen_t length = sizeof( addr );
-	if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
         {
-		std::cerr << "Error getting the socket address\n";
-		return -1;
-	    }
-	// network byte order to host byte order.
-	return ntohs( addr.sin_port );
- }
+        close( sockfd );
+		throw String("Error unkown host");
+        }
+
+	memcpy( &( addr.sin_addr ), host->h_addr, host->h_length );
+	addr.sin_port = htons( PORT );
+
+    String address = String(inet_ntoa(addr.sin_addr));
+    address += String(":") + ltos( (int)ntohs( addr.sin_port ) );
+
+    if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
+        {
+        close( sockfd );
+        throw String("Error connection failed to address: ") + address;
+        }
+
+    int bytes = send( sockfd, url.cstr(), url.size( ), 0 );
+    if ( bytes == -1 )
+        {
+        close( sockfd );
+        throw String("Error sending bytes to address: ") + address;
+        }
+    close( sockfd );
+    }
