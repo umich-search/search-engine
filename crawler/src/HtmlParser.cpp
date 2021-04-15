@@ -67,14 +67,16 @@ bool HtmlParser::findUrl(const char *token, size_t tokenLen, String linkType, St
             urlLen = i - firstQuotePos - 1;
             break;
         }
-        if(token[i] == searchPhrase[searchPos]) {
-            searchPos++;
-            if(searchPos == searchPhrase.size()) {
-                firstQuotePos = i;
+        else if ( firstQuotePos == String::npos) {
+         if(token[i] == searchPhrase[searchPos]) {
+                searchPos++;
+                if(searchPos == searchPhrase.size()) {
+                    firstQuotePos = i;
+                }
             }
-        }
-        else{
-            searchPos = 0;
+            else{
+                searchPos = 0;
+            }
         }
     }
     if (firstQuotePos != String::npos && urlLen != 0) {
