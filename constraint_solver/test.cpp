@@ -89,13 +89,10 @@ int main(int argc, char *argv[]) {
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // (0,3)(5,10)(12,16)(18,22)(24,26)
-   ::vector<Post*> result1 = *ConstraintSolver(EndDoc, q1);
+   // [0,1,2,3,4]
+   ::vector<Offset> result1 = *ConstraintSolver(EndDoc, q1);
    for (unsigned i = 0; i < result1.size(); ++i)
-      {
-      cout << result1[i]->GetStartLocation() << " " << result1[i]->GetEndLocation() << endl;
-      delete result1[i];
-      }
+      cout << result1[i] << endl;
 
 
 // query 2: "quick brown quick"
@@ -128,13 +125,10 @@ int main(int argc, char *argv[]) {
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // (5,10)(18,22)
-   ::vector<Post*> result2 = *ConstraintSolver(EndDoc, q2);
+   // [1,3]
+   ::vector<Offset> result2 = *ConstraintSolver(EndDoc, q2);
    for (unsigned i = 0; i < result2.size(); ++i)
-      {
-      cout << result2[i]->GetStartLocation() << " " << result2[i]->GetEndLocation() << endl;
-      delete result2[i];
-      }
+      cout << result2[i] << endl;
       
 
 // query 3: quick fox
@@ -169,13 +163,10 @@ int main(int argc, char *argv[]) {
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // (0,3)(12,16)(18,22)
-   ::vector<Post*> result3 = *ConstraintSolver(EndDoc, q3);
+   // [0,2,3]
+   ::vector<Offset> result3 = *ConstraintSolver(EndDoc, q3);
    for (unsigned i = 0; i < result3.size(); ++i)
-      {
-      cout << result3[i]->GetStartLocation() << " " << result3[i]->GetEndLocation() << endl;
-      delete result3[i];
-      }
+      cout << result3[i] << endl;
 
 
 
@@ -190,6 +181,9 @@ int main(int argc, char *argv[]) {
 //       delete result4[i];
 //       }
 
+   // delete(result1);
+   // delete(result2);
+   // delete(result3);
    delete(q1);
    delete (q2);
    delete (q3);
