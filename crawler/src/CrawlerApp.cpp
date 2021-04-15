@@ -10,8 +10,6 @@ const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
 const char * BLOOMFILTER_FILE = "bloomfilter";
-const int LISTEN_PORT = 8888;
-const int SEND_PORT = 8080;
 
 CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     : frontier( 
@@ -24,10 +22,10 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
         FP_RATE ),
     listenManager( 
         { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID, ThreadPool::LoopPool },
-        &frontier, &visited, LISTEN_PORT ),
+        &frontier, &visited ),
     sendManager(
         { "SendManager", NUM_SEND_THREADS, &printMutex, machineID, ThreadPool::TaskPool },
-        &frontier, &visited, SEND_PORT ),
+        &frontier, &visited ),
     crawlers(
         { "Crawler", NUM_CRAWL_THREADS, &printMutex, machineID, ThreadPool::LoopPool },
         &frontier, &visited, &sendManager )

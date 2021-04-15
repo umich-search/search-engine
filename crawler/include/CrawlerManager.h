@@ -40,7 +40,7 @@ class CrawlerManager : public ThreadPool
 class ListenManager : public CrawlerManager
     {
     public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port );
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited );
         ~ListenManager( );
 
     private:
@@ -54,7 +54,7 @@ class ListenManager : public CrawlerManager
 class SendManager : public CrawlerManager
     {
     public:
-        SendManager( Init init, Frontier *frontier, FileBloomfilter *visited, int port );
+        SendManager( Init init, Frontier *frontier, FileBloomfilter *visited );
         ~SendManager( ) { }
 
     private:
