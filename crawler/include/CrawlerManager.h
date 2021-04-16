@@ -13,21 +13,19 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 
-const size_t NUM_MACHINES = 2;
+const size_t NUM_MACHINES = 7;
 const int PORT = 8888;
 const size_t QUEUE_SIZE = 1024;
 
 static const char *HOST[ NUM_MACHINES ] = 
     {
         "35.202.123.51",
-        "35.225.185.228",
-        // "35.202.123.51",
-        // "104.197.37.30",
-        // "34.72.42.106",
-        // "34.69.231.181",
-        // "34.66.107.136",
-        // "34.68.201.74",
-        // "35.188.164.185",
+        "104.197.37.30",
+        "34.72.42.106",
+        "34.69.231.181",
+        "34.66.107.136",
+        "34.68.201.74",
+        "35.188.164.185",
     };
 
 class CrawlerManager : public ThreadPool
