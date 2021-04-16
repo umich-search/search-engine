@@ -44,7 +44,7 @@ void Crawler::parseRobot( const String& robotUrl )
     parsedUrl.Path = ROBOT_FILE;
 
     // Print( "extract robots.txt", 0 );
-    String robotFile = LinuxGetHTML( parsedUrl );
+    String robotFile = LinuxGetHTML( parsedUrl, 0 );
     // Print( "finish downloads", 0 );
 
     String rootUrl = String(parsedUrl.Service) + String("://") + String(parsedUrl.Host);
@@ -154,7 +154,7 @@ void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
         //Print(String("ParseURL: ") + url, threadID);
-        String html = LinuxGetHTML( parsedUrl );
+        String html = LinuxGetHTML( parsedUrl, 0 );
         //Print(String("GetHTML: ") + url, threadID);
 
         // 4. Parse the HTML for the webpage
