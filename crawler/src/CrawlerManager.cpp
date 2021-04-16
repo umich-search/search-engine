@@ -96,7 +96,7 @@ void ListenManager::runServer( int sockfd, size_t threadID )
             String message = handleConnect( connectionfd, threadID );
             String output = "URL received: ";
             output += message;
-            //Print( output, threadID );
+            Print( output, threadID );
             // Insert the link into the frontier (we can assume that hash is correct)
             if ( !visited->contains( message ) )
                 {
@@ -162,7 +162,7 @@ void SendManager::DoTask( Task task, size_t threadID )
             this->visited->insert( link->URL );
             this->frontier->PushUrl( *link );
             }
-        //Print( output, threadID );
+        Print( output, threadID );
         }
     else
         {
@@ -193,14 +193,14 @@ void SendManager::sendURL( String url, size_t machineID )
 
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-	struct hostent *host = gethostbyname( HOST[ machineID ] );
-	if ( !host )
-        {
-        close( sockfd );
-		throw String("Unkown host");
-        }
+	// struct hostent *host = gethostbyname(  );
+	// if ( !host )
+    //     {
+    //     close( sockfd );
+	// 	throw String("Unkown host");
+    //     }
 
-	memcpy( &( addr.sin_addr ), host->h_addr, host->h_length );
+	memcpy( &( addr.sin_addr ), HOST[ machineID ], strlen(HOST[ machineID ]));
 	addr.sin_port = htons( PORT );
 
     String address = String(inet_ntoa(addr.sin_addr));
