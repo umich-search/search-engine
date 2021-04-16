@@ -10,9 +10,9 @@
 #include "Common.h"
 
 // Max number of sync points
-#define NUM_SYNC_POINTS 8
+#define NUM_SYNC_POINTS 64
 // Size of bytes to write in memory before writing to disk
-#define CHUNK_SIZE_BYTES 10000
+#define CHUNK_SIZE_BYTES 3145728
 // titles > MAX_TITLE_LENGTH will be cutoff
 #define MAX_TITLE_LENGTH 512
 // Documents with URLs > MAX_URL_LENGTH will be skipped
