@@ -1,4 +1,5 @@
 #include "GetUrl.h"
+#include <sys/resource.h>
 
 const char * findSubstring( const char *start, const char *end, const char *substr, size_t strLen )
    {
@@ -140,6 +141,23 @@ String LinuxGetUrl( const ParsedUrl& url )
 
 String LinuxGetSsl( const ParsedUrl& url )
    {
+   const rlim_t kStackSize = 32 * 1024 * 1024;   // min stack size = 32 MB
+    struct rlimit rl;
+    int result;
+
+    result = getrlimit(RLIMIT_STACK, &rl);
+    if (result == 0)
+    {
+        if (rl.rlim_cur < kStackSize)
+        {
+            rl.rlim_cur = kStackSize;
+            result = setrlimit(RLIMIT_STACK, &rl);
+            if (result != 0)
+            {
+                fprintf(stderr, "setrlimit returned result = %d\n", result);
+            }
+        }
+    }
    // Get the host address.
    struct addrinfo *address, hints;
    memset( &hints, 0, sizeof( hints ) );
