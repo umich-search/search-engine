@@ -85,6 +85,11 @@ class ParsedUrl
          delete[ ] pathBuffer;
          }
 
+      bool IsOkay()
+         {
+         return !strncmp("http", Service, 4) || !strncmp("https", Service, 5);
+         }
+
    private:
       char *pathBuffer;
    };

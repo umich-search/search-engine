@@ -34,11 +34,11 @@ void ListenManager::DoLoop( size_t threadID )
             }
         catch ( String e )
             {
-            Print( e, threadID );
+            //Print( String("Exception: ") + e, threadID );
             }
         catch ( ... )
             {
-            Print("Uncaught exception", threadID);
+            Print("Exception: uncaught", threadID);
             }
         }
     }
@@ -48,12 +48,12 @@ int ListenManager::startServer( size_t threadID )
     // (1) Create socket
 	int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
 	if ( sockfd == -1 ) 
-        throw String("Error opening stream socket");
+        throw String("Unable to open stream socket");
 
 	// (2) Set the "reuse port" socket option
 	int yesval = 1;
 	if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
-        throw String("Error setting socket options");
+        throw String("Unable to set socket options");
 
 	// (3) Create a sockaddr_in struct for the proper port and bind() to it.
 	struct sockaddr_in addr;
@@ -63,14 +63,14 @@ int ListenManager::startServer( size_t threadID )
 
 	// (3b) Bind to the port.
 	if ( bind( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
-        throw String("Error binding stream socket");
+        throw String("Unable to bind stream socket");
 
 	// (3c) Detect which port was chosen.
 	socklen_t length = sizeof( addr );
 	if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
-		throw String("Error detecting port");
+		throw String("Unable to detect port");
     if ( ntohs( addr.sin_port ) != PORT )
-        throw String("Error incorrect listen port");
+        throw String("Incorrect listen port");
         
     return sockfd;
     }
@@ -79,7 +79,7 @@ void ListenManager::runServer( int sockfd, size_t threadID )
     {
 	// (4) Begin listening for incoming connections.
 	if ( listen( sockfd, QUEUE_SIZE ) == -1 )
-        throw String("Error listening on socket");
+        throw String("Socket listen failed");
     
     String output = "Listening on port ";
     output += ltos( PORT );
@@ -90,13 +90,13 @@ void ListenManager::runServer( int sockfd, size_t threadID )
         {
         int connectionfd = accept( sockfd, 0, 0 );
 		if ( connectionfd == -1 ) 
-            throw String("Error accepting connection");
+            throw String("Unable to accept connection");
         try 
             {
             String message = handleConnect( connectionfd, threadID );
             String output = "URL received: ";
             output += message;
-            Print( output, threadID );
+            //Print( output, threadID );
             // Insert the link into the frontier (we can assume that hash is correct)
             if ( !visited->contains( message ) )
                 {
@@ -107,7 +107,7 @@ void ListenManager::runServer( int sockfd, size_t threadID )
             }
         catch ( String e )
             {
-            Print( e, threadID );
+            //Print( e, threadID );
             }		
         }
     }
@@ -123,14 +123,14 @@ String ListenManager::handleConnect( int fd, size_t threadID )
 		if (bytes == -1)
             {
             close( fd );
-			throw String("Error reading byte stream");
+			throw String("Problem reading byte stream");
             }
 		cumsum += bytes;
 	} while ( bytes > 0 );
 
     close( fd );
     if ( cumsum == 0 )
-        throw String("Error empty message");
+        throw String("Empty message rec");
 
     return String( msg, cumsum );
     }
@@ -145,7 +145,7 @@ SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visite
 void SendManager::DoTask( Task task, size_t threadID )
     {
     Link *link = ( Link * ) task.args;
-    assert( link->URL[ link->URL.size( ) - 1 ] != '\n' );
+    //assert( link->URL[ link->URL.size( ) - 1 ] != '\n' );
     
     size_t mID = fnvHash( link->URL.cstr( ), link->URL.size( ) ) % NUM_MACHINES;
     
@@ -162,14 +162,14 @@ void SendManager::DoTask( Task task, size_t threadID )
             this->visited->insert( link->URL );
             this->frontier->PushUrl( *link );
             }
-        Print( output, threadID );
+        //Print( output, threadID );
         }
     else
         {
         try 
             {
-            sendURL( link->URL, mID, threadID );
-            Print( output, threadID );
+            sendURL( link->URL, mID );
+            //Print( output, threadID );
             }
         catch ( String e )
             {
@@ -185,11 +185,11 @@ void SendManager::DoTask( Task task, size_t threadID )
         delete link;
     }
 
-void SendManager::sendURL( String url, size_t machineID, size_t threadID )
+void SendManager::sendURL( String url, size_t machineID )
     {
     int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
     if ( sockfd == -1 )
-        throw String("Error opening stream socket");
+        throw String("Unable to open stream socket");
 
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
@@ -197,7 +197,7 @@ void SendManager::sendURL( String url, size_t machineID, size_t threadID )
 	if ( !host )
         {
         close( sockfd );
-		throw String("Error unkown host");
+		throw String("Unkown host");
         }
 
 	memcpy( &( addr.sin_addr ), host->h_addr, host->h_length );
@@ -209,14 +209,14 @@ void SendManager::sendURL( String url, size_t machineID, size_t threadID )
     if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
         {
         close( sockfd );
-        throw String("Error connection failed to address: ") + address;
+        throw String("Connection failed to machine: ") + ltos(machineID);
         }
 
     int bytes = send( sockfd, url.cstr(), url.size( ), 0 );
     if ( bytes == -1 )
         {
         close( sockfd );
-        throw String("Error sending bytes to address: ") + address;
+        throw String("Sending bytes failed to machine: ") + ltos(machineID);
         }
     close( sockfd );
     }

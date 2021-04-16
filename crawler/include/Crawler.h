@@ -3,6 +3,8 @@
 #include <PriorityQueue.h>
 #include <Concurrency.h>
 #include <Vector.h>
+#include <fstream>
+#include <ctime>
 #include "CrawlerManager.h"
 #include "ThreadPool.h"
 #include "BloomFilter.h"
@@ -10,7 +12,10 @@
 #include "GetUrl.h"
 #include "Frontier.h"
 #include "IndexConstructor.h"
+#include "Timer.h"
 static const char *ROBOT_FILE = "robots.txt";
+static const char *DOC_COUNT_FILE = "documentCount";
+static const int PRINT_INTERVAL = 100; // print every this number of documents
 
 // ----- Crawler.h
 // Task Input: NONE
@@ -28,13 +33,13 @@ class Crawler : public ThreadPool
         Frontier *frontier;
         FileBloomfilter *visited;
         SendManager *manager;
+        std::atomic< size_t > documentCount;
+        ThreadSafeTimer timer;
 
         void DoLoop( size_t threadID ) override;
         void Crawl( IndexConstructor &ic, size_t threadID );
 
         String retrieveWebpage( const ParsedUrl& url );
         void parseRobot( const String& robotUrl );
-
-        // TODO: ( with the index team ) add words to index
         void addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &IndexConstructor );
     };

@@ -19,8 +19,13 @@ const size_t QUEUE_SIZE = 1024;
 
 static const char *HOST[ NUM_MACHINES ] = 
     {
-        "localhost",
-        "localhost",
+        "35.202.123.51",
+        //"104.197.37.30",
+        //"34.72.42.106",
+        //"34.69.231.181",
+        //"34.66.107.136",
+        //"34.68.201.74",
+        //"35.188.164.185",
     };
 
 class CrawlerManager : public ThreadPool
@@ -58,7 +63,7 @@ class SendManager : public CrawlerManager
         ~SendManager( ) { }
 
     private:
-        void sendURL( String url, size_t machineID, size_t threadID );
+        void sendURL( String url, size_t machineID );
 
         void DoTask( Task task, size_t threadID ) override;
     };
