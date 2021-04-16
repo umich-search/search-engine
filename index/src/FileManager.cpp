@@ -16,11 +16,15 @@ int FileManager::resolveDocsChunkPath(size_t offset, char * pathname, size_t thr
     return 0;
 }
 
-int FileManager::resolveMetadataPath(char * pathname, size_t threadID) {
+int FileManager::resolveMetadataPath(size_t offset, char * pathname, size_t threadID) {
+    if(offset == -1) {
+        pathname[0] = '\0';
+        return 0;
+    }
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNKS_METADATA_DIRECTORY);
-    strcat(buffer,"thread-%zu-metadata.mdata");
-    sprintf(pathname, buffer, threadID);
+    strcat(buffer,"thread-%zu-%zu-metadata.mdata");
+    sprintf(pathname, buffer, threadID, offset);
     return 0;
 }
 
@@ -112,26 +116,25 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
     return 0;
 }
 
-int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname) {
-    std::cout << "WRITING TO METADAAT FILE" << std::endl;
+int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname, const char * prevMetadata) {
     ChunksMetadata *metadata;
+    ChunksMetadata * new_metadata;
     size_t numWordsSize, numUniqueWordsSize, numDocsSize, endLocationSize;
     numWordsSize = sizeof(w_Occurence);
     numUniqueWordsSize = sizeof(w_Occurence);
     numDocsSize = sizeof(d_Occurence);
     endLocationSize = sizeof(endLocation);
-    //std::cout << "Opening metadata files " << pathname << std::endl;
-    int f_metadata = open( pathname,
+    if(numChunks == 0) {
+            int f_metadata = open( pathname,
                            O_CREAT |
                            O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
-    
+
     if (f_metadata == -1) {
         std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
          throw "file open failed";
     }
-    std::cout << "Next end doc in metadata write: " << endLocation << std::endl;
-    if(FileSize(f_metadata) == 0) {
+
         ftruncate(f_metadata, sizeof(ChunksMetadata) + sizeof(Location) + sizeof(d_Occurence));
         metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
         if (metadata == MAP_FAILED ) {
@@ -145,20 +148,40 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         char * curr = ((char*)metadata + sizeof(ChunksMetadata));
         memcpy(curr, (char*)&endLocation, sizeof(Location));
         memcpy(curr + sizeof(Location), (char*)&numDocs, sizeof(d_Occurence));
+         close(f_metadata);
+
     }
     else {
-        if(numChunks == 0) {
-            ftruncate(f_metadata, 0);
+        int f_metadata = open( prevMetadata,
+                           O_CREAT |
+                           O_RDWR,
+                           S_IRWXU | S_IRWXG | S_IRWXO );
+
+        if (f_metadata == -1) {
+            std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
+            throw "file open failed";
+        }
+
+        int f_new_metadata = open( pathname,
+                           O_CREAT |
+                           O_RDWR,
+                           S_IRWXU | S_IRWXG | S_IRWXO );
+        if (f_new_metadata == -1) {
+            std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
+            throw "file open failed";
         }
         ftruncate(f_metadata, FileSize(f_metadata) + sizeof(Location) + sizeof(d_Occurence));
+        ftruncate(f_new_metadata, FileSize(f_metadata) + sizeof(Location) + sizeof(d_Occurence));
+
         metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
+        new_metadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_new_metadata, 0);
         if (mmap == MAP_FAILED ) {
            throw "Mapping failed";
         }
-        metadata->numWords = numWords;
-        metadata->numDocs = numDocs;
-        metadata->endLocation = endLocation;
-        metadata->numUniqueWords = numUniqueWords;
+        new_metadata->numWords = numWords;
+        new_metadata->numDocs = numDocs;
+        new_metadata->endLocation = endLocation;
+        new_metadata->numUniqueWords = numUniqueWords;
         Location chunkEnd;
         if(metadata->numChunks == 0) {
             chunkEnd = endLocation;
@@ -166,14 +189,20 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         else {
             chunkEnd = *(Location*)((char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(d_Occurence)) * (metadata->numChunks - 1)) + endLocation;
         }
-        char * curr = (char*)metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(d_Occurence)) * metadata->numChunks;
+        memcpy((char*)new_metadata + sizeof(ChunksMetadata), (char*)metadata + sizeof(ChunksMetadata), (sizeof(Location) + sizeof(d_Occurence)) * (metadata->numChunks));
+        char * curr = (char*)new_metadata + sizeof(ChunksMetadata) + (sizeof(Location) + sizeof(d_Occurence)) * metadata->numChunks;
+        
         memcpy(curr, (char*)&chunkEnd, sizeof(Location));
         memcpy(curr + sizeof(Location), (char*)&numDocs, sizeof(d_Occurence));
-        metadata->numChunks = numChunks + 1;
 
+        new_metadata->numChunks = numChunks + 1;
+         close(f_metadata);
+         close(f_new_metadata);
+
+    
+    //return endLocs;
 
     }
-    close(f_metadata);
     return 0;
 }
 
@@ -190,16 +219,20 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
        char chunkFile[MAX_PATHNAME_LENGTH];
        char docsFile[MAX_PATHNAME_LENGTH];
        char metadataFile[MAX_PATHNAME_LENGTH];
+       char prevMetadataFile[MAX_PATHNAME_LENGTH];
        resolveChunkPath(numChunks, chunkFile, threadID);
        resolveDocsChunkPath(numChunks, docsFile, threadID);
-       resolveMetadataPath(metadataFile, threadID );
+       resolveMetadataPath(numChunks , metadataFile, threadID );
+       resolveMetadataPath(numChunks - 1, prevMetadataFile, threadID);
        writePostingListsToFile(termIndex, endDocList, chunkFile);
        writeDocsToFile(docDetails, docsFile);
-       writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks, metadataFile );
+       std::cout << "writing metadatafile: " << metadataFile << std::endl;
+       writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks, metadataFile, prevMetadataFile  );
        return 0;
    }
 
     int FileManager::ReadChunk(size_t chunkIndex) {
+        ReadMetadata(chunkIndex);
         if(chunkIndex > chunksMetadata->numChunks) {
             throw "Error: Attempting to read more than available chunks";
         }
@@ -225,6 +258,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
     }
 
 int FileManager::ReadDocuments(Offset docsChunkIndex) {
+    ReadMetadata(docsChunkIndex);
     if(docsChunkIndex > chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
@@ -255,7 +289,7 @@ TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkIndex
     if(!termIndexBlob) {
         throw "Error: No chunk has been read";
     }
-    
+
     const SerialTuple * tuple = termIndexBlob->Find(term);
     if(!tuple) {
         throw "Error: Term does not exist";
@@ -300,13 +334,42 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 }
 
 
-int FileManager::ReadMetadata() {
+int FileManager::ReadMetadata(Offset givenChunk) {
+    // Use manager idea of num of chunks if no chunk given
+    if(givenChunk == -1) {
+        givenChunk = managerNumChunks;
+    }
     char metadataFile[MAX_PATHNAME_LENGTH];
-    resolveMetadataPath(metadataFile, threadID);
-    //std::cout << "ATTEMPTING TO WRITE METADATA() ON PATH " << metadataFile << std::endl;
-    int f_metadata = open( metadataFile,
+    int f_metadata = 0;
+    size_t cNum = 0;
+
+    // TODO: Initalize to skip search if num chunks is known
+    if(givenChunk != -1) {
+        resolveMetadataPath(givenChunk, metadataFile, threadID);
+        f_metadata = open( metadataFile,
+                        O_RDWR,
+                        S_IRWXU | S_IRWXG | S_IRWXO );
+        //managerNumChunks = givenChunk;
+    }
+    else {
+        f_metadata = 0;
+        while(f_metadata != - 1) {
+        cNum++;
+        resolveMetadataPath(cNum, metadataFile, threadID);
+
+        f_metadata = open( metadataFile,
+                        O_RDWR,
+                        S_IRWXU | S_IRWXG | S_IRWXO );
+        }
+        resolveMetadataPath(cNum - 1, metadataFile, threadID); 
+        //managerNumChunks = cNum - 1;
+
+        f_metadata = open( metadataFile,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
+
+    }
+
     if(f_metadata == -1) {
         std::cout << "WRITE FAILED" << std::endl;
         std::cerr << "Error openning file " << metadataFile << " with errno = " << strerror( errno ) << std::endl;
@@ -336,22 +399,29 @@ int FileManager::ReadMetadata() {
 }
    
 w_Occurence FileManager::getIndexWords() {
+    ReadMetadata();
+
     return chunksMetadata->numWords;
 }
 
 Offset FileManager::getNumChunks() {
+    ReadMetadata();
+
     return chunksMetadata->numChunks;
 }
 
 d_Occurence FileManager::getNumDocuments() {
+    ReadMetadata();
     return chunksMetadata->numDocs;
 }
 
 Location FileManager::getIndexEndLocation() {
+    ReadMetadata();
     return *(Location *)(chunksMetadata->dynamicSpace + (sizeof(Location) + sizeof(d_Occurence))* (chunksMetadata->numChunks - 1));
 }
 
 ::vector<Location> FileManager::getChunkEndLocations() {
+    ReadMetadata();
     ::vector<Location> endLocs;
     
     for(unsigned int i = 0; i < chunksMetadata->numChunks; ++i) {

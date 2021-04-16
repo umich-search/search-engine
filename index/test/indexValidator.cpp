@@ -4,7 +4,7 @@
 #include <filesystem>
 
 
-
+/*
 int validateChunksIntegrity() {
     FileManager m;
     vector<Location> endLocs = m.getChunkEndLocations(); 
@@ -66,7 +66,7 @@ int validateChunksIntegrity() {
          
          return nullptr;
          }
-         */
+         
     }
             std::cout << "Analyzing documets in chunks: " << std::endl;
         size_t docIndex = 0;
@@ -97,22 +97,39 @@ int validateChunksIntegrity() {
         }
     return 0;
 }
-
+*/
 int main() {
-    std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
-    std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
-
-    IndexConstructor ic;
-    for(unsigned int j = 0; j < 100; ++j ) {
-        for(unsigned int i = 0; i < 100; ++i) {
-            ic.Insert("Hello", Body);
-            ic.Insert("How are", Body);
-            ic.Insert("You",Body);
+  //  std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+    //std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+    size_t total_num_docs = 0;
+    size_t total_num_words = 0;
+    size_t num_words_in_chunk = 0;
+    ::vector<size_t> num_docs_in_thread;
+    ::vector<size_t> num_words_in_thread;
+    
+    for(unsigned int i = 0; i < 10; ++i) {
+        FileManager m(i);
+        if(i == 7) {
+            std::cout << "" << std::endl;
         }
-        String t("Title");
-        String u("URL");
-        ic.Insert(t,u);
+        size_t num_chunks = m.getNumChunks();
+        ::vector<d_Occurence> docCounts = m.getDocCountsAfterChunk();
+        ::vector<Location> endDocLocs = m.getChunkEndLocations();
+        std::cout << "Doc counts for thread: " << i << std::endl;
+        for(unsigned int i = 0; i < docCounts.size(); ++i) {
+            std::cout << docCounts[i] << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "Chunk end locs for thread: " << i << std::endl;
+        for(unsigned int i = 0; i < endDocLocs.size(); ++i) {
+            std::cout << endDocLocs[i] << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "Num unique words for thread: " << i << std::endl;
+        std::cout << m.chunksMetadata->numUniqueWords << std::endl;
+        total_num_docs += docCounts[num_chunks - 1];
+        total_num_words += endDocLocs[num_chunks - 1];
     }
-    validateChunksIntegrity();
-    std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+    std::cout << "total number of documents: " << total_num_docs << std::endl;
+    std::cout << "total number of words: " << total_num_words << std::endl;
 }

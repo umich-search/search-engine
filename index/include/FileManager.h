@@ -25,18 +25,19 @@ private:
       Location endLocation;
       char dynamicSpace[];
    };
-    
+   Offset managerNumChunks = -1;
+
     static int resolveChunkPath(size_t offset, char * pathname, size_t threadID);
     static int resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID);
-    static int resolveMetadataPath(char * pathname, size_t threadID);
+    static int resolveMetadataPath(size_t offset, char * pathname, size_t threadID);
     
     // Reads metadata file
-    int ReadMetadata();
+    int ReadMetadata(Offset givenChunk = -1);
     static int writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                 SharedPointer<EndDocPostingList>
                                 endDocList, const char *pathname);
     static int writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname );
-    static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname);
+    static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname, const char * prevMetadata);
 
 
 public:
