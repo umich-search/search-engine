@@ -43,5 +43,5 @@ class Crawler : public ThreadPool
 
         String retrieveWebpage( const ParsedUrl& url );
         void parseRobot( const String& robotUrl );
-        void addWordsToIndex( const HtmlParser& htmlparser, String url );
+        void addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID );
     };

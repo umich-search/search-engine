@@ -105,35 +105,38 @@ void Crawler::parseRobot( const String& robotUrl )
         myfile.close();
     }
 
-void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )
+void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID )
 {
+        CriticalSection s(&indexMutex);
         char title[MAX_TITLE_LENGTH];
         size_t titleLength = 0;
         //cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
+        if(htmlparser.titleWords.size() > 0 && htmlparser.titleWords[0].size() > 1 && htmlparser.titleWords[0][0] != '!') {
+            size_t titleTotalLength = 0;
+            for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
+                String s = "!";
+                s += htmlparser.titleWords[i];
+                ic.Insert(s, Title);
+              if(titleTotalLength + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
+                    strcat(title, htmlparser.titleWords[i].cstr());
+                    char gap = ' ';
+                    strcat(title, &gap);
+                    titleTotalLength += htmlparser.titleWords[i].size() + 2;
+                }
+            }
+        }
 
-        for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
-            size_t currTitleSize = htmlparser.titleWords[i].size();
-            const char * titleCstr = htmlparser.titleWords[i].cstr();
-            size_t currLoc = 0;
-            size_t startPos = 0;
-            while(titleCstr[currLoc] == '!') {
-                startPos++;
-            }
-            if(startPos != currTitleSize) {
-                ic.Insert(titleCstr + startPos, Title);
-            }
-            if(titleLength + currTitleSize + 1 < MAX_TITLE_LENGTH) {
-                strcat(title, htmlparser.titleWords[i].cstr());
-                char gap = ' ';
-                strcat(title, &gap);
-                titleLength += currTitleSize + 1;
-            }
-        }
         for(unsigned int i = 0; i < htmlparser.words.size(); ++i) {
+            //std::cout << "Inserting word: " << htmlparser.words[i].cstr() << std::endl;
             ic.Insert(htmlparser.words[i], Body);
+        } 
+        String output = String("Inserting title:") + String(title);
+        output += " with url: ";
+        output += String(url.cstr());
+        //Print( output, threadID );        
+        if(titleLength < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
+            ic.Insert(String(title), url);
         }
-        
-        ic.Insert(String(title), url);
         //cout << "Inserted Document!" << endl;
 
         return;
@@ -169,16 +172,15 @@ void Crawler::Crawl( size_t threadID )
             ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
             if ( !testUrl.IsOkay() )
                 continue;
-            Link* newLink = new Link( htmlparser.links[i] );
-            manager->PushTask( (void *) newLink, true );
+            //Link* newLink = new Link( htmlparser.links[i] );
+            //manager->PushTask( (void *) newLink, true );
             //Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
             }
         //Print(String("Num URLs parsed: ") + ltos(htmlparser.links.size()), threadID);
 
         // 6. Add the words from the HTML to the index
-        Lock(&indexMutex);
-        addWordsToIndex( htmlparser, url );
-        Unlock(&indexMutex);
+        addWordsToIndex( htmlparser, url, threadID );
+
         //Print(String("Inserted URL in index: ") + url, threadID );
         ++documentCount;
         if ( documentCount % PRINT_INTERVAL == 0 ) 
