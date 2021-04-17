@@ -35,11 +35,13 @@ class Crawler : public ThreadPool
         SendManager *manager;
         std::atomic< size_t > documentCount;
         ThreadSafeTimer timer;
+        IndexConstructor ic;
+        mutex_t indexMutex;
 
         void DoLoop( size_t threadID ) override;
-        void Crawl( IndexConstructor &ic, size_t threadID );
+        void Crawl( size_t threadID );
 
         String retrieveWebpage( const ParsedUrl& url );
         void parseRobot( const String& robotUrl );
-        void addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &IndexConstructor );
+        void addWordsToIndex( const HtmlParser& htmlparser, String url );
     };

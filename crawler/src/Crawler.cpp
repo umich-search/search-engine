@@ -3,7 +3,7 @@
 Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited, 
                  SendManager *manager ) 
     : ThreadPool( init ), frontier( frontier ), visited( visited ), 
-    manager( manager ), documentCount( 0 ) 
+    manager( manager ), documentCount( 0 ), ic(0) 
     { 
     std::ifstream file;
     file.open( DOC_COUNT_FILE );
@@ -11,18 +11,21 @@ Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited,
     file >> count;
     file.close();
     documentCount = count;
+    MutexInit(&indexMutex, nullptr);
     }
 
-Crawler::~Crawler( ) { }
+Crawler::~Crawler( )
+    {
+    ic.resolveChunkMem();
+    }
 
 void Crawler::DoLoop( size_t threadID )
     {
-    IndexConstructor ic(threadID);
     while ( alive )
         {
         try 
             {
-            Crawl( ic, threadID );
+            Crawl( threadID );
             }
         catch ( String e )
             {
@@ -33,7 +36,6 @@ void Crawler::DoLoop( size_t threadID )
             Print("Exception: uncaught", threadID);
             }
         }
-    ic.resolveChunkMem();
     }
 
 void Crawler::parseRobot( const String& robotUrl )
@@ -103,7 +105,7 @@ void Crawler::parseRobot( const String& robotUrl )
         myfile.close();
     }
 
-void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexConstructor &indexConstructor )
+void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url )
 {
         char title[MAX_TITLE_LENGTH];
         size_t titleLength = 0;
@@ -118,7 +120,7 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexCo
                 startPos++;
             }
             if(startPos != currTitleSize) {
-                indexConstructor.Insert(titleCstr + startPos, Title);
+                ic.Insert(titleCstr + startPos, Title);
             }
             if(titleLength + currTitleSize + 1 < MAX_TITLE_LENGTH) {
                 strcat(title, htmlparser.titleWords[i].cstr());
@@ -128,16 +130,16 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, IndexCo
             }
         }
         for(unsigned int i = 0; i < htmlparser.words.size(); ++i) {
-            indexConstructor.Insert(htmlparser.words[i], Body);
+            ic.Insert(htmlparser.words[i], Body);
         }
         
-        indexConstructor.Insert(String(title), url);
+        ic.Insert(String(title), url);
         //cout << "Inserted Document!" << endl;
 
         return;
     }
 
-void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
+void Crawler::Crawl( size_t threadID )
     {
     while ( alive || !frontier->Empty() )
         { 
@@ -174,7 +176,9 @@ void Crawler::Crawl( IndexConstructor &ic, size_t threadID )
         //Print(String("Num URLs parsed: ") + ltos(htmlparser.links.size()), threadID);
 
         // 6. Add the words from the HTML to the index
-        addWordsToIndex( htmlparser, url, ic );
+        Lock(&indexMutex);
+        addWordsToIndex( htmlparser, url );
+        Unlock(&indexMutex);
         //Print(String("Inserted URL in index: ") + url, threadID );
         ++documentCount;
         if ( documentCount % PRINT_INTERVAL == 0 ) 

@@ -169,7 +169,7 @@ void SendManager::DoTask( Task task, size_t threadID )
         try 
             {
             sendURL( link->URL, mID );
-            //Print( output, threadID );
+            Print( output, threadID );
             }
         catch ( String e )
             {
