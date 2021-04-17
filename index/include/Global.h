@@ -14,11 +14,11 @@
 // Size of bytes to write in memory before writing to disk
 #define CHUNK_SIZE_BYTES 209715200 // 200 MB
 // titles > MAX_TITLE_LENGTH will be cutoff
-#define MAX_TITLE_LENGTH 512
+#define MAX_TITLE_LENGTH 128
 // Documents with URLs > MAX_URL_LENGTH will be skipped
-#define MAX_URL_LENGTH 2048
+#define MAX_URL_LENGTH 512
 // Document Size = MAX_TITLE_LENGTH + MAX_URL_LENGTH + 2 * sizeof(Location)
-#define DOCUMENT_SIZE 2576
+#define DOCUMENT_SIZE 656
 // Maximum length of local machine pathname
 #define MAX_PATHNAME_LENGTH 4096
 // Storage locations

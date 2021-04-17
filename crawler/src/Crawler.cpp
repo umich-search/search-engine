@@ -12,6 +12,7 @@ Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited,
     file.close();
     documentCount = count;
     MutexInit(&indexMutex, nullptr);
+    timer.Start();
     }
 
 Crawler::~Crawler( )
