@@ -41,7 +41,7 @@ unsigned int htoi( const char *ptr )
    return result >> 4;
    }
 
-String LinuxGetUrl( const ParsedUrl& url )
+String LinuxGetUrl( const ParsedUrl& url, size_t numRedirect )
    {
    // Get the host address.
    struct addrinfo *address, hints;
@@ -117,7 +117,7 @@ String LinuxGetUrl( const ParsedUrl& url )
    if ( parsedHeader.redirectUrl )
       {
       ParsedUrl redirectUrl( parsedHeader.redirectUrl );
-      return LinuxGetHTML( redirectUrl );
+      return LinuxGetHTML( redirectUrl, numRedirect + 1 );
       }
 
    if ( parsedHeader.chunked )
@@ -139,7 +139,7 @@ String LinuxGetUrl( const ParsedUrl& url )
    return doc;
    }
 
-String LinuxGetSsl( const ParsedUrl& url )
+String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
    {
    const rlim_t kStackSize = 32 * 1024 * 1024;   // min stack size = 32 MB
     struct rlimit rl;
@@ -245,7 +245,7 @@ String LinuxGetSsl( const ParsedUrl& url )
    if ( parsedHeader.redirectUrl )
       {
       ParsedUrl redirectUrl( parsedHeader.redirectUrl );
-      return LinuxGetHTML( redirectUrl );
+      return LinuxGetHTML( redirectUrl, numRedirect + 1 );
       }
 
    if ( parsedHeader.chunked )
@@ -267,11 +267,14 @@ String LinuxGetSsl( const ParsedUrl& url )
    return doc;
    }
    
-String LinuxGetHTML( const ParsedUrl& url )
+String LinuxGetHTML( const ParsedUrl& url, size_t numRedirect )
    {
+   if ( numRedirect > 5 )
+      throw "Too many redirects!\n";
+
    if ( !strncmp( url.Service, "https", 5 ) )
-      return LinuxGetSsl( url );
+      return LinuxGetSsl( url, numRedirect );
    else if ( !strncmp( url.Service, "http", 4 ) )
-      return LinuxGetUrl( url );
+      return LinuxGetUrl( url, numRedirect );
    throw String("GetHTML: unknown service: ") + String(url.Service);
    }
