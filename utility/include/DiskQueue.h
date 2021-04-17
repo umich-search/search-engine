@@ -20,7 +20,7 @@
 #include <cassert>
 #include "mString.h"
 
-const unsigned int MAX_FILE_BLOCK_IN_BYTES = 4096;
+const unsigned int MAX_FILE_BLOCK_IN_BYTES = 512;
 
 bool DotName( const char * );
 String ltos( int );

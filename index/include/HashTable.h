@@ -2,7 +2,7 @@
 #include "Common.h"
 #include <cstring>
 // Number of buckets in hashtable during construction
-#define INITIAL_HASHTABLE_SIZE 30000
+#define INITIAL_HASHTABLE_SIZE 5 // 30000
 #define WRITE_TO_DISK true
 #define USE_CHUNK_LIMIT true
 typedef uint64_t fnvHash_t;
