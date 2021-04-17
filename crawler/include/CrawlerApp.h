@@ -16,8 +16,8 @@ class CrawlerApp
         mutex_t printMutex;
         Frontier frontier;
         FileBloomfilter visited;
-
-        ListenManager listenManager;
-        SendManager sendManager;
-        Crawler crawlers;
+        
+        ListenManager listenManager; // single-threaded
+        SendManager sendManager; // multi-threaded
+        Crawler crawlers; // multi-threaded
     };

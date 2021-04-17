@@ -14,8 +14,10 @@
 
 // ----- Listen Manager
 
-ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited )
-    : CrawlerManager( init, frontier, visited )
+ListenManager::ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited, size_t numListenThreads )
+    : CrawlerManager( init, frontier, visited ), connectHandler(
+        { "ConnectHandler", numListenThreads, init.printMutex, init.machineID, ThreadPool::TaskPool },
+        frontier, visited )
     {
     }
 
@@ -91,28 +93,49 @@ void ListenManager::runServer( int sockfd, size_t threadID )
         int connectionfd = accept( sockfd, 0, 0 );
 		if ( connectionfd == -1 ) 
             throw String("Unable to accept connection");
-        try 
-            {
-            String message = handleConnect( connectionfd, threadID );
-            String output = "URL received: ";
-            output += message;
-            Print( output, threadID );
-            // Insert the link into the frontier (we can assume that hash is correct)
-            if ( !visited->contains( message ) )
-                {
-                visited->insert( message );
-                Link link( message );
-                frontier->PushUrl( link );
-                }
-            }
-        catch ( String e )
-            {
-            //Print( e, threadID );
-            }		
+        // Add the connection to be handled
+        connectHandler.PushTask( (void *) new int(connectionfd), true );
         }
     }
 
-String ListenManager::handleConnect( int fd, size_t threadID )
+// ---- Connect Handler
+
+ConnectHandler::ConnectHandler( Init init, Frontier *frontier, FileBloomfilter *visited )
+    : CrawlerManager( init, frontier, visited )
+    {
+    }
+
+void ConnectHandler::DoTask( Task task, size_t threadID )
+    {
+    int *fd =  ( int * ) task.args;
+    try
+        {
+        String message = handleConnect( *fd, threadID );
+        String output = "URL received: ";
+        output += message;
+        Print( output, threadID );
+        // Insert the link into the frontier (we can assume that hash is correct)
+        if ( !visited->contains( message ) )
+            {
+            visited->insert( message );
+            Link link( message );
+            frontier->PushUrl( link );
+            }
+        }
+    catch ( String e )
+        {
+        //Print( String("Exception: ") + e, threadID );
+        }
+    catch ( ... )
+        {
+        Print("Exception: uncaught", threadID);
+        }
+
+    if ( task.deleteArgs )
+        delete fd;
+    }
+
+String ConnectHandler::handleConnect( int fd, size_t threadID )
     {
     char msg[ MAX_MESSAGE_SIZE + 1 ];
     memset( msg, 0, MAX_MESSAGE_SIZE + 1 );

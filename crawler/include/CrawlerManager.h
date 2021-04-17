@@ -13,19 +13,25 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 
-const size_t NUM_MACHINES = 14;
+const size_t NUM_MACHINES = 2;
 const int PORT = 8888;
 const size_t QUEUE_SIZE = 1024;
 
 static const char *HOST[ NUM_MACHINES ] = 
     {
+        // "127.0.0.1",
+        // "127.0.0.1",
+
         "35.202.123.51",
-        "104.197.37.30",
-        "34.72.42.106",
-        "34.69.231.181",
-        "34.66.107.136",
-        "34.68.201.74",
-        "35.188.164.185",
+        "35.225.185.228",
+
+        // "35.202.123.51",
+        // "104.197.37.30",
+        // "34.72.42.106",
+        // "34.69.231.181",
+        // "34.66.107.136",
+        // "34.68.201.74",
+        // "35.188.164.185",
     };
 
 class CrawlerManager : public ThreadPool
@@ -45,16 +51,31 @@ class CrawlerManager : public ThreadPool
 class ListenManager : public CrawlerManager
     {
     public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited );
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited,
+                        size_t numListenThreads );
         ~ListenManager( );
 
     private:
+        CrawlerManager connectHandler;
+
         int startServer( size_t threadID );
         void runServer( int sockfd, size_t threadID );
-        String handleConnect( int fd, size_t threadID );
 
         void DoLoop( size_t threadID ) override;
     };
+
+class ConnectHandler : public CrawlerManager
+    {
+    public:
+        ConnectHandler( Init init, Frontier *frontier, FileBloomfilter *visited );
+        ~ConnectHandler( ) { }
+
+    private:
+        String handleConnect( int fd, size_t threadID );
+
+        void DoTask( Task task, size_t threadID ) override;
+    };
+
 
 class SendManager : public CrawlerManager
     {
