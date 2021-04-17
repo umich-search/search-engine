@@ -29,7 +29,7 @@ void Crawler::DoLoop( size_t threadID )
             }
         catch ( String e )
             {
-            //Print(String("Exception: ") + e, threadID );
+            Print(String("Exception: ") + e, threadID );
             }
         catch ( ... )
             {
