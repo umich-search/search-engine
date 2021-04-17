@@ -5,7 +5,6 @@ EXPOSE 8888
 
 # TODO: change the machine ID
 ARG MACHINE_ID=0
-RUN echo "Machine ID: $MACHINE_ID"
 RUN mkdir crawler
 WORKDIR /crawler
 RUN mkdir frontier index_files seedlist 

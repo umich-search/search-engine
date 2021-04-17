@@ -270,7 +270,7 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
 String LinuxGetHTML( const ParsedUrl& url, size_t numRedirect )
    {
    if ( numRedirect > 5 )
-      throw "Too many redirects!\n";
+      throw String("Too many redirects!");
 
    if ( !strncmp( url.Service, "https", 5 ) )
       return LinuxGetSsl( url, numRedirect );

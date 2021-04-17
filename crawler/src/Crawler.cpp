@@ -33,7 +33,7 @@ void Crawler::DoLoop( size_t threadID )
             }
         catch ( ... )
             {
-            Print("Exception: uncaught", threadID);
+            //Print("Exception: uncaught", threadID);
             }
         }
     }
@@ -172,8 +172,8 @@ void Crawler::Crawl( size_t threadID )
             ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
             if ( !testUrl.IsOkay() )
                 continue;
-            //Link* newLink = new Link( htmlparser.links[i] );
-            //manager->PushTask( (void *) newLink, true );
+            Link* newLink = new Link( htmlparser.links[i] );
+            manager->PushTask( (void *) newLink, true );
             //Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
             }
         //Print(String("Num URLs parsed: ") + ltos(htmlparser.links.size()), threadID);
