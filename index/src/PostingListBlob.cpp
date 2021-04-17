@@ -67,7 +67,9 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
                 }
                 loc = raw->getPostLocationAt(curr);
             }
-            index = raw->getPostingsListOffsetAt(curr);
+            if(loc != -1) {
+                index = raw->getPostingsListOffsetAt(curr);
+            }
             return loc;
         } else {
             // Until next sync point or posts runs out
@@ -110,6 +112,8 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
                     throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
+            }
+            if(loc != -1) {
                 index = raw->getPostingsListOffsetAt(curr);
             }
             return loc;

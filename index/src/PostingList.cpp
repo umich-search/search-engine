@@ -17,7 +17,9 @@ size_t seekTermTarget(TermPostingList *postings, size_t target, size_t &index, s
                 }
                 loc = postings->syncIndex.postLocation[curr];
             }
-            index = postings->syncIndex.postingsListOffset[curr];
+            if(loc != -1 ) {
+                index = postings->syncIndex.postingsListOffset[curr];
+            }
             return loc;
         } else {
             // Until next sync point or posts runs out
@@ -58,6 +60,8 @@ size_t seekEndDocTarget(SharedPointer<EndDocPostingList> postings, size_t target
                     throw "seek out of range";
                 }
                 loc = postings->syncIndex.postLocation[curr];
+            }
+            if(loc != -1) {
                 index = postings->syncIndex.postingsListOffset[curr];
             }
             return loc;
