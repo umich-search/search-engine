@@ -35,7 +35,7 @@ int main( )
     while ( in >> s )
         {
         assert( s.back( ) != '\n' );
-        size_t idx = fnvHash( s.c_str( ), s.length( ) ) % 7;
+        size_t idx = fnvHash( s.c_str( ), s.length( ) ) % 14;
         out[ idx ] << s << '\r' 
             << '\n';
         }

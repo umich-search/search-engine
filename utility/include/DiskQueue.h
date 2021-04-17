@@ -20,7 +20,9 @@
 #include <cassert>
 #include "mString.h"
 
-const unsigned int MAX_FILE_BLOCK_IN_BYTES = 512;
+// MAX_FILE_BLOCK_IN_BYTES * MAX_NUM_FILE_BLOCKS * NUM_DQ = 30GB
+const unsigned int MAX_FILE_BLOCK_IN_BYTES = 256;
+const unsigned int MAX_NUM_FILE_BLOCKS = 120;
 
 bool DotName( const char * );
 String ltos( int );
@@ -28,6 +30,29 @@ size_t FileSize( int );
 
 class DiskQueue
     {
+    class fid // file id
+        {
+        private:
+            int id;
+            static int head, tail;
+
+        public:
+            fid( int );
+            fid& operator= ( const fid& );
+            int get( ) const;
+            void set( int );
+            int& operator++ ( );  // prefix
+            int operator++ ( int );  // postfix
+            bool operator== ( const fid& ) const;
+            bool operator== ( int ) const;
+            bool operator!= ( int ) const;
+            bool operator< ( int ) const;
+            bool operator> ( int ) const;
+            fid operator- ( int ) const;
+            fid operator+ ( int ) const;
+            fid operator- ( const fid& ) const;
+        };
+
     String dirName;
 
     int readFd, writeFd;  // the open file to read and  write

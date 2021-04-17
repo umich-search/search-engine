@@ -1,6 +1,13 @@
 #include "DiskQueue.h"
 #include <string.h>
 
+DiskQueue::fid::fid( int fid ) 
+    : id( fid )
+    {
+    }
+    
+
+
 int DiskQueue::openFileRD( int id )
     {
     String filePath = dirName;
@@ -41,7 +48,7 @@ DiskQueue::DiskQueue( const char *dir )
                 std::cerr << "stat of " << childPath << " contains non-file entries" << std::endl;
             else if ( !DotName( entry->d_name ) )
                 {
-                long fileID = atol( entry->d_name );
+                int fileID = atoi( entry->d_name );
                 if ( fileID < readFileID || readFileID == -1 )
                     readFileID = fileID;
                 if ( fileID > writeFileID || writeFileID == -1 )
@@ -169,6 +176,7 @@ String DiskQueue::PopFront( )
 
 void DiskQueue::PushBack( String& item )
     {
+    
     if ( item[ item.size( ) - 1 ] != '\n' )
         item += '\n';
     // write the new line into the file
