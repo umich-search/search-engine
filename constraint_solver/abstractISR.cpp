@@ -115,6 +115,11 @@ Post* ISROr::Next( )
     return nullptr;
     }
 
+ISR **ISROr::GetTerms()
+   {
+   return this->Terms;
+   }
+
 ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(Terms), NumberOfTerms(NumberOfTerms) 
    {
    EndDoc = dict->OpenISREndDoc();
@@ -240,6 +245,11 @@ Post* ISRAnd::NextEndDoc()
    return nullptr;
    }
 
+ISR **ISRAnd::GetTerms()
+   {
+   return this->Terms;
+   }
+
 ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)
    {
    }
@@ -322,6 +332,11 @@ Post* ISRPhrase::Next( )
 Post* ISRPhrase::NextEndDoc()
    {
    return nullptr;
+   }
+
+ISR **ISRPhrase::GetTerms()
+   {
+   return this->Terms;
    }
 
    /*

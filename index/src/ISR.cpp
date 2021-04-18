@@ -186,6 +186,9 @@ Post *ISRWord::GetCurrentPost() {
     return &currPost;
 }
 
+ISR **ISRWord::GetTerms() {
+    return nullptr;
+}
 
 // ISREndDoc Functions
 Post *ISREndDoc::GetCurrentPost(){
@@ -360,4 +363,8 @@ unsigned ISREndDoc::GetUrlLength() {
 
 Offset ISREndDoc::GetCurrIndex() {
     return currIndex;
+}
+
+ISR **ISREndDoc::GetTerms() {
+    return nullptr;
 }

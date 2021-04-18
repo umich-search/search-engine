@@ -37,6 +37,8 @@ class ISROr: public ISR
 
       Post *NextEndDoc();
 
+      ISR **GetTerms();
+
 
    private:
       unsigned nearestTerm;
@@ -67,6 +69,8 @@ class ISRAnd: public ISR
 
       Post *NextEndDoc();
 
+      ISR **GetTerms();
+
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
@@ -91,6 +95,8 @@ class ISRPhrase: public ISR
       // Post *NextDocument( );
 
       Post *NextEndDoc();
+
+      ISR **GetTerms();
 
    private:
       unsigned nearestTerm, farthestTerm;
