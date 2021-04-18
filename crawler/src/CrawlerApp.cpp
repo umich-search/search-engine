@@ -1,10 +1,10 @@
 #include "CrawlerApp.h"
 
 // -- Crawler App Parameters
-const size_t NUM_CRAWL_THREADS = 200;
+const size_t NUM_CRAWL_THREADS = 1;
 const size_t NUM_SEND_THREADS = 8;
 const size_t NUM_LISTEN_THREADS = 7;
-const size_t NUM_DISK_QUEUE = 1000;
+const size_t NUM_DISK_QUEUE = 10;
 const size_t PQ_SIZE = 1000;
 const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
@@ -34,7 +34,7 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
-        String seedFile = "seedlist/test.txt";
+        String seedFile = "seedlist/test1.txt";
         //String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
         std::cout << "Constructing frontier using seed list..." << std::endl;
         frontier.FrontierInit( seedFile.cstr(), &visited );

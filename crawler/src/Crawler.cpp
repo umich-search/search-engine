@@ -30,7 +30,7 @@ void Crawler::DoLoop( size_t threadID )
             }
         catch ( String e )
             {
-            //Print(String("Exception: ") + e, threadID );
+            Print(String("Exception: ") + e, threadID );
             }
         catch ( ... )
             {
@@ -151,7 +151,7 @@ void Crawler::Crawl( size_t threadID )
         // if alive but frontier(pq) is empty, block until the urls
         // in the disk queue refills the pq
         String url = frontier->PopUrl( alive );
-        //Print(String("Popped URL from frontier: ") + url, threadID);
+        Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
@@ -182,7 +182,7 @@ void Crawler::Crawl( size_t threadID )
         // 6. Add the words from the HTML to the index
         addWordsToIndex( htmlparser, url, threadID );
 
-        //Print(String("Inserted URL in index: ") + url, threadID );
+        Print(String("Inserted URL in index: ") + url, threadID );
         ++documentCount;
         if ( documentCount % PRINT_INTERVAL == 0 ) 
             {

@@ -1,0 +1,3 @@
+https://in.gr/cgi-bin/
+https://in.gr/wp-admin
+https://in.gr/wp-includes
