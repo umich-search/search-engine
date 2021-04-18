@@ -22,10 +22,10 @@
 // Maximum length of local machine pathname
 #define MAX_PATHNAME_LENGTH 4096
 // Storage locations
-#define CHUNKS_METADATA_PATH "index_files/chunks_metadata.txt"
-#define CHUNKS_METADATA_DIRECTORY "index_files/"
-#define CHUNK_DIRECTORY "index_files/"
-#define DOCS_DIRECTORY "index_files/"
+#define CHUNKS_METADATA_PATH "/disk-index/chunks_metadata.txt"
+#define CHUNKS_METADATA_DIRECTORY "/disk-index"
+#define CHUNK_DIRECTORY "/disk-index"
+#define DOCS_DIRECTORY "/disk-index"
 // Whether or not to write to disk (set to false for in-memory tests)
 //#define WRITE_TO_DISK true
 // Whether or not to write every chunk bytes ( used for testing)

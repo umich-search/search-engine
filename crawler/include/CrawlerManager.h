@@ -13,7 +13,7 @@
 // Task: Distribute URLs according to hash and obey bloom filter
 // Task Output: URLs to frontier / URLs to other machines
 
-const size_t NUM_MACHINES = 7;
+const size_t NUM_MACHINES = 14;
 const int PORT = 8888;
 const size_t QUEUE_SIZE = 1024;
 
