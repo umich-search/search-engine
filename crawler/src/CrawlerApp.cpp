@@ -2,8 +2,8 @@
 
 // -- Crawler App Parameters
 const size_t NUM_CRAWL_THREADS = 200;
-const size_t NUM_SEND_THREADS = 10;
-const size_t NUM_LISTEN_THREADS = 1;
+const size_t NUM_SEND_THREADS = 8;
+const size_t NUM_LISTEN_THREADS = 7;
 const size_t NUM_DISK_QUEUE = 1000;
 const size_t PQ_SIZE = 1000;
 const int NUM_OBJECTS = 100000;
@@ -21,8 +21,8 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
         NUM_OBJECTS, 
         FP_RATE ),
     listenManager( 
-        { "ListenManager", NUM_LISTEN_THREADS, &printMutex, machineID, ThreadPool::LoopPool },
-        &frontier, &visited ),
+        { "ListenManager", 1, &printMutex, machineID, ThreadPool::LoopPool },
+        &frontier, &visited, NUM_LISTEN_THREADS ),
     sendManager(
         { "SendManager", NUM_SEND_THREADS, &printMutex, machineID, ThreadPool::TaskPool },
         &frontier, &visited ),
@@ -34,8 +34,8 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
-        //String seedFile = "seedlist/test.txt";
-        String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
+        String seedFile = "seedlist/test.txt";
+        //String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
         std::cout << "Constructing frontier using seed list..." << std::endl;
         frontier.FrontierInit( seedFile.cstr(), &visited );
         }
