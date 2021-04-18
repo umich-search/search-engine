@@ -22,8 +22,8 @@
 #include "mString.h"
 
 // MAX_FILE_BLOCK_IN_BYTES * MAX_NUM_FILE_BLOCKS * NUM_DQ = 30GB
-const unsigned int MAX_FILE_BLOCK_IN_BYTES = 20;
-const unsigned int MAX_NUM_FILE_BLOCKS = 6;
+const unsigned int MAX_FILE_BLOCK_IN_BYTES = 512;
+const unsigned int MAX_NUM_FILE_BLOCKS = 120;
 
 bool DotName( const char * );
 String ltos( int );

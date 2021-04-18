@@ -177,7 +177,7 @@ void Frontier::PushUrl( Link& link )
         }
     catch( DiskQueueExceptions& e )
         {
-        std::cerr << "DiskQueue #" << dqIdx << " full, pushing to the next dq\n";
+        // std::cerr << "DiskQueue #" << dqIdx << " full, pushing to the next dq\n";
         Unlock( poolMutexes[ dqIdx ]);
         size_t i = ( dqIdx + 1 ) % urlPool.size( );
         while ( i != dqIdx )
@@ -189,7 +189,7 @@ void Frontier::PushUrl( Link& link )
                 }
             catch( DiskQueueExceptions& e )
                 {
-                std::cerr << "DiskQueue #" << i << " full, pushing to the next dq\n";
+                // std::cerr << "DiskQueue #" << i << " full, pushing to the next dq\n";
                 Unlock( poolMutexes[ i ] );
                 i = ( i + 1 ) % urlPool.size( );
                 continue;
