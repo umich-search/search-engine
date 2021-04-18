@@ -11,8 +11,7 @@ RUN mkdir frontier seedlist index_files
 COPY CrawlerStart .
 COPY DockerStart.sh .
 RUN echo 0 > documentCount
-COPY seedlist/test.txt seedlist/
-#COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
+COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
 
 # TODO: change the machine ID
 CMD ./DockerStart.sh ${MACHINE_ID}

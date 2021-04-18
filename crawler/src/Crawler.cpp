@@ -109,34 +109,31 @@ void Crawler::parseRobot( const String& robotUrl )
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID )
 {
         CriticalSection s(&indexMutex);
-        char title[MAX_TITLE_LENGTH];
-        size_t titleLength = 0;
-        //cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
+        String title;
         if(htmlparser.titleWords.size() > 0 && htmlparser.titleWords[0].size() > 1 && htmlparser.titleWords[0][0] != '!') {
             size_t titleTotalLength = 0;
             for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
                 String s = "!";
                 s += htmlparser.titleWords[i];
                 ic.Insert(s, Title);
-              if(titleTotalLength + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
-                    strcat(title, htmlparser.titleWords[i].cstr());
-                    char gap = ' ';
-                    strcat(title, &gap);
-                    titleTotalLength += htmlparser.titleWords[i].size() + 2;
+              if(title.size() + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
+                  title += htmlparser.titleWords[i];//+ String(' ');
+                  title += String(' ');
                 }
             }
         }
+        std::cout << "Insert title: " << title.cstr() << std::endl;
 
         for(unsigned int i = 0; i < htmlparser.words.size(); ++i) {
             //std::cout << "Inserting word: " << htmlparser.words[i].cstr() << std::endl;
             ic.Insert(htmlparser.words[i], Body);
         } 
-        String output = String("Inserting title:") + String(title);
+        String output = String("Inserting title:") + title;
         output += " with url: ";
         output += String(url.cstr());
-        //Print( output, threadID );        
-        if(titleLength < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
-            ic.Insert(String(title), url);
+        Print( output, threadID );        
+        if(title.size() + 1 < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
+            ic.Insert(title, url);
         }
         //cout << "Inserted Document!" << endl;
 
