@@ -44,7 +44,7 @@ LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
-EXEC = managerTestM1
+EXEC = FrontierTest
 
 all: $(EXEC)
 

@@ -129,8 +129,9 @@ void Frontier::FrontierInit( const char *seedFile, FileBloomfilter *filter )
     ssize_t bytes;
     while ( ( bytes = getline( &linePtr, &bufferSize, fp ) ) != -1 )
         {
-        String url ( "https://" );
+        String url ( "1" );  // 1 stands for https, 0 for http
         url += String( linePtr, bytes - 2 ); // excluding the trailing '\n'
+        // String url( linePtr, bytes - 2 );
         filter->insert( url );
         Link lk( url );  
         PushUrl( lk );
@@ -141,14 +142,72 @@ void Frontier::FrontierInit( const char *seedFile, FileBloomfilter *filter )
 
 void Frontier::PushUrl( Link& link )
     {
+    // filter out protocols to save space, 1 for https, 0 for http
+    if ( !strncmp( link.URL.cstr( ), "https://", 8 ) )
+        {
+        String protocol( '1' );
+        protocol += String( link.URL.buffer + 8, link.URL.size( ) - 8 );
+        link.URL = protocol;
+        }
+    else if ( !strncmp( link.URL.cstr( ), "http://", 7 ) )
+        {
+        String protocol( '0' );
+        protocol += String( link.URL.buffer + 7, link.URL.size( ) - 7 );
+        link.URL = protocol;
+        }
+    else if ( link.URL[ 0 ] != '1' && link.URL[ 1 ] != '0' )
+        {
+        String protocol( '1' );
+        protocol += link.URL;
+        link.URL = protocol;
+        }
+    // determine which to disk queue to insert
     size_t dqIdx = 0;  // disk queue index
     if ( priorityCalculator )  // use priority calculator if provided
         dqIdx = priorityCalculator( link );
     else  // other wise simply hash and map
+    // TODO: should hash over domains, not url
         dqIdx = fnvHash( link.URL.cstr( ), link.URL.size( ) ) % urlPool.size( );
+    
+    // start inserting into diskqueues
     Lock( poolMutexes[ dqIdx ] );
-    urlPool[ dqIdx ]->PushBack( link.URL );
+    try
+        {
+        urlPool[ dqIdx ]->PushBack( link.URL );
+        }
+    catch( DiskQueueExceptions& e )
+        {
+        std::cerr << "DiskQueue #" << dqIdx << " full, pushing to the next dq\n";
+        Unlock( poolMutexes[ dqIdx ]);
+        size_t i = ( dqIdx + 1 ) % urlPool.size( );
+        while ( i != dqIdx )
+            {
+            Lock( poolMutexes[ i ] );
+            try
+                {
+                urlPool[ i ]->PushBack( link.URL );
+                }
+            catch( DiskQueueExceptions& e )
+                {
+                std::cerr << "DiskQueue #" << i << " full, pushing to the next dq\n";
+                Unlock( poolMutexes[ i ] );
+                i = ( i + 1 ) % urlPool.size( );
+                continue;
+                }
+            catch( ... )
+                {
+                std::cerr << "Unkown exception in dq, url dropped\n";
+                }
+            Unlock( poolMutexes[ i ] );
+            break;
+            }
+        if ( i == dqIdx )
+            std::cerr << "Frontier " << dqIdx 
+                << " is full, url " << link.URL << " dropped" << '\n';
+        return;
+        }
     Unlock( poolMutexes[ dqIdx ]);
+    return;
     }
 
 String Frontier::PopUrl( bool alive )
@@ -176,7 +235,16 @@ String Frontier::PopUrl( bool alive )
                 }
             else
                 {
-                String poppedUrl = urlPool[ poolIdx ]->PopFront( );
+                String poppedUrl;
+                try
+                    {
+                    poppedUrl = urlPool[ poolIdx ]->PopFront( );
+                    }
+                catch( DiskQueueExceptions& e )
+                    {
+                    Unlock( poolMutexes[ poolIdx ] );
+                    continue;
+                    }
                 // if the read file pointer is at the EOF of the first file
                 if ( poppedUrl.size( ) == 0 )
                     {
@@ -188,9 +256,14 @@ String Frontier::PopUrl( bool alive )
                 }
             }
         }
+
     // not empty, pop a url off and return
     String nextUrl = urlPq.Top( ).url;
     urlPq.Pop( );
     Unlock( &pqMutex );
-    return nextUrl;
+    assert( nextUrl[ 0 ] == '0' || nextUrl[ 0 ] == '1' );
+    if ( nextUrl[ 0 ] == '1' )
+        return String( "https://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
+    else
+        return String( "http://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
     }
