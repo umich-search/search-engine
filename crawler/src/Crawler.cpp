@@ -30,7 +30,7 @@ void Crawler::DoLoop( size_t threadID )
             }
         catch ( String e )
             {
-            Print(String("Exception: ") + e, threadID );
+            //Print(String("Exception: ") + e, threadID );
             }
         catch ( ... )
             {
@@ -138,8 +138,8 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t 
             ic.Insert(htmlparser.words[i], Body);
         } 
         String output = String("Inserting title:") + title;
-        Print( output, threadID );     
-        std::cout << "Title size bytes: " << title.size() + 1 << std::endl;   
+        //Print( output, threadID );     
+        //std::cout << "Title size bytes: " << title.size() + 1 << std::endl;   
         if(title.size() < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
             ic.Insert(title, url);
         }
@@ -156,7 +156,7 @@ void Crawler::Crawl( size_t threadID )
         // if alive but frontier(pq) is empty, block until the urls
         // in the disk queue refills the pq
         String url = frontier->PopUrl( alive );
-        Print(String("Popped URL from frontier: ") + url, threadID);
+        //Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
@@ -187,7 +187,7 @@ void Crawler::Crawl( size_t threadID )
         // 6. Add the words from the HTML to the index
         addWordsToIndex( htmlparser, url, threadID );
 
-        Print(String("Inserted URL in index: ") + url, threadID );
+        //Print(String("Inserted URL in index: ") + url, threadID );
         ++documentCount;
         if ( documentCount % PRINT_INTERVAL == 0 ) 
             {

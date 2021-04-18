@@ -10,9 +10,9 @@
 #include "Common.h"
 
 // Max number of sync points
-#define NUM_SYNC_POINTS 64 // 8
+#define NUM_SYNC_POINTS 64
 // Size of bytes to write in memory before writing to disk
-#define CHUNK_SIZE_BYTES 209715200 // 200 MB
+#define CHUNK_SIZE_BYTES 200000000 
 // titles > MAX_TITLE_LENGTH will be cutoff
 #define MAX_TITLE_LENGTH 128
 // Documents with URLs > MAX_URL_LENGTH will be skipped
@@ -22,10 +22,10 @@
 // Maximum length of local machine pathname
 #define MAX_PATHNAME_LENGTH 4096
 // Storage locations
-#define CHUNKS_METADATA_PATH "index_files/chunks_metadata.txt"
-#define CHUNKS_METADATA_DIRECTORY "index_files/"
-#define CHUNK_DIRECTORY "index_files/"
-#define DOCS_DIRECTORY "index_files/"
+#define CHUNKS_METADATA_PATH "/disk-index/chunks_metadata.txt"
+#define CHUNKS_METADATA_DIRECTORY "/disk-index/"
+#define CHUNK_DIRECTORY "/disk-index/"
+#define DOCS_DIRECTORY "/disk-index/"
 // Whether or not to write to disk (set to false for in-memory tests)
 //#define WRITE_TO_DISK true
 // Whether or not to write every chunk bytes ( used for testing)

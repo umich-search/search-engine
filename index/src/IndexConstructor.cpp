@@ -30,6 +30,9 @@ int IndexConstructor::Insert( String title, String URL) {
     chunkMemoryAlloc += DOCUMENT_SIZE;
     if(chunkMemoryAlloc > CHUNK_SIZE_BYTES && USE_CHUNK_LIMIT) {
         std::cout << "Wrote: " << chunkMemoryAlloc << " to disk" << std::endl;
+        std::cout << "Num unique words: " << numberOfUniqueWords << std::endl;
+        std::cout << "End location: " << endLocation << std::endl;
+        std::cout << "Num docs: " << numberOfDocuments << std::endl;
         resolveChunkMem();
     }
     return 0;

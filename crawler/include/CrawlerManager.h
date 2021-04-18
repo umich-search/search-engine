@@ -48,22 +48,6 @@ class CrawlerManager : public ThreadPool
         FileBloomfilter *visited;
     };
 
-class ListenManager : public CrawlerManager
-    {
-    public:
-        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited,
-                        size_t numListenThreads );
-        ~ListenManager( );
-
-    private:
-        CrawlerManager connectHandler;
-
-        int startServer( size_t threadID );
-        void runServer( int sockfd, size_t threadID );
-
-        void DoLoop( size_t threadID ) override;
-    };
-
 class ConnectHandler : public CrawlerManager
     {
     public:
@@ -73,9 +57,28 @@ class ConnectHandler : public CrawlerManager
     private:
         String handleConnect( int fd, size_t threadID );
 
+        void incrementCountURL( size_t threadID );
+        size_t countURL;
+        mutex_t countURLmutex;
+
         void DoTask( Task task, size_t threadID ) override;
     };
 
+class ListenManager : public CrawlerManager
+    {
+    public:
+        ListenManager( Init init, Frontier *frontier, FileBloomfilter *visited,
+                        size_t numListenThreads );
+        ~ListenManager( );
+
+    private:
+        ConnectHandler connectHandler;
+
+        int startServer( size_t threadID );
+        void runServer( int sockfd, size_t threadID );
+
+        void DoLoop( size_t threadID ) override;
+    };
 
 class SendManager : public CrawlerManager
     {
@@ -84,6 +87,9 @@ class SendManager : public CrawlerManager
         ~SendManager( ) { }
 
     private:
+        std::atomic<size_t> failedMachine[ NUM_MACHINES ];
+        mutex_t failedMachineMutex;
+
         void sendURL( String url, size_t machineID );
 
         void DoTask( Task task, size_t threadID ) override;
