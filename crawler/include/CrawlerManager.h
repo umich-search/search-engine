@@ -87,6 +87,7 @@ class SendManager : public CrawlerManager
         ~SendManager( ) { }
 
     private:
+        void incrementCountFailMachine( size_t machineID, size_t threadID );
         std::atomic<size_t> failedMachine[ NUM_MACHINES ];
         mutex_t failedMachineMutex;
 

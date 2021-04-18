@@ -216,13 +216,7 @@ void SendManager::DoTask( Task task, size_t threadID )
         catch ( String e )
             {
             //Print( e, threadID ); 
-            Lock(&failedMachineMutex);
-            if ( ++failedMachine[ mID ] % 5 == 0 )
-                {
-                Print(String("Unable to connect to machine: ") + ltos(mID), threadID);
-                failedMachine[ mID ] = 0;
-                }
-            Unlock(&failedMachineMutex);
+            incrementCountFailMachine( mID, threadID );
             }
         catch ( ... )
             {
@@ -232,6 +226,16 @@ void SendManager::DoTask( Task task, size_t threadID )
 
     if ( task.deleteArgs )
         delete link;
+    }
+
+void SendManager::incrementCountFailMachine( size_t machineID, size_t threadID )
+    {
+    CriticalSection s(&failedMachineMutex);
+    if ( ++failedMachine[ machineID ] % 5 == 0 )
+        {
+        Print(String("Unable to connect to machine: ") + ltos(machineID), threadID);
+        failedMachine[ machineID ] = 0;
+        }
     }
 
 void SendManager::sendURL( String url, size_t machineID )
