@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const char *seedlist = "top-1m.txt";
+const char *seedlist = "top1mil_filtered.txt";
 const char *seedMs[ 14 ] = 
     {
     "seedlist/seedM0-0.txt",
