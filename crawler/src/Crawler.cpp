@@ -109,21 +109,27 @@ void Crawler::parseRobot( const String& robotUrl )
 void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t threadID )
 {
         CriticalSection s(&indexMutex);
-        char title[MAX_TITLE_LENGTH];
-        size_t titleLength = 0;
-        //cout << "Currently " << indexConstructor.fileManager.chunksMetadata->numChunks << " chunks created" << endl;
+        String title;
+        bool titleMaxReached = false;
         if(htmlparser.titleWords.size() > 0 && htmlparser.titleWords[0].size() > 1 && htmlparser.titleWords[0][0] != '!') {
             size_t titleTotalLength = 0;
             for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
                 String s = "!";
                 s += htmlparser.titleWords[i];
                 ic.Insert(s, Title);
-              if(titleTotalLength + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
-                    strcat(title, htmlparser.titleWords[i].cstr());
-                    char gap = ' ';
-                    strcat(title, &gap);
-                    titleTotalLength += htmlparser.titleWords[i].size() + 2;
+                if(!titleMaxReached) {
+                    if(title.size() + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
+                        title += htmlparser.titleWords[i];
+                        title += String(' ');
+                    }
+                    else {
+                        // Maxiumum title length - (current title size + null term) - 1
+                        size_t charsToAdd = MAX_TITLE_LENGTH - title.size() - 3;
+                        title += String(htmlparser.titleWords[i].cstr(), charsToAdd);
+                        titleMaxReached = true;
+                    }
                 }
+
             }
         }
 
@@ -131,12 +137,11 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t 
             //std::cout << "Inserting word: " << htmlparser.words[i].cstr() << std::endl;
             ic.Insert(htmlparser.words[i], Body);
         } 
-        String output = String("Inserting title:") + String(title);
-        output += " with url: ";
-        output += String(url.cstr());
-        //Print( output, threadID );        
-        if(titleLength < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
-            ic.Insert(String(title), url);
+        String output = String("Inserting title:") + title;
+        //Print( output, threadID );     
+        //std::cout << "Title size bytes: " << title.size() + 1 << std::endl;   
+        if(title.size() < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
+            ic.Insert(title, url);
         }
         //cout << "Inserted Document!" << endl;
 
@@ -160,7 +165,7 @@ void Crawler::Crawl( size_t threadID )
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
         //Print(String("ParseURL: ") + url, threadID);
-        String html = LinuxGetHTML( parsedUrl, 0 );
+        String html = LinuxGetHTML( parsedUrl, 0 ); // TODO: if get html fails, url lost forever
         //Print(String("GetHTML: ") + url, threadID);
 
         // 4. Parse the HTML for the webpage

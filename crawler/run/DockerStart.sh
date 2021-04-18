@@ -7,5 +7,6 @@ if [ -f ".FirstCrawl" ]; then
 else
     echo "Starting docker script for first time..."
     touch .FirstCrawl
+    echo 0 > /disk-index/documentCount
     ./CrawlerStart $MACHINE_ID 1
 fi

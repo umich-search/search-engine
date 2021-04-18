@@ -190,7 +190,19 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
    // set ssl library
    SSL_library_init( );
    SSL_CTX *ctx = SSL_CTX_new( SSLv23_method( ) );
+   if ( !ctx )
+      {
+      freeaddrinfo( address );
+      close( socketFD );
+      throw String("GetHTML: Error creating SSL ctx");
+      }
    SSL *ssl = SSL_new( ctx );
+      if ( !ssl )
+      {
+      freeaddrinfo( address );
+      close( socketFD );
+      throw String("GetHTML: Error creating SSL obj");
+      }
    SSL_set_fd( ssl, socketFD );
    connectResult = SSL_connect( ssl );
    if ( connectResult != 1 )
@@ -235,7 +247,8 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
       // write( 1, buffer, bytes );
 
    // Close the socket and free the address info structure.
-   SSL_shutdown( ssl );
+   if ( bytes != 0 )
+      SSL_shutdown( ssl );
    SSL_free( ssl );
    SSL_CTX_free( ctx );
    close( socketFD );

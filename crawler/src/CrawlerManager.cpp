@@ -27,6 +27,7 @@ ListenManager::~ListenManager( )
 
 void ListenManager::DoLoop( size_t threadID )
     {
+    connectHandler.Start();
     while ( alive )
         {
         try
@@ -43,6 +44,7 @@ void ListenManager::DoLoop( size_t threadID )
             Print("Exception: uncaught", threadID);
             }
         }
+    connectHandler.Stop();
     }
 
 int ListenManager::startServer( size_t threadID )
@@ -103,6 +105,7 @@ void ListenManager::runServer( int sockfd, size_t threadID )
 ConnectHandler::ConnectHandler( Init init, Frontier *frontier, FileBloomfilter *visited )
     : CrawlerManager( init, frontier, visited )
     {
+    MutexInit(&countURLmutex, nullptr);
     }
 
 void ConnectHandler::DoTask( Task task, size_t threadID )
@@ -111,9 +114,10 @@ void ConnectHandler::DoTask( Task task, size_t threadID )
     try
         {
         String message = handleConnect( *fd, threadID );
-        String output = "URL received: ";
-        output += message;
-        Print( output, threadID );
+        //String output = "URL received: ";
+        //output += message;
+        //Print( output, threadID );
+        incrementCountURL( threadID );
         // Insert the link into the frontier (we can assume that hash is correct)
         if ( !visited->contains( message ) )
             {
@@ -124,7 +128,7 @@ void ConnectHandler::DoTask( Task task, size_t threadID )
         }
     catch ( String e )
         {
-        //Print( String("Exception: ") + e, threadID );
+        Print( String("Exception: ") + e, threadID );
         }
     catch ( ... )
         {
@@ -158,11 +162,26 @@ String ConnectHandler::handleConnect( int fd, size_t threadID )
     return String( msg, cumsum );
     }
 
+void ConnectHandler::incrementCountURL( size_t threadID )
+    {
+    CriticalSection s(&countURLmutex);
+    if ( ++countURL % 100 == 0 )
+        {
+        Print("100 more URLs received", threadID ); 
+        countURL = 0;
+        }
+    }
+
 // ----- Send Manager
 
 SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visited )
         : CrawlerManager( init, frontier, visited )
         {
+        for ( size_t i = 0; i < NUM_MACHINES; ++i )
+            {
+            failedMachine[i] = 0;
+            }
+        MutexInit(&failedMachineMutex, nullptr);
         }
 
 void SendManager::DoTask( Task task, size_t threadID )
@@ -185,18 +204,20 @@ void SendManager::DoTask( Task task, size_t threadID )
             this->visited->insert( link->URL );
             this->frontier->PushUrl( *link );
             }
-        Print( output, threadID );
+        //Print( output, threadID );
         }
     else
         {
         try 
             {
             sendURL( link->URL, mID );
-            Print( output, threadID );
+            //Print( output, threadID );
+            failedMachine[ mID ] = 0;
             }
         catch ( String e )
             {
-            Print( e, threadID ); 
+            //Print( e, threadID ); 
+            incrementCountFailMachine( mID, threadID );
             }
         catch ( ... )
             {
@@ -208,6 +229,16 @@ void SendManager::DoTask( Task task, size_t threadID )
         delete link;
     }
 
+void SendManager::incrementCountFailMachine( size_t machineID, size_t threadID )
+    {
+    CriticalSection s(&failedMachineMutex);
+    if ( ++failedMachine[ machineID ] % 5 == 0 )
+        {
+        Print(String("Unable to connect to machine: ") + ltos(machineID), threadID);
+        failedMachine[ machineID ] = 0;
+        }
+    }
+
 void SendManager::sendURL( String url, size_t machineID )
     {
     int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
@@ -216,30 +247,28 @@ void SendManager::sendURL( String url, size_t machineID )
 
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-	// struct hostent *host = gethostbyname(  );
-	// if ( !host )
-    //     {
-    //     close( sockfd );
-	// 	throw String("Unkown host");
-    //     }
-
-	memcpy( &( addr.sin_addr ), HOST[ machineID ], strlen(HOST[ machineID ]));
+    int result = inet_pton( AF_INET, HOST[ machineID ] , &addr.sin_addr );
+    if ( result == -1 )
+        throw String("Error creating IP address: invalid family");
+    else if ( result == 0 )
+        throw String("Error creating IP address: invalid cstr");
 	addr.sin_port = htons( PORT );
 
-    String address = String(inet_ntoa(addr.sin_addr));
-    address += String(":") + ltos( (int)ntohs( addr.sin_port ) );
+    String address( HOST[ machineID ] );
+    address += String(":") + ltos( PORT );
+    String machine = ltos(machineID) + String(" (") + address + String(")");
 
     if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
         {
         close( sockfd );
-        throw String("Connection failed to machine: ") + ltos(machineID);
+        throw String("Connection failed to machine: ") + machine;
         }
 
     int bytes = send( sockfd, url.cstr(), url.size( ), 0 );
     if ( bytes == -1 )
         {
         close( sockfd );
-        throw String("Sending bytes failed to machine: ") + ltos(machineID);
+        throw String("Sending bytes failed to machine: ") + machine;
         }
     close( sockfd );
     }

@@ -14,7 +14,7 @@
 #include "IndexConstructor.h"
 #include "Timer.h"
 static const char *ROBOT_FILE = "robots.txt";
-static const char *DOC_COUNT_FILE = "documentCount";
+static const char *DOC_COUNT_FILE = "/disk-index/documentCount";
 static const int PRINT_INTERVAL = 100; // print every this number of documents
 
 // ----- Crawler.h

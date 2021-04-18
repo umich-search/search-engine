@@ -34,8 +34,8 @@ CrawlerApp::CrawlerApp( size_t machineID, bool frontierInit )
     MutexInit( &printMutex, nullptr );
     if ( frontierInit ) 
         {
-        String seedFile = "seedlist/test.txt";
-        //String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
+        //String seedFile = "seedlist/test1.txt";
+        String seedFile = String("seedlist/seedM") + ltos(machineID) + String(".txt");
         std::cout << "Constructing frontier using seed list..." << std::endl;
         frontier.FrontierInit( seedFile.cstr(), &visited );
         }

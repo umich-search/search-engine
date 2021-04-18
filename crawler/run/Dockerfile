@@ -4,15 +4,13 @@ RUN apt-get install -y git make gcc g++ openssl libssl-dev
 EXPOSE 8888
 
 # TODO: change the machine ID and seed ID
-ENV MACHINE_ID 1
+ENV MACHINE_ID 0
 RUN mkdir crawler
 WORKDIR /crawler
-RUN mkdir frontier seedlist index_files
+RUN mkdir frontier seedlist 
 COPY CrawlerStart .
 COPY DockerStart.sh .
-RUN echo 0 > documentCount
-COPY seedlist/test.txt seedlist/
-#COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
+COPY seedlist/seedM"$MACHINE_ID".txt seedlist/
 
 # TODO: change the machine ID
 CMD ./DockerStart.sh ${MACHINE_ID}
