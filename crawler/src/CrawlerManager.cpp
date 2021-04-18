@@ -105,6 +105,7 @@ void ListenManager::runServer( int sockfd, size_t threadID )
 ConnectHandler::ConnectHandler( Init init, Frontier *frontier, FileBloomfilter *visited )
     : CrawlerManager( init, frontier, visited )
     {
+    MutexInit(&countURLmutex, nullptr);
     }
 
 void ConnectHandler::DoTask( Task task, size_t threadID )

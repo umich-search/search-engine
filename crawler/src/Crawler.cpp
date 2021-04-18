@@ -165,7 +165,7 @@ void Crawler::Crawl( size_t threadID )
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
         //Print(String("ParseURL: ") + url, threadID);
-        String html = LinuxGetHTML( parsedUrl, 0 );
+        String html = LinuxGetHTML( parsedUrl, 0 ); // TODO: if get html fails, url lost forever
         //Print(String("GetHTML: ") + url, threadID);
 
         // 4. Parse the HTML for the webpage

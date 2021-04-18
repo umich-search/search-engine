@@ -17,7 +17,7 @@ class CrawlerApp
         Frontier frontier;
         FileBloomfilter visited;
         
-        ListenManager listenManager; // single-threaded
+        ListenManager listenManager; // multi-threaded
         SendManager sendManager; // multi-threaded
         Crawler crawlers; // multi-threaded
     };
