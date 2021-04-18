@@ -110,29 +110,37 @@ void Crawler::addWordsToIndex( const HtmlParser& htmlparser, String url, size_t 
 {
         CriticalSection s(&indexMutex);
         String title;
+        bool titleMaxReached = false;
         if(htmlparser.titleWords.size() > 0 && htmlparser.titleWords[0].size() > 1 && htmlparser.titleWords[0][0] != '!') {
             size_t titleTotalLength = 0;
             for(unsigned int i = 0; i < htmlparser.titleWords.size(); ++i) {
                 String s = "!";
                 s += htmlparser.titleWords[i];
                 ic.Insert(s, Title);
-              if(title.size() + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
-                  title += htmlparser.titleWords[i];//+ String(' ');
-                  title += String(' ');
+                if(!titleMaxReached) {
+                    if(title.size() + htmlparser.titleWords[i].size() + 2 < MAX_TITLE_LENGTH - 1) {
+                        title += htmlparser.titleWords[i];
+                        title += String(' ');
+                    }
+                    else {
+                        // Maxiumum title length - (current title size + null term) - 1
+                        size_t charsToAdd = MAX_TITLE_LENGTH - title.size() - 3;
+                        title += String(htmlparser.titleWords[i].cstr(), charsToAdd);
+                        titleMaxReached = true;
+                    }
                 }
+
             }
         }
-        std::cout << "Insert title: " << title.cstr() << std::endl;
 
         for(unsigned int i = 0; i < htmlparser.words.size(); ++i) {
             //std::cout << "Inserting word: " << htmlparser.words[i].cstr() << std::endl;
             ic.Insert(htmlparser.words[i], Body);
         } 
         String output = String("Inserting title:") + title;
-        output += " with url: ";
-        output += String(url.cstr());
-        Print( output, threadID );        
-        if(title.size() + 1 < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
+        Print( output, threadID );     
+        std::cout << "Title size bytes: " << title.size() + 1 << std::endl;   
+        if(title.size() < MAX_TITLE_LENGTH - 1 && url.size() < MAX_URL_LENGTH - 2) {
             ic.Insert(title, url);
         }
         //cout << "Inserted Document!" << endl;

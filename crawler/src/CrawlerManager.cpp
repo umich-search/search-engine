@@ -36,7 +36,7 @@ void ListenManager::DoLoop( size_t threadID )
             }
         catch ( String e )
             {
-            //Print( String("Exception: ") + e, threadID );
+            Print( String("Exception: ") + e, threadID );
             }
         catch ( ... )
             {
@@ -124,7 +124,7 @@ void ConnectHandler::DoTask( Task task, size_t threadID )
         }
     catch ( String e )
         {
-        //Print( String("Exception: ") + e, threadID );
+        Print( String("Exception: ") + e, threadID );
         }
     catch ( ... )
         {
