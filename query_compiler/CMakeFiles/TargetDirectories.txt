@@ -1,0 +1,3 @@
+/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/query_compiler/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/query_compiler/CMakeFiles/edit_cache.dir
+/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/query_compiler/CMakeFiles/query_compiler.dir
