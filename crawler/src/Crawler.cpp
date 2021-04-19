@@ -156,23 +156,23 @@ void Crawler::Crawl( size_t threadID )
         // in the disk queue refills the pq
         String url;
         try
-        {
+            {
             url = frontier->PopUrl( alive );
-        }
+            }
         catch( ... )
-        {
+            {
             continue;
-        }
+            }
         
-        //Print(String("Popped URL from frontier: ") + url, threadID);
+        Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
-        //Print(String("ParseRobot: ") + url, threadID);
+        Print(String("ParseRobot: ") + url, threadID);
 
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
-        //Print(String("ParseURL: ") + url, threadID);
+        Print(String("ParseURL: ") + url, threadID);
         String html;
         try 
             {
@@ -190,7 +190,7 @@ void Crawler::Crawl( size_t threadID )
                 }
             return;
             }
-        //Print(String("GetHTML: ") + url, threadID);
+        // Print(String("GetHTML: ") + html, threadID);
 
         // 4. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
@@ -199,22 +199,60 @@ void Crawler::Crawl( size_t threadID )
         // 5. Send the URLs found in the HTML back to the manager
         for ( size_t i = 0; i < htmlparser.links.size(); ++i )
             {
-            if ( htmlparser.links[i].URL.size() == 0 )
+            // if the link is empty
+            if ( htmlparser.links[ i ].URL.size() == 0 )
                 continue;
-            ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
+            // parse url
+            ParsedUrl testUrl( htmlparser.links[ i ].URL.cstr() );
             Link *newLink;
-            if ( !testUrl.IsOkay() )
+            // relative urls and base url given
+            if ( !testUrl.IsOkay( ) )
                 {
-                if ( testUrl.CompleteUrl[ 0 ] == '/' )
-                    newLink = new Link( String( parsedUrl.Service ) + String( "://" ) 
-                        + String( parsedUrl.Host ) + String( testUrl.CompleteUrl ) );
-                else
+                if ( htmlparser.base.size( ) == 0 )
                     continue;
+                // start by / -> append to base
+                if ( testUrl.CompleteUrl[ 0 ] == '/' )
+                    {
+                    if ( htmlparser.base[ htmlparser.base.size( ) - 1 ] == '/' )
+                        newLink = new Link( htmlparser.base + String( testUrl.CompleteUrl + 1 ) );
+                    else
+                        newLink = new Link( htmlparser.base + String( testUrl.CompleteUrl ) );
+                    }
+                // not start by / -> find current directory
+                else
+                    {
+                    // get the directory of the base url
+                    ssize_t i = htmlparser.base.size( ) - 1;
+                    while ( i >= 0 && htmlparser.base[ i ] != '/' )
+                        i--;
+                    if ( i == 0 )
+                        continue;
+                    // construct new url
+                    String newUrl( htmlparser.base.cstr( ), i + 1 );
+                    newLink = new Link( newUrl + String( testUrl.CompleteUrl ) );
+                    }
                 }
+            // absolute url
             else
                 newLink = new Link( htmlparser.links[ i ] );
+
+            // push to the manager
             manager->PushTask( (void *) newLink, true );
-            //Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
+
+            // ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
+            // Link *newLink;
+            // if ( !testUrl.IsOkay() )
+            //     {
+            //     if ( testUrl.CompleteUrl[ 0 ] == '/' )
+            //         newLink = new Link( String( parsedUrl.Service ) + String( "://" ) 
+            //             + String( parsedUrl.Host ) + String( testUrl.CompleteUrl ) );
+            //     else
+            //         continue;
+            //     }
+            // else
+            //     newLink = new Link( htmlparser.links[ i ] );
+            // manager->PushTask( (void *) newLink, true );
+            Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
             }
         //Print(String("Num URLs parsed: ") + ltos(htmlparser.links.size()), threadID);
 

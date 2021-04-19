@@ -3,377 +3,205 @@ WRITE FAILED
 WRITE FAILED
 WRITE FAILED
 Constructing Crawler App (machineID:0)...
-Constructing frontier using seed list...
 Starting Crawler App...
-M:0 Thread(Crawler:0): Popped URL from frontier: https://t.co
-M:0 Thread(Crawler:1): Popped URL from frontier: https://fc2.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://ask.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://adobe.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://merdeka.com
-M:0 Thread(Crawler:5): Popped URL from frontier: https://messenger.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://aljazeera.com
-M:0 Thread(Crawler:7): Popped URL from frontier: https://techcrunch.com
-M:0 Thread(Crawler:8): Popped URL from frontier: https://gumtree.com.au
-M:0 Thread(Crawler:9): Popped URL from frontier: https://playvalorant.com
 M:0 Thread(ListenManager:0): Listening on port 8888
-M:0 Thread(Crawler:0): ParseRobot: https://t.co
-M:0 Thread(Crawler:0): ParseURL: https://t.co
-M:0 Thread(Crawler:1): Popped URL from frontier: https://sina.cn
-M:0 Thread(Crawler:6): Popped URL from frontier: https://giphy.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://webex.com
-M:0 Thread(Crawler:7): Popped URL from frontier: https://myntra.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://olx.com.eg
-M:0 Thread(Crawler:8): Popped URL from frontier: https://hbomax.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://fetlife.com
-M:0 Thread(Crawler:1): ParseRobot: https://sina.cn
-M:0 Thread(Crawler:1): ParseURL: https://sina.cn
-M:0 Thread(Crawler:6): ParseRobot: https://giphy.com
-M:0 Thread(Crawler:6): ParseURL: https://giphy.com
-M:0 Thread(Crawler:3): ParseRobot: https://adobe.com
-M:0 Thread(Crawler:3): ParseURL: https://adobe.com
-M:0 Thread(Crawler:0): ParseRobot: https://fetlife.com
-M:0 Thread(Crawler:0): ParseURL: https://fetlife.com
-M:0 Thread(Crawler:5): ParseRobot: https://messenger.com
-M:0 Thread(Crawler:5): ParseURL: https://messenger.com
-M:0 Thread(Crawler:6): GetHTML: https://giphy.com
-M:0 Thread(Crawler:6): HTML parsed: https://giphy.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://spankbang.com
-M:0 Thread(Crawler:4): ParseRobot: https://merdeka.com
-M:0 Thread(Crawler:4): ParseURL: https://merdeka.com
-M:0 Thread(Crawler:2): ParseRobot: https://webex.com
-M:0 Thread(Crawler:2): ParseURL: https://webex.com
-M:0 Thread(Crawler:8): Popped URL from frontier: https://sdpnoticias.com
-M:0 Thread(Crawler:1): GetHTML: https://sina.cn
-M:0 Thread(Crawler:1): HTML parsed: https://sina.cn
-M:0 Thread(Crawler:1): Popped URL from frontier: https://brownsfashion.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://beeg.com
-M:0 Thread(Crawler:0): GetHTML: https://fetlife.com
-M:0 Thread(Crawler:0): HTML parsed: https://fetlife.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://match.com
-M:0 Thread(Crawler:8): Popped URL from frontier: https://nature.com
-M:0 Thread(Crawler:6): ParseRobot: https://spankbang.com
-M:0 Thread(Crawler:6): ParseURL: https://spankbang.com
-M:0 Thread(Crawler:9): ParseRobot: https://beeg.com
-M:0 Thread(Crawler:9): ParseURL: https://beeg.com
-M:0 Thread(Crawler:3): GetHTML: https://adobe.com
-M:0 Thread(Crawler:3): HTML parsed: https://adobe.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://bet365.com
-M:0 Thread(Crawler:0): ParseRobot: https://match.com
-M:0 Thread(Crawler:0): ParseURL: https://match.com
-M:0 Thread(Crawler:2): GetHTML: https://webex.com
-M:0 Thread(Crawler:2): HTML parsed: https://webex.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://realsrv.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://ouedkniss.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://madhyamam.com
-M:0 Thread(Crawler:5): GetHTML: https://messenger.com
-M:0 Thread(Crawler:6): GetHTML: https://spankbang.com
-M:0 Thread(Crawler:5): HTML parsed: https://messenger.com
-M:0 Thread(Crawler:5): Popped URL from frontier: https://blondieshop.com
-M:0 Thread(Crawler:6): HTML parsed: https://spankbang.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://prensalibre.com
-M:0 Thread(Crawler:9): GetHTML: https://beeg.com
-M:0 Thread(Crawler:9): HTML parsed: https://beeg.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://chooseauto.com.cn
-M:0 Thread(Crawler:4): GetHTML: https://merdeka.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://ptt.cc
-M:0 Thread(Crawler:4): HTML parsed: https://merdeka.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://cnn.com
-M:0 Thread(Crawler:8): ParseRobot: https://nature.com
-M:0 Thread(Crawler:8): ParseURL: https://nature.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://goal.com
-M:0 Thread(Crawler:5): ParseRobot: https://blondieshop.com
-M:0 Thread(Crawler:5): ParseURL: https://blondieshop.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://virgilio.it
-M:0 Thread(Crawler:0): ParseRobot: https://ptt.cc
-M:0 Thread(Crawler:0): ParseURL: https://ptt.cc
-M:0 Thread(Crawler:6): ParseRobot: https://prensalibre.com
-M:0 Thread(Crawler:6): ParseURL: https://prensalibre.com
-M:0 Thread(Crawler:3): ParseRobot: https://bet365.com
-M:0 Thread(Crawler:3): ParseURL: https://bet365.com
-M:0 Thread(Crawler:2): ParseRobot: https://ouedkniss.com
-M:0 Thread(Crawler:2): ParseURL: https://ouedkniss.com
-M:0 Thread(Crawler:1): ParseRobot: https://madhyamam.com
-M:0 Thread(Crawler:1): ParseURL: https://madhyamam.com
-M:0 Thread(Crawler:4): ParseRobot: https://cnn.com
-M:0 Thread(Crawler:4): ParseURL: https://cnn.com
-M:0 Thread(Crawler:0): GetHTML: https://ptt.cc
-M:0 Thread(Crawler:0): HTML parsed: https://ptt.cc
-M:0 Thread(Crawler:0): Popped URL from frontier: https://sunat.gob.pe
-M:0 Thread(Crawler:9): Popped URL from frontier: https://shopstyle.com
-M:0 Thread(Crawler:3): GetHTML: https://bet365.com
-M:0 Thread(Crawler:3): HTML parsed: https://bet365.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://chaturbate.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://elwatannews.com
-M:0 Thread(Crawler:5): GetHTML: https://blondieshop.com
-M:0 Thread(Crawler:5): HTML parsed: https://blondieshop.com
-M:0 Thread(Crawler:5): Popped URL from frontier: https://exlibrisgroup.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://forums.wordpress.com
-M:0 Thread(Crawler:4): GetHTML: https://cnn.com
-M:0 Thread(Crawler:4): HTML parsed: https://cnn.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://adf.ly
-M:0 Thread(Crawler:6): GetHTML: https://prensalibre.com
-M:0 Thread(Crawler:6): HTML parsed: https://prensalibre.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://youm7.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://argaam.com
-M:0 Thread(Crawler:2): GetHTML: https://ouedkniss.com
-M:0 Thread(Crawler:2): HTML parsed: https://ouedkniss.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://meb.gov.tr
-M:0 Thread(Crawler:3): ParseRobot: https://chaturbate.com
-M:0 Thread(Crawler:3): ParseURL: https://chaturbate.com
-M:0 Thread(Crawler:1): GetHTML: https://madhyamam.com
-M:0 Thread(Crawler:1): HTML parsed: https://madhyamam.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://nicovideo.jp
-M:0 Thread(Crawler:5): ParseRobot: https://exlibrisgroup.com
-M:0 Thread(Crawler:5): ParseURL: https://exlibrisgroup.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://pinterest.jp
-M:0 Thread(Crawler:8): Popped URL from frontier: https://biobiochile.cl
-M:0 Thread(Crawler:6): Popped URL from frontier: https://marketwatch.com
-M:0 Thread(Crawler:2): ParseRobot: https://meb.gov.tr
-M:0 Thread(Crawler:2): ParseURL: https://meb.gov.tr
-M:0 Thread(Crawler:5): GetHTML: https://exlibrisgroup.com
-M:0 Thread(Crawler:5): HTML parsed: https://exlibrisgroup.com
-M:0 Thread(Crawler:5): Popped URL from frontier: https://ewaybillgst.gov.in
-M:0 Thread(Crawler:3): GetHTML: https://chaturbate.com
-M:0 Thread(Crawler:3): HTML parsed: https://chaturbate.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://donya-e-eqtesad.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://ajio.com
-M:0 Thread(Crawler:9): ParseRobot: https://forums.wordpress.com
-M:0 Thread(Crawler:9): ParseURL: https://forums.wordpress.com
-M:0 Thread(Crawler:4): ParseRobot: https://pinterest.jp
-M:0 Thread(Crawler:4): ParseURL: https://pinterest.jp
-M:0 Thread(Crawler:1): ParseRobot: https://nicovideo.jp
-M:0 Thread(Crawler:1): ParseURL: https://nicovideo.jp
-M:0 Thread(Crawler:2): GetHTML: https://meb.gov.tr
-M:0 Thread(Crawler:2): HTML parsed: https://meb.gov.tr
-M:0 Thread(Crawler:2): Popped URL from frontier: https://paytm.com
-M:0 Thread(Crawler:0): ParseRobot: https://argaam.com
-M:0 Thread(Crawler:0): ParseURL: https://argaam.com
-M:0 Thread(Crawler:3): ParseRobot: https://donya-e-eqtesad.com
-M:0 Thread(Crawler:3): ParseURL: https://donya-e-eqtesad.com
-M:0 Thread(Crawler:4): GetHTML: https://pinterest.jp
-M:0 Thread(Crawler:4): HTML parsed: https://pinterest.jp
-M:0 Thread(Crawler:4): Popped URL from frontier: https://dbs.com.sg
-M:0 Thread(Crawler:8): ParseRobot: https://biobiochile.cl
-M:0 Thread(Crawler:8): ParseURL: https://biobiochile.cl
-M:0 Thread(Crawler:1): GetHTML: https://nicovideo.jp
-M:0 Thread(Crawler:1): HTML parsed: https://nicovideo.jp
-M:0 Thread(Crawler:1): Popped URL from frontier: https://kompas.com
-M:0 Thread(Crawler:2): ParseRobot: https://paytm.com
-M:0 Thread(Crawler:2): ParseURL: https://paytm.com
-M:0 Thread(Crawler:6): ParseRobot: https://ajio.com
-M:0 Thread(Crawler:6): ParseURL: https://ajio.com
-M:0 Thread(Crawler:3): GetHTML: https://donya-e-eqtesad.com
-M:0 Thread(Crawler:3): HTML parsed: https://donya-e-eqtesad.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://cloudflare.com
-M:0 Thread(Crawler:9): GetHTML: https://forums.wordpress.com
-M:0 Thread(Crawler:9): HTML parsed: https://forums.wordpress.com
-M:0 Thread(Crawler:9): Popped URL from frontier: https://1stepdownload.com
-M:0 Thread(Crawler:0): GetHTML: https://argaam.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://matchesfashion.com
-M:0 Thread(Crawler:2): GetHTML: https://paytm.com
-M:0 Thread(Crawler:2): HTML parsed: https://paytm.com
-M:0 Thread(Crawler:2): Popped URL from frontier: https://my.sina.cn/?vt=4&pos=108
-M:0 Thread(Crawler:9): Popped URL from frontier: https://eladies.sina.cn/gossip?vt=4&pos=108
-M:0 Thread(Crawler:4): Popped URL from frontier: https://fashion.sina.cn/2021-04-15/detail-ikmxzfmk0620402.d.html?vt=4&pos=108
-M:0 Thread(Crawler:0): Popped URL from frontier: https://360.cn
-M:0 Thread(Crawler:1): Popped URL from frontier: https://riafan.ru
-M:0 Thread(Crawler:4): ParseRobot: https://fashion.sina.cn/2021-04-15/detail-ikmxzfmk0620402.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): ParseURL: https://fashion.sina.cn/2021-04-15/detail-ikmxzfmk0620402.d.html?vt=4&pos=108
-M:0 Thread(Crawler:9): ParseRobot: https://eladies.sina.cn/gossip?vt=4&pos=108
-M:0 Thread(Crawler:9): ParseURL: https://eladies.sina.cn/gossip?vt=4&pos=108
-M:0 Thread(Crawler:3): ParseRobot: https://cloudflare.com
-M:0 Thread(Crawler:3): ParseURL: https://cloudflare.com
-M:0 Thread(Crawler:1): ParseRobot: https://riafan.ru
-M:0 Thread(Crawler:1): ParseURL: https://riafan.ru
-M:0 Thread(Crawler:0): ParseRobot: https://360.cn
-M:0 Thread(Crawler:0): ParseURL: https://360.cn
-M:0 Thread(Crawler:9): GetHTML: https://eladies.sina.cn/gossip?vt=4&pos=108
-M:0 Thread(Crawler:9): HTML parsed: https://eladies.sina.cn/gossip?vt=4&pos=108
-M:0 Thread(Crawler:9): Popped URL from frontier: https://legacy.com
-M:0 Thread(Crawler:4): GetHTML: https://fashion.sina.cn/2021-04-15/detail-ikmxzfmk0620402.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): HTML parsed: https://fashion.sina.cn/2021-04-15/detail-ikmxzfmk0620402.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): Popped URL from frontier: https://eba.gov.tr
-M:0 Thread(Crawler:2): Popped URL from frontier: https://tencent.com
-M:0 Thread(Crawler:3): GetHTML: https://cloudflare.com
-M:0 Thread(Crawler:3): HTML parsed: https://cloudflare.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://brainly.com
-M:0 Thread(Crawler:1): GetHTML: https://riafan.ru
-M:0 Thread(Crawler:1): HTML parsed: https://riafan.ru
-M:0 Thread(Crawler:1): Popped URL from frontier: https://axisbank.com
-M:0 Thread(Crawler:6): GetHTML: https://ajio.com
-M:0 Thread(Crawler:6): HTML parsed: https://ajio.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://sastasundar.com
-M:0 Thread(Crawler:4): ParseRobot: https://eba.gov.tr
-M:0 Thread(Crawler:4): ParseURL: https://eba.gov.tr
-M:0 Thread(Crawler:3): ParseRobot: https://brainly.com
-M:0 Thread(Crawler:3): ParseURL: https://brainly.com
-M:0 Thread(Crawler:8): GetHTML: https://biobiochile.cl
-M:0 Thread(Crawler:8): HTML parsed: https://biobiochile.cl
-M:0 Thread(Crawler:8): Popped URL from frontier: https://beeg.com/1668121051?t=263
-M:0 Thread(Crawler:0): GetHTML: https://360.cn
-M:0 Thread(Crawler:0): HTML parsed: https://360.cn
-M:0 Thread(Crawler:0): Popped URL from frontier: https://finance.sina.cn/event/yaoyiyao/tg_h5_outside.d.html?position=financewapfeed&vt=4&pos=108
-M:0 Thread(Crawler:3): GetHTML: https://brainly.com
-M:0 Thread(Crawler:3): HTML parsed: https://brainly.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://ubc.ca
-M:0 Thread(Crawler:4): GetHTML: https://eba.gov.tr
-M:0 Thread(Crawler:4): HTML parsed: https://eba.gov.tr
-M:0 Thread(Crawler:4): Popped URL from frontier: https://114la.com
-M:0 Thread(Crawler:8): ParseRobot: https://beeg.com/1668121051?t=263
-M:0 Thread(Crawler:8): ParseURL: https://beeg.com/1668121051?t=263
-M:0 Thread(Crawler:1): ParseRobot: https://axisbank.com
-M:0 Thread(Crawler:1): ParseURL: https://axisbank.com
-M:0 Thread(Crawler:0): ParseRobot: https://finance.sina.cn/event/yaoyiyao/tg_h5_outside.d.html?position=financewapfeed&vt=4&pos=108
-M:0 Thread(Crawler:0): ParseURL: https://finance.sina.cn/event/yaoyiyao/tg_h5_outside.d.html?position=financewapfeed&vt=4&pos=108
-M:0 Thread(Crawler:8): GetHTML: https://beeg.com/1668121051?t=263
-M:0 Thread(Crawler:8): HTML parsed: https://beeg.com/1668121051?t=263
-M:0 Thread(Crawler:8): Popped URL from frontier: https://etoro.com
-M:0 Thread(Crawler:6): ParseRobot: https://sastasundar.com
-M:0 Thread(Crawler:6): ParseURL: https://sastasundar.com
-M:0 Thread(Crawler:0): GetHTML: https://finance.sina.cn/event/yaoyiyao/tg_h5_outside.d.html?position=financewapfeed&vt=4&pos=108
-M:0 Thread(Crawler:0): HTML parsed: https://finance.sina.cn/event/yaoyiyao/tg_h5_outside.d.html?position=financewapfeed&vt=4&pos=108
-M:0 Thread(Crawler:0): Popped URL from frontier: https://google.co.il
-M:0 Thread(Crawler:4): ParseRobot: https://114la.com
-M:0 Thread(Crawler:4): ParseURL: https://114la.com
-M:0 Thread(Crawler:3): ParseRobot: https://ubc.ca
-M:0 Thread(Crawler:3): ParseURL: https://ubc.ca
-M:0 Thread(Crawler:1): GetHTML: https://axisbank.com
-M:0 Thread(Crawler:1): HTML parsed: https://axisbank.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://yahoo.com.tw
-M:0 Thread(Crawler:4): GetHTML: https://114la.com
-M:0 Thread(Crawler:4): HTML parsed: https://114la.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://citibank.com
-M:0 Thread(Crawler:8): Popped URL from frontier: https://instacart.com
-M:0 Thread(Crawler:3): GetHTML: https://ubc.ca
-M:0 Thread(Crawler:0): ParseRobot: https://google.co.il
-M:0 Thread(Crawler:0): ParseURL: https://google.co.il
-M:0 Thread(Crawler:3): HTML parsed: https://ubc.ca
-M:0 Thread(Crawler:3): Popped URL from frontier: https://www.adobe.com/sa_en/
-M:0 Thread(Crawler:4): ParseRobot: https://citibank.com
-M:0 Thread(Crawler:4): ParseURL: https://citibank.com
-M:0 Thread(Crawler:3): ParseRobot: https://www.adobe.com/sa_en/
-M:0 Thread(Crawler:3): ParseURL: https://www.adobe.com/sa_en/
-M:0 Thread(Crawler:0): GetHTML: https://google.co.il
-M:0 Thread(Crawler:0): HTML parsed: https://google.co.il
-M:0 Thread(Crawler:0): Popped URL from frontier: https://sina.cn/index/settings?vt=4&pos=108
-M:0 Thread(Crawler:6): GetHTML: https://sastasundar.com
-M:0 Thread(Crawler:6): HTML parsed: https://sastasundar.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://l.messenger.com/l.php?u=https%3A%2F%2Fmarket.android.com%2Fdetails%3Fid%3Dcom.facebook.orca&amp;h=AT276YUk3OWAIR8eAN3pgUlLvf8FbMhT_ywyR2p-_pcUuppTMndko-JqIaVPS066Irw8swkgXfz3O3gCFxyfIEYnld0a3b0ZphUd4oYPI-bXOYh6zGMVbX1Qt1m7Ihw1TkT-2E1zsO6PQA
-M:0 Thread(Crawler:8): ParseRobot: https://instacart.com
-M:0 Thread(Crawler:8): ParseURL: https://instacart.com
-M:0 Thread(Crawler:3): GetHTML: https://www.adobe.com/sa_en/
-M:0 Thread(Crawler:3): HTML parsed: https://www.adobe.com/sa_en/
-M:0 Thread(Crawler:3): Popped URL from frontier: https://issuu.com
-M:0 Thread(Crawler:1): ParseRobot: https://yahoo.com.tw
-M:0 Thread(Crawler:1): ParseURL: https://yahoo.com.tw
-M:0 Thread(Crawler:0): ParseRobot: https://sina.cn/index/settings?vt=4&pos=108
-M:0 Thread(Crawler:0): ParseURL: https://sina.cn/index/settings?vt=4&pos=108
-M:0 Thread(Crawler:6): ParseRobot: https://l.messenger.com/l.php?u=https%3A%2F%2Fmarket.android.com%2Fdetails%3Fid%3Dcom.facebook.orca&amp;h=AT276YUk3OWAIR8eAN3pgUlLvf8FbMhT_ywyR2p-_pcUuppTMndko-JqIaVPS066Irw8swkgXfz3O3gCFxyfIEYnld0a3b0ZphUd4oYPI-bXOYh6zGMVbX1Qt1m7Ihw1TkT-2E1zsO6PQA
-M:0 Thread(Crawler:6): ParseURL: https://l.messenger.com/l.php?u=https%3A%2F%2Fmarket.android.com%2Fdetails%3Fid%3Dcom.facebook.orca&amp;h=AT276YUk3OWAIR8eAN3pgUlLvf8FbMhT_ywyR2p-_pcUuppTMndko-JqIaVPS066Irw8swkgXfz3O3gCFxyfIEYnld0a3b0ZphUd4oYPI-bXOYh6zGMVbX1Qt1m7Ihw1TkT-2E1zsO6PQA
-M:0 Thread(Crawler:6): GetHTML: https://l.messenger.com/l.php?u=https%3A%2F%2Fmarket.android.com%2Fdetails%3Fid%3Dcom.facebook.orca&amp;h=AT276YUk3OWAIR8eAN3pgUlLvf8FbMhT_ywyR2p-_pcUuppTMndko-JqIaVPS066Irw8swkgXfz3O3gCFxyfIEYnld0a3b0ZphUd4oYPI-bXOYh6zGMVbX1Qt1m7Ihw1TkT-2E1zsO6PQA
-M:0 Thread(Crawler:3): ParseRobot: https://issuu.com
-M:0 Thread(Crawler:3): ParseURL: https://issuu.com
-M:0 Thread(Crawler:6): HTML parsed: https://l.messenger.com/l.php?u=https%3A%2F%2Fmarket.android.com%2Fdetails%3Fid%3Dcom.facebook.orca&amp;h=AT276YUk3OWAIR8eAN3pgUlLvf8FbMhT_ywyR2p-_pcUuppTMndko-JqIaVPS066Irw8swkgXfz3O3gCFxyfIEYnld0a3b0ZphUd4oYPI-bXOYh6zGMVbX1Qt1m7Ihw1TkT-2E1zsO6PQA
-M:0 Thread(Crawler:6): Popped URL from frontier: https://carfax.com
-M:0 Thread(Crawler:3): GetHTML: https://issuu.com
-M:0 Thread(Crawler:3): HTML parsed: https://issuu.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://manga47.net
-M:0 Thread(Crawler:4): GetHTML: https://citibank.com
-M:0 Thread(Crawler:4): HTML parsed: https://citibank.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://elecfans.com
-M:0 Thread(Crawler:8): GetHTML: https://instacart.com
-M:0 Thread(Crawler:8): HTML parsed: https://instacart.com
-M:0 Thread(Crawler:8): Popped URL from frontier: https://skyscanner.com
-M:0 Thread(Crawler:3): Popped URL from frontier: https://www.adobe.com/ua/
-M:0 Thread(Crawler:1): GetHTML: https://yahoo.com.tw
-M:0 Thread(Crawler:1): HTML parsed: https://yahoo.com.tw
-M:0 Thread(Crawler:1): Popped URL from frontier: https://sina.cn/index/nav?vt=4&pos=108
-M:0 Thread(Crawler:6): ParseRobot: https://carfax.com
-M:0 Thread(Crawler:6): ParseURL: https://carfax.com
-M:0 Thread(Crawler:3): ParseRobot: https://www.adobe.com/ua/
-M:0 Thread(Crawler:3): ParseURL: https://www.adobe.com/ua/
-M:0 Thread(Crawler:4): ParseRobot: https://elecfans.com
-M:0 Thread(Crawler:4): ParseURL: https://elecfans.com
-M:0 Thread(Crawler:1): ParseRobot: https://sina.cn/index/nav?vt=4&pos=108
-M:0 Thread(Crawler:1): ParseURL: https://sina.cn/index/nav?vt=4&pos=108
-M:0 Thread(Crawler:8): ParseRobot: https://skyscanner.com
-M:0 Thread(Crawler:8): ParseURL: https://skyscanner.com
-M:0 Thread(Crawler:3): GetHTML: https://www.adobe.com/ua/
-M:0 Thread(Crawler:3): HTML parsed: https://www.adobe.com/ua/
-M:0 Thread(Crawler:3): Popped URL from frontier: https://hardware.webex.com/devices/accessories
-M:0 Thread(Crawler:4): GetHTML: https://elecfans.com
-M:0 Thread(Crawler:4): HTML parsed: https://elecfans.com
-M:0 Thread(Crawler:4): Popped URL from frontier: https://video.sina.cn/news/2021-04-18/detail-ikmxzfmk7509119.d.html?vt=4&pos=108
-M:0 Thread(Crawler:3): Popped URL from frontier: http://book.sina.cn/dpool/newbook/bookv1/vipc.php?bid=5510136&cid=10466053&pos=108&vt=4&format=simple&nwm=book_wap_0006&data_id=436889
-M:0 Thread(Crawler:6): GetHTML: https://carfax.com
-M:0 Thread(Crawler:6): HTML parsed: https://carfax.com
-M:0 Thread(Crawler:6): Popped URL from frontier: https://stores.jp
-M:0 Thread(Crawler:0): GetHTML: https://sina.cn/index/settings?vt=4&pos=108
-M:0 Thread(Crawler:0): HTML parsed: https://sina.cn/index/settings?vt=4&pos=108
-M:0 Thread(Crawler:0): Popped URL from frontier: https://jetblue.com
-M:0 Thread(Crawler:4): ParseRobot: https://video.sina.cn/news/2021-04-18/detail-ikmxzfmk7509119.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): ParseURL: https://video.sina.cn/news/2021-04-18/detail-ikmxzfmk7509119.d.html?vt=4&pos=108
-M:0 Thread(Crawler:6): ParseRobot: https://stores.jp
-M:0 Thread(Crawler:6): ParseURL: https://stores.jp
-M:0 Thread(Crawler:0): ParseRobot: https://jetblue.com
-M:0 Thread(Crawler:0): ParseURL: https://jetblue.com
-M:0 Thread(Crawler:3): ParseRobot: http://book.sina.cn/dpool/newbook/bookv1/vipc.php?bid=5510136&cid=10466053&pos=108&vt=4&format=simple&nwm=book_wap_0006&data_id=436889
-M:0 Thread(Crawler:3): ParseURL: http://book.sina.cn/dpool/newbook/bookv1/vipc.php?bid=5510136&cid=10466053&pos=108&vt=4&format=simple&nwm=book_wap_0006&data_id=436889
-M:0 Thread(Crawler:8): GetHTML: https://skyscanner.com
-M:0 Thread(Crawler:1): GetHTML: https://sina.cn/index/nav?vt=4&pos=108
-M:0 Thread(Crawler:8): HTML parsed: https://skyscanner.com
-M:0 Thread(Crawler:1): HTML parsed: https://sina.cn/index/nav?vt=4&pos=108
-M:0 Thread(Crawler:8): Popped URL from frontier: https://peardeck.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://theatlantic.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://tutorialspoint.com
-M:0 Thread(Crawler:4): GetHTML: https://video.sina.cn/news/2021-04-18/detail-ikmxzfmk7509119.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): HTML parsed: https://video.sina.cn/news/2021-04-18/detail-ikmxzfmk7509119.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): Popped URL from frontier: https://beeg.com/1185071349?t=1909
-M:0 Thread(Crawler:6): GetHTML: https://stores.jp
-M:0 Thread(Crawler:6): HTML parsed: https://stores.jp
-M:0 Thread(Crawler:8): Popped URL from frontier: https://spankbang.com/tag/%e6%97%a5%e6%9c%ac/
-M:0 Thread(Crawler:6): Popped URL from frontier: https://mil.sina.cn/gjjq/2021-04-10/detail-ikmyaawa8863352.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): ParseRobot: https://beeg.com/1185071349?t=1909
-M:0 Thread(Crawler:4): ParseURL: https://beeg.com/1185071349?t=1909
-M:0 Thread(Crawler:8): ParseRobot: https://spankbang.com/tag/%e6%97%a5%e6%9c%ac/
-M:0 Thread(Crawler:8): ParseURL: https://spankbang.com/tag/%e6%97%a5%e6%9c%ac/
-M:0 Thread(Crawler:1): ParseRobot: https://theatlantic.com
-M:0 Thread(Crawler:1): ParseURL: https://theatlantic.com
-M:0 Thread(Crawler:6): ParseRobot: https://mil.sina.cn/gjjq/2021-04-10/detail-ikmyaawa8863352.d.html?vt=4&pos=108
-M:0 Thread(Crawler:6): ParseURL: https://mil.sina.cn/gjjq/2021-04-10/detail-ikmyaawa8863352.d.html?vt=4&pos=108
-M:0 Thread(Crawler:4): GetHTML: https://beeg.com/1185071349?t=1909
-M:0 Thread(Crawler:4): HTML parsed: https://beeg.com/1185071349?t=1909
-M:0 Thread(Crawler:4): Popped URL from frontier: https://auto.sina.cn/estation/?c=spr_auto_trackid_241bb75d212f64fb&vt=4&pos=108
-M:0 Thread(Crawler:8): GetHTML: https://spankbang.com/tag/%e6%97%a5%e6%9c%ac/
-M:0 Thread(Crawler:8): HTML parsed: https://spankbang.com/tag/%e6%97%a5%e6%9c%ac/
-M:0 Thread(Crawler:8): Popped URL from frontier: https://tech.sina.cn/i/gn/2021-04-18/detail-ikmxzfmk7424011.d.html?vt=4&pos=108
-M:0 Thread(Crawler:0): ParseRobot: https://tutorialspoint.com
-M:0 Thread(Crawler:0): ParseURL: https://tutorialspoint.com
-M:0 Thread(Crawler:4): ParseRobot: https://auto.sina.cn/estation/?c=spr_auto_trackid_241bb75d212f64fb&vt=4&pos=108
-M:0 Thread(Crawler:4): ParseURL: https://auto.sina.cn/estation/?c=spr_auto_trackid_241bb75d212f64fb&vt=4&pos=108
-M:0 Thread(Crawler:6): GetHTML: https://mil.sina.cn/gjjq/2021-04-10/detail-ikmyaawa8863352.d.html?vt=4&pos=108
-M:0 Thread(Crawler:6): HTML parsed: https://mil.sina.cn/gjjq/2021-04-10/detail-ikmyaawa8863352.d.html?vt=4&pos=108
-M:0 Thread(Crawler:6): Popped URL from frontier: https://etsy.com
-M:0 Thread(Crawler:8): ParseRobot: https://tech.sina.cn/i/gn/2021-04-18/detail-ikmxzfmk7424011.d.html?vt=4&pos=108
-M:0 Thread(Crawler:8): ParseURL: https://tech.sina.cn/i/gn/2021-04-18/detail-ikmxzfmk7424011.d.html?vt=4&pos=108
-M:0 Thread(Crawler:3): GetHTML: http://book.sina.cn/dpool/newbook/bookv1/vipc.php?bid=5510136&cid=10466053&pos=108&vt=4&format=simple&nwm=book_wap_0006&data_id=436889
-M:0 Thread(Crawler:3): HTML parsed: http://book.sina.cn/dpool/newbook/bookv1/vipc.php?bid=5510136&cid=10466053&pos=108&vt=4&format=simple&nwm=book_wap_0006&data_id=436889
-M:0 Thread(Crawler:3): Popped URL from frontier: https://efukt.com
-M:0 Thread(Crawler:1): GetHTML: https://theatlantic.com
-M:0 Thread(Crawler:1): HTML parsed: https://theatlantic.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://intuit.com
-M:0 Thread(Crawler:4): GetHTML: https://auto.sina.cn/estation/?c=spr_auto_trackid_241bb75d212f64fb&vt=4&pos=108
-M:0 Thread(Crawler:4): HTML parsed: https://auto.sina.cn/estation/?c=spr_auto_trackid_241bb75d212f64fb&vt=4&pos=108
-M:0 Thread(Crawler:4): Popped URL from frontier: https://kontan.co.id
-M:0 Thread(Crawler:0): GetHTML: https://tutorialspoint.com
-M:0 Thread(Crawler:0): HTML parsed: https://tutorialspoint.com
-M:0 Thread(Crawler:0): Popped URL from frontier: https://property24.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://webex.com/downloads.html
-M:0 Thread(Crawler:8): Popped URL from frontier: https://beeg.com/1979113171?t=329
-M:0 Thread(Crawler:4): Popped URL from frontier: https://games.sina.cn/wm/comos_index.shtml?vt=4&pos=108
-M:0 Thread(Crawler:3): Popped URL from frontier: http://travel.sina.cn/video/video_list.d.html?vt=4&pos=108
-M:0 Thread(Crawler:6): ParseRobot: https://etsy.com
-M:0 Thread(Crawler:6): ParseURL: https://etsy.com
-M:0 Thread(Crawler:1): Popped URL from frontier: https://spankbang.com/59aqn/video/miamelano+a+day+and+night+with+a+friend
-M:0 Thread(Crawler:8): Popped URL from frontier: https://dxy.cn
-M:0 Thread(Crawler:4): Popped URL from frontier: https://hangseng.com
+M:0 Thread(Crawler:0): Popped URL from frontier: https://ve.com
+M:0 Thread(Crawler:4): Popped URL from frontier: https://nv.gov
+M:0 Thread(Crawler:3): Popped URL from frontier: https://ti.com
+M:0 Thread(Crawler:5): Popped URL from frontier: https://tn.gov
+M:0 Thread(Crawler:87): Popped URL from frontier: https://kgw.com
+M:0 Thread(Crawler:88): Popped URL from frontier: https://cnn.com
+M:0 Thread(Crawler:89): Popped URL from frontier: https://ted.com
+M:0 Thread(Crawler:90): Popped URL from frontier: https://bna.com
+M:0 Thread(Crawler:1): Popped URL from frontier: https://ask.com
+M:0 Thread(Crawler:91): Popped URL from frontier: https://f6s.com
+M:0 Thread(Crawler:92): Popped URL from frontier: https://adp.com
+M:0 Thread(Crawler:7): Popped URL from frontier: https://awf.org
+M:0 Thread(Crawler:8): Popped URL from frontier: https://eji.org
+M:0 Thread(Crawler:93): Popped URL from frontier: https://hpe.com
+M:0 Thread(Crawler:94): Popped URL from frontier: https://eol.org
+M:0 Thread(Crawler:9): Popped URL from frontier: https://ada.gov
+M:0 Thread(Crawler:95): Popped URL from frontier: https://cio.com
+M:0 Thread(Crawler:96): Popped URL from frontier: https://crtv.com
+M:0 Thread(Crawler:10): Popped URL from frontier: https://ahrq.gov
+M:0 Thread(Crawler:11): Popped URL from frontier: https://ncse.com
+M:0 Thread(Crawler:97): Popped URL from frontier: https://pypi.org
+M:0 Thread(Crawler:12): Popped URL from frontier: https://ietf.org
+M:0 Thread(Crawler:14): Popped URL from frontier: https://etsy.com
+M:0 Thread(Crawler:15): Popped URL from frontier: https://ehow.com
+M:0 Thread(Crawler:86): Popped URL from frontier: https://pg.com
+M:0 Thread(Crawler:2): Popped URL from frontier: https://kk.org
+M:0 Thread(Crawler:17): Popped URL from frontier: https://wcpo.com
+M:0 Thread(Crawler:16): Popped URL from frontier: https://axis.com
+M:0 Thread(Crawler:18): Popped URL from frontier: https://secg.org
+M:0 Thread(Crawler:26): Popped URL from frontier: https://iaea.org
+M:0 Thread(Crawler:22): Popped URL from frontier: https://wso2.com
+M:0 Thread(Crawler:98): Popped URL from frontier: https://kptv.com
+M:0 Thread(Crawler:21): Popped URL from frontier: https://fsfe.org
+M:0 Thread(Crawler:99): Popped URL from frontier: https://eweek.com
+M:0 Thread(Crawler:28): Popped URL from frontier: https://hmhco.com
+M:0 Thread(Crawler:6): Popped URL from frontier: https://wgno.com
+M:0 Thread(Crawler:20): Popped URL from frontier: https://amny.com
+M:0 Thread(Crawler:13): Popped URL from frontier: https://flock.com
+M:0 Thread(Crawler:19): Popped URL from frontier: https://reed.edu
+M:0 Thread(Crawler:25): Popped URL from frontier: https://maxon.net
+M:0 Thread(Crawler:30): Popped URL from frontier: https://shape.com
+M:0 Thread(Crawler:32): Popped URL from frontier: https://adobe.com
+M:0 Thread(Crawler:23): Popped URL from frontier: https://wltx.com
+M:0 Thread(Crawler:33): Popped URL from frontier: https://webex.com
+M:0 Thread(Crawler:27): Popped URL from frontier: https://frac.org
+M:0 Thread(Crawler:24): Popped URL from frontier: https://tesla.com
+M:0 Thread(Crawler:29): Popped URL from frontier: https://crbug.com
+M:0 Thread(Crawler:34): Popped URL from frontier: https://nhtsa.gov
+M:0 Thread(Crawler:35): Popped URL from frontier: https://plesk.com
+M:0 Thread(Crawler:31): Popped URL from frontier: https://s1.wp.com
+M:0 Thread(Crawler:36): Popped URL from frontier: https://topic.com
+M:0 Thread(Crawler:37): Popped URL from frontier: https://paytm.com
+M:0 Thread(Crawler:38): Popped URL from frontier: https://eaton.com
+M:0 Thread(Crawler:39): Popped URL from frontier: https://i1.wp.com
+M:0 Thread(Crawler:40): Popped URL from frontier: https://giphy.com
+M:0 Thread(Crawler:41): Popped URL from frontier: https://first.org
+M:0 Thread(Crawler:42): Popped URL from frontier: https://joyent.com
+M:0 Thread(Crawler:43): Popped URL from frontier: https://nickjr.com
+M:0 Thread(Crawler:44): Popped URL from frontier: https://uakron.edu
+M:0 Thread(Crawler:45): Popped URL from frontier: https://whatwg.org
+M:0 Thread(Crawler:46): Popped URL from frontier: https://hbomax.com
+M:0 Thread(Crawler:47): Popped URL from frontier: https://huawei.com
+M:0 Thread(Crawler:48): Popped URL from frontier: https://nature.com
+M:0 Thread(Crawler:49): Popped URL from frontier: https://drexel.edu
+M:0 Thread(Crawler:50): Popped URL from frontier: https://pxtoem.com
+M:0 Thread(Crawler:51): Popped URL from frontier: https://regexr.com
+M:0 Thread(Crawler:52): Popped URL from frontier: https://ssense.com
+M:0 Thread(Crawler:53): Popped URL from frontier: https://c-span.org
+M:0 Thread(Crawler:54): Popped URL from frontier: https://actega.com
+M:0 Thread(Crawler:55): Popped URL from frontier: https://legacy.com
+M:0 Thread(Crawler:56): Popped URL from frontier: https://osnews.com
+M:0 Thread(Crawler:57): Popped URL from frontier: https://onstar.com
+M:0 Thread(Crawler:58): Popped URL from frontier: https://tested.com
+M:0 Thread(Crawler:59): Popped URL from frontier: https://bjpenn.com
+M:0 Thread(Crawler:60): Popped URL from frontier: https://aclunc.org
+M:0 Thread(Crawler:61): Popped URL from frontier: https://dep.pa.gov
+M:0 Thread(Crawler:62): Popped URL from frontier: https://gyro13.com
+M:0 Thread(Crawler:63): Popped URL from frontier: https://24ways.org
+M:0 Thread(Crawler:64): Popped URL from frontier: https://viewat.org
+M:0 Thread(Crawler:65): Popped URL from frontier: https://frogx3.com
+M:0 Thread(Crawler:66): Popped URL from frontier: https://nextjs.org
+M:0 Thread(Crawler:67): Popped URL from frontier: https://ubuntu.com
+M:0 Thread(Crawler:68): Popped URL from frontier: https://eepurl.com
+M:0 Thread(Crawler:69): Popped URL from frontier: https://tongal.com
+M:0 Thread(Crawler:70): Popped URL from frontier: https://adweek.com
+M:0 Thread(Crawler:71): Popped URL from frontier: https://carfax.com
+M:0 Thread(Crawler:72): Popped URL from frontier: https://nikkei.com
+M:0 Thread(Crawler:73): Popped URL from frontier: https://cpanel.net
+M:0 Thread(Crawler:74): Popped URL from frontier: https://list25.com
+M:0 Thread(Crawler:75): Popped URL from frontier: https://canlii.org
+M:0 Thread(Crawler:76): Popped URL from frontier: https://eenews.net
+M:0 Thread(Crawler:77): Popped URL from frontier: https://gitbook.com
+M:0 Thread(Crawler:78): Popped URL from frontier: https://madison.com
+M:0 Thread(Crawler:79): Popped URL from frontier: https://glazman.org
+M:0 Thread(Crawler:80): Popped URL from frontier: https://woorank.com
+M:0 Thread(Crawler:81): Popped URL from frontier: https://olemiss.edu
+M:0 Thread(Crawler:82): Popped URL from frontier: https://adbrite.com
+M:0 Thread(Crawler:83): Popped URL from frontier: https://ftp.gnu.org
+M:0 Thread(Crawler:84): Popped URL from frontier: https://laravel.com
+M:0 Thread(Crawler:85): Popped URL from frontier: https://lilluna.com
+M:0 Thread(Crawler:27): Popped URL from frontier: https://khronos.org
+M:0 Thread(Crawler:19): Popped URL from frontier: https://i.ytimg.com
+M:0 Thread(Crawler:48): Popped URL from frontier: https://web.pdx.edu
+M:0 Thread(Crawler:23): Popped URL from frontier: https://bobvila.com
+M:0 Thread(Crawler:88): Popped URL from frontier: https://aclu-nj.org
+M:0 Thread(Crawler:20): Popped URL from frontier: https://gartner.com
+M:0 Thread(Crawler:30): Popped URL from frontier: https://dnainfo.com
+M:0 Thread(Crawler:0): Popped URL from frontier: https://housing.com
+M:0 Thread(Crawler:31): Popped URL from frontier: https://jdsupra.com
+M:0 Thread(Crawler:3): Popped URL from frontier: https://animoto.com
+M:0 Thread(Crawler:24): Popped URL from frontier: https://dl.ifip.org
+M:0 Thread(Crawler:13): Popped URL from frontier: https://news.un.org
+M:0 Thread(Crawler:8): Popped URL from frontier: https://philips.com
+M:0 Thread(Crawler:57): Popped URL from frontier: https://fire.ca.gov
+M:0 Thread(Crawler:5): Popped URL from frontier: https://kin10ki.com
+M:0 Thread(Crawler:91): Popped URL from frontier: https://revolut.com
+M:0 Thread(Crawler:29): Popped URL from frontier: https://bellard.org
+M:0 Thread(Crawler:89): Popped URL from frontier: https://autoblog.com
+M:0 Thread(Crawler:35): Popped URL from frontier: https://byliner.com
+M:0 Thread(Crawler:87): Popped URL from frontier: https://v.youku.com
+M:0 Thread(Crawler:25): Popped URL from frontier: https://santafe.org
+M:0 Thread(Crawler:54): Popped URL from frontier: https://eligrey.com
+M:0 Thread(Crawler:53): Popped URL from frontier: https://soa.cmu.edu
+M:0 Thread(Crawler:58): Popped URL from frontier: https://thestar.com
+M:0 Thread(Crawler:42): Popped URL from frontier: https://wevideo.com
+M:0 Thread(Crawler:56): Popped URL from frontier: https://eetd.lbl.gov
+M:0 Thread(Crawler:62): Popped URL from frontier: https://acunetix.com
+M:0 Thread(Crawler:66): Popped URL from frontier: https://mixcloud.com
+M:0 Thread(Crawler:60): Popped URL from frontier: https://wiki.ros.org
+M:0 Thread(Crawler:64): Popped URL from frontier: https://omniture.com
+M:0 Thread(Crawler:38): Popped URL from frontier: https://esmadrid.com
+M:0 Thread(Crawler:36): Popped URL from frontier: https://france24.com
+M:0 Thread(Crawler:17): Popped URL from frontier: https://galvnews.com
+M:0 Thread(Crawler:74): Popped URL from frontier: https://bat.bing.com
+M:0 Thread(Crawler:2): Popped URL from frontier: https://gustavus.edu
+M:0 Thread(Crawler:12): Popped URL from frontier: https://archpark.org
+M:0 Thread(Crawler:34): Popped URL from frontier: https://gofundme.com
+M:0 Thread(Crawler:45): Popped URL from frontier: https://keepassx.org
+M:0 Thread(Crawler:21): Popped URL from frontier: https://advrider.com
+M:0 Thread(Crawler:26): Popped URL from frontier: https://dccomics.com
+M:0 Thread(Crawler:81): Popped URL from frontier: https://smallpdf.com
+M:0 Thread(Crawler:98): Popped URL from frontier: https://logitech.com
+M:0 Thread(Crawler:7): Popped URL from frontier: https://utdallas.edu
+M:0 Thread(Crawler:92): Popped URL from frontier: https://kanolabs.com
+M:0 Thread(Crawler:95): Popped URL from frontier: https://catholic.com
+M:0 Thread(Crawler:82): Popped URL from frontier: https://autoguide.com
+M:0 Thread(Crawler:76): Popped URL from frontier: https://starwars.com
+M:0 Thread(Crawler:6): Popped URL from frontier: https://falkvinge.net
+M:0 Thread(Crawler:85): Popped URL from frontier: https://airportiq.com
+M:0 Thread(Crawler:50): Popped URL from frontier: https://princeton.edu
+M:0 Thread(Crawler:40): Popped URL from frontier: https://heraldnet.com
+M:0 Thread(Crawler:90): Popped URL from frontier: https://cookiebot.com
+M:0 Thread(Crawler:47): Popped URL from frontier: https://hobbyking.com
+M:0 Thread(Crawler:93): Popped URL from frontier: https://muckrack.com
+M:0 Thread(Crawler:84): Popped URL from frontier: https://osxdaily.com
+M:0 Thread(Crawler:9): Popped URL from frontier: https://cfpub.epa.gov
+M:0 Thread(Crawler:94): Popped URL from frontier: https://spokesman.com
+M:0 Thread(Crawler:49): Popped URL from frontier: https://dartmouth.edu
+M:0 Thread(Crawler:52): Popped URL from frontier: https://touchnote.com
+M:0 Thread(Crawler:55): Popped URL from frontier: https://archinect.com
+M:0 Thread(Crawler:59): Popped URL from frontier: https://messenger.com
+M:0 Thread(Crawler:83): Popped URL from frontier: https://gislounge.com
+M:0 Thread(Crawler:80): Popped URL from frontier: https://blackbaud.com
+M:0 Thread(Crawler:77): Popped URL from frontier: https://article19.org
+M:0 Thread(Crawler:75): Popped URL from frontier: https://hibernate.org
+M:0 Thread(Crawler:73): Popped URL from frontier: https://marcilall.com
+M:0 Thread(Crawler:96): Popped URL from frontier: https://aljazeera.com
+M:0 Thread(Crawler:72): Popped URL from frontier: https://hernia44.com
+M:0 Thread(Crawler:71): Popped URL from frontier: https://audioboom.com
+M:0 Thread(Crawler:15): Popped URL from frontier: https://apogenix.com
+M:0 Thread(Crawler:44): Popped URL from frontier: https://anieto2k.com
+M:0 Thread(Crawler:69): Popped URL from frontier: https://gamesalad.com
+M:0 Thread(Crawler:78): Popped URL from frontier: https://news.usc.edu
+M:0 Thread(Crawler:28): Popped URL from frontier: https://fsis.usda.gov
+M:0 Thread(Crawler:79): Popped URL from frontier: https://filmlinc.org
+M:0 Thread(Crawler:37): Popped URL from frontier: https://dumpaday.com
+M:0 Thread(Crawler:65): Popped URL from frontier: https://askapache.com
+M:0 Thread(Crawler:41): Popped URL from frontier: https://classicfm.com
+M:0 Thread(Crawler:46): Popped URL from frontier: https://stampinup.net
+M:0 Thread(Crawler:32): Popped URL from frontier: https://pogonip.org
+M:0 Thread(Crawler:43): Popped URL from frontier: https://money.udn.com
+M:0 Thread(Crawler:1): Popped URL from frontier: https://makuake.com
+M:0 Thread(Crawler:67): Popped URL from frontier: https://thefrisky.com
+M:0 Thread(Crawler:63): Popped URL from frontier: https://maplesoft.com
+M:0 Thread(Crawler:61): Popped URL from frontier: https://malaymail.com
+M:0 Thread(Crawler:68): Popped URL from frontier: https://fatherly.com
+M:0 Thread(Crawler:39): Popped URL from frontier: https://ilovem83.com
+M:0 Thread(Crawler:99): Popped URL from frontier: https://etracker.com
+M:0 Thread(Crawler:51): Popped URL from frontier: https://wireshark.org
+M:0 Thread(Crawler:70): Popped URL from frontier: https://iamrogue.com
+M:0 Thread(Crawler:11): Popped URL from frontier: https://formula1.com
+M:0 Thread(Crawler:33): Popped URL from frontier: https://themuse.com
+M:0 Thread(Crawler:14): Popped URL from frontier: https://londoneye.com
+M:0 Thread(Crawler:97): Popped URL from frontier: https://colorhexa.com
+M:0 Thread(Crawler:10): Popped URL from frontier: https://hostinger.com
+M:0 Thread(Crawler:86): Popped URL from frontier: https://media.npr.org
+M:0 Thread(Crawler:4): Popped URL from frontier: https://pagerduty.com
+M:0 Thread(Crawler:16): Popped URL from frontier: https://cluetrain.com
+M:0 Thread(Crawler:18): Popped URL from frontier: https://nchfp.uga.edu
+M:0 Thread(Crawler:22): Popped URL from frontier: https://airliners.net

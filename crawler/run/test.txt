@@ -1,6 +1,0 @@
-https://pypi.org/simple/
-https://pypi.org/packages/
-https://pypi.org/_includes/
-https://pypi.org/pypi/*/json
-https://pypi.org/pypi/*/*/json
-https://pypi.org/pypi*?
