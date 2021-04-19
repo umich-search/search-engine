@@ -39,6 +39,7 @@ class ISROr: public ISR
 
       ISR **GetTerms();
 
+      int GetTermNum() { return this->NumberOfTerms; }
 
    private:
       unsigned nearestTerm;
@@ -71,6 +72,8 @@ class ISRAnd: public ISR
 
       ISR **GetTerms();
 
+      int GetTermNum() { return this->NumberOfTerms; }
+
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
@@ -97,6 +100,8 @@ class ISRPhrase: public ISR
       Post *NextEndDoc();
 
       ISR **GetTerms();
+
+      int GetTermNum() { return this->NumberOfTerms; }
 
    private:
       unsigned nearestTerm, farthestTerm;
