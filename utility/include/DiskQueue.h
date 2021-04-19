@@ -18,62 +18,47 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <cassert>
+#include <exception>
 #include "mString.h"
 
 // MAX_FILE_BLOCK_IN_BYTES * MAX_NUM_FILE_BLOCKS * NUM_DQ = 30GB
-const unsigned int MAX_FILE_BLOCK_IN_BYTES = 256;
+const unsigned int MAX_FILE_BLOCK_IN_BYTES = 512;
 const unsigned int MAX_NUM_FILE_BLOCKS = 120;
 
 bool DotName( const char * );
 String ltos( int );
 size_t FileSize( int );
 
+enum class DiskQueueExceptions
+    {
+    EmptyDiskQueue,
+    FullDiskQueue,
+    };
+
 class DiskQueue
     {
-    class fid // file id
-        {
-        private:
-            int id;
-            static int head, tail;
+    private:
+        String dirName;
 
-        public:
-            fid( int );
-            fid& operator= ( const fid& );
-            int get( ) const;
-            void set( int );
-            int& operator++ ( );  // prefix
-            int operator++ ( int );  // postfix
-            bool operator== ( const fid& ) const;
-            bool operator== ( int ) const;
-            bool operator!= ( int ) const;
-            bool operator< ( int ) const;
-            bool operator> ( int ) const;
-            fid operator- ( int ) const;
-            fid operator+ ( int ) const;
-            fid operator- ( const fid& ) const;
-        };
+        int readFd, writeFd;  // the open file to read and  write
+        int readFileID, writeFileID;
+        size_t bytesWrite;  // number of bytes written in writeFd
+        FILE *readFp; // assist reading line by line
 
-    String dirName;
+        // read file maintains:
+        //  1. readFileID
+        //  2. readFd
+        //  3. readFp
 
-    int readFd, writeFd;  // the open file to read and  write
-    int readFileID, writeFileID;
-    size_t bytesWrite;  // number of bytes written in writeFd
-    FILE *readFp; // assist reading line by line
+        // write file maintains:/
+        //  1. writeFileID
+        //  2. writeFd
+        //  3. bytesWrite
 
-    // read file maintains:
-    //  1. readFileID
-    //  2. readFd
-    //  3. readFp
+        // read file and write file must operate on different files, so there need not to be locks. Any operations on the file requires checking the FileID first.
 
-    // write file maintains:/
-    //  1. writeFileID
-    //  2. writeFd
-    //  3. bytesWrite
-
-    // read file and write file must operate on different files, so there need not to be locks. Any operations on the file requires checking the FileID first.
-
-    int openFileRD( int );
-    int openFileWR( int );
+        int openFileRD( int );
+        int openFileWR( int );
 
     public:
         // Link the disk queue to the directory dirName
@@ -83,6 +68,7 @@ class DiskQueue
         ~DiskQueue( );
         const String& GetDirName( ) const;
         bool empty( ) const;
+        bool full( ) const;
         String PopFront( );
         void PushBack( String& item );
         void PrintStatus( ) const;

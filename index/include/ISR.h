@@ -22,6 +22,9 @@ public:
 
     // Get position of last term
     virtual Location GetEndLocation() = 0;
+
+    // Get Terms data of an ISR
+    virtual ISR **GetTerms() = 0;
 };
 
 class ISRWord : public ISR {
@@ -54,6 +57,9 @@ public:
 
     // get current post
     Post *GetCurrentPost();
+
+    // Get Terms data of an ISR
+    ISR **GetTerms();
 
 private:
     FileManager manager;
@@ -98,6 +104,9 @@ public:
 
     // get length of url
     unsigned GetUrlLength();
+
+    // Get Terms data of an ISR
+    ISR **GetTerms();
 
 private:
     FileManager manager;

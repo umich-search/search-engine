@@ -156,11 +156,11 @@ void Crawler::Crawl( size_t threadID )
         // if alive but frontier(pq) is empty, block until the urls
         // in the disk queue refills the pq
         String url = frontier->PopUrl( alive );
-        //Print(String("Popped URL from frontier: ") + url, threadID);
+        Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
-        //Print(String("ParseRobot: ") + url, threadID);
+        Print(String("ParseRobot: ") + url, threadID);
 
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
@@ -187,15 +187,23 @@ void Crawler::Crawl( size_t threadID )
 
         // 4. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
-        //Print(String("HTML parsed: ") + url, threadID);
+        Print(String("HTML parsed: ") + url, threadID);
 
         // 5. Send the URLs found in the HTML back to the manager
         for ( size_t i = 0; i < htmlparser.links.size(); ++i )
             {
             ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
+            Link *newLink;
             if ( !testUrl.IsOkay() )
-                continue;
-            Link* newLink = new Link( htmlparser.links[i] );
+                {
+                if ( testUrl.CompleteUrl[ 0 ] == '/' )
+                    newLink = new Link( String( parsedUrl.Service ) + String( "://" ) 
+                        + String( parsedUrl.Host ) + String( testUrl.CompleteUrl ) );
+                else
+                    continue;
+                }
+            else
+                newLink = new Link( htmlparser.links[ i ] );
             manager->PushTask( (void *) newLink, true );
             //Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
             }

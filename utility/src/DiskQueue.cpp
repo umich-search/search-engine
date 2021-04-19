@@ -1,13 +1,6 @@
 #include "DiskQueue.h"
 #include <string.h>
 
-DiskQueue::fid::fid( int fid ) 
-    : id( fid )
-    {
-    }
-    
-
-
 int DiskQueue::openFileRD( int id )
     {
     String filePath = dirName;
@@ -30,9 +23,13 @@ int DiskQueue::openFileWR( int id )
 
 DiskQueue::DiskQueue( const char *dir )
     {
+    bool files[ MAX_NUM_FILE_BLOCKS ];
+    for ( size_t i = 0; i < MAX_NUM_FILE_BLOCKS; ++i )
+        files[ i ] = false;
+
+    // iterate over existing files to fill "files"
     dirName = String( dir );
     DIR *handle = opendir( dirName.cstr( ) );
-    readFileID = writeFileID = -1;
     if ( handle )
         {
         dirName += '/';
@@ -49,10 +46,11 @@ DiskQueue::DiskQueue( const char *dir )
             else if ( !DotName( entry->d_name ) )
                 {
                 int fileID = atoi( entry->d_name );
-                if ( fileID < readFileID || readFileID == -1 )
-                    readFileID = fileID;
-                if ( fileID > writeFileID || writeFileID == -1 )
-                    writeFileID = fileID;
+                // if ( fileID < readFileID || readFileID == -1 )
+                //     readFileID = fileID;
+                // if ( fileID > writeFileID || writeFileID == -1 )
+                //     writeFileID = fileID;
+                files[ fileID ] = true;
                 }
             }
         closedir( handle );   
@@ -63,7 +61,21 @@ DiskQueue::DiskQueue( const char *dir )
         exit( 1 );
         }
 
-    if ( readFileID == writeFileID )  // no read files exists
+    // find the head and tail of the files
+    readFileID = writeFileID = -1;
+    bool prev = files[ MAX_NUM_FILE_BLOCKS - 1 ];
+    for ( size_t i = 0; i < MAX_NUM_FILE_BLOCKS; ++i )
+        {
+        if ( !prev && files[ i ] )  // (0,1) -> head
+            readFileID = i;
+        else if ( prev && !files[ i ] )  // (1,0) -> tail
+            writeFileID = i == 0 ? MAX_NUM_FILE_BLOCKS - 1 : i - 1;
+        prev = files[ i ];
+        }
+
+    // open files
+    // no read files exists (no file or 1 file)
+    if ( readFileID == writeFileID ) 
         {
         readFileID = -1;  // no read file
         if  ( writeFileID == -1 )  // empty folder
@@ -85,12 +97,13 @@ DiskQueue::DiskQueue( const char *dir )
                 readFd = openFileRD( readFileID );
                 readFp = fdopen( readFd, "r" );
 
-                writeFileID++;
+                writeFileID = ( writeFileID + 1 ) % MAX_NUM_FILE_BLOCKS;
                 writeFd = openFileWR( writeFileID );
                 bytesWrite = 0;
                 }
             }
         }
+    // read file exists
     else
         {
         readFd = openFileRD( readFileID );
@@ -101,7 +114,7 @@ DiskQueue::DiskQueue( const char *dir )
         if ( bytesWrite >= MAX_FILE_BLOCK_IN_BYTES )
             {
             close( writeFd );
-            writeFileID++;
+            writeFileID = ( writeFileID + 1 ) % MAX_NUM_FILE_BLOCKS;
             writeFd = openFileWR( writeFileID );
             bytesWrite = 0;
             }
@@ -126,16 +139,22 @@ bool DiskQueue::empty( ) const
     return readFileID == -1;
     }
 
+bool DiskQueue::full( ) const
+    {
+    return ( writeFileID + 1 ) % MAX_NUM_FILE_BLOCKS == readFileID;
+    }
+
 String DiskQueue::PopFront( ) 
     {
     if ( readFileID == -1 )
-        return String( "" );
+        throw DiskQueueExceptions::EmptyDiskQueue;
+
     char *linePtr = nullptr;
     size_t len = 0;
     ssize_t nread = getline( &linePtr, &len, readFp );
     if ( nread == -1 )  // EOF
         {
-        if ( readFileID + 1 == writeFileID )  // the next file is in writing mode
+        if ( ( readFileID + 1 ) % MAX_NUM_FILE_BLOCKS == writeFileID )  // the next file is in writing mode
             {
             String pathName = dirName;
             pathName += ltos( readFileID );
@@ -146,7 +165,7 @@ String DiskQueue::PopFront( )
             
             readFileID = -1;  // wait for the write file to complete
             free( linePtr );  // free linPtr
-            return String( "" );
+            throw DiskQueueExceptions::EmptyDiskQueue;
             }
         else
             {
@@ -156,7 +175,7 @@ String DiskQueue::PopFront( )
                 std::cerr << "Error deleting the file " << pathName << " with the errno = " << strerror(errno) << std::endl;
             fclose( readFp );
 
-            ++readFileID;
+            readFileID = ( readFileID + 1 ) % MAX_NUM_FILE_BLOCKS;
             readFd = openFileRD( readFileID );
             readFp = fdopen( readFd, "r" );
             nread = getline( &linePtr, &len, readFp );
@@ -176,37 +195,72 @@ String DiskQueue::PopFront( )
 
 void DiskQueue::PushBack( String& item )
     {
+    // if the file block is full
+    if ( bytesWrite >= MAX_FILE_BLOCK_IN_BYTES )
+        {
+        // if the disk queue is full
+        if ( ( writeFileID + 1 ) % MAX_NUM_FILE_BLOCKS == readFileID )
+            throw DiskQueueExceptions::FullDiskQueue;
+        // if there is still space
+        else
+            {
+            close( writeFd );
+
+            // create new file to write
+            int oldWriteId = writeFileID;
+            writeFileID = ( writeFileID + 1 ) % MAX_NUM_FILE_BLOCKS;
+            writeFd = openFileWR( writeFileID );
+            bytesWrite = 0;
+
+            // link the read file to the recently closed written file
+            if ( readFileID == -1 )
+                {
+                readFileID = oldWriteId;
+                readFd = openFileRD( readFileID );
+                readFp = fdopen( readFd, "r" );
+                }
+            }
+        }
     
+    // new item must end with newline
     if ( item[ item.size( ) - 1 ] != '\n' )
         item += '\n';
     // write the new line into the file
     if ( write( writeFd, item.cstr( ), item.size( ) ) == -1 )
-        std::cerr << "Error writing to file " << item << " with errno = " << strerror(errno) << std::endl;
+        std::cerr << "Error writing to file " << item << " with errno = " << strerror( errno ) << std::endl;
     bytesWrite += item.size( );
-    // if the write file exceeds the max file size
-    if ( bytesWrite >= MAX_FILE_BLOCK_IN_BYTES )
-        {
-        close( writeFd );
 
-        // create new file to write
-        writeFileID++;
-        writeFd = openFileWR( writeFileID );
-        bytesWrite = 0;
+    // // new item must end with newline
+    // if ( item[ item.size( ) - 1 ] != '\n' )
+    //     item += '\n';
+    // // write the new line into the file
+    // if ( write( writeFd, item.cstr( ), item.size( ) ) == -1 )
+    //     std::cerr << "Error writing to file " << item << " with errno = " << strerror( errno ) << std::endl;
+    // bytesWrite += item.size( );
+    // // if the write file exceeds the max file size
+    // if ( bytesWrite >= MAX_FILE_BLOCK_IN_BYTES )
+    //     {
+    //     close( writeFd );
 
-        if ( readFileID == -1 )  // link the read file to the recently closed written file
-            {
-            readFileID = writeFileID - 1;
-            readFd = openFileRD( readFileID );
-            readFp = fdopen( readFd, "r" );
-            }
-        }
+    //     // create new file to write
+    //     writeFileID++;
+    //     writeFd = openFileWR( writeFileID );
+    //     bytesWrite = 0;
+
+    //     if ( readFileID == -1 )  // link the read file to the recently closed written file
+    //         {
+    //         readFileID = writeFileID - 1;
+    //         readFd = openFileRD( readFileID );
+    //         readFp = fdopen( readFd, "r" );
+    //         }
+    //     }
     }
 
 void DiskQueue::PrintStatus( ) const
     {
     std::cout << "Directory Name: " << dirName << std::endl
         << "Number of files in the directory: " 
-        << ( readFileID == -1 ? ( writeFileID == -1 ? 0 : 1 ) : writeFileID - readFileID ) << std::endl
+        << ( readFileID == -1 ? ( writeFileID == -1 ? 0 : 1 ) : writeFileID + 1 - readFileID ) << std::endl
         << "ReadFile: " << readFileID << ", WriteFile: " << writeFileID << std::endl;
     }    
 
