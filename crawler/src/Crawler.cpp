@@ -164,15 +164,15 @@ void Crawler::Crawl( size_t threadID )
             continue;
             }
         
-        Print(String("Popped URL from frontier: ") + url, threadID);
+        // Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
-        Print(String("ParseRobot: ") + url, threadID);
+        // Print(String("ParseRobot: ") + url, threadID);
 
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
-        Print(String("ParseURL: ") + url, threadID);
+        // Print(String("ParseURL: ") + url, threadID);
         String html;
         try 
             {
@@ -194,9 +194,10 @@ void Crawler::Crawl( size_t threadID )
 
         // 4. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
-        //Print(String("HTML parsed: ") + url, threadID);
+        // Print(String("HTML parsed: ") + url, threadID);
 
         // 5. Send the URLs found in the HTML back to the manager
+        ParsedUrl baseUrl( htmlparser.base.cstr( ) );
         for ( size_t i = 0; i < htmlparser.links.size(); ++i )
             {
             // if the link is empty
@@ -208,25 +209,19 @@ void Crawler::Crawl( size_t threadID )
             // relative urls and base url given
             if ( !testUrl.IsOkay( ) )
                 {
-                if ( htmlparser.base.size( ) == 0 )
+                if ( !baseUrl.IsOkay( ) )
                     continue;
-                // start by / -> append to base
+                // start by / -> append to base's domain
                 if ( testUrl.CompleteUrl[ 0 ] == '/' )
-                    {
-                    if ( htmlparser.base[ htmlparser.base.size( ) - 1 ] == '/' )
-                        newLink = new Link( htmlparser.base + String( testUrl.CompleteUrl + 1 ) );
-                    else
-                        newLink = new Link( htmlparser.base + String( testUrl.CompleteUrl ) );
-                    }
+                    newLink = new Link( String( baseUrl.Service ) + String( "://" ) 
+                        + String( baseUrl.Host ) + String( testUrl.CompleteUrl ) );
                 // not start by / -> find current directory
                 else
                     {
                     // get the directory of the base url
                     ssize_t i = htmlparser.base.size( ) - 1;
-                    while ( i >= 0 && htmlparser.base[ i ] != '/' )
+                    while ( i >= 0 && htmlparser.base[ i ] != '/' ) 
                         i--;
-                    if ( i == 0 )
-                        continue;
                     // construct new url
                     String newUrl( htmlparser.base.cstr( ), i + 1 );
                     newLink = new Link( newUrl + String( testUrl.CompleteUrl ) );
@@ -252,7 +247,7 @@ void Crawler::Crawl( size_t threadID )
             // else
             //     newLink = new Link( htmlparser.links[ i ] );
             // manager->PushTask( (void *) newLink, true );
-            Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
+            // Print(String("Pushed URL to manager: ") + newLink->URL, threadID);
             }
         //Print(String("Num URLs parsed: ") + ltos(htmlparser.links.size()), threadID);
 
