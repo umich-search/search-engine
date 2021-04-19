@@ -3,6 +3,7 @@
 #include "Post.h"
 #include "PostingListBlob.h"
 #include "FileManager.h"
+#include "../constraint_solver/constraint_solver.h"
 
 typedef size_t Location;
 
@@ -28,6 +29,20 @@ public:
 
     // Get number of Terms of and ISR
     virtual int GetTermNum() = 0;
+
+    // Calculate according to heuristics
+    virtual int GetHeuristicScore( Match *document ) = 0;
+
+protected:
+    int num_short_spans = 0;
+    int num_inorder_spans = 0;
+    int num_exact_phrase = 0;
+    int num_spans_near_top = 0;
+    bool all_words_freq = false;
+    bool most_words_freq = false;
+    bool some_words_freq = false;
+    const int freq_threshold = 3;
+
 };
 
 class ISRWord : public ISR {
@@ -66,6 +81,8 @@ public:
 
     int GetTermNum(){ return 0; }
 
+    int GetHeuristicScore( Match *document );
+
 private:
     FileManager manager;
     const char *term;
@@ -74,6 +91,10 @@ private:
     Post currPost;
     Post Doc;
     TermPostingListRaw termPostingListRaw;
+    const int short_span_weight = 1;
+    const int span_near_top_weight = 0.5;
+    const int some_freq_weight = 5;
+    const int near_top_threshold = 50;
 };
 
 class ISREndDoc : public ISR {
@@ -114,6 +135,8 @@ public:
     ISR **GetTerms();
 
     int GetTermNum(){ return 0; }
+
+    int GetHeuristicScore(){return 0;}
 
 private:
     FileManager manager;
