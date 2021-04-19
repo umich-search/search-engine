@@ -5,11 +5,46 @@
 #include "../utility/include/Vector.h"
 #include "../constraint_solver/constraint_solver.h"
 
-class ISRSpan{
+#define MAXSHORT 10
+#define MINFREQUENT 20
+#define MINTOP 100
+#define MINMOST 0.6
+#define MINSOME 0.3
+
+struct Statistics {
+    size_t numShortSpans;
+    size_t numOrderSpans;
+    size_t numPhrases;
+    size_t numTopSpans;
+    size_t numFrequentWords;
+};
+
+struct Weights {
+    float weightShortSpan;
+    float weightOrderSpan;
+    float weightPhrase;
+    float weightTopSpan;
+    float weightAll;
+    float weightMost;
+    float weightSome;
+};
+
+class ISRSpan {
 public:
+
+    ISRSpan(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+            struct Weights weights) : numTerms(numTerms), positionRarestTerm(positionRarestTerm), Terms(Terms),
+                                      docIndex(0), matchDocs(matchDocs), weights(weights),location(::vector<Location>(numTerms, 0)){
+        statistics.numPhrases = 0;
+        statistics.numOrderSpans = 0;
+        statistics.numTopSpans = 0;
+        statistics.numShortSpans = 0;
+        statistics.numFrequentWords = 0;
+    }
+
     //Move the rarest term to the next occurrence
     //Move all the other terms to the nearest location corresponding to the rarest term;
-    //Return True if the end of the doc is reached
+    //Return false if the end of the doc is passed
     bool Next();
 
     //Move the rarest term to the first occurrence in the document specified by docIndex
@@ -28,18 +63,39 @@ private:
     //the total number of terms in the phrase
     size_t numTerms;
 
-    //the ISRWord abstract for the rarest term
-    ISRWord* rarestTerm;
+    size_t positionRarestTerm;
 
     //the ISRWord abstract for other terms
-    ISRWord** Terms;
+    ISRWord **Terms;
 
     //the current index of document in ConstraintSolver
-    size_t docIndex = 0;
+    size_t docIndex;
 
-    ::vector<Match*>* ConstraintSolver;
+    ::vector<Match *> *matchDocs;
 
     ::vector<Location> location;
 
-    ::vector<float> score;
+    //score for each document
+    ::vector<float> scores;
+
+    Location smallest, farthest;
+
+    struct Statistics statistics;
+
+    struct Weights weights;
+
+    bool ifShortSpan();
+
+    bool ifOrderSpan();
+
+    bool ifExactPhrases();
+
+    bool ifNearTop();
+
+    bool calculate_num_frequent_words();
+
 };
+
+::vector<float>
+calculate_scores(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+                 struct Weights weights);
