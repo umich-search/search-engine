@@ -4,7 +4,7 @@ RUN apt-get install -y git make gcc g++ openssl libssl-dev
 EXPOSE 8888
 
 # TODO: change the machine ID and seed ID
-ENV MACHINE_ID 0
+ENV MACHINE_ID 13
 RUN mkdir crawler
 WORKDIR /crawler
 RUN mkdir frontier seedlist 
