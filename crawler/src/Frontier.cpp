@@ -261,9 +261,10 @@ String Frontier::PopUrl( bool alive )
     String nextUrl = urlPq.Top( ).url;
     urlPq.Pop( );
     Unlock( &pqMutex );
-    assert( nextUrl[ 0 ] == '0' || nextUrl[ 0 ] == '1' );
     if ( nextUrl[ 0 ] == '1' )
         return String( "https://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
-    else
+    else if ( nextUrl[ 1 ] == '0' )
         return String( "http://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
+    else
+        return String( "" );
     }

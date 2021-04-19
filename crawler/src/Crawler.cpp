@@ -216,7 +216,7 @@ void Crawler::Crawl( size_t threadID )
         ++documentCount;
         if ( documentCount % PRINT_INTERVAL == 0 ) 
             {
-            double speed = PRINT_INTERVAL / timer.ElapsedSeconds();;
+            double speed = PRINT_INTERVAL / timer.ElapsedSeconds();
             timer.Reset();
             Print(String("Document count: ") + ltos(documentCount), threadID);
             Print(String("Crawling speed ≈ ") + ltos(speed) + String(" docs/s"), threadID);
