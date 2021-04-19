@@ -25,6 +25,9 @@ public:
 
     // Get Terms data of an ISR
     virtual ISR **GetTerms() = 0;
+
+    // Get number of Terms of and ISR
+    virtual int GetTermNum() = 0;
 };
 
 class ISRWord : public ISR {
@@ -60,6 +63,8 @@ public:
 
     // Get Terms data of an ISR
     ISR **GetTerms();
+
+    int GetTermNum(){ return 0; }
 
 private:
     FileManager manager;
@@ -107,6 +112,8 @@ public:
 
     // Get Terms data of an ISR
     ISR **GetTerms();
+
+    int GetTermNum(){ return 0; }
 
 private:
     FileManager manager;
