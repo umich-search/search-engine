@@ -263,7 +263,7 @@ String Frontier::PopUrl( bool alive )
     Unlock( &pqMutex );
     if ( nextUrl[ 0 ] == '1' )
         return String( "https://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
-    else if ( nextUrl[ 1 ] == '0' )
+    else if ( nextUrl[ 0 ] == '0' )
         return String( "http://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
     else
         throw "empty";
