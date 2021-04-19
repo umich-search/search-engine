@@ -52,7 +52,7 @@ String LinuxGetUrl( const ParsedUrl& url, size_t numRedirect )
    int error = getaddrinfo( url.Host, "80", &hints, &address );
    if ( error )
       {
-      throw String("GetHTML: Error getting addr info");
+      throw GET_HTML_ERROR_RETRY;
       }
 
    // Create a TCP/IP socket.
@@ -69,7 +69,7 @@ String LinuxGetUrl( const ParsedUrl& url, size_t numRedirect )
       {
       freeaddrinfo( address );
       close( socketFD );
-      throw String("GetHTML: Error connecting to host");
+      throw GET_HTML_ERROR_RETRY;
       }
 
    // Send a GET message.
@@ -167,7 +167,7 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
    int error = getaddrinfo( url.Host, "443", &hints, &address );
    if ( error )
       {
-      throw String("GetHTML: Error getting addr info");
+      throw GET_HTML_ERROR_RETRY;
       }
 
    // Create a TCP/IP socket.
@@ -184,7 +184,7 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
       {
       freeaddrinfo( address );
       close( socketFD );
-      throw String("GetHTML: Error connecting to host");
+      throw GET_HTML_ERROR_RETRY;
       }
 
    // set ssl library
@@ -209,7 +209,7 @@ String LinuxGetSsl( const ParsedUrl& url, size_t numRedirect )
       {
       freeaddrinfo( address );
       close( socketFD );
-      throw String("GetHTML: Error connecting on SSL");
+      throw GET_HTML_ERROR_RETRY;
       }
 
    // Send a GET message.
