@@ -266,5 +266,5 @@ String Frontier::PopUrl( bool alive )
     else if ( nextUrl[ 1 ] == '0' )
         return String( "http://" ) + String( nextUrl.buffer + 1, nextUrl.size( ) - 1 );
     else
-        return String( "" );
+        throw "empty";
     }

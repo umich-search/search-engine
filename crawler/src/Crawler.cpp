@@ -7,11 +7,10 @@ Crawler::Crawler( Init init, Frontier *frontier, FileBloomfilter *visited,
     { 
     std::ifstream file;
     file.open( DOC_COUNT_FILE );
-    size_t count;
-    file >> count;
+    file >> documentCount;
     file.close();
-    documentCount = count;
     MutexInit(&indexMutex, nullptr);
+    MutexInit(&docCountMutex, nullptr);
     timer.Start();
     }
 
@@ -155,12 +154,21 @@ void Crawler::Crawl( size_t threadID )
         // 1. Get a URL from the frontier
         // if alive but frontier(pq) is empty, block until the urls
         // in the disk queue refills the pq
-        String url = frontier->PopUrl( alive );
-        Print(String("Popped URL from frontier: ") + url, threadID);
+        String url;
+        try
+        {
+            url = frontier->PopUrl( alive );
+        }
+        catch( ... )
+        {
+            continue;
+        }
+        
+        //Print(String("Popped URL from frontier: ") + url, threadID);
 
         // 2. check for robots.txt
         this->parseRobot( url );
-        Print(String("ParseRobot: ") + url, threadID);
+        //Print(String("ParseRobot: ") + url, threadID);
 
         // 3. Retrieve the HTML webpage from the URL
         ParsedUrl parsedUrl( url.cstr() );
@@ -182,16 +190,17 @@ void Crawler::Crawl( size_t threadID )
                 }
             return;
             }
-        
         //Print(String("GetHTML: ") + url, threadID);
 
         // 4. Parse the HTML for the webpage
         HtmlParser htmlparser( html.cstr(), html.size() );
-        Print(String("HTML parsed: ") + url, threadID);
+        //Print(String("HTML parsed: ") + url, threadID);
 
         // 5. Send the URLs found in the HTML back to the manager
         for ( size_t i = 0; i < htmlparser.links.size(); ++i )
             {
+            if ( htmlparser.links[i].URL.size() == 0 )
+                continue;
             ParsedUrl testUrl( htmlparser.links[i].URL.cstr() );
             Link *newLink;
             if ( !testUrl.IsOkay() )
@@ -213,23 +222,29 @@ void Crawler::Crawl( size_t threadID )
         addWordsToIndex( htmlparser, url, threadID );
 
         //Print(String("Inserted URL in index: ") + url, threadID );
-        ++documentCount;
-        if ( documentCount % PRINT_INTERVAL == 0 ) 
-            {
-            double speed = PRINT_INTERVAL / timer.ElapsedSeconds();
-            timer.Reset();
-            Print(String("Document count: ") + ltos(documentCount), threadID);
-            Print(String("Crawling speed ≈ ") + ltos(speed) + String(" docs/s"), threadID);
-            std::ofstream file;
-            file.open( DOC_COUNT_FILE );
-            file << "\r" << documentCount;
-            file.close();
-            }
+        incrementDocumentCount( threadID );
 
         // Test managers
         // sleep(3);
         // Link *newLink = new Link( url );
         // manager->PushTask( ( void * ) newLink, true );
         // Print( String( "Pushed url: " ) + url, threadID );
+        }
+    }
+
+void Crawler::incrementDocumentCount( size_t threadID )
+    {
+    CriticalSection s(&docCountMutex);
+    ++documentCount;
+    if ( documentCount % PRINT_INTERVAL == 0 ) 
+        {
+        double speed = PRINT_INTERVAL / timer.ElapsedSeconds();
+        timer.Reset();
+        Print(String("Document count: ") + ltos(documentCount), threadID);
+        Print(String("Crawling speed ≈ ") + ltos(speed) + String(" docs/s"), threadID);
+        std::ofstream file;
+        file.open( DOC_COUNT_FILE );
+        file << "\r" << documentCount;
+        file.close();
         }
     }
