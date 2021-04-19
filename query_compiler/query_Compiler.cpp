@@ -1,6 +1,6 @@
 #include <iostream>
-#include <../utility/include/mString.h>
-#include <query_Compiler.h>
+#include "../utility/include/mString.h"
+#include "query_Compiler.h"
 #include <cctype>
 
 void incorrectQuery(const char* errMessage){
@@ -14,7 +14,7 @@ void incorrectQuery(const char* errMessage){
 // 3. &&/AND -> &, ||/OR -> |
 // 4. quick fox -> quick & fox
 // 5. space before and after | and &
-char* Normalize (char* input)
+String Normalize (char* input)
    {
    const String AND_OP = " & ";
    const String OR_OP = " | ";
@@ -107,8 +107,7 @@ char* Normalize (char* input)
       }
    if (prevIsOp)
       incorrectQuery("Illegal logical operator!\n");
-   std::cout << output << std::endl;
-   return const_cast<char *> (output.cstr());
+   return output;
    }
 
 
@@ -119,7 +118,7 @@ ISR* Query_Compiler (Dictionary *dict, char* input)
 
 
 //Just for debugging
-char* test_String (char * input)
+String test_String (char * input)
    {
    return Normalize(input);
    }

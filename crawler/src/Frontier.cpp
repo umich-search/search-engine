@@ -155,7 +155,7 @@ void Frontier::PushUrl( Link& link )
         protocol += String( link.URL.buffer + 7, link.URL.size( ) - 7 );
         link.URL = protocol;
         }
-    else if ( link.URL[ 0 ] != '1' && link.URL[ 1 ] != '0' )
+    else if ( link.URL[ 0 ] != '1' && link.URL[ 0 ] != '0' )
         {
         String protocol( '1' );
         protocol += link.URL;

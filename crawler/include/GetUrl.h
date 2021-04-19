@@ -13,6 +13,8 @@
 #include <iostream>
 #include "mString.h"
 
+static const int GET_HTML_ERROR_RETRY = 69420;
+
 const char *findSubstring( const char *, const char *, const char *, size_t );
 unsigned int htoi( const char *ptr );
 
