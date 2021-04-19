@@ -162,13 +162,18 @@ void Frontier::PushUrl( Link& link )
         link.URL = protocol;
         }
     // determine which to disk queue to insert
+
     size_t dqIdx = 0;  // disk queue index
     if ( priorityCalculator )  // use priority calculator if provided
         dqIdx = priorityCalculator( link );
     else  // other wise simply hash and map
-    // TODO: should hash over domains, not url
-        dqIdx = fnvHash( link.URL.cstr( ), link.URL.size( ) ) % urlPool.size( );
-    
+        {
+        // dqIdx = fnvHash( link.URL.cstr( ), link.URL.size( ) ) % urlPool.size( );
+        String url( String( "https://" ) + String( link.URL.cstr( ) + 1, link.URL.size( ) - 1 ) );
+        ParsedUrl dmExtractor( url.cstr( ) );
+        dqIdx = fnvHash( dmExtractor.Host, strlen( dmExtractor.Host ) ) % urlPool.size( );
+        }
+
     // start inserting into diskqueues
     Lock( poolMutexes[ dqIdx ] );
     try

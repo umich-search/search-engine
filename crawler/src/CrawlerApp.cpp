@@ -1,11 +1,11 @@
 #include "CrawlerApp.h"
 
 // -- Crawler App Parameters
-const size_t NUM_CRAWL_THREADS = 1;  // 200
+const size_t NUM_CRAWL_THREADS = 100;  // 100
 const size_t NUM_SEND_THREADS = 10;
 const size_t NUM_LISTEN_THREADS = 10;
-const size_t NUM_DISK_QUEUE = 1000;  // 100
-const size_t PQ_SIZE = 500;  // 1000
+const size_t NUM_DISK_QUEUE = 1000;  // 1000
+const size_t PQ_SIZE = 500;  // 500
 const int NUM_OBJECTS = 100000;
 const double FP_RATE = 0.0001;
 const char * FRONTIER_DIR = "frontier";
