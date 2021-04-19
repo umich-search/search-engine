@@ -94,7 +94,7 @@ class ThreadSafeQueue
         bool Push( T val ) 
             { 
             CriticalSection s(&mutex);
-            if ( blocked || queue.Size() > 1000 )
+            if ( blocked || queue.Size() > 10000 )
                 return false;
             queue.Push( val );
             Signal(&cv);
