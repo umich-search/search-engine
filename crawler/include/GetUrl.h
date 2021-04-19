@@ -82,9 +82,38 @@ class ParsedUrl
             Host = Path = p;
          }
 
+      ParsedUrl( )
+         {
+         }
+
       ~ParsedUrl( )
          {
          delete[ ] pathBuffer;
+         }
+
+      ParsedUrl& operator= ( ParsedUrl&& other )
+         {
+         ParsedUrl victim;
+         victim.CompleteUrl = CompleteUrl;
+         victim.Service = Service;
+         victim.Host = Host;
+         victim.Port = Port;
+         victim.Path = Path;
+         victim.pathBuffer = pathBuffer;
+
+         pathBuffer = other.pathBuffer;
+         CompleteUrl = other.CompleteUrl;
+         Service = other.Service;
+         Host = other.Host;
+         Port = other.Port;
+         Path = other.Path;
+
+         other.pathBuffer = nullptr;
+         other.CompleteUrl 
+            = other.Service = other.Host 
+            = other.Port = other.Path = nullptr;
+         
+         return *this;
          }
 
       bool IsOkay()

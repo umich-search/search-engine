@@ -1,7 +1,7 @@
 #include "CrawlerApp.h"
 
 // -- Crawler App Parameters
-const size_t NUM_CRAWL_THREADS = 100;  // 200
+const size_t NUM_CRAWL_THREADS = 1;  // 200
 const size_t NUM_SEND_THREADS = 10;
 const size_t NUM_LISTEN_THREADS = 10;
 const size_t NUM_DISK_QUEUE = 1000;  // 100
