@@ -5,6 +5,7 @@ void ISRSpan::Start(size_t index) {
     Location docStartLocation = (*matchDocs)[index]->start;
     Location docEndLocation = (*matchDocs)[index]->end;
     location[positionRarestTerm] = (*(Terms + positionRarestTerm))->Seek(docStartLocation)->GetStartLocation();
+    smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
         if (i == positionRarestTerm) continue;
         ISRWord *term = *(Terms + i);
@@ -13,12 +14,14 @@ void ISRSpan::Start(size_t index) {
         after = prev = term->Seek(docStartLocation)->GetStartLocation();
         while (after < location[positionRarestTerm]) {
             prev = after;
-            after = term->Next()->GetStartLocation();
+            auto next = term->Next();
+            if (next == nullptr) break;
+            after = next->GetStartLocation();
         }
-        if (after >= docEndLocation) location[i] = prev;
-        else if (location[positionRarestTerm] - prev < after - location[positionRarestTerm]) location[i] = prev;
+        if (after >= docEndLocation ||
+            location[positionRarestTerm] - prev < after - location[positionRarestTerm])
+            location[i] = prev;
         else location[i] = after;
-        smallest = farthest = location[positionRarestTerm];
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -30,23 +33,27 @@ void ISRSpan::Start(size_t index) {
 
 bool ISRSpan::Next() {
     //TODO: maybe call seek is inefficient
-    location[positionRarestTerm] = (*(Terms + positionRarestTerm))->Next()->GetStartLocation();
     Location docEndLocation = (*matchDocs)[docIndex]->end;
-    if (location[positionRarestTerm] > docEndLocation) return false;
+    auto next = (*(Terms + positionRarestTerm))->Next();
+    if (next == nullptr || next->GetStartLocation() > docEndLocation) return false;
+    location[positionRarestTerm] = next->GetStartLocation();
+    smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
-        if (i == positionRarestTerm) { continue; }
+        if (i == positionRarestTerm) continue;
         ISRWord *term = *(Terms + i);
         Location prev;
         Location after;
         after = prev = term->Seek(location[i])->GetStartLocation();
         while (after < location[positionRarestTerm]) {
             prev = after;
-            after = term->Next()->GetStartLocation();
+            auto next = term->Next();
+            if (next == nullptr) break;
+            after = next->GetStartLocation();
         }
-        if (after >= docEndLocation) location[i] = prev;
-        else if (location[positionRarestTerm] - prev < after - location[positionRarestTerm]) location[i] = prev;
+        if (after >= docEndLocation ||
+            location[positionRarestTerm] - prev < after - location[positionRarestTerm])
+            location[i] = prev;
         else location[i] = after;
-        smallest = farthest = location[positionRarestTerm];
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -101,17 +108,32 @@ bool ISRSpan::ifExactPhrases() {
     return true;
 }
 
-bool ISRSpan::calculate_num_frequent_words() {
-    //todo: calculate number of frequent words
+
+void ISRSpan::calculate_num_frequent_words() {
+    Location docStartLocation = (*matchDocs)[docIndex]->start;
+    Location docEndLocation = (*matchDocs)[docIndex]->end;
+    for (int i = 0; i < numTerms; i++) {
+        ISRWord *term = *(Terms + i);
+        size_t count = 1;
+        term->Seek(docStartLocation);
+        while (true) {
+            auto next = term->Next();
+            if (next == nullptr) break;
+            if (next->GetStartLocation() >= docEndLocation) break;
+            count += 1;
+        }
+        size_t temp = (count / (docEndLocation - docStartLocation)) / (term->GetNumberOfOccurrences() / totalWords);
+        if (temp >= MINFREQUENT) statistics.numFrequentWords += 1;
+    }
 }
 
 ::vector<float>
 calculate_scores(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights weights) {
-    class ISRSpan isrspan(matchDocs, Terms, numTerms, positionRarestTerm, weights);
+                 struct Weights weights, size_t totalWords) {
+    class ISRSpan isrspan(matchDocs, Terms, numTerms, positionRarestTerm, weights, totalWords);
     for (int i = 0; i < matchDocs->size(); i++) {
         isrspan.Start(i);
-        while(isrspan.Next());
+        while (isrspan.Next());
         isrspan.update_score();
     }
     return isrspan.get_score();

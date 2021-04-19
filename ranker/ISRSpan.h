@@ -6,7 +6,7 @@
 #include "../constraint_solver/constraint_solver.h"
 
 #define MAXSHORT 10
-#define MINFREQUENT 20
+#define MINFREQUENT 10
 #define MINTOP 100
 #define MINMOST 0.6
 #define MINSOME 0.3
@@ -33,8 +33,11 @@ class ISRSpan {
 public:
 
     ISRSpan(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-            struct Weights weights) : numTerms(numTerms), positionRarestTerm(positionRarestTerm), Terms(Terms),
-                                      docIndex(0), matchDocs(matchDocs), weights(weights),location(::vector<Location>(numTerms, 0)){
+            struct Weights weights, size_t totalWords) : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
+                                                         Terms(Terms),
+                                                         docIndex(0), matchDocs(matchDocs), weights(weights),
+                                                         location(::vector<Location>(numTerms, 0)),
+                                                         totalWords(totalWords) {
         statistics.numPhrases = 0;
         statistics.numOrderSpans = 0;
         statistics.numTopSpans = 0;
@@ -65,6 +68,8 @@ private:
 
     size_t positionRarestTerm;
 
+    size_t totalWords;
+
     //the ISRWord abstract for other terms
     ISRWord **Terms;
 
@@ -92,10 +97,10 @@ private:
 
     bool ifNearTop();
 
-    bool calculate_num_frequent_words();
+    void calculate_num_frequent_words();
 
 };
 
 ::vector<float>
 calculate_scores(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights weights);
+                 struct Weights weights, size_t totalWords);
