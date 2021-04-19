@@ -165,9 +165,9 @@ String ConnectHandler::handleConnect( int fd, size_t threadID )
 void ConnectHandler::incrementCountURL( size_t threadID )
     {
     CriticalSection s(&countURLmutex);
-    if ( ++countURL % 100 == 0 )
+    if ( ++countURL % 1000 == 0 )
         {
-        Print("100 more URLs received", threadID ); 
+        Print("1000 more URLs received", threadID ); 
         countURL = 0;
         }
     }
@@ -232,7 +232,7 @@ void SendManager::DoTask( Task task, size_t threadID )
 void SendManager::incrementCountFailMachine( size_t machineID, size_t threadID )
     {
     CriticalSection s(&failedMachineMutex);
-    if ( ++failedMachine[ machineID ] % 5 == 0 )
+    if ( ++failedMachine[ machineID ] % 250 == 0 )
         {
         Print(String("Unable to connect to machine: ") + ltos(machineID), threadID);
         failedMachine[ machineID ] = 0;
