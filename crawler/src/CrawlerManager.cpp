@@ -157,7 +157,7 @@ String ConnectHandler::handleConnect( int fd, size_t threadID )
 
     close( fd );
     if ( cumsum == 0 )
-        throw String("Empty message rec");
+        throw String("Empty message received");
 
     return String( msg, cumsum );
     }
@@ -165,9 +165,9 @@ String ConnectHandler::handleConnect( int fd, size_t threadID )
 void ConnectHandler::incrementCountURL( size_t threadID )
     {
     CriticalSection s(&countURLmutex);
-    if ( ++countURL % 1000 == 0 )
+    if ( ++countURL % 5000 == 0 )
         {
-        Print("1000 more URLs received", threadID ); 
+        Print("5000 more URLs received", threadID ); 
         countURL = 0;
         }
     }
@@ -179,9 +179,9 @@ SendManager::SendManager( Init init, Frontier *frontier, FileBloomfilter *visite
         {
         for ( size_t i = 0; i < NUM_MACHINES; ++i )
             {
-            failedMachine[i] = 0;
+            machineAlive[i] = false;
             }
-        MutexInit(&failedMachineMutex, nullptr);
+        MutexInit(&machineAliveMutex, nullptr);
         }
 
 void SendManager::DoTask( Task task, size_t threadID )
@@ -212,12 +212,12 @@ void SendManager::DoTask( Task task, size_t threadID )
             {
             sendURL( link->URL, mID );
             //Print( output, threadID );
-            failedMachine[ mID ] = 0;
+            setMachineStatus( true, mID, threadID );
             }
         catch ( String e )
             {
             //Print( e, threadID ); 
-            incrementCountFailMachine( mID, threadID );
+            setMachineStatus( false, mID, threadID );
             }
         catch ( ... )
             {
@@ -229,13 +229,18 @@ void SendManager::DoTask( Task task, size_t threadID )
         delete link;
     }
 
-void SendManager::incrementCountFailMachine( size_t machineID, size_t threadID )
+void SendManager::setMachineStatus( bool alive, size_t machineID, size_t threadID )
     {
-    CriticalSection s(&failedMachineMutex);
-    if ( ++failedMachine[ machineID ] % 250 == 0 )
+    CriticalSection s(&machineAliveMutex);
+    if ( alive && !machineAlive[ machineID ] )
         {
-        Print(String("Unable to connect to machine: ") + ltos(machineID), threadID);
-        failedMachine[ machineID ] = 0;
+        machineAlive[ machineID ] = true;
+        Print(String("Machine connected: ") + ltos(machineID), threadID );
+        }
+    else if ( !alive && machineAlive[ machineID ] )
+        {
+        machineAlive[ machineID ] = false;
+        Print(String("Machine disconnected: ") + ltos(machineID), threadID);
         }
     }
 
