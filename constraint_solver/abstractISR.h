@@ -20,6 +20,7 @@ class ISROr: public ISR
       unsigned NumberOfTerms;
       ISREndDoc *EndDoc;
       ISROr( ISR **Terms, unsigned NumberOfTerms );
+      ~ISROr();
 
       Location GetStartLocation( );
          
@@ -41,8 +42,6 @@ class ISROr: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
-      int GetHeuristicScore( Match *document );
-
    private:
       unsigned nearestTerm;
       // nearStartLocation and nearestEndLocation are
@@ -58,6 +57,7 @@ class ISRAnd: public ISR
       ISREndDoc *EndDoc;
 
       ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict );
+      ~ISRAnd();
 
       Location GetStartLocation( );
 
@@ -76,8 +76,6 @@ class ISRAnd: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
-      int GetHeuristicScore( Match *document );
-
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
@@ -90,6 +88,7 @@ class ISRPhrase: public ISR
       unsigned NumberOfTerms;
 
       ISRPhrase( ISR **Terms, unsigned NumberOfTerms );
+      ~ISRPhrase();
 
       Location GetStartLocation( );
 
@@ -106,8 +105,6 @@ class ISRPhrase: public ISR
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
-
-      int GetHeuristicScore( Match *document );
 
    private:
       unsigned nearestTerm, farthestTerm;
