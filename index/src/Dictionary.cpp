@@ -1,6 +1,6 @@
 #include "Dictionary.h"
 
-ISRWord *Dictionary::OpenISRWord(char *word) {
+ISRWord *Dictionary::OpenISRWord(const char *word) {
     //construct commonHeader
     return new ISRWord(manager, word);
 }

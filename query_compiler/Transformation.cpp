@@ -1,11 +1,16 @@
 #include <iostream>
 #include "Transformation.h"
+#include <cctype>
 
 ISR* StringToISR ( Dictionary *dict, String input )
    {
+   //   std::cout<< "We are in string to isr!!!!" << std::endl;
+  //    std::cout<< input.cstr() << std::endl;
    // true - AND, false - OR
    ::vector<ISR*> rootOrStream;
    ::vector<ISR*> currentAndStream;
+   ISR** testStream = new ISR*[1];
+   unsigned count = 0;
    char *currentChar = (char*) input.begin();
    while (*currentChar != '\0')
       {
@@ -14,13 +19,14 @@ ISR* StringToISR ( Dictionary *dict, String input )
          ::vector<ISR*> currentPhraseStream;
          do
             {
-            String currentWord;
-            while (*(++currentChar) == ' ');
+            String currentWord = String();
+            while (isspace(*(++currentChar)));
             if (*currentChar == '"')
                break;
-            while ((*currentChar != ' ') && (*currentChar != '"'))
+            while ( (!isspace(*currentChar) ) && (*currentChar != '"'))
                currentWord += *(currentChar++);
-            currentPhraseStream.pushBack(dict->OpenISRWord(const_cast<char *> ( currentWord.cstr())));
+            //std::cout<<"currentWord = \""<<   currentWord.cstr() << "\"" << std::endl;
+            currentPhraseStream.pushBack(dict->OpenISRWord(currentWord.cstr()));
             } while (*currentChar != '"');
          ISR** currentPhraseISR = new ISR*[currentPhraseStream.size()];
          for (size_t i = 0; i < currentPhraseStream.size(); ++i)
@@ -34,28 +40,44 @@ ISR* StringToISR ( Dictionary *dict, String input )
          }
       else if (*currentChar == '(')
          {
-         String currentBracket;
+         String currentBracket = String();
          while (*(++currentChar) != ')')
             currentBracket += *currentChar;
-            std::cout<<"recusion start"<<std::endl;
-         currentAndStream.pushBack(StringToISR(dict, const_cast<char *> ( currentBracket.cstr())));
-         std::cout<<"recursion end"<<std::endl;
+            //std::cout<<"recusion start"<<std::endl;
+         currentAndStream.pushBack(StringToISR(dict, currentBracket.cstr()));
+         //std::cout<<"recursion end"<<std::endl;
          }
       else if (*currentChar == '|')
          {
-         ISR** currentAndISR = new ISR*[currentAndStream.size()];
+         ISR** currentAndTerms = new ISR*[currentAndStream.size()];
          for (unsigned i = 0; i < currentAndStream.size(); ++i)
-            * (currentAndISR + i) = currentAndStream[i];
-            std::cout<<"addOr" << std::endl;
-         rootOrStream.pushBack(new ISRAnd(currentAndISR, currentAndStream.size(), dict));
+            * (currentAndTerms + i) = currentAndStream[i];
+           // std::cout<<"Construction of a new ISRAnd: size = " << currentAndStream.size() << std::endl;
+         ISRAnd* currentAndISR = new ISRAnd(currentAndTerms, currentAndStream.size(), dict);
+         rootOrStream.pushBack(currentAndISR);
+         
+         //test currentAndISR
+         // ISR** testTerms = currentAndISR->GetTerms();
+         // int numtestTerms = currentAndISR->GetTermNum();
+         // for (unsigned i = 0; i < numtestTerms; ++i)
+         // {
+         //    ISR* testTerm -= * ( )
+         // }
+
+         while (currentAndStream.size())
+            {
+            delete *currentAndStream.end();
+            currentAndStream.popBack();
+            }
          }
       else if ( (*currentChar != ' ') && (*currentChar != '&') )
          {
-         String currentWord;
+         String currentWord = String();
          while ( (*currentChar != ' ') && (*currentChar != '\0') )
             currentWord += *(currentChar++);
-            std::cout<<"addAnd: "<< currentWord.cstr() <<std::endl;
-         currentAndStream.pushBack(dict->OpenISRWord(const_cast<char *>(currentWord.cstr())));
+            //std::cout<<"(else) currentWord = \""<<   currentWord.cstr() << "\"" << std::endl;
+            ISRWord* currentWordISR = dict->OpenISRWord(currentWord.cstr());
+            currentAndStream.pushBack(currentWordISR);
          }
       currentChar++;
       }
@@ -66,16 +88,20 @@ ISR* StringToISR ( Dictionary *dict, String input )
    // If there's no '|', the root type will be ISRAnd, otherwise it will be ISROr
    if (rootOrStream.size() == 0)
       {
-         std::cout<<"Decision: Root is AND"<<std::endl;
+         //std::cout<<"Decision: Root is AND"<<std::endl;
+            //std::cout<<"Construction of a new ISRAnd: size = " << currentAndStream.size() << std::endl;
          return new ISRAnd(currentAndISR, currentAndStream.size(), dict);
       }
    else
       {
-         std::cout<<"Decision: Root is OR"<<std::endl;
+         //std::cout<<"Decision: Root is OR"<<std::endl;
+           // std::cout<<"Construction of a new ISRAnd: size = " << currentAndStream.size() << std::endl;
         rootOrStream.pushBack( new ISRAnd(currentAndISR, currentAndStream.size(), dict) );
-        ISR** rootOrISR = new ISR*[rootOrStream.size()];
+        ISR** rootOrTerms = new ISR*[rootOrStream.size()];
         for (unsigned i = 0; i < rootOrStream.size(); ++i)
-           * (rootOrISR + i) = rootOrStream[i];
-      return new ISROr(rootOrISR, rootOrStream.size());
+           * (rootOrTerms + i) = rootOrStream[i];
+           ///std::cout<<"Construction of a new ISROr: size = " << rootOrStream.size() << std::endl;
+        ISR* root =  new ISROr(rootOrTerms, rootOrStream.size());
+        return root;
       }
    }

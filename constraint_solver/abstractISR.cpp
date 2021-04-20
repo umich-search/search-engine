@@ -18,6 +18,11 @@ ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
    {
    }
 
+ISROr::~ISROr()
+   {
+   delete[] Terms;
+   }
+
 Location ISROr::GetStartLocation( )
    {
    return nearestStartLocation;
@@ -35,15 +40,17 @@ Post* ISROr::Seek( Location target )
    // The document is the document containing the nearest term.
    
    // return (start, end) of the match
+   //std::cout<< "Entered ISROr Seek" << std::endl;
    Location minLoc = SIZE_MAX;
    Post* firstPost = nullptr;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
+         //std::cout << "Term " << i << std::endl;
       ISR* Term = *(Terms + i); 
       Post* nextPost = Term->Seek(target);
       // this term has no next match
       if (!nextPost) {
-         // std::cout << "skipped" << std::endl;
+          //std::cout << "skipped" << std::endl;
          continue;
       }
       Location nextLocation = nextPost->GetStartLocation();
@@ -56,7 +63,7 @@ Post* ISROr::Seek( Location target )
          minLoc = nextLocation;
          }
       }
-   //std::cout << nearestTerm << std::endl;
+  // std::cout << nearestTerm << std::endl;
    if (firstPost)
       {
       nearestStartLocation = firstPost->GetStartLocation();
@@ -129,6 +136,11 @@ ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(
    nearestEndLocation = 0;
    }
 
+ISRAnd::~ISRAnd()
+   {
+   delete[] Terms;
+   }
+
 Location ISRAnd::GetStartLocation( )
    {
    return nearestStartLocation;
@@ -149,6 +161,7 @@ Post* ISRAnd::Seek( Location target )
    // 4. If any term is past the document end, return to
    // step 2.
    // 5. If any ISR reaches the end, there is no match.
+   //std::cout<< "Entered ISRAnd Seek" << std::endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
    for (size_t i = 0; i < NumberOfTerms; ++i)
       {
@@ -252,6 +265,11 @@ ISR **ISRAnd::GetTerms()
 
 ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)
    {
+   }
+
+ISRPhrase::~ISRPhrase()
+   {
+   delete[] Terms;
    }
 
 Location ISRPhrase::GetStartLocation( )

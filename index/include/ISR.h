@@ -3,7 +3,7 @@
 #include "Post.h"
 #include "PostingListBlob.h"
 #include "FileManager.h"
-#include "../constraint_solver/constraint_solver.h"
+#include "../../constraint_solver/constraint_solver.h"
 
 typedef size_t Location;
 
@@ -47,10 +47,17 @@ protected:
 
 class ISRWord : public ISR {
 public:
-    ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currIndex(0), term(word),
+    ISRWord(FileManager fileManager, const char* word) : manager(fileManager), currChunk(0), currIndex(0),
                                                          currPost(0),Doc(0) {
+            char* word_copy = new char[strlen(word)];
+            strcpy (word_copy, word);
+            term = word_copy;
             // Initalize with term seek to 0
             Seek(0);
+    }
+
+    ~ISRWord() {
+        delete[] term;
     }
 
     // Returns next post
