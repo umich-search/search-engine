@@ -6,8 +6,9 @@
 
 struct url_score {
     char *URL;
+    char *title;
     int score;
-    url_score(char *URL, int score) : URL(URL), score(score){}
+    url_score(char *URL, char *title, int score) : URL(URL), title(title), score(score){}
 };
 
 class Ranker {

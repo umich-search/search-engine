@@ -4,6 +4,7 @@
 #include "PostingListBlob.h"
 #include "FileManager.h"
 #include "../constraint_solver/constraint_solver.h"
+#include "../ranker/ISRSpan.h"
 
 typedef size_t Location;
 
@@ -31,7 +32,9 @@ public:
     virtual int GetTermNum() = 0;
 
     // Calculate according to heuristics
-    virtual int GetHeuristicScore( Match *document ) = 0;
+    int GetHeuristicScore( Match *document );
+
+    virtual Weights *getWeights() = 0;
 
 protected:
     int num_short_spans = 0;
@@ -79,9 +82,11 @@ public:
     // Get Terms data of an ISR
     ISR **GetTerms();
 
-    int GetTermNum(){ return 0; }
+    int GetTermNum() { return 0; }
 
-    int GetHeuristicScore( Match *document );
+    // int GetHeuristicScore( Match *document );
+
+    Weights *getWeights() { return &(this->weights); }
 
 private:
     FileManager manager;
@@ -91,10 +96,15 @@ private:
     Post currPost;
     Post Doc;
     TermPostingListRaw termPostingListRaw;
-    const int short_span_weight = 1;
-    const int span_near_top_weight = 0.5;
-    const int some_freq_weight = 5;
-    const int near_top_threshold = 50;
+    struct Weights weights {
+        weightShortSpan: 1,
+        weightOrderSpan: 0,
+        weightPhrase: 0, 
+        weightTopSpan: 0.5,
+        weightAll: 0,
+        weightMost: 0,
+        weightSome: 5
+    };
 };
 
 class ISREndDoc : public ISR {

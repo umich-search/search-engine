@@ -1,6 +1,24 @@
 #include "../include/ISR.h"
+#include "../ranker/ISRSpan.h"
 
 // ISRWord Functions
+
+
+int ISR::GetHeuristicScore( Match *document )
+    {
+    size_t rarestlocation = 0;
+    w_Occurence minOccurence = 0xFFFFFFFFFFFFFFFF;
+    for (size_t i = 0; i < this->GetTermNum(); ++i) {
+        ISRWord *term = (ISRWord*)*(this->GetTerms() + i);
+        w_Occurence occ = term->GetNumberOfOccurrences();
+        if ( occ < minOccurence )
+            {
+            minOccurence = occ;
+            rarestlocation = i;
+            }
+    }  
+    return calculate_scores(document, (ISRWord **)this->GetTerms(), this->GetTermNum(), rarestlocation, this->getWeights());
+    }
 
 Post *ISRWord::Next() {
     size_t numOccurence = termPostingListRaw.getHeader()->numOfOccurence;
@@ -190,18 +208,18 @@ ISR **ISRWord::GetTerms() {
     return nullptr;
 }
 
-int ISRWord::GetHeuristicScore( Match *document ) {
-    Post *post = this->Seek( document->start );
-    bool isFreq = false;
-    while ( post->GetStartLocation() <= document->end )
-        {
-        this->num_short_spans++;
-        if ( post->GetStartLocation() - document->start < near_top_threshold ) this->num_spans_near_top++;
-        post = this->Seek( this->GetStartLocation());   
-        }
-    if ( this->num_short_spans >= freq_threshold ) isFreq = true;
-    return this->num_short_spans * short_span_weight + this->num_spans_near_top * span_near_top_weight + isFreq * some_freq_weight;
-}
+// int ISRWord::GetHeuristicScore( Match *document ) {
+//     Post *post = this->Seek( document->start );
+//     bool isFreq = false;
+//     while ( post->GetStartLocation() <= document->end )
+//         {
+//         this->num_short_spans++;
+//         if ( post->GetStartLocation() - document->start < near_top_threshold ) this->num_spans_near_top++;
+//         post = this->Seek( this->GetStartLocation());   
+//         }
+//     if ( this->num_short_spans >= freq_threshold ) isFreq = true;
+//     return this->num_short_spans * short_span_weight + this->num_spans_near_top * span_near_top_weight + isFreq * some_freq_weight;
+// }
 
 // ISREndDoc Functions
 Post *ISREndDoc::GetCurrentPost(){
