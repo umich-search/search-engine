@@ -1,5 +1,54 @@
 #include "ranker.h"
 
+void quickSortHelper(vector<url_score> &nums, int p, int r) {
+    if (p >= r)return;
+    struct url_score key = nums[r];
+    int partition = p - 1, i = p;
+    while (i != r) {
+        if (nums[i].score >= key.score) {
+            partition++;
+            struct url_score t = nums[partition];
+            nums[partition] = nums[i];
+            nums[i] = t;
+        }
+        i++;
+    }
+    nums[r] = nums[partition + 1];
+    nums[partition + 1] = key;
+    quickSortHelper(nums, p, partition);
+    quickSortHelper(nums, partition + 1, r);
+}
+
+//Sort a vector of url_score in descending order according to score
+vector<url_score> sortArray(vector<url_score> &nums) {
+    quickSortHelper(nums, 0, nums.size() - 1);
+    return nums;
+}
+
+void quickSortHelper(vector<struct url_score> &nums, int p, int r) {
+    if (p >= r)return;
+    int key = nums.score[r];
+    int partition = p - 1, i = p;
+    while (i != r) {
+        if (nums.score[i] >= key) {
+            partition++;
+            struct url_score t = nums[partition];
+            nums[partition] = nums[i];
+            nums[i] = t;
+        }
+        i++;
+    }
+    nums[r] = nums[partition + 1];
+    nums[partition + 1] = key;
+    quickSortHelper(nums, p, partition);
+    quickSortHelper(nums, partition + 1, r);
+}
+
+vector<int> sortArray(vector<struct url_score> &nums) {
+    quickSortHelper(nums, 0, nums.size() - 1);
+    return nums;
+}
+
 ::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
     for ( int i = 0; i < (*matches).size(); ++i ) 
