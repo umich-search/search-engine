@@ -74,8 +74,19 @@ int main(int argc, char *argv[]) {
    ::vector<Match*>* res_ptr = nullptr;
 // query 1: quick | fox
    cout << "q1 Results:" << endl;
-   ISR *terms_q1[] = {word_quick, word_fox};
-   ISROr *q1 = new ISROr(terms_q1, 2);
+   //ISR *terms_q1[] = {word_quick, word_fox};
+   //ISROr *q1 = new ISROr(terms_q1, 2);
+   ISR* q1 = Query_Compiler(&dict, (char *) "quick | fox");
+
+   int q1Size = q1->GetTermNum();
+   ISR** q1_terms = q1->GetTerms();
+   // for (unsigned i = 0; i < q1Size; ++i)
+   // {
+   //    ISR* q1_term = *(q1_terms + i);
+   //    int q1_termSize = q1_term->GetTermNum();
+   //    cout<<q1_termSize<<endl;
+   // }
+
 
    cout<<"ISROr Seek tests:"<<endl;
    res = q1->Seek(0);
@@ -93,14 +104,14 @@ int main(int argc, char *argv[]) {
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
    // [0,1,2,3,4]
-   res_ptr = ConstraintSolver(EndDoc, q1);
-   ::vector<Match*> result1 = *res_ptr;
-   for (unsigned i = 0; i < result1.size(); ++i)
-      {
-      cout << result1[i]->id<<' '<<result1[i]->start<<' ' <<result1[i]->end<< endl;
-      delete result1[i];
-      }
-   delete res_ptr;
+   // res_ptr = ConstraintSolver(EndDoc, q1);
+   // ::vector<Match*> result1 = *res_ptr;
+   // for (unsigned i = 0; i < result1.size(); ++i)
+   //    {
+   //    cout << result1[i]->id<<' '<<result1[i]->start<<' ' <<result1[i]->end<< endl;
+   //    delete result1[i];
+   //    }
+   // delete res_ptr;
 
 
 // query 2: "quick brown quick"
@@ -134,14 +145,14 @@ int main(int argc, char *argv[]) {
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
    // [1,3]
-   res_ptr = ConstraintSolver(EndDoc, q2);
-   ::vector<Match*> result2 = *res_ptr;
-   for (unsigned i = 0; i < result2.size(); ++i)
-      {
-      cout << result2[i]->id<<' '<<result2[i]->start<<' ' <<result2[i]->end<< endl;
-      delete result2[i];
-      }
-   delete res_ptr;
+   // res_ptr = ConstraintSolver(EndDoc, q2);
+   // ::vector<Match*> result2 = *res_ptr;
+   // for (unsigned i = 0; i < result2.size(); ++i)
+   //    {
+   //    cout << result2[i]->id<<' '<<result2[i]->start<<' ' <<result2[i]->end<< endl;
+   //    delete result2[i];
+   //    }
+   // delete res_ptr;
       
 
 // query 3: quick fox
@@ -171,20 +182,21 @@ int main(int argc, char *argv[]) {
    ASSERT(res->GetEndLocation(), ==, 19);
    delete res;
    res = q2->Seek(19);
-   ASSERT(res, ==, nullptr);
+   cout<<res->GetStartLocation()<<endl;
+   cout<<res->GetEndLocation()<<endl;
    res = q2->Seek(29);
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
    // [0,2,3]
-   res_ptr = ConstraintSolver(EndDoc, q3);
-   ::vector<Match*> result3 = *res_ptr;
-   for (unsigned i = 0; i < result3.size(); ++i)
-      {
-      cout << result3[i]->id<<' '<<result3[i]->start<<' ' <<result3[i]->end<< endl;
-      delete result3[i];
-      }
-   delete res_ptr;
+   // res_ptr = ConstraintSolver(EndDoc, q3);
+   // ::vector<Match*> result3 = *res_ptr;
+   // for (unsigned i = 0; i < result3.size(); ++i)
+   //    {
+   //    cout << result3[i]->id<<' '<<result3[i]->start<<' ' <<result3[i]->end<< endl;
+   //    delete result3[i];
+   //    }
+   // delete res_ptr;
 
 
 
@@ -202,9 +214,9 @@ int main(int argc, char *argv[]) {
    // delete(result1);
    // delete(result2);
    // delete(result3);
-   delete(q1);
-   delete (q2);
-   delete (q3);
+   // delete (q1);
+   // delete (q2);
+   // delete (q3);
    //delete (q4);
 
    delete (word_quick);

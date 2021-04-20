@@ -8,7 +8,7 @@
 class Dictionary {
 public:
     // return an ISRWord object given word
-    ISRWord* OpenISRWord(  char*word );
+    ISRWord* OpenISRWord( const char*word );
     // return then ISREndDoc object 
     ISREndDoc* OpenISREndDoc( );
     // Get number of words in index
