@@ -12,5 +12,7 @@ struct url_score {
 
 class Ranker {
 public:
+const int static_weight = 0.1;
+const int dynamic_weight = 0.9;
 ::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot){}
 };

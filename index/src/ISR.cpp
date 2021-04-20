@@ -190,6 +190,19 @@ ISR **ISRWord::GetTerms() {
     return nullptr;
 }
 
+int ISRWord::GetHeuristicScore( Match *document ) {
+    Post *post = this->Seek( document->start );
+    bool isFreq = false;
+    while ( post->GetStartLocation() <= document->end )
+        {
+        this->num_short_spans++;
+        if ( post->GetStartLocation() - document->start < near_top_threshold ) this->num_spans_near_top++;
+        post = this->Seek( this->GetStartLocation());   
+        }
+    if ( this->num_short_spans >= freq_threshold ) isFreq = true;
+    return this->num_short_spans * short_span_weight + this->num_spans_near_top * span_near_top_weight + isFreq * some_freq_weight;
+}
+
 // ISREndDoc Functions
 Post *ISREndDoc::GetCurrentPost(){
     return &currPost;

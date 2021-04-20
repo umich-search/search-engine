@@ -41,6 +41,8 @@ class ISROr: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
+      int GetHeuristicScore( Match *document );
+
    private:
       unsigned nearestTerm;
       // nearStartLocation and nearestEndLocation are
@@ -74,6 +76,8 @@ class ISRAnd: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
+      int GetHeuristicScore( Match *document );
+
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
@@ -102,6 +106,8 @@ class ISRPhrase: public ISR
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
+
+      int GetHeuristicScore( Match *document );
 
    private:
       unsigned nearestTerm, farthestTerm;

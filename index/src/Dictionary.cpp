@@ -20,3 +20,21 @@ Location Dictionary::GetNumberOfUniqueWords() {
 Location Dictionary::GetNumberOfDocuments() {
     return numberOfDocuments;
 }
+
+DocumentDetails * Dictionary::GetDocumentDetials( Offset index ) {
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    
+    size_t currChunk = 0;
+    for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) {
+        if(index < docOccurenceAfterChunk[currChunk]) {
+            break;
+        }
+    }
+    if(currChunk == docOccurenceAfterChunk.size()) {
+        return nullptr;
+    }
+    else {
+        return &manager.GetDocumentDetails(index, currChunk);
+    }
+}
+

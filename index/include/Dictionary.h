@@ -17,6 +17,8 @@ public:
     Location GetNumberOfUniqueWords( );
     // Get number of documents
     Location GetNumberOfDocuments( );
+    // Get document details given index 
+    DocumentDetails * GetDocumentDetials( Offset index );
     // constructor
     Dictionary(FileManager filemanager, size_t threadID) : manager(threadID) {
         manager = filemanager;
