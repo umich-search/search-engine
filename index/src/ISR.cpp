@@ -17,7 +17,7 @@ int ISR::GetHeuristicScore( Match *document )
             rarestlocation = i;
             }
     }  
-    return calculate_scores(document, (ISRWord **)this->GetTerms(), this->GetTermNum(), rarestlocation, this->getWeights());
+    return calculate_scores(document, (ISRWord **)(this->GetTerms()), this->GetTermNum(), rarestlocation, this->getWeights());
     }
 
 Post *ISRWord::Next() {
