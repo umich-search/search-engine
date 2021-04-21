@@ -25,52 +25,52 @@ vector<url_score> sortArray(vector<url_score> &nums) {
     return nums;
 }
 
-void quickSortHelper(vector<struct url_score> &nums, int p, int r) {
-    if (p >= r)return;
-    int key = nums.score[r];
-    int partition = p - 1, i = p;
-    while (i != r) {
-        if (nums.score[i] >= key) {
-            partition++;
-            struct url_score t = nums[partition];
-            nums[partition] = nums[i];
-            nums[i] = t;
-        }
-        i++;
-    }
-    nums[r] = nums[partition + 1];
-    nums[partition + 1] = key;
-    quickSortHelper(nums, p, partition);
-    quickSortHelper(nums, partition + 1, r);
-}
-
-vector<int> sortArray(vector<struct url_score> &nums) {
-    quickSortHelper(nums, 0, nums.size() - 1);
-    return nums;
-}
-
-::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot)
+::vector<url_score*> getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
-    for ( int i = 0; i < (*matches).size(); ++i ) 
+    vector<url_score*> arr;
+    for ( size_t i = 0; i < (*matches).size(); ++i ) 
         {
-        float totalScore = 0;
+        float staticScore = 0;
         Match *document = (*matches)[i];
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
         float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
-
+        float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
+        String url, title; 
+        Dictionary *dict = new Dictionary(0);
+        DocumentDetails *docs = dict->GetDocumentDetials(i);
+        url = docs->url;
+        title = docs->title;
+        url_score *newDoc = new url_score(url, title, totalScore);
+        delete dict;
+        // insertion sort
+        if ( arr.size() < N ) 
+            {
+            int j = arr.size() - 1;
+            while ( j >= 0 && arr[j]->score < totalScore )
+                {
+                if ( j == arr.size() - 1 ) arr.pushBack(arr[j]);
+                else arr[j + 1] = arr[j];
+                --j;
+                }
+            if ( j + 1 < arr.size() ) arr[j + 1] = newDoc;
+            else arr.pushBack(newDoc);
+            }
+        else if ( arr.size() >= N )
+            {
+            int j = N - 1;
+            while ( j >=0 && arr[j]->score < totalScore )
+                {
+                if( j < N - 1 ) arr[j + 1] = arr[j];
+                --j;
+                }
+            if ( j + 1 < N ) arr[j + 1] = newDoc;
+            }
         }
-
+    return arr;
     }
 
 float getDynamic(Match* document, ISR* queryRoot)
     {
-    // if ( queryRoot->GetTermNum() == 0 ) // reached leaf node
-    //     {
-    //     return 0;
-    //     }
-    // else if ( queryRoot->GetTermNum() > 0 ) // at abstract ISR
-    //     { // assume that a queryRoot cannot start as a wordISR
-        // see if there is a non-word ISR. If yes, then turn the wordISRs to phraseISR
         bool abstractISRExists = false;
         for ( int i = 0; i < queryRoot->GetTermNum(); ++i )
             {
@@ -93,6 +93,6 @@ float getDynamic(Match* document, ISR* queryRoot)
                     scores.pushBack(root->GetHeuristicScore(document));
                     }
                 }
-            return queryRoot->GetCombinedScore(document, scores);
-    //        }
+            return queryRoot->GetCombinedScore(scores);
+            }
     }

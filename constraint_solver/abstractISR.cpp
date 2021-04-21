@@ -127,6 +127,16 @@ ISR **ISROr::GetTerms()
    return this->Terms;
    }
 
+float ISROr::GetCombinedScore( vector<float> scores )
+   {
+   float res = 0;
+   for ( size_t i = 0; i < scores.size(); ++i )
+      {
+      res += scores[i];
+      }
+   return res;
+   }
+
 ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(Terms), NumberOfTerms(NumberOfTerms) 
    {
    EndDoc = dict->OpenISREndDoc();
@@ -261,6 +271,16 @@ Post* ISRAnd::NextEndDoc()
 ISR **ISRAnd::GetTerms()
    {
    return this->Terms;
+   }
+
+float ISRAnd::GetCombinedScore(vector<float> scores)
+   {
+   float res = 1;
+   for ( size_t i = 0; i < scores.size(); ++i )
+      {
+      res *= scores[i];
+      }
+   return res;
    }
 
 ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)

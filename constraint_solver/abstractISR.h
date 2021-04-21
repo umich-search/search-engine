@@ -44,6 +44,8 @@ class ISROr: public ISR
 
       Weights *getWeights() { return &(this->weights); }
 
+      float GetCombinedScore( vector<float> scores );
+
    private:
       unsigned nearestTerm;
       // nearStartLocation and nearestEndLocation are
@@ -89,6 +91,8 @@ class ISRAnd: public ISR
 
       Weights *getWeights() { return &(this->weights); }
 
+      float GetCombinedScore( vector<float> scores );
+
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
@@ -129,6 +133,8 @@ class ISRPhrase: public ISR
       int GetTermNum() { return this->NumberOfTerms; }
 
       Weights *getWeights() { return &(this->weights); }
+
+      float GetCombinedScore( vector<float> scores ) { return 0; }
 
    private:
       unsigned nearestTerm, farthestTerm;
