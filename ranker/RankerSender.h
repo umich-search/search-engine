@@ -9,25 +9,46 @@
 #include "ranker.h"
 #include "mString.h"
 #include "Vector.h"
+#include "query_Compiler.h"
 
 #define MAX_MESSAGE_SIZE 512
 
 class RankServer
     {
     private:
+        // communication attributes
         int sockfd, port, mPort;  // listen socket fd and port, manager port
         size_t queueSize;  // the size of the listen queue
         String managerIP;  // the ip address of the manager
 
+        // ranking attributes
+        Dictionary dict;
+        Ranker rk;
+
         // serialize the vector of scores into network message
-        String serializeScores( ::vector< url_score * >& scores );
+        String serializeScores( ::vector< url_score * >& scores )
+            {
+            String msg;
+            for ( size_t i = 0; i < scores.size( ); ++i )
+                {
+                msg += serializeUrlScore( scores[ i ] );
+                // delete the heap memory
+                delete scores[ i ];
+                scores[ i ] = nullptr;
+                }
+            return msg;
+            }
 
         // build the query compiler and the constraint solver 
         // call the ranker to obtain results
-        String retrieveDocRank( String& query );
-
-        // decode the received message to obtain the query string
-        String deserializeQueryMsg( const char *msg );
+        String retrieveDocRank( const char *query )
+            {
+            ISR *queryRoot = Query_Compiler( &dict, query );
+            ISREndDoc *EndDoc = dict.OpenISREndDoc( );
+            ::vector< Match *>* matches = ConstraintSolver( EndDoc, queryRoot );
+            ::vector< url_score * > scores = rk.getHighest( matches, queryRoot );
+            return serializeScores( scores );
+            }
 
         // set up socket parameters
         void startServer( )
@@ -76,14 +97,22 @@ class RankServer
                 int connectionfd = accept( sockfd, 0, 0 );
                 if ( connectionfd == -1 ) 
                     throw String("Unable to accept connection");
-                // Add the connection to be handled
-                handleConnect( connectionfd );
+                try
+                    {
+                    // Add the connection to be handled
+                    handleConnect( connectionfd );
+                    }
+                catch( const char * e )
+                    {
+                    std::cerr << e << std::endl;
+                    }
                 }
 
             close( sockfd );
             }
     
-        // handle an established connection with the manager
+        // handle an established connection:
+        // retrieve document ranks and send to the manager
         int handleConnect( int connectFd )
             {
             char msg[ MAX_MESSAGE_SIZE + 1 ];
@@ -110,9 +139,7 @@ class RankServer
             msg[ cumsum ] = 0;
 
             // send message to the manager
-            String query, docRank;
-            query = deserializeQueryMsg( msg );
-            docRank = retrieveDocRank( query );
+            String docRank = retrieveDocRank( msg );
             if ( sendMessage( docRank ) == -1 )
                 {
                 std::cerr << "Unable to send messages to the manager\n";
@@ -161,7 +188,8 @@ class RankServer
     
     public:
         RankServer( int port_, int mPort_, size_t qSize = 1024 ) 
-            : port( port_ ), mPort( mPort_ ), queueSize( qSize ) 
+            : port( port_ ), mPort( mPort_ ), 
+            queueSize( qSize ), dict( 0 )
             {
             }
         
@@ -171,8 +199,15 @@ class RankServer
 
         void Start( )
             {
-            startServer( );
-            runServer( );
+            try
+                {
+                startServer( );
+                runServer( );
+                }
+            catch( const char *e )
+                {
+                std::cerr << e << std::endl;
+                }
             }
     };
 
