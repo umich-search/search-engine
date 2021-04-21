@@ -36,6 +36,8 @@ public:
 
     virtual Weights *getWeights() = 0;
 
+    virtual float GetCombinedScore( vector<float> scores ) = 0;
+
 protected:
     int num_short_spans = 0;
     int num_inorder_spans = 0;
@@ -94,6 +96,8 @@ public:
     // int GetHeuristicScore( Match *document );
 
     Weights *getWeights() { return &(this->weights); }
+
+    float GetCombinedScore( vector<float> scores ) { return 0; }
 
 private:
     FileManager manager;
@@ -154,6 +158,8 @@ public:
     int GetTermNum(){ return 0; }
 
     int GetHeuristicScore(){return 0;}
+
+    float GetCombinedScore( vector<float> scores ) { return 0; }
 
 private:
     FileManager manager;

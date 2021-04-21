@@ -21,7 +21,7 @@ static const char *HOST[ NUM_MACHINES ] =
     {
         "35.202.123.51",
         "104.197.37.30",
-        "35.221.26.91",
+        "146.148.73.38",
         "34.69.231.181",
         "34.66.107.136",
         "34.68.201.74",
@@ -88,9 +88,9 @@ class SendManager : public CrawlerManager
         ~SendManager( ) { }
 
     private:
-        void incrementCountFailMachine( size_t machineID, size_t threadID );
-        std::atomic<size_t> failedMachine[ NUM_MACHINES ];
-        mutex_t failedMachineMutex;
+        void setMachineStatus( bool alive, size_t machineID, size_t threadID );
+        bool machineAlive[ NUM_MACHINES ];
+        mutex_t machineAliveMutex;
 
         void sendURL( String url, size_t machineID );
 
