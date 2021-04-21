@@ -129,7 +129,7 @@ float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
                  struct Weights *weights) {
     class ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
-    isrspan.Start(0);
+    isrspan.Start();
     while (isrspan.Next());
     isrspan.update_score();
     return isrspan.get_score();
