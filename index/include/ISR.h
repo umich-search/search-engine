@@ -3,7 +3,8 @@
 #include "Post.h"
 #include "PostingListBlob.h"
 #include "FileManager.h"
-#include "../constraint_solver/constraint_solver.h"
+#include "../../constraint_solver/constraint_solver.h"
+#include "../ranker/ISRSpan.h"
 
 typedef size_t Location;
 
@@ -31,7 +32,11 @@ public:
     virtual int GetTermNum() = 0;
 
     // Calculate according to heuristics
-    virtual int GetHeuristicScore( Match *document ) = 0;
+    int GetHeuristicScore( Match *document );
+
+    virtual Weights *getWeights() = 0;
+
+    virtual float GetCombinedScore( vector<float> scores ) = 0;
 
 protected:
     int num_short_spans = 0;
@@ -47,10 +52,17 @@ protected:
 
 class ISRWord : public ISR {
 public:
-    ISRWord(FileManager fileManager, const char *word) : manager(fileManager), currChunk(0), currIndex(0), term(word),
+    ISRWord(FileManager fileManager, const char* word) : manager(fileManager), currChunk(0), currIndex(0),
                                                          currPost(0),Doc(0) {
+            char* word_copy = new char[strlen(word)];
+            strcpy (word_copy, word);
+            term = word_copy;
             // Initalize with term seek to 0
             Seek(0);
+    }
+
+    ~ISRWord() {
+        delete[] term;
     }
 
     // Returns next post
@@ -79,9 +91,13 @@ public:
     // Get Terms data of an ISR
     ISR **GetTerms();
 
-    int GetTermNum(){ return 0; }
+    int GetTermNum() { return 0; }
 
-    int GetHeuristicScore( Match *document );
+    // int GetHeuristicScore( Match *document );
+
+    Weights *getWeights() { return &(this->weights); }
+
+    float GetCombinedScore( vector<float> scores ) { return 0; }
 
 private:
     FileManager manager;
@@ -91,10 +107,15 @@ private:
     Post currPost;
     Post Doc;
     TermPostingListRaw termPostingListRaw;
-    const int short_span_weight = 1;
-    const int span_near_top_weight = 0.5;
-    const int some_freq_weight = 5;
-    const int near_top_threshold = 50;
+    struct Weights weights {
+        weightShortSpan: 1,
+        weightOrderSpan: 0,
+        weightPhrase: 0, 
+        weightTopSpan: 0.5,
+        weightAll: 0,
+        weightMost: 0,
+        weightSome: 5
+    };
 };
 
 class ISREndDoc : public ISR {
@@ -137,6 +158,8 @@ public:
     int GetTermNum(){ return 0; }
 
     int GetHeuristicScore(){return 0;}
+
+    float GetCombinedScore( vector<float> scores ) { return 0; }
 
 private:
     FileManager manager;

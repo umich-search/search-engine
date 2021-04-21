@@ -20,6 +20,7 @@ class ISROr: public ISR
       unsigned NumberOfTerms;
       ISREndDoc *EndDoc;
       ISROr( ISR **Terms, unsigned NumberOfTerms );
+      ~ISROr();
 
       Location GetStartLocation( );
          
@@ -41,13 +42,24 @@ class ISROr: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
-      int GetHeuristicScore( Match *document );
+      Weights *getWeights() { return &(this->weights); }
+
+      float GetCombinedScore( vector<float> scores );
 
    private:
       unsigned nearestTerm;
       // nearStartLocation and nearestEndLocation are
       // the start and end of the nearestTerm.
       Location nearestStartLocation, nearestEndLocation;
+      struct Weights weights {
+        weightShortSpan: 5,
+        weightOrderSpan: 2,
+        weightPhrase: 2, 
+        weightTopSpan: 0.5,
+        weightAll: 10,
+        weightMost: 10,
+        weightSome: 10
+    };
    };
 
 class ISRAnd: public ISR
@@ -58,6 +70,7 @@ class ISRAnd: public ISR
       ISREndDoc *EndDoc;
 
       ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict );
+      ~ISRAnd();
 
       Location GetStartLocation( );
 
@@ -76,11 +89,22 @@ class ISRAnd: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
-      int GetHeuristicScore( Match *document );
+      Weights *getWeights() { return &(this->weights); }
+
+      float GetCombinedScore( vector<float> scores );
 
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
+      struct Weights weights {
+        weightShortSpan: 5,
+        weightOrderSpan: 2,
+        weightPhrase: 2, 
+        weightTopSpan: 0.5,
+        weightAll: 15,
+        weightMost: 10,
+        weightSome: 5
+    };
    };
 
 class ISRPhrase: public ISR
@@ -90,6 +114,7 @@ class ISRPhrase: public ISR
       unsigned NumberOfTerms;
 
       ISRPhrase( ISR **Terms, unsigned NumberOfTerms );
+      ~ISRPhrase();
 
       Location GetStartLocation( );
 
@@ -107,11 +132,22 @@ class ISRPhrase: public ISR
 
       int GetTermNum() { return this->NumberOfTerms; }
 
-      int GetHeuristicScore( Match *document );
+      Weights *getWeights() { return &(this->weights); }
+
+      float GetCombinedScore( vector<float> scores ) { return 0; }
 
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation;
+      struct Weights weights {
+        weightShortSpan: 1,
+        weightOrderSpan: 1,
+        weightPhrase: 7, 
+        weightTopSpan: 0.5,
+        weightAll: 15,
+        weightMost: 10,
+        weightSome: 5
+    };
    };
 
 /*

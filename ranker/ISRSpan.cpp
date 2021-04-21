@@ -1,9 +1,8 @@
 #include "ISRSpan.h"
 
-void ISRSpan::Start(size_t index) {
-    docIndex = index;
-    Location docStartLocation = (*matchDocs)[index]->start;
-    Location docEndLocation = (*matchDocs)[index]->end;
+void ISRSpan::Start() {
+    Location docStartLocation = document->start;
+    Location docEndLocation = document->end;
     location[positionRarestTerm] = (*(Terms + positionRarestTerm))->Seek(docStartLocation)->GetStartLocation();
     smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
@@ -33,7 +32,7 @@ void ISRSpan::Start(size_t index) {
 
 bool ISRSpan::Next() {
     //TODO: maybe call seek is inefficient
-    Location docEndLocation = (*matchDocs)[docIndex]->end;
+    Location docEndLocation = document->end;
     auto next = (*(Terms + positionRarestTerm))->Next();
     if (next == nullptr || next->GetStartLocation() > docEndLocation) return false;
     location[positionRarestTerm] = next->GetStartLocation();
@@ -64,26 +63,25 @@ bool ISRSpan::Next() {
     return true;
 }
 
-::vector<float> ISRSpan::get_score() {
-    return scores;
+float ISRSpan::get_score() {
+    return score;
 }
 
 void ISRSpan::update_score() {
-    float score = 0;
     calculate_num_frequent_words();
-    if ((double) statistics.numFrequentWords / numTerms == 1) score += weights.weightAll;
-    else if ((double) statistics.numFrequentWords / numTerms >= MINMOST) score += weights.weightMost;
-    else if ((double) statistics.numFrequentWords / numTerms >= MINSOME) score += weights.weightSome;
-    score += weights.weightShortSpan * statistics.numShortSpans;
-    score += weights.weightOrderSpan * statistics.numOrderSpans;
-    score += weights.weightPhrase * statistics.numPhrases;
-    score += weights.weightTopSpan * statistics.numTopSpans;
-    scores.push(score);
-    statistics.numTopSpans = 0;
-    statistics.numOrderSpans = 0;
-    statistics.numPhrases = 0;
-    statistics.numTopSpans = 0;
-    statistics.numFrequentWords = 0;
+    if (numTerms != 1) {
+        if ((double) statistics.numFrequentWords / numTerms == 1) score += weights->weightAll;
+        else if ((double) statistics.numFrequentWords / numTerms >= MINMOST) score += weights->weightMost;
+        else if ((double) statistics.numFrequentWords / numTerms >= MINSOME) score += weights->weightSome;
+    } else {
+        if (statistics.numFrequentWords == 1)score += weights->weightSome;
+    }
+    score += weights->weightShortSpan * statistics.numShortSpans;
+    if (numTerms != 1) {
+        score += weights->weightOrderSpan * statistics.numOrderSpans;
+        score += weights->weightPhrase * statistics.numPhrases;
+    }
+    score += weights->weightTopSpan * statistics.numTopSpans;
 }
 
 bool ISRSpan::ifShortSpan() {
@@ -91,7 +89,7 @@ bool ISRSpan::ifShortSpan() {
 }
 
 bool ISRSpan::ifNearTop() {
-    return farthest - (*matchDocs)[docIndex]->start <= MINTOP;
+    return farthest - document->start <= MINTOP;
 }
 
 bool ISRSpan::ifOrderSpan() {
@@ -110,8 +108,8 @@ bool ISRSpan::ifExactPhrases() {
 
 
 void ISRSpan::calculate_num_frequent_words() {
-    Location docStartLocation = (*matchDocs)[docIndex]->start;
-    Location docEndLocation = (*matchDocs)[docIndex]->end;
+    Location docStartLocation = document->start;
+    Location docEndLocation = document->end;
     for (int i = 0; i < numTerms; i++) {
         ISRWord *term = *(Terms + i);
         size_t count = 1;
@@ -127,14 +125,12 @@ void ISRSpan::calculate_num_frequent_words() {
     }
 }
 
-::vector<float>
-calculate_scores(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights weights, size_t totalWords) {
-    class ISRSpan isrspan(matchDocs, Terms, numTerms, positionRarestTerm, weights, totalWords);
-    for (int i = 0; i < matchDocs->size(); i++) {
-        isrspan.Start(i);
-        while (isrspan.Next());
-        isrspan.update_score();
-    }
+float
+calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+                 struct Weights *weights) {
+    class ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
+    isrspan.Start();
+    while (isrspan.Next());
+    isrspan.update_score();
     return isrspan.get_score();
 }

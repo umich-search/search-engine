@@ -32,17 +32,17 @@ struct Weights {
 class ISRSpan {
 public:
 
-    ISRSpan(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-            struct Weights weights, size_t totalWords) : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
-                                                         Terms(Terms),
-                                                         docIndex(0), matchDocs(matchDocs), weights(weights),
-                                                         location(::vector<Location>(numTerms, 0)),
-                                                         totalWords(totalWords) {
+    ISRSpan(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+            struct Weights *weights) : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
+                                                         Terms(Terms),document(document),weights(weights),
+                                                         location(::vector<Location>(numTerms, 0)){
         statistics.numPhrases = 0;
         statistics.numOrderSpans = 0;
         statistics.numTopSpans = 0;
         statistics.numShortSpans = 0;
         statistics.numFrequentWords = 0;
+        Dictionary dictionary(0);
+        totalWords = dictionary.GetNumberOfWords();
     }
 
     //Move the rarest term to the next occurrence
@@ -52,15 +52,14 @@ public:
 
     //Move the rarest term to the first occurrence in the document specified by docIndex
     //Move all other terms to the nearest location corresponding to the rarest term;
-    //Update the docIndex to be equal to index
-    void Start(size_t index);
+    void Start();
 
     //Update the score corresponding to the doc specified by docIndex
     //The location of all terms in current span is given by location
     void update_score();
 
     //Return the calculated score
-    ::vector<float> get_score();
+    float get_score();
 
 private:
     //the total number of terms in the phrase
@@ -73,21 +72,18 @@ private:
     //the ISRWord abstract for other terms
     ISRWord **Terms;
 
-    //the current index of document in ConstraintSolver
-    size_t docIndex;
-
-    ::vector<Match *> *matchDocs;
+    Match *document;
 
     ::vector<Location> location;
 
     //score for each document
-    ::vector<float> scores;
+    float score;
 
     Location smallest, farthest;
 
     struct Statistics statistics;
 
-    struct Weights weights;
+    struct Weights *weights;
 
     bool ifShortSpan();
 
@@ -101,6 +97,5 @@ private:
 
 };
 
-::vector<float>
-calculate_scores(::vector<Match *> *matchDocs, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights weights, size_t totalWords);
+float
+calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm, struct Weights *weights);
