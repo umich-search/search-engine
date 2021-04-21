@@ -96,3 +96,16 @@ float getDynamic(Match* document, ISR* queryRoot)
             return queryRoot->GetCombinedScore(document, scores);
     //        }
     }
+
+size_t getUrlScoreSize( url_score& us )
+    {
+    
+    return strlen( us.URL ) + strlen( us.title ) + sizeof( us.score );
+    }
+
+String serializeUrlScore( url_score& us )
+    {
+    // serialize it into [URL]$[title]$score.
+    // $ separate fields and . notes the end
+    return String( us.URL ) + String( )
+    }
