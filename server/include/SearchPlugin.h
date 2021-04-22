@@ -35,6 +35,8 @@ class SearchPlugin : public PluginObject
             if ( action != "GET" )
                 return "";
             String query = parseQuery( path.c_str() );
+            if ( query.size() == 0 )
+                return "";
             ::vector<url_score> scores;
             std::string html = searchBar;
             // TODO: fix "RankerManager.h" #include "CrawlerManager.h"
@@ -59,8 +61,14 @@ class SearchPlugin : public PluginObject
 
         String parseQuery( std::string path )
             {
-            const char * start = "?query=";
-            size_t pos = path.find(start);
-            return String(path.substr(pos).c_str());
+            const char * search = "?query=";
+            size_t start = path.find(search);
+            if ( start == string::npos )
+                return "";
+            size_t end = path.find( "&", start );
+            if ( end == string::npos )
+                return String( path.substr(start).c_str() );
+            else
+                return String( path.substr(start, end-start).c_str() );
             }
     };
