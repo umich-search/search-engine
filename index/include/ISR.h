@@ -161,6 +161,8 @@ public:
 
     float GetCombinedScore( vector<float> scores ) { return 0; }
 
+    Weights *getWeights() { return 0; }
+
 private:
     FileManager manager;
     size_t currChunk;
