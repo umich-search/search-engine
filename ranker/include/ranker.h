@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../utility/include/Vector.h"
-#include "../constraint_solver/constraint_solver.h"
-#include "../index/include/ISR.h"
+#include "Vector.h"
+#include "constraint_solver.h"
+#include "ISR.h"
 
 const size_t N = 10; // number of url_score that a ranker return
 const float dynamicWeight = 0.95;
