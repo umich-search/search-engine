@@ -29,6 +29,23 @@ struct Weights {
     float weightSome;
 };
 
+struct StaticWeights{
+    float weightDomain;
+    float weightURL;
+    float weightTitle;
+};
+
+String DomainTable[]{
+        "org",
+        "com",
+        "edu",
+        "net",
+        "io",
+        "edu",
+        "gov"
+};
+
+
 class ISRSpan {
 public:
 
@@ -99,3 +116,7 @@ private:
 
 float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm, struct Weights *weights);
+
+
+float
+calculate_static_scores(Match *document, struct StaticWeights *weights);

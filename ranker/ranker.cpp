@@ -96,3 +96,11 @@ float getDynamic(Match* document, ISR* queryRoot)
             return queryRoot->GetCombinedScore(scores);
             }
     }
+
+String serializeUrlScore( url_score *us )
+    {
+    // [URL]$[title]#[score]@
+    return us->URL + String( '$' ) + 
+        us->title + String( '#' ) + 
+        ltos( us->score ) + String( '@' );
+    }
