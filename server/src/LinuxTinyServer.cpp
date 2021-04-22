@@ -279,7 +279,7 @@ void GetFile(int talkSocket, const char *contentType, off_t contentSize, const c
     int responseLength;
     responseLength = sprintf(response,
                               "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %lld\r\nConnection: close\r\n\r\n",
-                              contentType, contentSize);
+                              contentType, ( long long int )contentSize);
     memcpy(response + responseLength, body, contentSize);
     cout << response<<endl;
     send(talkSocket, response, responseLength+contentSize, 0);

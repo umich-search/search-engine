@@ -127,6 +127,7 @@ void ISRSpan::calculate_num_frequent_words() {
 
 
 String extract_domain(String url){
+    return String( "" );
 }
 
 float

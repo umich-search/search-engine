@@ -6,6 +6,12 @@
 // #include "constraint_solver.h"
 // #include "ISRSpan.h"
 
+#define MAXSHORT 10
+#define MINFREQUENT 10
+#define MINTOP 100
+#define MINMOST 0.6
+#define MINSOME 0.3
+
 typedef size_t Location;
 
 struct Match
