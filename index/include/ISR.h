@@ -4,9 +4,26 @@
 #include "PostingListBlob.h"
 #include "FileManager.h"
 // #include "constraint_solver.h"
-#include "ISRSpan.h"
+// #include "ISRSpan.h"
 
 typedef size_t Location;
+
+struct Match
+   {
+   Offset id;
+   Location start, end;
+   Match(Offset d, Location s, Location e): id(d), start(s), end(e){}
+   };
+
+struct Weights {
+    float weightShortSpan;
+    float weightOrderSpan;
+    float weightPhrase;
+    float weightTopSpan;
+    float weightAll;
+    float weightMost;
+    float weightSome;
+};
 
 class ISR {
 public:

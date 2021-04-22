@@ -22,15 +22,6 @@ struct Statistics {
     size_t numFrequentWords;
 };
 
-struct Weights {
-    float weightShortSpan;
-    float weightOrderSpan;
-    float weightPhrase;
-    float weightTopSpan;
-    float weightAll;
-    float weightMost;
-    float weightSome;
-};
 
 struct StaticWeights{
     float weightDomain;
@@ -38,7 +29,7 @@ struct StaticWeights{
     float weightTitle;
 };
 
-String DomainTable[]{
+const String DomainsTable[]{
         "org",
         "com",
         "edu",
