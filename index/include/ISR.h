@@ -3,7 +3,7 @@
 #include "Post.h"
 #include "PostingListBlob.h"
 #include "FileManager.h"
-#include "constraint_solver.h"
+// #include "constraint_solver.h"
 #include "ISRSpan.h"
 
 typedef size_t Location;

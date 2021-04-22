@@ -9,7 +9,7 @@
 #include "constraint_solver.h"
 
 // FOR TESTING ONLY!
-using namespace std;
+// using namespace std;
 
 ::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
     {

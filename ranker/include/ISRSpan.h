@@ -1,9 +1,11 @@
-#include "Dictionary.h"
+#pragma once
+
+// #include "Dictionary.h"
 #include "ISR.h"
 #include "Post.h"
 #include "PostingList.h"
 #include "Vector.h"
-#include "constraint_solver.h"
+// #include "constraint_solver.h"
 
 #define MAXSHORT 10
 #define MINFREQUENT 10
