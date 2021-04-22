@@ -1,9 +1,9 @@
-#include "../index/include/Dictionary.h"
-#include "../index/include/ISR.h"
-#include "../index/include/Post.h"
-#include "../index/include/PostingList.h"
-#include "../utility/include/Vector.h"
-#include "../constraint_solver/constraint_solver.h"
+#include "Dictionary.h"
+#include "ISR.h"
+#include "Post.h"
+#include "PostingList.h"
+#include "Vector.h"
+#include "constraint_solver.h"
 
 #define MAXSHORT 10
 #define MINFREQUENT 10
