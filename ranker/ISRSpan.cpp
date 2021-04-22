@@ -141,16 +141,16 @@ calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t posit
 
 Dictionary dictionary(0);
 
-float
-calculate_static_scores(Match *document, struct StaticWeights *weights) {
-    float score = 0;
-    DocumentDetails *documentDetails = dictionary.GetDocumentDetials(0);
-    score += (1.0 / documentDetails->url.size()) * weights->weightURL;
-    score += (1.0 / documentDetails->title.size()) * weights->weightTitle;
-    for (auto x:DomainTable){
-        if (extract_domain(documentDetails->url).compare(x)==0) score+=weights->weightDomain;
-    }
-    return score;
-}
+// float
+// calculate_static_scores(Match *document, struct StaticWeights *weights) {
+//     float score = 0;
+//     DocumentDetails *documentDetails = dictionary.GetDocumentDetials(0);
+//     score += (1.0 / documentDetails->url.size()) * weights->weightURL;
+//     score += (1.0 / documentDetails->title.size()) * weights->weightTitle;
+//     for (auto x:DomainTable){
+//         if (extract_domain(documentDetails->url).compare(x)==0) score+=weights->weightDomain;
+//     }
+//     return score;
+// }
 
 
