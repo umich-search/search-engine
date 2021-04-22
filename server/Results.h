@@ -4,4 +4,4 @@
 #include "../query_compiler/query_Compiler.h"
 #include "../ranker/ranker.h"
 
-::vector<url_score> Results(Dictionary *dict, char* input);
+::vector<url_score *> Results(Dictionary *dict, char* input);

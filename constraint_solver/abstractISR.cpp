@@ -1,7 +1,7 @@
 // Abstract ISR definition.
 #include<limits>
 #include "../index/include/Dictionary.h"
-#include "AbstractISR.h"
+#include "abstractISR.h"
 
 // // FOR TEST ONLY!!!
 // #include<iostream>
