@@ -12,40 +12,6 @@
 #define MINMOST 0.6
 #define MINSOME 0.3
 
-struct Statistics {
-    size_t numShortSpans;
-    size_t numOrderSpans;
-    size_t numPhrases;
-    size_t numTopSpans;
-    size_t numFrequentWords;
-};
-
-struct Weights {
-    float weightShortSpan;
-    float weightOrderSpan;
-    float weightPhrase;
-    float weightTopSpan;
-    float weightAll;
-    float weightMost;
-    float weightSome;
-};
-
-struct StaticWeights{
-    float weightDomain;
-    float weightURL;
-    float weightTitle;
-};
-
-String DomainTable[]{
-        "org",
-        "com",
-        "edu",
-        "net",
-        "io",
-        "edu",
-        "gov"
-};
-
 typedef size_t Location;
 
 struct Match
