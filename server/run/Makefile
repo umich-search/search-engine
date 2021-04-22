@@ -142,7 +142,7 @@ $(EXEC): $(EXEC).o $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ)
 .PHONY: clean cleanObj utilityObj indexObj qcObj csObj rankerObj all
 
 cleanObj:
-	rm -f $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ)
+	rm -f $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ)
 clean:
 	rm -rf $(EXEC) *.o
 # cleanStorage:

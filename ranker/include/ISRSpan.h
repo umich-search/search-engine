@@ -1,11 +1,12 @@
 #pragma once
 
-// #include "Dictionary.h"
+#include "Dictionary.h"
 #include "ISR.h"
 #include "Post.h"
 #include "PostingList.h"
 #include "Vector.h"
-// #include "constraint_solver.h"
+#include "constraint_solver.h"
+
 
 #define MAXSHORT 10
 #define MINFREQUENT 10
@@ -51,10 +52,11 @@ String DomainTable[]{
 class ISRSpan {
 public:
 
-    ISRSpan(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-            struct Weights *weights) : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
-                                                         Terms(Terms),document(document),weights(weights),
-                                                         location(::vector<Location>(numTerms, 0)){
+    ISRSpan(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm, struct Weights *weights) 
+        : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
+        Terms(Terms),document(document),weights(weights),
+        location(::vector<Location>(numTerms, 0))
+        {
         statistics.numPhrases = 0;
         statistics.numOrderSpans = 0;
         statistics.numTopSpans = 0;
@@ -62,7 +64,7 @@ public:
         statistics.numFrequentWords = 0;
         Dictionary dictionary(0);
         totalWords = dictionary.GetNumberOfWords();
-    }
+        }
 
     //Move the rarest term to the next occurrence
     //Move all the other terms to the nearest location corresponding to the rarest term;

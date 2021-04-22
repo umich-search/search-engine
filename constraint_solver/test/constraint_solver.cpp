@@ -2,10 +2,10 @@
 // Input: ISR Tree from query compiler "queryRoot"
 // Output: Array of Post with (start, end) of all matching documents "posts"
 #include <iostream>
-#include "../index/include/ISR.h"
+#include "ISR.h"
 #include "abstractISR.h"
-#include "../utility/include/Vector.h"
-#include "../index/include/Dictionary.h"
+#include "Vector.h"
+#include "Dictionary.h"
 #include "constraint_solver.h"
 
 // FOR TESTING ONLY!
