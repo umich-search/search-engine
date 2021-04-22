@@ -25,7 +25,7 @@ vector<url_score> sortArray(vector<url_score> &nums) {
     return nums;
 }
 
-::vector<url_score*> getHighest(::vector<Match*>* matches, ISR* queryRoot)
+vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
     vector<url_score*> arr;
     for ( size_t i = 0; i < (*matches).size(); ++i ) 
