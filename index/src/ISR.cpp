@@ -1,5 +1,5 @@
-#include "../include/ISR.h"
-#include "../ranker/ISRSpan.h"
+#include "ISR.h"
+#include "ISRSpan.h"
 
 // ISRWord Functions
 

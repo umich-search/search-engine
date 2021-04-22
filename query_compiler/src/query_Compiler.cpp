@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../utility/include/mString.h"
+#include "mString.h"
 #include "query_Compiler.h"
 #include <cctype>
 

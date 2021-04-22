@@ -7,6 +7,39 @@
 #include "Vector.h"
 #include "constraint_solver.h"
 
+
+#define MAXSHORT 10
+#define MINFREQUENT 10
+#define MINTOP 100
+#define MINMOST 0.6
+#define MINSOME 0.3
+
+struct Statistics {
+    size_t numShortSpans;
+    size_t numOrderSpans;
+    size_t numPhrases;
+    size_t numTopSpans;
+    size_t numFrequentWords;
+};
+
+
+struct StaticWeights{
+    float weightDomain;
+    float weightURL;
+    float weightTitle;
+};
+
+const String DomainsTable[]{
+        "org",
+        "com",
+        "edu",
+        "net",
+        "io",
+        "edu",
+        "gov"
+};
+
+
 class ISRSpan {
 public:
 

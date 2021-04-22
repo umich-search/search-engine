@@ -33,6 +33,7 @@
 #include <string.h>
 #include <string>
 #include <cassert>
+#include "DiskQueue.h"
 
 using namespace std;
 #define FILISIZE 102400
@@ -243,15 +244,15 @@ bool SafePath(const char *path) {
 }
 
 
-off_t FileSize(int f) {
-    // Return -1 for directories.
+// off_t FileSize(int f) {
+//     // Return -1 for directories.
 
-    struct stat fileInfo;
-    if (fstat(f, &fileInfo) == -1) return -2;
-    if ((fileInfo.st_mode & S_IFMT) == S_IFDIR)
-        return -1;
-    return fileInfo.st_size;
-}
+//     struct stat fileInfo;
+//     if (fstat(f, &fileInfo) == -1) return -2;
+//     if ((fileInfo.st_mode & S_IFMT) == S_IFDIR)
+//         return -1;
+//     return fileInfo.st_size;
+// }
 
 
 void AccessDenied(int talkSocket) {
@@ -340,109 +341,109 @@ void *Talk(void *talkSocket) {
 }
 
 
-int main(int argc, char **argv) {
+// int main(int argc, char **argv) {
 
-    if (argc != 3) {
-        cerr << "Usage:  " << argv[0] << " port rootdirectory" << endl;
-        return 1;
-    }
+//     if (argc != 3) {
+//         cerr << "Usage:  " << argv[0] << " port rootdirectory" << endl;
+//         return 1;
+//     }
 
-    int port = atoi(argv[1]);
-    RootDirectory = argv[2];
+//     int port = atoi(argv[1]);
+//     RootDirectory = argv[2];
 
-    // Discard any trailing slash.  (Any path specified in
-    // an HTTP header will have to start with /.)
+//     // Discard any trailing slash.  (Any path specified in
+//     // an HTTP header will have to start with /.)
 
-    char *r = RootDirectory;
-    if (*r) {
-        do
-            r++;
-        while (*r);
-        r--;
-        if (*r == '/')
-            *r = 0;
-    }
+//     char *r = RootDirectory;
+//     if (*r) {
+//         do
+//             r++;
+//         while (*r);
+//         r--;
+//         if (*r == '/')
+//             *r = 0;
+//     }
 
-    // We'll use two sockets, one for listening for new
-    // connection requests, the other for talking to each
-    // new client.
+//     // We'll use two sockets, one for listening for new
+//     // connection requests, the other for talking to each
+//     // new client.
 
-    int listenSocket, talkSocket;
+//     int listenSocket, talkSocket;
 
-    // Create socket address structures to go with each
-    // socket.
+//     // Create socket address structures to go with each
+//     // socket.
 
-    struct sockaddr_in listenAddress, talkAddress;
-    socklen_t talkAddressLength = sizeof(talkAddress);
-    memset(&listenAddress, 0, sizeof(listenAddress));
-    memset(&talkAddress, 0, sizeof(talkAddress));
+//     struct sockaddr_in listenAddress, talkAddress;
+//     socklen_t talkAddressLength = sizeof(talkAddress);
+//     memset(&listenAddress, 0, sizeof(listenAddress));
+//     memset(&talkAddress, 0, sizeof(talkAddress));
 
-    // Fill in details of where we'll listen.
+//     // Fill in details of where we'll listen.
 
-    // We'll use the standard internet family of protocols.
-    listenAddress.sin_family = AF_INET;
+//     // We'll use the standard internet family of protocols.
+//     listenAddress.sin_family = AF_INET;
 
-    // htons( ) transforms the port number from host (our)
-    // byte-ordering into network byte-ordering (which could
-    // be different).
-    listenAddress.sin_port = htons(port);
+//     // htons( ) transforms the port number from host (our)
+//     // byte-ordering into network byte-ordering (which could
+//     // be different).
+//     listenAddress.sin_port = htons(port);
 
-    // INADDR_ANY means we'll accept connections to any IP
-    // assigned to this machine.
-    listenAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+//     // INADDR_ANY means we'll accept connections to any IP
+//     // assigned to this machine.
+//     listenAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    // TO DO:  Create the listenSocket, specifying that we'll r/w
-    // it as a stream of bytes using TCP/IP.
-    if ((listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
-        perror("socket");
-    }
-    // TO DO:  Bind the listen socket to the IP address and protocol
-    // where we'd like to listen for connections.
-    if (bind(listenSocket, (const struct sockaddr *) &listenAddress, (socklen_t) sizeof(listenAddress)) == -1) {
-        perror("bind");
-    }
-    // TO DO:  Begin listening for clients to connect to us.
+//     // TO DO:  Create the listenSocket, specifying that we'll r/w
+//     // it as a stream of bytes using TCP/IP.
+//     if ((listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
+//         perror("socket");
+//     }
+//     // TO DO:  Bind the listen socket to the IP address and protocol
+//     // where we'd like to listen for connections.
+//     if (bind(listenSocket, (const struct sockaddr *) &listenAddress, (socklen_t) sizeof(listenAddress)) == -1) {
+//         perror("bind");
+//     }
+//     // TO DO:  Begin listening for clients to connect to us.
 
-    // The second argument to listen( ) specifies the maximum
-    // number of connection requests that can be allowed to
-    // stack up waiting for us to accept them before Linux
-    // starts refusing or ignoring new ones.
-    //
-    // SOMAXCONN is a system-configured default maximum socket
-    // queue length.  (Under WSL Ubuntu, it's defined as 128
-    // in /usr/include/x86_64-linux-gnu/bits/socket.h.)
-    if (listen(listenSocket, SOMAXCONN) == -1) {
-        perror("listen");
-    }
+//     // The second argument to listen( ) specifies the maximum
+//     // number of connection requests that can be allowed to
+//     // stack up waiting for us to accept them before Linux
+//     // starts refusing or ignoring new ones.
+//     //
+//     // SOMAXCONN is a system-configured default maximum socket
+//     // queue length.  (Under WSL Ubuntu, it's defined as 128
+//     // in /usr/include/x86_64-linux-gnu/bits/socket.h.)
+//     if (listen(listenSocket, SOMAXCONN) == -1) {
+//         perror("listen");
+//     }
 
-    // TO DO;  Accept each new connection and create a thread to talk with
-    // the client over the new talk socket that's created by Linux
-    // when we accept the connection.
-    while ((talkSocket = accept(listenSocket, (struct sockaddr *) &talkAddress, (socklen_t *) &talkAddressLength)) !=
-           -1) {
-        // TO DO:  Create and detach a child thread to talk to the
-        // client using pthread_create and pthread_detach.
+//     // TO DO;  Accept each new connection and create a thread to talk with
+//     // the client over the new talk socket that's created by Linux
+//     // when we accept the connection.
+//     while ((talkSocket = accept(listenSocket, (struct sockaddr *) &talkAddress, (socklen_t *) &talkAddressLength)) !=
+//            -1) {
+//         // TO DO:  Create and detach a child thread to talk to the
+//         // client using pthread_create and pthread_detach.
 
-        // When creating a child thread, you get to pass a void *,
-        // usually used as a pointer to an object with whatever
-        // information the child needs.
+//         // When creating a child thread, you get to pass a void *,
+//         // usually used as a pointer to an object with whatever
+//         // information the child needs.
 
-        // The talk socket is passed on the heap rather than with a
-        // pointer to the local variable because we're going to quickly
-        // overwrite that local variable with the next accept( ).  Since
-        // this is multithreaded, we can't predict whether the child will
-        // run before we do that.  The child will be responsible for
-        // freeing the resource.  We do not wait for the child thread
-        // to complete.
-        //
-        // (A simpler alternative in this particular case would be to
-        // caste the int talksocket to a void *, knowing that a void *
-        // must be at least as large as the int.  But that would not
-        // demonstrate what to do in the general case.)
-        pthread_t child;
-        pthread_create(&child, nullptr, Talk, new int(talkSocket));
-        pthread_detach(child);
-    }
+//         // The talk socket is passed on the heap rather than with a
+//         // pointer to the local variable because we're going to quickly
+//         // overwrite that local variable with the next accept( ).  Since
+//         // this is multithreaded, we can't predict whether the child will
+//         // run before we do that.  The child will be responsible for
+//         // freeing the resource.  We do not wait for the child thread
+//         // to complete.
+//         //
+//         // (A simpler alternative in this particular case would be to
+//         // caste the int talksocket to a void *, knowing that a void *
+//         // must be at least as large as the int.  But that would not
+//         // demonstrate what to do in the general case.)
+//         pthread_t child;
+//         pthread_create(&child, nullptr, Talk, new int(talkSocket));
+//         pthread_detach(child);
+//     }
 
-    close(listenSocket);
-}
+//     close(listenSocket);
+// }

@@ -4,15 +4,13 @@
 #include "PostingListBlob.h"
 #include "FileManager.h"
 // #include "constraint_solver.h"
-#include "ISRSpan.h"
+// #include "ISRSpan.h"
 
 #define MAXSHORT 10
 #define MINFREQUENT 10
 #define MINTOP 100
 #define MINMOST 0.6
 #define MINSOME 0.3
-
-const int a;
 
 struct Statistics {
     size_t numShortSpans;
@@ -49,6 +47,23 @@ String DomainTable[]{
 };
 
 typedef size_t Location;
+
+struct Match
+   {
+   Offset id;
+   Location start, end;
+   Match(Offset d, Location s, Location e): id(d), start(s), end(e){}
+   };
+
+struct Weights {
+    float weightShortSpan;
+    float weightOrderSpan;
+    float weightPhrase;
+    float weightTopSpan;
+    float weightAll;
+    float weightMost;
+    float weightSome;
+};
 
 class ISR {
 public:

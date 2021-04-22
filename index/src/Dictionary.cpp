@@ -34,7 +34,8 @@ DocumentDetails * Dictionary::GetDocumentDetials( Offset index ) {
         return nullptr;
     }
     else {
-        return &manager.GetDocumentDetails(index, currChunk);
+        DocumentDetails *dd = new DocumentDetails(manager.GetDocumentDetails(index, currChunk));
+        return dd;
     }
 }
 

@@ -1,4 +1,5 @@
 #include "ranker.h"
+#include "Dictionary.h"
 
 // void quickSortHelper(vector<url_score> &nums, int p, int r) {
 //     if (p >= r)return;
@@ -25,6 +26,8 @@
 //     return nums;
 // }
 
+float getDynamic(Match* document, ISR* queryRoot);
+
 vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
     vector<url_score*> arr;
@@ -41,6 +44,7 @@ vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
         url = docs->url;
         title = docs->title;
         url_score *newDoc = new url_score(url, title, totalScore);
+        delete docs;
         delete dict;
         // insertion sort
         if ( arr.size() < N ) 
