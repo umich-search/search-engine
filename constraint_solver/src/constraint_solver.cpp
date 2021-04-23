@@ -16,7 +16,7 @@
     Location currentLocation = 0;
     Post* match = nullptr;
     ::vector<Match*>* matches = new ::vector<Match*>(); 
-    while ( match = queryRoot->Seek(currentLocation) )
+    while ( match = queryRoot->Seek( currentLocation ) )
         {
         // find the next endDoc location in "Post endDoc"
         Post* endDoc = EndDoc->Seek(match->GetStartLocation());

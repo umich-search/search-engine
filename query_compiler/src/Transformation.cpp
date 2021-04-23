@@ -32,11 +32,11 @@ ISR* StringToISR ( Dictionary *dict, String input )
          for (size_t i = 0; i < currentPhraseStream.size(); ++i)
             *(currentPhraseISR + i) = currentPhraseStream[i];
          currentAndStream.pushBack(new ISRPhrase(currentPhraseISR, currentPhraseStream.size()));
-         // while (currentPhraseStream.size())
-         //    {
-         //    delete *currentPhraseStream.end();
-         //    currentPhraseStream.popBack();
-         //    }
+         while (currentPhraseStream.size())
+            {
+            // delete *currentPhraseStream.end();
+            currentPhraseStream.popBack();
+            }
          }
       else if (*currentChar == '(')
          {
@@ -66,7 +66,7 @@ ISR* StringToISR ( Dictionary *dict, String input )
 
          while (currentAndStream.size())
             {
-            delete *currentAndStream.end();
+            // delete *currentAndStream.end();
             currentAndStream.popBack();
             }
          }
@@ -99,7 +99,7 @@ ISR* StringToISR ( Dictionary *dict, String input )
         rootOrStream.pushBack( new ISRAnd(currentAndISR, currentAndStream.size(), dict) );
         ISR** rootOrTerms = new ISR*[rootOrStream.size()];
         for (unsigned i = 0; i < rootOrStream.size(); ++i)
-           * (rootOrTerms + i) = rootOrStream[i];
+           * ( rootOrTerms + i ) = rootOrStream[i];
            ///std::cout<<"Construction of a new ISROr: size = " << rootOrStream.size() << std::endl;
         ISR* root =  new ISROr(rootOrTerms, rootOrStream.size());
         return root;
