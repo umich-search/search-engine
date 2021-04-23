@@ -53,8 +53,6 @@ public:
         statistics.numTopSpans = 0;
         statistics.numShortSpans = 0;
         statistics.numFrequentWords = 0;
-        Dictionary dictionary(0);
-        totalWords = dictionary.GetNumberOfWords();
         }
 
     //Move the rarest term to the next occurrence
@@ -78,8 +76,6 @@ private:
     size_t numTerms;
 
     size_t positionRarestTerm;
-
-    size_t totalWords;
 
     //the ISRWord abstract for other terms
     ISRWord **Terms;
