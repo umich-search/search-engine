@@ -55,7 +55,7 @@ public:
     virtual int GetTermNum() = 0;
 
     // Calculate according to heuristics
-    int GetHeuristicScore( Match *document );
+    float GetHeuristicScore( Match *document );
 
     virtual Weights *getWeights() = 0;
 
@@ -116,7 +116,7 @@ public:
 
     int GetTermNum() { return 0; }
 
-    // int GetHeuristicScore( Match *document );
+    // float GetHeuristicScore( Match *document );
 
     Weights *getWeights() { return &(this->weights); }
 
@@ -180,7 +180,7 @@ public:
 
     int GetTermNum(){ return 0; }
 
-    int GetHeuristicScore(){return 0;}
+    float GetHeuristicScore(){return 0;}
 
     float GetCombinedScore( vector<float> scores ) { return 0; }
 

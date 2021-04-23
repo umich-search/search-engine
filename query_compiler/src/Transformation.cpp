@@ -34,7 +34,7 @@ ISR* StringToISR ( Dictionary *dict, String input )
          currentAndStream.pushBack(new ISRPhrase(currentPhraseISR, currentPhraseStream.size()));
          while (currentPhraseStream.size())
             {
-            delete *currentPhraseStream.end();
+            delete currentPhraseStream.end();
             currentPhraseStream.popBack();
             }
          }

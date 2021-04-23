@@ -16,9 +16,12 @@ using namespace std;
 int main(int argc, char *argv[]) {
    std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
    std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
-
    ifstream docs;
-   docs.open("testdoc.txt");
+   docs.open("server/run/testdoc.txt");
+   if (docs.bad()) cerr << "1111";
+   if (docs.fail()) cerr << "Error: " << strerror(errno);
+   if (docs.is_open())
+      cout<<"Open!!!\n";
    IndexConstructor ic(0);
    String term;
    char term0[10];
@@ -76,7 +79,7 @@ int main(int argc, char *argv[]) {
 
    for ( size_t i = 0; i < results1.size(); ++i )
    {
-       std::cout << results1[i] << std::endl;
+       std::cout << results1[i]->score << std::endl;
    }
    //Post* res = nullptr;
    //::vector<Match*>* res_ptr = nullptr;

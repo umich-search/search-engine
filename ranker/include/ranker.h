@@ -11,8 +11,8 @@ const float staticWeight = 0.05;
 struct url_score {
     String URL;
     String title;
-    int score;
-    url_score(String URL, String title, int score) : URL(URL), title(title), score(score){}
+    float score;
+    url_score(String URL, String title, float score) : URL(URL), title(title), score(score){}
 };
 
 

@@ -47,7 +47,8 @@ vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
         delete docs;
         delete dict;
         // insertion sort
-        if ( arr.size() < N ) 
+        if ( arr.size() == 0 ) arr.pushBack(newDoc);
+        else if ( arr.size() < N ) 
             {
             int j = arr.size() - 1;
             while ( j >= 0 && arr[j]->score < totalScore )
@@ -69,6 +70,7 @@ vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
                 }
             if ( j + 1 < N ) arr[j + 1] = newDoc;
             }
+        
         }
     return arr;
     }
@@ -79,7 +81,11 @@ float getDynamic(Match* document, ISR* queryRoot)
     for ( int i = 0; i < queryRoot->GetTermNum(); ++i )
         {
         std::cout << (*( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
-        if ((*( queryRoot->GetTerms() + i ))->GetTermNum() > 0) abstractISRExists = true;
+        if ((*( queryRoot->GetTerms() + i ))->GetTermNum() > 0) 
+            {
+            abstractISRExists = true;
+            break;
+            }
         }
     // this ISR has only WordISRs, calculate score according to heuristics
     if ( !abstractISRExists ) return queryRoot->GetHeuristicScore(document);
