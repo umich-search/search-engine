@@ -70,6 +70,7 @@ vector<url_score*> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
                 }
             if ( j + 1 < N ) arr[j + 1] = newDoc;
             }
+        
         }
     return arr;
     }

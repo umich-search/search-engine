@@ -8,19 +8,32 @@ float ISR::GetHeuristicScore( Match *document )
     {
     size_t rarestlocation = 0;
     w_Occurence minOccurence = 0xFFFFFFFFFFFFFFFF;
-    for (size_t i = 0; i < this->GetTermNum(); ++i) {
-        ISRWord *term = (ISRWord*)*(this->GetTerms() + i);
-        w_Occurence occ = term->GetNumberOfOccurrences();
+    w_Occurence occ = 0;
+    for ( size_t i = 0; i < this->GetTermNum(); ++i ) 
+        {
+        ISRWord *term = ( ISRWord* )*( this->GetTerms() + i );
+        // term->Seek( document->start );
+        Post *curPost = term->Seek( document->start );
+        while ( curPost != nullptr && curPost->GetStartLocation( ) < document->end ) 
+            {
+            occ += 1;
+            curPost = term->Next();
+            // if ( next == nullptr ) break;
+            // if ( next->GetStartLocation() >= document->end ) break;
+            }
+        if ( occ == 0 ) continue;
         if ( occ < minOccurence )
             {
             minOccurence = occ;
             rarestlocation = i;
             }
-    }  
+        } 
+    if ( minOccurence == 0xFFFFFFFFFFFFFFFF ) return 0;
     return calculate_scores(document, (ISRWord **)(this->GetTerms()), this->GetTermNum(), rarestlocation, this->getWeights());
     }
 
 Post *ISRWord::Next() {
+    // currIdx: the index into the posting list
     size_t numOccurence = termPostingListRaw.getHeader()->numOfOccurence;
     if (currIndex < numOccurence - 1) {
         currIndex += 1;
@@ -30,8 +43,11 @@ Post *ISRWord::Next() {
                 std::cout << "Reseeking" << std::endl;
 
         Post *post = Seek(currPost.GetStartLocation() + 1);
-        if(post == nullptr) { std::cout << "post not found after reseek" << std::endl;}
-        if (post == nullptr) return nullptr;
+        if ( post == nullptr ) 
+            { 
+            std::cout << this->GetTerms()->term << ' ' << "post not found after reseek" << std::endl;
+            return nullptr;
+            }
         else currPost = *post;
     }
     return &currPost;

@@ -135,7 +135,7 @@ String extract_domain(String url){
 float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
                  struct Weights *weights) {
-    class ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
+    ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
     isrspan.Start();
     while (isrspan.Next());
     isrspan.update_score();
