@@ -24,10 +24,10 @@ void ISRSpan::Start() {
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
-//    if (ifShortSpan()) statistics.numShortSpans += 1;
-//    if (ifNearTop()) statistics.numTopSpans += 1;
-//    if (ifOrderSpan()) statistics.numOrderSpans += 1;
-//    if (ifExactPhrases()) statistics.numPhrases += 1;
+    if (ifShortSpan()) statistics.numShortSpans += 1;
+    if (ifNearTop()) statistics.numTopSpans += 1;
+    if (ifOrderSpan()) statistics.numOrderSpans += 1;
+    if (ifExactPhrases()) statistics.numPhrases += 1;
 }
 
 bool ISRSpan::Next() {
@@ -82,6 +82,8 @@ void ISRSpan::update_score() {
         score += weights->weightPhrase * statistics.numPhrases;
     }
     score += weights->weightTopSpan * statistics.numTopSpans;
+    //std::cout<<"hhhhhhhhh"<<std::endl;
+    //std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
 }
 
 bool ISRSpan::ifShortSpan() {
@@ -120,13 +122,8 @@ void ISRSpan::calculate_num_frequent_words() {
             if (next->GetStartLocation() >= docEndLocation) break;
             count += 1;
         }
-<<<<<<< HEAD
-        float temp = ((float)count / (docEndLocation - docStartLocation)) / ((float)term->GetNumberOfOccurrences() / totalWords);
-        if (temp >= MINFREQUENT) statistics.numFrequentWords += 1;
-=======
         float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();        
         if ( count >= expected * 2) statistics.numFrequentWords += 1;
->>>>>>> fbf508f9e86c5e51f0566701f6de3c37a8368ba5
     }
 }
 
