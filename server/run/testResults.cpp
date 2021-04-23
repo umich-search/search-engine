@@ -14,10 +14,10 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-   std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
-   std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+   // std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+   // std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
    ifstream docs;
-   docs.open("server/run/testdoc.txt");
+   docs.open("testdoc.txt");
    if (docs.bad()) cerr << "1111";
    if (docs.fail()) cerr << "Error: " << strerror(errno);
    if (docs.is_open())
@@ -75,11 +75,11 @@ int main(int argc, char *argv[]) {
    //    std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
    // }
 
-   ::vector<url_score *> results1 = Results ( &dict, "quick | fox" );
+   ::vector<url_score> results1 = Results ( &dict, "quick | fox" );
 
    for ( size_t i = 0; i < results1.size(); ++i )
    {
-       std::cout << results1[i]->score << std::endl;
+       std::cout << results1[i].score << std::endl;
    }
    //Post* res = nullptr;
    //::vector<Match*>* res_ptr = nullptr;
@@ -126,10 +126,10 @@ int main(int argc, char *argv[]) {
 
 
 // query 2: "quick brown quick"
-   ::vector<url_score *> results2 = Results ( &dict, "\"quick brown quick \"" );
+   ::vector<url_score> results2 = Results ( &dict, "\"quick brown quick \"" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
-       std::cout << results2[i]->score << std::endl;
+       std::cout << results2[i].score << std::endl;
    }
 //    ISR *terms_q2[] = {word_quick, word_brown, word_quick};
 //    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
@@ -173,10 +173,10 @@ int main(int argc, char *argv[]) {
 
 // query 3: quick fox
    cout << "q3 Results:" << endl;
-   ::vector<url_score *> results3 = Results ( &dict, "quick fox" );
+   ::vector<url_score> results3 = Results ( &dict, "quick fox" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
-       std::cout << results3[i]->score << std::endl;
+       std::cout << results3[i].score << std::endl;
    }
 //    ISR *terms_q3[] = {word_quick, word_fox};
 //    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
@@ -243,6 +243,10 @@ int main(int argc, char *argv[]) {
    delete (word_quick);
    delete (word_brown);
    delete (word_fox);
+
+   // freeResults( results1 );
+   // freeResults( results2 );
+   // freeResults( results3 );
 
    return 0;
    }

@@ -20,7 +20,10 @@ ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
 
 ISROr::~ISROr()
    {
+   for ( size_t i = 0; i < NumberOfTerms; ++i )
+      delete Terms[ i ];
    delete[] Terms;
+   delete EndDoc;
    }
 
 Location ISROr::GetStartLocation( )
@@ -148,7 +151,10 @@ ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(
 
 ISRAnd::~ISRAnd()
    {
+   for ( size_t i = 0; i < NumberOfTerms; ++i )
+      delete Terms[ i ];
    delete[] Terms;
+   delete EndDoc;
    }
 
 Location ISRAnd::GetStartLocation( )
@@ -289,6 +295,8 @@ ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), Numb
 
 ISRPhrase::~ISRPhrase()
    {
+   for ( size_t i = 0; i < NumberOfTerms; ++i )
+      delete Terms[ i ];
    delete[] Terms;
    }
 

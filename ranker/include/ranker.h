@@ -12,7 +12,8 @@ struct url_score {
     String URL;
     String title;
     float score;
-    url_score(String URL, String title, float score) : URL(URL), title(title), score(score){}
+    url_score( ) { }
+    url_score( String URL, String title, float score ) : URL(URL), title(title), score(score){ }
 };
 
 
@@ -20,7 +21,8 @@ class Ranker {
 public:
 const float static_weight = 0.1;
 const float dynamic_weight = 0.9;
-::vector<url_score *> getHighest(::vector<Match*>* matches, ISR* queryRoot);
+::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot);
 };
 
 String serializeUrlScore( url_score *us );
+void freeResults( ::vector< url_score * >& v );

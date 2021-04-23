@@ -24,10 +24,11 @@
         // calculate doc length and doc start location
         Location startLocation = currentLocation - EndDoc->GetDocumentLength();
         // output index (not start, end location) of matching doc
-        Match* match=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
-        matches->pushBack(match);
+        Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
+        matches->pushBack(matchDoc);
         // Post* document = new Post(startLocation, currentLocation);
         // posts->pushBack(document);
+        delete match;
         }
     return matches;
     }
