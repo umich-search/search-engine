@@ -70,9 +70,9 @@ float ISRSpan::get_score() {
 void ISRSpan::update_score() {
     calculate_num_frequent_words();
     if (numTerms != 1) {
-        if ((double) statistics.numFrequentWords / numTerms == 1) score += weights->weightAll;
-        else if ((double) statistics.numFrequentWords / numTerms >= MINMOST) score += weights->weightMost;
-        else if ((double) statistics.numFrequentWords / numTerms >= MINSOME) score += weights->weightSome;
+        if ((float) statistics.numFrequentWords / numTerms == 1) score += weights->weightAll;
+        else if ((float) statistics.numFrequentWords / numTerms >= MINMOST) score += weights->weightMost;
+        else if ((float) statistics.numFrequentWords / numTerms >= MINSOME) score += weights->weightSome;
     } else {
         if (statistics.numFrequentWords == 1)score += weights->weightSome;
     }
@@ -82,6 +82,8 @@ void ISRSpan::update_score() {
         score += weights->weightPhrase * statistics.numPhrases;
     }
     score += weights->weightTopSpan * statistics.numTopSpans;
+    //std::cout<<"hhhhhhhhh"<<std::endl;
+    //std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
 }
 
 bool ISRSpan::ifShortSpan() {
