@@ -120,7 +120,7 @@ public:
 
     Weights *getWeights() { return &(this->weights); }
 
-    float GetCombinedScore( vector<float> scores ) { return 0; }
+    float GetCombinedScore( vector <float> scores ) { return 0; }
 
 private:
     FileManager manager;
