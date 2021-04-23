@@ -4,7 +4,7 @@
 // ISRWord Functions
 
 
-int ISR::GetHeuristicScore( Match *document )
+float ISR::GetHeuristicScore( Match *document )
     {
     size_t rarestlocation = 0;
     w_Occurence minOccurence = 0xFFFFFFFFFFFFFFFF;
