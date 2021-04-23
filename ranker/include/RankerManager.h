@@ -11,7 +11,7 @@
 #include "ranker.h"
 #include "mString.h"
 #include "Vector.h"
-#include "CrawlerManager.h"  // import host names
+#include "CrawlerManager.h"  // import host names TODO: fix makefile
 
 #define MAX_MESSAGE_SIZE 512
 
