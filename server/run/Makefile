@@ -75,8 +75,8 @@ SOBJ = $(patsubst $(SSDIR)/%.cpp, $(SODIR)/%.o, $(SSRC))
 # 	compile commands
 #####################################################
 CXX = g++
-CXXFLAGS = -std=c++11 -g  -I$(UIDIR) -I$(IIDIR) -I$(CIDIR) -I$(QIDIR) -I$(RIDIR) -I$(SIDIR)
-LIBS = -lssl -lcrypto -lz -pthread
+CXXFLAGS = -std=c++17 -g  -I$(UIDIR) -I$(IIDIR) -I$(CIDIR) -I$(QIDIR) -I$(RIDIR) -I$(SIDIR)
+LIBS = -lssl -lcrypto -lz -pthread 
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
