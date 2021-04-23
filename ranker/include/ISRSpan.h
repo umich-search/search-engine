@@ -64,7 +64,7 @@ public:
 
     //Move the rarest term to the first occurrence in the document specified by docIndex
     //Move all other terms to the nearest location corresponding to the rarest term;
-    void Start();
+    bool Start();
 
     //Update the score corresponding to the doc specified by docIndex
     //The location of all terms in current span is given by location

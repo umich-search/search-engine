@@ -63,20 +63,32 @@ int main(int argc, char *argv[]) {
     ISRWord *word_brown = dict.OpenISRWord(brown);
     ISRWord *word_fox = dict.OpenISRWord(fox);
     ISRWord *terms[] = {word_quick, word_brown, word_fox};
-    char *input = "quick | brown | fox";
+    char *input = "quick | brown";
     ISR *queryRoot = Query_Compiler(&dict, input);
-    ::vector<Match *> * match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
-    cout << "start location"<<(*match)[1]->start << endl;
-    struct Weights weights {
-            weightShortSpan: 1,
-            weightOrderSpan: 1,
-            weightPhrase: 1,
+    ::vector<Match *> *match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    struct Weights weights{
+            weightShortSpan: 0.5,
+            weightOrderSpan: 0.5,
+            weightPhrase: 0.5,
             weightTopSpan: 0.5,
-            weightAll: 1,
-            weightMost: 1,
-            weightSome: 5
+            weightAll: 0.5,
+            weightMost: 0.5,
+            weightSome: 0.5
     };
-    float score = calculate_scores((*match)[1], (ISRWord **)terms, 3, 2, &weights);
-    cout<<score;
+    float score = calculate_scores((*match)[1], (ISRWord **) terms, 2, 1, &weights);
+    ASSERT(score, ==, 4);
+
+    char *input2 = "quick | brown | fox";
+    queryRoot = Query_Compiler(&dict, input2);
+    match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    score = calculate_scores((*match)[0], (ISRWord **) terms, 3, 2, &weights);
+    ASSERT(score, ==, 2);
+
+    char *input3 = "quick | brown | fox";
+    queryRoot = Query_Compiler(&dict, input3);
+    match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    score = calculate_scores((*match)[1], (ISRWord **) terms, 3, 2, &weights);
+    ASSERT(score-0.000000001, <=, 0);
+
     return 0;
 }

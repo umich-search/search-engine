@@ -1,9 +1,11 @@
 #include "ISRSpan.h"
 
-void ISRSpan::Start() {
+
+bool ISRSpan::Start() {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
     location[positionRarestTerm] = (*(Terms + positionRarestTerm))->Seek(docStartLocation)->GetStartLocation();
+    if (location[positionRarestTerm] > docEndLocation)return false;
     smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
         if (i == positionRarestTerm) continue;
@@ -11,16 +13,24 @@ void ISRSpan::Start() {
         Location prev;
         Location after;
         after = prev = term->Seek(docStartLocation)->GetStartLocation();
+        if (after > docEndLocation) return false;
         while (after < location[positionRarestTerm]) {
             prev = after;
             auto next = term->Next();
             if (next == nullptr) break;
             after = next->GetStartLocation();
         }
-        if (after >= docEndLocation ||
-            location[positionRarestTerm] - prev < after - location[positionRarestTerm])
-            location[i] = prev;
-        else location[i] = after;
+        if (i < positionRarestTerm) {
+            if (after >= docEndLocation ||
+                location[positionRarestTerm] - prev <= after - location[positionRarestTerm])
+                location[i] = prev;
+            else location[i] = after;
+        } else {
+            if (after >= docEndLocation ||
+                location[positionRarestTerm] - prev < after - location[positionRarestTerm])
+                location[i] = prev;
+            else location[i] = after;
+        }
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -28,6 +38,7 @@ void ISRSpan::Start() {
     if (ifNearTop()) statistics.numTopSpans += 1;
     if (ifOrderSpan()) statistics.numOrderSpans += 1;
     if (ifExactPhrases()) statistics.numPhrases += 1;
+    return true;
 }
 
 bool ISRSpan::Next() {
@@ -49,10 +60,18 @@ bool ISRSpan::Next() {
             if (next == nullptr) break;
             after = next->GetStartLocation();
         }
-        if (after >= docEndLocation ||
-            location[positionRarestTerm] - prev < after - location[positionRarestTerm])
-            location[i] = prev;
-        else location[i] = after;
+        //Previous is better
+        if (i < positionRarestTerm) {
+            if (after >= docEndLocation ||
+                location[positionRarestTerm] - prev <= after - location[positionRarestTerm])
+                location[i] = prev;
+            else location[i] = after;
+        } else {
+            if (after >= docEndLocation ||
+                location[positionRarestTerm] - prev < after - location[positionRarestTerm])
+                location[i] = prev;
+            else location[i] = after;
+        }
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -122,22 +141,23 @@ void ISRSpan::calculate_num_frequent_words() {
             if (next->GetStartLocation() >= docEndLocation) break;
             count += 1;
         }
-        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();        
-        if ( count >= expected * 2) statistics.numFrequentWords += 1;
+        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();
+        if (count >= expected * 2) statistics.numFrequentWords += 1;
     }
 }
 
 
-String extract_domain(String url){
-    return String( "" );
+String extract_domain(String url) {
+    return String("");
 }
 
 float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
                  struct Weights *weights) {
     class ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
-    isrspan.Start();
-    while (isrspan.Next());
+    if (isrspan.Start()) {
+        while (isrspan.Next());
+    }
     isrspan.update_score();
     return isrspan.get_score();
 }
