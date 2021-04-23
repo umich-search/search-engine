@@ -120,8 +120,13 @@ void ISRSpan::calculate_num_frequent_words() {
             if (next->GetStartLocation() >= docEndLocation) break;
             count += 1;
         }
+<<<<<<< HEAD
         float temp = ((float)count / (docEndLocation - docStartLocation)) / ((float)term->GetNumberOfOccurrences() / totalWords);
         if (temp >= MINFREQUENT) statistics.numFrequentWords += 1;
+=======
+        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();        
+        if ( count >= expected * 2) statistics.numFrequentWords += 1;
+>>>>>>> fbf508f9e86c5e51f0566701f6de3c37a8368ba5
     }
 }
 
@@ -140,7 +145,7 @@ calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t posit
     return isrspan.get_score();
 }
 
-Dictionary dictionary(0);
+// Dictionary dictionary(0);
 
 // float
 // calculate_static_scores(Match *document, struct StaticWeights *weights) {

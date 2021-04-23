@@ -78,6 +78,7 @@ float getDynamic(Match* document, ISR* queryRoot)
     bool abstractISRExists = false;
     for ( int i = 0; i < queryRoot->GetTermNum(); ++i )
         {
+        std::cout << (*( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
         if ((*( queryRoot->GetTerms() + i ))->GetTermNum() > 0) abstractISRExists = true;
         }
     // this ISR has only WordISRs, calculate score according to heuristics
