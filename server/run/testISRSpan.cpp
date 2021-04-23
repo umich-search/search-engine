@@ -77,18 +77,42 @@ int main(int argc, char *argv[]) {
     };
     float score = calculate_scores((*match)[1], (ISRWord **) terms, 2, 1, &weights);
     ASSERT(score, ==, 4);
+    std::cout<<"----------success 1"<<std::endl;
 
     char *input2 = "quick | brown | fox";
     queryRoot = Query_Compiler(&dict, input2);
     match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
     score = calculate_scores((*match)[0], (ISRWord **) terms, 3, 2, &weights);
     ASSERT(score, ==, 2);
+    std::cout<<"-----------success 2"<<std::endl;
 
     char *input3 = "quick | brown | fox";
     queryRoot = Query_Compiler(&dict, input3);
     match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
     score = calculate_scores((*match)[1], (ISRWord **) terms, 3, 2, &weights);
     ASSERT(score-0.000000001, <=, 0);
+    std::cout<<"-----------success 3"<<std::endl;
+
+    char *input4 = "quick | brown | fox";
+    queryRoot = Query_Compiler(&dict, input4);
+    match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    score = calculate_scores((*match)[2], (ISRWord **) terms, 3, 2, &weights);
+    ASSERT(score, ==, 2);
+    std::cout<<"-----------success 4"<<std::endl;
+
+    char *input5 = "quick | brown | fox";
+    queryRoot = Query_Compiler(&dict, input5);
+    match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    score = calculate_scores((*match)[3], (ISRWord **) terms, 3, 2, &weights);
+    ASSERT(score, ==, 1);
+    std::cout<<"-----------success 5"<<std::endl;
+
+    char *input6 = "quick | brown | fox";
+    queryRoot = Query_Compiler(&dict, input6);
+    match = (::vector<Match *> *) ConstraintSolver(EndDoc, queryRoot);
+    score = calculate_scores((*match)[4], (ISRWord **) terms, 3, 2, &weights);
+    ASSERT(score-0.000000001, <=, 0);
+    std::cout<<"-----------success 6"<<std::endl;
 
     return 0;
 }

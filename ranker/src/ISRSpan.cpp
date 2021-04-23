@@ -4,7 +4,9 @@
 bool ISRSpan::Start() {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
-    location[positionRarestTerm] = (*(Terms + positionRarestTerm))->Seek(docStartLocation)->GetStartLocation();
+    auto seek = (*(Terms + positionRarestTerm))->Seek(docStartLocation);
+    if (seek==nullptr) return false;
+    location[positionRarestTerm] = seek->GetStartLocation();
     if (location[positionRarestTerm] > docEndLocation)return false;
     smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
@@ -12,7 +14,9 @@ bool ISRSpan::Start() {
         ISRWord *term = *(Terms + i);
         Location prev;
         Location after;
-        after = prev = term->Seek(docStartLocation)->GetStartLocation();
+        auto seek = term->Seek(docStartLocation);
+        if (seek == nullptr) return false;
+        after = prev = seek->GetStartLocation();
         if (after > docEndLocation) return false;
         while (after < location[positionRarestTerm]) {
             prev = after;
