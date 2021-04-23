@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 
    for ( size_t i = 0; i < results1.size(); ++i )
    {
-       std::cout << results1[i] << std::endl;
+       std::cout << results1[i]->score << std::endl;
    }
    //Post* res = nullptr;
    //::vector<Match*>* res_ptr = nullptr;
