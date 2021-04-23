@@ -220,7 +220,7 @@ template <typename T> class vector
       //    one past the last valid element of the vector
       T* end()
          {
-         return &arr[_size];
+         return &arr[_size - 1];
          }
 
       // REQUIRES: Nothing

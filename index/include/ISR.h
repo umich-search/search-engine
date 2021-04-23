@@ -122,6 +122,12 @@ public:
 
     float GetCombinedScore( vector <float> scores ) { return 0; }
 
+    // debug
+    void printTerm( )
+        {
+        std::cout << term << std::endl;
+        }
+
 private:
     FileManager manager;
     const char *term;

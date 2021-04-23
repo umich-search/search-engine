@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
    ::vector<url_score *> results2 = Results ( &dict, "\"quick brown quick \"" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
-       std::cout << results2[i] << std::endl;
+       std::cout << results2[i]->score << std::endl;
    }
 //    ISR *terms_q2[] = {word_quick, word_brown, word_quick};
 //    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
    ::vector<url_score *> results3 = Results ( &dict, "quick fox" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
-       std::cout << results3[i] << std::endl;
+       std::cout << results3[i]->score << std::endl;
    }
 //    ISR *terms_q3[] = {word_quick, word_fox};
 //    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);

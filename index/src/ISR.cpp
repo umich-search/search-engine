@@ -12,6 +12,8 @@ float ISR::GetHeuristicScore( Match *document )
     for ( size_t i = 0; i < this->GetTermNum(); ++i ) 
         {
         ISRWord *term = ( ISRWord* )*( this->GetTerms() + i );
+        std::cout << "word term: ";
+        term->printTerm( );
         // term->Seek( document->start );
         Post *curPost = term->Seek( document->start );
         while ( curPost != nullptr && curPost->GetStartLocation( ) < document->end ) 
@@ -45,7 +47,7 @@ Post *ISRWord::Next() {
         Post *post = Seek(currPost.GetStartLocation() + 1);
         if ( post == nullptr ) 
             { 
-            std::cout << this->GetTerms()->term << ' ' << "post not found after reseek" << std::endl;
+            std::cout << ' ' << "post not found after reseek" << std::endl;
             return nullptr;
             }
         else currPost = *post;

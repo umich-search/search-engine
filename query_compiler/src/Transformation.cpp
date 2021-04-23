@@ -32,11 +32,11 @@ ISR* StringToISR ( Dictionary *dict, String input )
          for (size_t i = 0; i < currentPhraseStream.size(); ++i)
             *(currentPhraseISR + i) = currentPhraseStream[i];
          currentAndStream.pushBack(new ISRPhrase(currentPhraseISR, currentPhraseStream.size()));
-         while (currentPhraseStream.size())
-            {
-            delete currentPhraseStream.end();
-            currentPhraseStream.popBack();
-            }
+         // while (currentPhraseStream.size())
+         //    {
+         //    delete *currentPhraseStream.end();
+         //    currentPhraseStream.popBack();
+         //    }
          }
       else if (*currentChar == '(')
          {
