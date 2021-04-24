@@ -12,8 +12,22 @@ struct url_score {
     String URL;
     String title;
     float score;
-    url_score( ) { }
-    url_score( String URL, String title, float score ) : URL(URL), title(title), score(score){ }
+    url_score( ) 
+        {
+        }
+    url_score( String URL, String title, float score ) : URL(URL), title(title), score(score)
+        { 
+        }
+    url_score( const url_score& other ) : URL( other.URL ), title( other.title ), score( other.score )
+        {
+        }
+    url_score& operator= ( const url_score& other )
+        {
+        URL = other.URL;
+        title = other.title;
+        score = other.score;
+        return *this;
+        }
 };
 
 
@@ -26,3 +40,5 @@ const float dynamic_weight = 0.9;
 
 String serializeUrlScore( url_score *us );
 void freeResults( ::vector< url_score * >& v );
+
+void printRanks( ::vector< url_score >& v );

@@ -80,7 +80,7 @@ LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
-EXEC = tinyCrawler
+EXEC = queryServerTest
 
 all: $(EXEC)
 
@@ -137,7 +137,7 @@ $(EXEC).o: $(EXEC).cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ $^
 
 $(EXEC): $(EXEC).o $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ) $(OBJ)
-	$(CXX) -o $@ $^ $(LIBS)
+	$(CXX) -g -o $@ $^ $(LIBS)
 
 .PHONY: clean cleanObj utilityObj indexObj qcObj csObj rankerObj all
 
