@@ -342,6 +342,8 @@ void *Talk(void *talkSocket) {
     }
 
     // Else, serve the file at the path
+    if ( path == "/" )
+        path = "/index.html";
     path = string(RootDirectory) + path;
     cout << action << " " << path << endl;
     if (strcmp(action, "GET") == 0 && SafePath(path.c_str())) {
