@@ -154,11 +154,40 @@ void ISRSpan::calculate_num_frequent_words( )
         if ( count >= expected * 2 ) 
             statistics.numFrequentWords += 1;
         }
-    }  
+    }
 
 
-String extract_domain(String url) {
-    return String("");
+const char* extract_url(String a) {
+    int count = 0;
+    int loc1=-1;
+    int loc2=-1;
+    bool flag = false;
+    for(int i=0;i<a.size()-2;i++){
+        if(a[i]==':'&&a[i+1]=='/'&&a[i+2]=='/'){
+            flag = true;
+            break;
+        }
+    }
+    int cmp = flag? 3:1;
+    for (int i = 0; i < a.size(); i++) {
+        if (a[i] == '/') count += 1;
+        if (count == cmp) {
+            loc2 = i;
+            break;
+        }
+    }
+    if(count==cmp-1) loc2=a.size();
+    if(loc2>a.size()) return "";
+    for (int i = loc2; i > 0; i--) {
+        if (i<a.size()&&a[i] == '.') {
+            loc1 = i;
+            break;
+        }
+    }
+    String result;
+    if (loc1<0) return "";
+    for (int i=loc1+1;i<loc2;i++) result+=a[i];
+    return result.c_str();
 }
 
 float
@@ -174,18 +203,18 @@ calculate_scores( Match *document, ISRWord **Terms, size_t numTerms, size_t posi
     return isrspan.get_score();
     }
 
-// Dictionary dictionary(0);
+ Dictionary dictionary(0);
 
-// float
-// calculate_static_scores(Match *document, struct StaticWeights *weights) {
-//     float score = 0;
-//     DocumentDetails *documentDetails = dictionary.GetDocumentDetials(0);
-//     score += (1.0 / documentDetails->url.size()) * weights->weightURL;
-//     score += (1.0 / documentDetails->title.size()) * weights->weightTitle;
-//     for (auto x:DomainsTable){
-//         if (extract_domain(documentDetails->url).compare(x)==0) score+=weights->weightDomain;
-//     }
-//     return score;
-// }
+ float
+ calculate_static_scores(Match *document, struct StaticWeights *weights) {
+     float score = 0;
+     DocumentDetails *documentDetails = dictionary.GetDocumentDetials(document->id);
+     score += (1.0 / documentDetails->url.size()) * weights->weightURL;
+     score += (1.0 / documentDetails->title.size()) * weights->weightTitle;
+     for (auto x:DomainsTable){
+         if (strcmp(x,extract_url(documentDetails->url))==0) score+=weights->weightDomain;
+     }
+     return score;
+ }
 
 

@@ -29,7 +29,7 @@ struct StaticWeights{
     float weightTitle;
 };
 
-const String DomainsTable[]{
+const char* DomainsTable[]{
         "org",
         "com",
         "edu",
