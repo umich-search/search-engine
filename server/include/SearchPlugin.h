@@ -12,9 +12,9 @@
 class SearchPlugin : public PluginObject
     {
     public:
-        SearchPlugin()
+        SearchPlugin() 
             {
-            //Plugin = this;
+            queryServer.Start();
             }
         ~SearchPlugin() { };
 
@@ -25,27 +25,19 @@ class SearchPlugin : public PluginObject
         
         std::string ProcessRequest( std::string action, std::string path )
             {
-            CriticalSection s(&mutex);
             if ( action != "GET" )
                 return "";
-            std::string query = parseQuery( path );
-            if ( query.size() == 0 )
-                return "";
-            // TODO: fix "RankerManager.h" #include "CrawlerManager.h"
-            // String queryString( query.c_str() );
+            std::string query = queryServer.deserializeQueryMsg( path );
             ::vector<url_score> scores = queryServer.CollectRanks( query );
             std::string html;
-            for ( size_t i = 0; i < 3; ++i )
+            for ( size_t i = 0; i < scores.size(); ++i )
                 {
                 std::string result = "<div class=\"resultTag\"><h4><a href=\"";
-                result += "https://google.com";
-                //result += scores[i].URL;
+                result += scores[i].URL;
                 result += "\">";
-                result += "Google";
-                //result += scores[i].title;
+                result += scores[i].title;
                 result += "</a></h4><p>";
-                //result += scores[i].URL;
-                result += "https://google.com";
+                result += scores[i].URL;
                 result += "</p></div>";
                 html += result;
                 }
@@ -54,15 +46,4 @@ class SearchPlugin : public PluginObject
 
     private:
         QueryServer queryServer;
-        mutex_t mutex;
-
-        std::string parseQuery( std::string path )
-            {
-            const char * search = "?query=";
-            size_t start = path.find( search );
-            if ( start == string::npos )
-                return "";
-            start += strlen( search );
-            return path.substr(start);
-            }
     };
