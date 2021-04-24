@@ -257,9 +257,13 @@ class QueryServer
         QueryServer( );
         ~QueryServer( );
 
-        // decode the received message to obtain the query string
-        // called by the main server
-        String deserializeQueryMsg( const char *msg );
+        // decode the received message to obtain the query string;
+        // called by the main server;
+        String deserializeQueryMsg( const char *msg )
+            {
+            // TODO: adapt this function to web server queries
+            return String( msg );
+            }
 
         // main server calls this function when it receives a query from the user
         // call deserializeQueryMsg before calling this function

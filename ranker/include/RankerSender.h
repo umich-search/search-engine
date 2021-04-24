@@ -10,6 +10,7 @@
 #include "mString.h"
 #include "Vector.h"
 #include "query_Compiler.h"
+#include "Results.h"
 
 #define MAX_MESSAGE_SIZE 512
 
@@ -26,27 +27,25 @@ class RankServer
         Ranker rk;
 
         // serialize the vector of scores into network message
-        String serializeScores( ::vector< url_score * >& scores )
+        String serializeScores( ::vector< url_score >& scores )
             {
             String msg;
             for ( size_t i = 0; i < scores.size( ); ++i )
                 {
-                msg += serializeUrlScore( scores[ i ] );
+                msg += serializeUrlScore( &scores[ i ] );
                 // delete the heap memory
-                delete scores[ i ];
-                scores[ i ] = nullptr;
+                // delete scores[ i ];
+                // scores[ i ] = nullptr;
                 }
             return msg;
             }
 
         // build the query compiler and the constraint solver 
         // call the ranker to obtain results
-        String retrieveDocRank( const char *query )
+        String retrieveDocRank( char *query )
             {
-            ISR *queryRoot = Query_Compiler( &dict, query );
-            ISREndDoc *EndDoc = dict.OpenISREndDoc( );
-            ::vector< Match *>* matches = ConstraintSolver( EndDoc, queryRoot );
-            ::vector< url_score * > scores = rk.getHighest( matches, queryRoot );
+            Dictionary dict( 0 );
+            ::vector< url_score > scores = Results( &dict, query );
             return serializeScores( scores );
             }
 
