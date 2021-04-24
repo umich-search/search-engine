@@ -16,15 +16,15 @@ USRC = $(wildcard $(USDIR)/*.cpp)
 UOBJ = $(patsubst $(USDIR)/%.cpp, $(UODIR)/%.o, $(USRC))
 
 # crawler
-# IDIR = ../include
-# SDIR = ../src
-# ODIR = $(SDIR)/obj
+IDIR = ../../crawler/include
+SDIR = ../../crawler/src
+ODIR = $(SDIR)/obj
 
-# HEADERS = $(wildcard $(IDIR)/*.h)
-# _SRC_ = $(wildcard $(SDIR)/*.cpp)
-# _SRC = $(filter-out $(SDIR)/FrontierOpt.cpp,$(_SRC_))
-# SRC = $(filter-out $(SDIR)/HtmlParserDemo.cpp,$(_SRC))
-# OBJ = $(patsubst $(SDIR)/%.cpp,$(ODIR)/%.o,$(SRC))
+HEADERS = $(wildcard $(IDIR)/*.h)
+_SRC_ = $(wildcard $(SDIR)/*.cpp)
+_SRC = $(filter-out $(SDIR)/FrontierOpt.cpp,$(_SRC_))
+SRC = $(filter-out $(SDIR)/HtmlParserDemo.cpp,$(_SRC))
+OBJ = $(patsubst $(SDIR)/%.cpp,$(ODIR)/%.o,$(SRC))
 
 # index
 IIDIR = ../../index/include
@@ -75,18 +75,18 @@ SOBJ = $(patsubst $(SSDIR)/%.cpp, $(SODIR)/%.o, $(SSRC))
 # 	compile commands
 #####################################################
 CXX = g++
-CXXFLAGS = -std=c++17 -g  -I$(UIDIR) -I$(IIDIR) -I$(CIDIR) -I$(QIDIR) -I$(RIDIR) -I$(SIDIR)
-LIBS = -lssl -lcrypto -lz -pthread 
+CXXFLAGS = -std=c++11 -g  -I$(UIDIR) -I$(IIDIR) -I$(CIDIR) -I$(QIDIR) -I$(RIDIR) -I$(SIDIR) -I$(IDIR)
+LIBS = -lssl -lcrypto -lz -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
-EXEC = testResults
+EXEC = queryServerTest
 
 all: $(EXEC)
 
 utilityObj: $(UOBJ)
 
-# crawlerObj: $(OBJ)
+crawlerObj: $(OBJ)
 
 indexObj: $(IOBJ)
 
@@ -107,10 +107,10 @@ $(UODIR)/%.o: $(USDIR)/%.cpp $(UHEADERS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # crawler source files depend on both its and utilities' headers
-# $(ODIR)/%.o: $(SDIR)/%.cpp $(UHEADERS) $(HEADERS)
-# 	$(CXX) -c $(CXXFLAGS) $< -o $@
+$(ODIR)/%.o: $(SDIR)/%.cpp $(UHEADERS) $(HEADERS)
+	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-$(IODIR)/%.o: $(ISDIR)/%.cpp $(UHEADERS) $(IHEADERS)
+$(IODIR)/%.o: $(ISDIR)/%.cpp $(UHEADERS) $(IHEADERS) 
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # constraint solver dependencies
@@ -122,11 +122,11 @@ $(QODIR)/%.o: $(QSDIR)/%.cpp $(QHEADERS) $(CHEADERS) $(UHEADERS) $(IHEADERS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # ranker dependencies
-$(RODIR)/%.o: $(RSDIR)/%.cpp $(RHEADERS) $(QHEADERS) $(CHEADERS) $(UHEADERS) $(IHEADERS)
+$(RODIR)/%.o: $(RSDIR)/%.cpp $(RHEADERS) $(QHEADERS) $(CHEADERS) $(UHEADERS) $(IHEADERS) $(SHEADERS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 # server dependencies
-$(SODIR)/%.o: $(SSDIR)/%.cpp $(SHEADERS) $(RHEADERS) $(QHEADERS) $(CHEADERS) $(UHEADERS) $(IHEADERS)
+$(SODIR)/%.o: $(SSDIR)/%.cpp $(SHEADERS) $(RHEADERS) $(QHEADERS) $(CHEADERS) $(UHEADERS) $(IHEADERS) $(HEADERS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 #############################################################################
@@ -136,13 +136,13 @@ $(SODIR)/%.o: $(SSDIR)/%.cpp $(SHEADERS) $(RHEADERS) $(QHEADERS) $(CHEADERS) $(U
 $(EXEC).o: $(EXEC).cpp
 	$(CXX) -c $(CXXFLAGS) -o $@ $^
 
-$(EXEC): $(EXEC).o $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
+$(EXEC): $(EXEC).o $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ) $(OBJ)
+	$(CXX) -g -o $@ $^ $(LIBS)
 
 .PHONY: clean cleanObj utilityObj indexObj qcObj csObj rankerObj all
 
 cleanObj:
-	rm -f $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ)
+	rm -f $(UOBJ) $(IOBJ) $(COBJ) $(QOBJ) $(ROBJ) $(SOBJ) $(OBJ)
 clean:
 	rm -rf $(EXEC) *.o
 # cleanStorage:
