@@ -40,8 +40,8 @@ using namespace std;
 // The constructor for any plugin should set Plugin = this so that
 // LinuxTinyServer knows it exists and can call it.
 
-#include "Plugin.h"
-#include "SearchPlugin.h"
+#include "../include/Plugin.h"
+#include "../include/SearchPlugin.h"
 
 PluginObject *Plugin = nullptr;
 
@@ -208,7 +208,10 @@ string UnencodeUrlEncoding(string &path) {
                     }
                 }
             }
-        } else
+        }
+        else if (c == '+')
+            result += ' ';
+        else
             result += c;
 
     return result;
@@ -317,12 +320,28 @@ void *Talk(void *talkSocket) {
     string path = path_c;
     path = UnencodeUrlEncoding(path);
     
-    SearchPlugin searchPlugin();
-    if(Plugin->MagicPath(path)){
-        string ret = Plugin->ProcessRequest( action, path );
-        send(sockfd, ret.c_str(), strlen(ret.c_str()), 0);
+    // Handle the path /search?query=university+of+michigan
+    SearchPlugin searchPlugin;
+    if(searchPlugin.MagicPath(path)){
+        string results = searchPlugin.ProcessRequest( action, path );
+        string root(RootDirectory);
+        root += "/index.html";
+        int file = open(root.c_str(), O_RDONLY);
+        off_t fileSize = ServerFileSize(file);
+        if (fileSize == -1)AccessDenied(sockfd);
+        if (fileSize == -2)FileNotFound(sockfd);
+        else {
+            const char *contentType = "text/html";
+            char buf[FILISIZE];
+            read(file, buf, fileSize);
+            memcpy(buf + fileSize, results.c_str(), results.size());
+            GetFile(sockfd, contentType, fileSize + results.size(), buf);
+        }
+        close(sockfd);
+        return nullptr;
     }
 
+    // Else, serve the file at the path
     path = string(RootDirectory) + path;
     cout << action << " " << path << endl;
     if (strcmp(action, "GET") == 0 && SafePath(path.c_str())) {
