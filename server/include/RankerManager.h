@@ -15,6 +15,37 @@
 
 #define MAX_MESSAGE_SIZE 512
 
+
+const size_t NUM_RANKERS = 1;
+// const int PORT = 8888;
+// const size_t QUEUE_SIZE = 1024;
+
+static const char *RANKER_HOST[ ] = 
+    {
+        // "35.202.123.51",
+        // "104.197.37.30",
+        // "146.148.73.38",
+        // "34.69.231.181",
+        // "34.66.107.136",
+        // "34.68.201.74",
+        // "35.188.164.185",
+        // "35.221.27.146",
+        // "35.199.41.233",
+        // "35.245.62.74",
+        // "34.86.92.34",
+        // "35.236.254.45",
+        // "35.230.186.30",
+        // "35.221.49.174",
+        "127.0.0.1",
+        "127.0.0.1",
+        "127.0.0.1",
+    };
+
+const int RANKER_PORT[ ] = 
+    {
+    8000, 8001, 8002
+    };
+
 // query server, handles and manages input queries and ranking results
 class QueryServer
     {
@@ -120,9 +151,11 @@ class QueryServer
         // send the query to every distributed rank server
         int sendQuery( String& query )
             {
-            for ( size_t i = 0; i < NUM_MACHINES; ++i )
+            std::cout << "start querying machines!\n";
+            for ( size_t i = 0; i < NUM_RANKERS; ++i )
                 {
-                 int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+                std::cout << "Sending to the " << i << "th machine\n";
+                int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
                 if ( sockfd == -1 )
                     {
                     std::cerr << "Unable to open stream socket";
@@ -131,7 +164,7 @@ class QueryServer
 
                 struct sockaddr_in addr;
                 addr.sin_family = AF_INET;
-                int result = inet_pton( AF_INET, HOST[ i ] , &addr.sin_addr );
+                int result = inet_pton( AF_INET, RANKER_HOST[ i ] , &addr.sin_addr );
                 if ( result == -1 )
                     { 
                     std::cerr << "Error creating IP address: invalid family";
@@ -142,26 +175,28 @@ class QueryServer
                     std::cerr << "Error creating IP address: invalid cstr";
                     return -1;
                     }
-                addr.sin_port = htons( PORT );
+                addr.sin_port = htons( RANKER_PORT[ i ] );
 
-                String address( HOST[ i ] );
-                address += String(":") + ltos( PORT );
+                String address( RANKER_HOST[ i ] );
+                address += String(":") + ltos( RANKER_PORT[ i ] );
                 String machine = ltos( i ) + String(" (") + address + String(")");
 
                 if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
                     {
                     close( sockfd );
-                    std::cerr << "Connection failed to machine: " <<  machine;
+                    std::cerr << "Connection failed to machine: " <<  machine << std::endl;
                     return -1;
                     }
+                std::cout << "Connection succeeds to machine " << machine << std::endl;
 
                 int bytes = send( sockfd, query.cstr(), query.size( ), 0 );
                 if ( bytes == -1 )
                     {
                     close( sockfd );
-                    std::cerr << "Sending bytes failed to machine: " <<  machine;
+                    std::cerr << "Sending bytes failed to machine: " <<  machine << std::endl;
                     return -1;
                     }
+                std::cout << query << " sent sucessfully to machine: " << machine << std::endl;
                 close( sockfd );
                 }
             return 0;
@@ -200,16 +235,15 @@ class QueryServer
                 throw String("Socket listen failed");
             
             String output = "Listening on port ";
-            output += ltos( port );
 
-            std::cout << output << std::endl;
+            std::cout << output << ntohs( addr.sin_port ) << std::endl;
             }
 
         // collect the results from all distributed rank servers
         void collectResult( )
             {
             // (5) Serve incoming connections one by one forever.
-            for ( int i = 0; i < NUM_MACHINES; ++i  )
+            for ( int i = 0; i < NUM_RANKERS; ++i  )
                 {
                 int connectionfd = accept( sockfd, 0, 0 );
                 if ( connectionfd == -1 ) 
@@ -250,16 +284,28 @@ class QueryServer
             String urlStr( msg );
 
             ::vector< url_score > scores = deserializeScores( urlStr );
+            std::cout << "Rank received: \n";
+            printRanks( scores );
             mergedScores = merge( mergedScores, scores );
             }
 
     public:
-        QueryServer( );
-        ~QueryServer( );
+        QueryServer( size_t qSize = 1024, int myPort = 8888, size_t mSize = 10 ) 
+            : queueSize( qSize ), port( myPort ), mergeSize( mSize )
+            { 
+            std::cout << "input port = " << port << std::endl;
+            }
+        ~QueryServer( ) 
+            { 
+            }
 
-        // decode the received message to obtain the query string
-        // called by the main server
-        String deserializeQueryMsg( const char *msg );
+        // decode the received message to obtain the query string;
+        // called by the main server;
+        String deserializeQueryMsg( const char *msg )
+            {
+            // TODO: adapt this function to web server queries
+            return String( msg );
+            }
 
         // main server calls this function when it receives a query from the user
         // call deserializeQueryMsg before calling this function

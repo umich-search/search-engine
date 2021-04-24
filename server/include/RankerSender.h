@@ -10,6 +10,7 @@
 #include "mString.h"
 #include "Vector.h"
 #include "query_Compiler.h"
+#include "Results.h"
 
 #define MAX_MESSAGE_SIZE 512
 
@@ -26,27 +27,26 @@ class RankServer
         Ranker rk;
 
         // serialize the vector of scores into network message
-        String serializeScores( ::vector< url_score * >& scores )
+        String serializeScores( ::vector< url_score >& scores )
             {
             String msg;
             for ( size_t i = 0; i < scores.size( ); ++i )
                 {
-                msg += serializeUrlScore( scores[ i ] );
+                msg += serializeUrlScore( &scores[ i ] );
                 // delete the heap memory
-                delete scores[ i ];
-                scores[ i ] = nullptr;
+                // delete scores[ i ];
+                // scores[ i ] = nullptr;
                 }
             return msg;
             }
 
         // build the query compiler and the constraint solver 
         // call the ranker to obtain results
-        String retrieveDocRank( const char *query )
+        String retrieveDocRank( char *query )
             {
-            ISR *queryRoot = Query_Compiler( &dict, query );
-            ISREndDoc *EndDoc = dict.OpenISREndDoc( );
-            ::vector< Match *>* matches = ConstraintSolver( EndDoc, queryRoot );
-            ::vector< url_score * > scores = rk.getHighest( matches, queryRoot );
+            Dictionary dict( 0 );
+            ::vector< url_score > scores = Results( &dict, query );
+            printRanks( scores );
             return serializeScores( scores );
             }
 
@@ -79,6 +79,7 @@ class RankServer
                 throw String("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
                 throw String("Incorrect listen port");
+            std::cout << "Ranker Server Listening on port " << ntohs( addr.sin_port ) << std::endl;
             }
 
         // start the server to listen traffics
@@ -94,7 +95,9 @@ class RankServer
             // (5) Serve incoming connections one by one forever.
             while ( true ) 
                 {
+                std::cout << "waiting to accept\n";
                 int connectionfd = accept( sockfd, 0, 0 );
+                std::cout << "accepted\n";
                 if ( connectionfd == -1 ) 
                     throw String("Unable to accept connection");
                 try
@@ -120,17 +123,17 @@ class RankServer
             size_t cumsum = 0;
             ssize_t bytes = 0;
             do {
-                bytes = recv( sockfd, msg + cumsum, MAX_MESSAGE_SIZE - cumsum, 0 );
+                bytes = recv( connectFd, msg + cumsum, MAX_MESSAGE_SIZE - cumsum, 0 );
                 if (bytes == -1)
                     {
-                    close( sockfd );
-                    std::cerr << "Problem reading byte stream";
+                    close( connectFd );
+                    std::cerr << "Problem reading byte stream with errno = " << strerror( errno ) << std::endl;
                     return -1;
                     }
                 cumsum += bytes;
             } while ( bytes > 0 );
 
-            close( sockfd );
+            close( connectFd );
             if ( cumsum == 0 )
                 {
                 std::cerr << "Empty message rec";
@@ -140,6 +143,7 @@ class RankServer
 
             // send message to the manager
             String docRank = retrieveDocRank( msg );
+            std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
             if ( sendMessage( docRank ) == -1 )
                 {
                 std::cerr << "Unable to send messages to the manager\n";
@@ -168,12 +172,14 @@ class RankServer
             address += String(":") + ltos( mPort );
             // String machine = ltos(machineID) + String(" (") + address + String(")");
 
+            std::cout << "trying to connect\n";
             if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
                 {
                 close( sockfd );
                 std::cerr << "Unable to connect to the ranker manager\n";
                 return -1;
                 }
+            std::cout << "connection established\n";
 
             int bytes = send( sockfd, msg.cstr(), msg.size( ), 0 );
             if ( bytes == -1 )
@@ -182,13 +188,15 @@ class RankServer
                 std::cerr << "Unable to send the message\n";
                 return -1;
                 }
+            std::cout << "message sent to the manager\n";
+
             close( sockfd );
             return 0;
             }
     
     public:
-        RankServer( int port_, int mPort_, size_t qSize = 1024 ) 
-            : port( port_ ), mPort( mPort_ ), 
+        RankServer( String mIP, int port_, int mPort_, size_t qSize = 1024 ) 
+            : port( port_ ), mPort( mPort_ ), managerIP( mIP ), 
             queueSize( qSize ), dict( 0 )
             {
             }

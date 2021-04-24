@@ -36,7 +36,8 @@ class SearchPlugin : public PluginObject
             //::vector<url_score> scores = queryServer.CollectRanks( query );
             for ( size_t i = 0; i < 3; ++i )
                 {
-                std::string result = "<h4><a href=\"";
+                std::string result = "<div class=\"resultTag\"><h4><a href=\"";
+                result += "https://google.com";
                 //result += scores[i].URL;
                 result += "\">";
                 result += "Google";
@@ -44,7 +45,7 @@ class SearchPlugin : public PluginObject
                 result += "</a></h4><p>";
                 //result += scores[i].URL;
                 result += "https://google.com";
-                result += "</p>";
+                result += "</p></div>";
                 html += result;
                 }
             return html;

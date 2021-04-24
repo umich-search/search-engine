@@ -102,3 +102,9 @@ void freeResults( ::vector< url_score * >& v )
         v.popBack( );
         }
     }
+
+void printRanks( ::vector< url_score >& v )
+    {
+    for ( int i = 0; i < v.size( ); ++i )
+        std::cout << v[ i ].URL << '\n' << v[ i ].title << '\n' << v[ i ].score << std::endl << std::endl;
+    }
