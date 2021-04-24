@@ -44,8 +44,8 @@ class RankServer
         // call the ranker to obtain results
         std::string retrieveDocRank( char *query )
             {
-            Dictionary dict( 0 );
-            ::vector< url_score > scores = Results( &dict, query );
+            Dictionary d( 0 );
+            ::vector< url_score > scores = Results( &d, query );
             printRanks( scores );
             return serializeScores( scores );
             }
@@ -144,8 +144,8 @@ class RankServer
             // send message to the manager
             
             // TODO: change docRank to the ranker result
-            // std::string docRank = retrieveDocRank( msg );
-            std::string docRank = "google.com$GOOGLE#4@";
+            std::string docRank = retrieveDocRank( msg );
+            // std::string docRank = "google.com$GOOGLE#4@";
             std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
             if ( sendMessage( docRank ) == -1 )
                 {

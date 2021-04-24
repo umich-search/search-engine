@@ -50,7 +50,7 @@ const int RANKER_PORT[ ] =
 class QueryServer
     {
     private:
-        int sockfd, port;  // network interface to rank servers
+        int port, sockfd;  // network interface to rank servers (sockfd for test)
         size_t queueSize;
 
         ::vector< url_score > mergedScores;

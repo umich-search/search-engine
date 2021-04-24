@@ -125,8 +125,8 @@ int main(int argc, char *argv[]) {
    // delete res_ptr;
 
 
-// query 2: "quick brown quick"
-   ::vector<url_score> results2 = Results ( &dict, "\"quick brown quick \"" );
+   // query 2: "quick brown quick"
+   ::vector<url_score> results2 = Results ( &dict, "quick | fox" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
        std::cerr << results2[i].score << std::endl;
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 
 // query 3: quick fox
    cout << "q3 Results:" << endl;
-   ::vector<url_score> results3 = Results ( &dict, "quick fox" );
+   ::vector<url_score> results3 = Results ( &dict, "quicker foxes" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
        std::cerr << results3[i].score << std::endl;

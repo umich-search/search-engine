@@ -28,6 +28,10 @@ int main( int argc, char *argv[ ] )
     sin.open( seedFile.cstr( ) );
     String url;
     int count = 0;
+
+    // index the pages into index files
+    IndexConstructor ic( 0 );
+
     while ( sin >> url )
         {
         try
@@ -39,9 +43,7 @@ int main( int argc, char *argv[ ] )
             ParsedUrl parsedUrl( completeUrl.cstr( ) );
             String html = LinuxGetHTML( parsedUrl, 0 );
             HtmlParser htmlparser( html.cstr( ), html.size( ) );
-            
-            // index the pages into index files
-            IndexConstructor ic( 0 );
+        
 
             String title;
             bool titleMaxReached = false;
@@ -86,8 +88,10 @@ int main( int argc, char *argv[ ] )
                 ic.Insert( title, url );
                 }
             ++count;
-            if ( count % 3 == 0 )
-                ic.FinishConstruction();
+
+            // if ( count % 3 == 0 )
+            //     ic.FinishConstruction();
+            
             }
 
         catch( ... )
@@ -96,4 +100,6 @@ int main( int argc, char *argv[ ] )
             continue;
             }
         }
+        
+        ic.FinishConstruction();
     }
