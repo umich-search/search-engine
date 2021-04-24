@@ -132,23 +132,29 @@ bool ISRSpan::ifExactPhrases() {
 }
 
 
-void ISRSpan::calculate_num_frequent_words() {
+void ISRSpan::calculate_num_frequent_words( ) 
+    {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
-    for (int i = 0; i < numTerms; i++) {
-        ISRWord *term = *(Terms + i);
+    for (int i = 0; i < numTerms; i++) 
+        {
+        ISRWord *term = *( Terms + i );
         size_t count = 1;
-        term->Seek(docStartLocation);
-        while (true) {
+        term->Seek( docStartLocation );
+        while ( true ) 
+            {
             auto next = term->Next();
-            if (next == nullptr) break;
-            if (next->GetStartLocation() >= docEndLocation) break;
+            if ( next == nullptr ) 
+                break;
+            if ( next->GetStartLocation( ) >= docEndLocation ) 
+                break;
             count += 1;
+            }
+        float expected = ( float ) term->GetNumberOfOccurrences( ) / ( float ) term->GetDocumentCount( );
+        if ( count >= expected * 2 ) 
+            statistics.numFrequentWords += 1;
         }
-        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();
-        if (count >= expected * 2) statistics.numFrequentWords += 1;
-    }
-}
+    }  
 
 
 String extract_domain(String url) {
@@ -156,15 +162,17 @@ String extract_domain(String url) {
 }
 
 float
-calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights *weights) {
-    class ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
-    if (isrspan.Start()) {
+calculate_scores( Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+                 struct Weights *weights ) 
+    {
+    ISRSpan isrspan( document, Terms, numTerms, positionRarestTerm, weights );
+    if ( isrspan.Start( ) ) 
+        {
         while (isrspan.Next());
-    }
+        }
     isrspan.update_score();
     return isrspan.get_score();
-}
+    }
 
 // Dictionary dictionary(0);
 

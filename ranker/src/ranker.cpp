@@ -31,23 +31,24 @@ float getDynamic(Match* document, ISR* queryRoot);
 vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
     vector<url_score> arr;
-    for ( size_t i = 0; i < (*matches).size(); ++i ) 
+    for ( size_t i = 0; i < ( *matches ).size(); ++i ) 
         {
         float staticScore = 0;
-        Match *document = (*matches)[i];
+        Match *document = ( *matches )[ i ];
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
         float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
         float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
         String url, title; 
-        Dictionary *dict = new Dictionary(0);
-        DocumentDetails *docs = dict->GetDocumentDetials(i);
+        Dictionary *dict = new Dictionary( 0 );
+        DocumentDetails *docs = dict->GetDocumentDetials( i );
         url = docs->url;
         title = docs->title;
         url_score newDoc( url, title, totalScore );
         delete docs;
         delete dict;
         // insertion sort
-        if ( arr.size() == 0 ) arr.pushBack( newDoc );
+        if ( arr.size() == 0 ) 
+            arr.pushBack( newDoc );
         else if ( arr.size() < N ) 
             {
             int j = arr.size() - 1;
@@ -78,9 +79,9 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
 float getDynamic(Match* document, ISR* queryRoot)
     {
     bool abstractISRExists = false;
-    for ( int i = 0; i < queryRoot->GetTermNum(); ++i )
+    for ( int i = 0; i < queryRoot->GetTermNum( ); ++i )
         {
-        std::cout << (*( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
+        std::cout << ( *( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
         if ((*( queryRoot->GetTerms() + i ))->GetTermNum() > 0) 
             {
             abstractISRExists = true;
@@ -88,20 +89,21 @@ float getDynamic(Match* document, ISR* queryRoot)
             }
         }
     // this ISR has only WordISRs, calculate score according to heuristics
-    if ( !abstractISRExists ) return queryRoot->GetHeuristicScore(document);
+    if ( !abstractISRExists ) 
+        return queryRoot->GetHeuristicScore( document );
     else 
         {
-        vector<float> scores;
-        for (int i = 0; i < queryRoot->GetTermNum(); ++i) 
+        vector< float > scores;
+        for ( int i = 0; i < queryRoot->GetTermNum( ); ++i ) 
             {
-            ISR *root = *( queryRoot->GetTerms() + i );
-            if ( root->GetTermNum() > 0 ) // abstract ISR
+            ISR *child = *( queryRoot->GetTerms() + i );
+            if ( child->GetTermNum() > 0 ) // abstract ISR
                 {
-                scores.pushBack( getDynamic(document, root) );
+                scores.pushBack( getDynamic( document, child ) );
                 }
             else // treat the ISRWord as ISRPhrase
                 {
-                scores.pushBack(root->GetHeuristicScore(document));
+                scores.pushBack( child->GetHeuristicScore( document ) );
                 }
             }
         return queryRoot->GetCombinedScore(scores);

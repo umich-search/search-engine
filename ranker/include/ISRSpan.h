@@ -44,9 +44,9 @@ class ISRSpan {
 public:
 
     ISRSpan(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm, struct Weights *weights) 
-        : numTerms(numTerms), positionRarestTerm(positionRarestTerm),
-        Terms(Terms),document(document),weights(weights),
-        location(::vector<Location>(numTerms, 0))
+        : numTerms( numTerms ), positionRarestTerm( positionRarestTerm ),
+        Terms( Terms ), document( document ), location( ::vector< Location >( numTerms, 0 ) ), 
+        score( 0 ), smallest( 0 ), farthest( 0 ), weights( weights )
         {
         statistics.numPhrases = 0;
         statistics.numOrderSpans = 0;

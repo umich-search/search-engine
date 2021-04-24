@@ -31,13 +31,13 @@ float ISR::GetHeuristicScore( Match *document )
             }
         } 
     if ( minOccurence == 0xFFFFFFFFFFFFFFFF ) return 0;
-    return calculate_scores(document, (ISRWord **)(this->GetTerms()), this->GetTermNum(), rarestlocation, this->getWeights());
+    return calculate_scores( document, ( ISRWord ** )( this->GetTerms( ) ), this->GetTermNum( ), rarestlocation, this->getWeights( ) );
     }
 
 Post *ISRWord::Next() {
     // currIdx: the index into the posting list
-    size_t numOccurence = termPostingListRaw.getHeader()->numOfOccurence;
-    if (currIndex < numOccurence - 1) {
+    size_t numOccurence = termPostingListRaw.getHeader( )->numOfOccurence;
+    if ( currIndex < numOccurence - 1 ) {
         currIndex += 1;
         Location delta = termPostingListRaw.getPostAt(currIndex).delta;
         currPost.SetLocation(delta + currPost.GetStartLocation());

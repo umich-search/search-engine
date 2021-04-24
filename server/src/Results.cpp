@@ -16,6 +16,8 @@
    // ISROr *q1 = new ISROr(terms_q1, 2);
    ::vector< Match * > *matches = ConstraintSolver( EndDoc, queryRoot );
    ::vector<url_score> res = results.getHighest( matches, queryRoot );
+
+   // free allocated memory
    for ( size_t i = 0; i < matches->size( ); ++i )
    {
    delete ( *matches )[ i ];
@@ -24,5 +26,6 @@
    delete matches;
    delete queryRoot;
    delete EndDoc;
+   
    return res;
    }
