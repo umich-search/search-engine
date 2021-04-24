@@ -2,9 +2,9 @@
 #include <cstring>
 #include "Plugin.h"
 //#include "../../ranker/include/ranker.h"
-//#include "../../utility/include/mString.h"
-#include "../../utility/include/Concurrency.h"
-#include "../../utility/include/Vector.h"
+#include "mString.h"
+#include "Concurrency.h"
+#include "Vector.h"
 #include "RankerManager.h"
 
 // Handle requests for the path /search?query=university+of+michigan
@@ -28,12 +28,13 @@ class SearchPlugin : public PluginObject
             CriticalSection s(&mutex);
             if ( action != "GET" )
                 return "";
-            std::string query = parseQuery( path.c_str() );
+            std::string query = parseQuery( path );
             if ( query.size() == 0 )
                 return "";
-            std::string html;
             // TODO: fix "RankerManager.h" #include "CrawlerManager.h"
+            // String queryString( query.c_str() );
             ::vector<url_score> scores = queryServer.CollectRanks( query );
+            std::string html;
             for ( size_t i = 0; i < 3; ++i )
                 {
                 std::string result = "<div class=\"resultTag\"><h4><a href=\"";
