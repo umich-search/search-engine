@@ -20,16 +20,16 @@ class RankServer
         // communication attributes
         int sockfd, port, mPort;  // listen socket fd and port, manager port
         size_t queueSize;  // the size of the listen queue
-        String managerIP;  // the ip address of the manager
+        std::string managerIP;  // the ip address of the manager
 
         // ranking attributes
         Dictionary dict;
         Ranker rk;
 
         // serialize the vector of scores into network message
-        String serializeScores( ::vector< url_score >& scores )
+        std::string serializeScores( ::vector< url_score >& scores )
             {
-            String msg;
+            std::string msg;
             for ( size_t i = 0; i < scores.size( ); ++i )
                 {
                 msg += serializeUrlScore( &scores[ i ] );
@@ -42,7 +42,7 @@ class RankServer
 
         // build the query compiler and the constraint solver 
         // call the ranker to obtain results
-        String retrieveDocRank( char *query )
+        std::string retrieveDocRank( char *query )
             {
             Dictionary dict( 0 );
             ::vector< url_score > scores = Results( &dict, query );
@@ -56,12 +56,12 @@ class RankServer
             // (1) Create socket
             sockfd = socket( AF_INET, SOCK_STREAM, 0 );
             if ( sockfd == -1 ) 
-                throw String("Unable to open stream socket");
+                throw std::string("Unable to open stream socket");
 
             // (2) Set the "reuse port" socket option
             int yesval = 1;
             if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
-                throw String("Unable to set socket options");
+                throw std::string("Unable to set socket options");
 
             // (3) Create a sockaddr_in struct for the proper port and bind() to it.
             struct sockaddr_in addr;
@@ -71,14 +71,14 @@ class RankServer
 
             // (3b) Bind to the port.
             if ( bind( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
-                throw String("Unable to bind stream socket");
+                throw std::string("Unable to bind stream socket");
 
             // (3c) Detect which port was chosen.
             socklen_t length = sizeof( addr );
             if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
-                throw String("Unable to detect port");
+                throw std::string("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
-                throw String("Incorrect listen port");
+                throw std::string("Incorrect listen port");
             std::cout << "Ranker Server Listening on port " << ntohs( addr.sin_port ) << std::endl;
             }
 
@@ -87,10 +87,10 @@ class RankServer
             {
             // (4) Begin listening for incoming connections.
             if ( listen( sockfd, queueSize ) == -1 )
-                throw String("Socket listen failed");
+                throw std::string("Socket listen failed");
             
-            String output = "Listening on port ";
-            output += ltos( port );
+            std::string output = "Listening on port ";
+            output += ltos( port ).cstr( );
 
             // (5) Serve incoming connections one by one forever.
             while ( true ) 
@@ -99,7 +99,7 @@ class RankServer
                 int connectionfd = accept( sockfd, 0, 0 );
                 std::cout << "accepted\n";
                 if ( connectionfd == -1 ) 
-                    throw String("Unable to accept connection");
+                    throw std::string("Unable to accept connection");
                 try
                     {
                     // Add the connection to be handled
@@ -142,7 +142,10 @@ class RankServer
             msg[ cumsum ] = 0;
 
             // send message to the manager
-            String docRank = retrieveDocRank( msg );
+            
+            // TODO: change docRank to the ranker result
+            // std::string docRank = retrieveDocRank( msg );
+            std::string docRank = "google.com$GOOGLE#4@";
             std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
             if ( sendMessage( docRank ) == -1 )
                 {
@@ -153,23 +156,23 @@ class RankServer
             }
 
         // send the ranked result to the manager
-        int sendMessage( String& msg )
+        int sendMessage( std::string& msg )
             {
             int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
             if ( sockfd == -1 )
-                throw String("Unable to open stream socket");
+                throw std::string("Unable to open stream socket");
 
             struct sockaddr_in addr;
             addr.sin_family = AF_INET;
-            int result = inet_pton( AF_INET, managerIP.cstr( ), &addr.sin_addr );
+            int result = inet_pton( AF_INET, managerIP.c_str( ), &addr.sin_addr );
             if ( result == -1 )
-                throw String("Error creating IP address: invalid family");
+                throw std::string("Error creating IP address: invalid family");
             else if ( result == 0 )
-                throw String("Error creating IP address: invalid cstr");
+                throw std::string("Error creating IP address: invalid cstr");
             addr.sin_port = htons( mPort );
 
-            String address( managerIP );
-            address += String(":") + ltos( mPort );
+            std::string address( managerIP );
+            address += std::string(":") + ltos( mPort ).cstr( );
             // String machine = ltos(machineID) + String(" (") + address + String(")");
 
             std::cout << "trying to connect\n";
@@ -181,7 +184,7 @@ class RankServer
                 }
             std::cout << "connection established\n";
 
-            int bytes = send( sockfd, msg.cstr(), msg.size( ), 0 );
+            int bytes = send( sockfd, msg.c_str(), msg.size( ), 0 );
             if ( bytes == -1 )
                 {
                 close( sockfd );
@@ -195,7 +198,7 @@ class RankServer
             }
     
     public:
-        RankServer( String mIP, int port_, int mPort_, size_t qSize = 1024 ) 
+        RankServer( std::string mIP, int port_, int mPort_, size_t qSize = 1024 ) 
             : port( port_ ), mPort( mPort_ ), managerIP( mIP ), 
             queueSize( qSize ), dict( 0 )
             {

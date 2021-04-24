@@ -22,7 +22,7 @@ int main( int argc, char *argv[ ] )
         {
         server.Start( );
         }
-    catch( String& e )
+    catch( std::string& e )
         {
         std::cout << e << std::endl;
         }

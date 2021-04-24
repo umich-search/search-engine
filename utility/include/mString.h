@@ -22,6 +22,7 @@ public:
 
     ~String() {
         delete[] buffer;
+        buffer = nullptr;
     }
 
     // String Literal / C String Constructor

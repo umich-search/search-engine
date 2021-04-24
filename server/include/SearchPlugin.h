@@ -5,7 +5,7 @@
 //#include "../../utility/include/mString.h"
 #include "../../utility/include/Concurrency.h"
 #include "../../utility/include/Vector.h"
-//#include "RankerManager.h"
+#include "RankerManager.h"
 
 // Handle requests for the path /search?query=university+of+michigan
 
@@ -33,7 +33,7 @@ class SearchPlugin : public PluginObject
                 return "";
             std::string html;
             // TODO: fix "RankerManager.h" #include "CrawlerManager.h"
-            //::vector<url_score> scores = queryServer.CollectRanks( query );
+            ::vector<url_score> scores = queryServer.CollectRanks( query );
             for ( size_t i = 0; i < 3; ++i )
                 {
                 std::string result = "<div class=\"resultTag\"><h4><a href=\"";
@@ -52,7 +52,7 @@ class SearchPlugin : public PluginObject
             }
 
     private:
-        //QueryServer queryServer;
+        QueryServer queryServer;
         mutex_t mutex;
 
         std::string parseQuery( std::string path )

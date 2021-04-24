@@ -9,25 +9,28 @@ const float dynamicWeight = 0.95;
 const float staticWeight = 0.05;
 
 struct url_score {
-    String URL;
-    String title;
+    std::string URL;
+    std::string title;
     float score;
     url_score( ) 
         {
         }
-    url_score( String URL, String title, float score ) : URL(URL), title(title), score(score)
+    url_score( String URL, String title, float score ) : URL(URL.cstr( )), title(title.cstr( )), score(score)
         { 
         }
-    url_score( const url_score& other ) : URL( other.URL ), title( other.title ), score( other.score )
-        {
+    url_score( std::string URL, std::string title, float score ) : URL(URL), title(title), score(score)
+        { 
         }
-    url_score& operator= ( const url_score& other )
-        {
-        URL = other.URL;
-        title = other.title;
-        score = other.score;
-        return *this;
-        }
+    // url_score( const url_score& other ) : URL( other.URL ), title( other.title ), score( other.score )
+    //     {
+    //     }
+    // url_score& operator= ( const url_score& other )
+    //     {
+    //     URL = other.URL;
+    //     title = other.title;
+    //     score = other.score;
+    //     return *this;
+    //     }
 };
 
 
@@ -38,7 +41,7 @@ const float dynamic_weight = 0.9;
 ::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot);
 };
 
-String serializeUrlScore( url_score *us );
+std::string serializeUrlScore( url_score *us );
 void freeResults( ::vector< url_score * >& v );
 
 void printRanks( ::vector< url_score >& v );

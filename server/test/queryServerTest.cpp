@@ -7,7 +7,7 @@ const int port = 8888;
 
 int main( )
     {
-    String query1 = "Google | Facebook", query2 = "amazon", query3 = "( google wikipedia ) | amazon";
+    std::string query1 = "Google | Facebook", query2 = "amazon", query3 = "( google wikipedia ) | amazon";
     QueryServer qServer;
     try
         {
@@ -25,7 +25,7 @@ int main( )
         {
         std::cout << e << std::endl;
         }
-    catch( String& es )
+    catch( std::string& es )
         {
         std::cout << es << std::endl;
         }

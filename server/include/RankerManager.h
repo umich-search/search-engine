@@ -16,7 +16,7 @@
 #define MAX_MESSAGE_SIZE 512
 
 
-const size_t NUM_RANKERS = 1;
+const size_t NUM_RANKERS = 3;
 // const int PORT = 8888;
 // const size_t QUEUE_SIZE = 1024;
 
@@ -60,18 +60,18 @@ class QueryServer
         // ********* Helper Methods ************* //
 
         // construct url_score from string
-        ::vector< url_score > deserializeScores( String& urlStr )
+        ::vector< url_score > deserializeScores( std::string& urlStr )
             {
             ::vector< url_score > res;
             size_t iter = 0, start = iter;
             const char urlTag = '$', titleTag = '#', scoreTag = '@';
             int score, completedSecNum = 0;  // when finish = 3
-            String URL, title;
+            std::string URL, title;
             for ( ; iter < urlStr.size( ); ++iter )
                 {
                 if ( urlStr[ iter ] == urlTag )
                     {
-                    URL = String( urlStr.cstr( ) + start, iter - start );
+                    URL = std::string( urlStr.c_str( ) + start, iter - start );
                     start = iter + 1;
                     if ( completedSecNum != 0 )
                         throw "Malformed rank server response1\n";
@@ -80,7 +80,7 @@ class QueryServer
                     }
                 else if ( urlStr[ iter ] == titleTag )
                     {
-                    title = String( urlStr.cstr( ) + start, iter - start );
+                    title = std::string( urlStr.c_str( ) + start, iter - start );
                     start = iter + 1;
                     if ( completedSecNum != 1 )
                         throw "Malformed rank server response1\n";
@@ -89,7 +89,7 @@ class QueryServer
                     }
                 else if ( urlStr[ iter ] == scoreTag )
                     {
-                    score = atoi( String( urlStr.cstr( ) + start, iter - start ).cstr( ) );
+                    score = atoi( std::string( urlStr.c_str( ) + start, iter - start ).c_str( ) );
                     start = iter + 1;
                     if ( completedSecNum != 2 )
                         throw "Malformed rank server response1\n";
@@ -149,7 +149,7 @@ class QueryServer
         // ********* Communication Methods ************* //
 
         // send the query to every distributed rank server
-        int sendQuery( String& query )
+        int sendQuery( std::string& query )
             {
             std::cout << "start querying machines!\n";
             for ( size_t i = 0; i < NUM_RANKERS; ++i )
@@ -177,9 +177,9 @@ class QueryServer
                     }
                 addr.sin_port = htons( RANKER_PORT[ i ] );
 
-                String address( RANKER_HOST[ i ] );
-                address += String(":") + ltos( RANKER_PORT[ i ] );
-                String machine = ltos( i ) + String(" (") + address + String(")");
+                std::string address( RANKER_HOST[ i ] );
+                address += std::string(":") + ltos( RANKER_PORT[ i ] ).cstr( );
+                std::string machine = ltos( i ).cstr( ) + std::string(" (") + address + std::string(")");
 
                 if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
                     {
@@ -189,7 +189,7 @@ class QueryServer
                     }
                 std::cout << "Connection succeeds to machine " << machine << std::endl;
 
-                int bytes = send( sockfd, query.cstr(), query.size( ), 0 );
+                int bytes = send( sockfd, query.c_str(), query.size( ), 0 );
                 if ( bytes == -1 )
                     {
                     close( sockfd );
@@ -207,12 +207,12 @@ class QueryServer
             // (1) Create socket
             sockfd = socket( AF_INET, SOCK_STREAM, 0 );
             if ( sockfd == -1 ) 
-                throw String("Unable to open stream socket");
+                throw std::string("Unable to open stream socket");
 
             // (2) Set the "reuse port" socket option
             int yesval = 1;
             if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
-                throw String("Unable to set socket options");
+                throw std::string("Unable to set socket options");
 
             // (3) Create a sockaddr_in struct for the proper port and bind() to it.
             struct sockaddr_in addr;
@@ -222,19 +222,19 @@ class QueryServer
 
             // (3b) Bind to the port.
             if ( bind( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
-                throw String("Unable to bind stream socket");
+                throw std::string("Unable to bind stream socket");
 
             // (3c) Detect which port was chosen.
             socklen_t length = sizeof( addr );
             if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
-                throw String("Unable to detect port");
+                throw std::string("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
-                throw String("Incorrect listen port");
+                throw std::string("Incorrect listen port");
             // (4) Begin listening for incoming connections.
             if ( listen( sockfd, queueSize ) == -1 )
-                throw String("Socket listen failed");
+                throw std::string("Socket listen failed");
             
-            String output = "Listening on port ";
+            std::string output = "Listening on port ";
 
             std::cout << output << ntohs( addr.sin_port ) << std::endl;
             }
@@ -247,7 +247,7 @@ class QueryServer
                 {
                 int connectionfd = accept( sockfd, 0, 0 );
                 if ( connectionfd == -1 ) 
-                    throw String("Unable to accept connection");
+                    throw std::string("Unable to accept connection");
                 try
                     {
                     // Add the connection to be handled
@@ -272,16 +272,16 @@ class QueryServer
                 if (bytes == -1)
                     {
                     close( connectionfd );
-                    throw String("Problem reading byte stream");
+                    throw std::string("Problem reading byte stream");
                     }
                 cumsum += bytes;
             } while ( bytes > 0 );
 
             close( connectionfd );
             if ( cumsum == 0 )
-                throw String("Empty message rec");
+                throw std::string("Empty message rec");
             msg[ cumsum ] = 0;
-            String urlStr( msg );
+            std::string urlStr( msg );
 
             ::vector< url_score > scores = deserializeScores( urlStr );
             std::cout << "Rank received: \n";
@@ -301,15 +301,15 @@ class QueryServer
 
         // decode the received message to obtain the query string;
         // called by the main server;
-        String deserializeQueryMsg( const char *msg )
+        std::string deserializeQueryMsg( const char *msg )
             {
             // TODO: adapt this function to web server queries
-            return String( msg );
+            return std::string( msg );
             }
 
         // main server calls this function when it receives a query from the user
         // call deserializeQueryMsg before calling this function
-        ::vector< url_score > CollectRanks( String& query )
+        ::vector< url_score > CollectRanks( std::string& query )
             {
             if ( mergedScores.size( ) > 0 )
                 mergedScores.resize( 0 );  // clear buffer

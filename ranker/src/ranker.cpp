@@ -110,12 +110,12 @@ float getDynamic(Match* document, ISR* queryRoot)
         }
     }
 
-String serializeUrlScore( url_score *us )
+std::string serializeUrlScore( url_score *us )
     {
     // [URL]$[title]#[score]@
-    return us->URL + String( '$' ) + 
-        us->title + String( '#' ) + 
-        ltos( us->score ) + String( '@' );
+    return us->URL + '$' + 
+        us->title + '#' + 
+        ltos( us->score ).cstr( ) + '@';
     }
 
 void freeResults( ::vector< url_score * >& v )
@@ -130,5 +130,7 @@ void freeResults( ::vector< url_score * >& v )
 void printRanks( ::vector< url_score >& v )
     {
     for ( int i = 0; i < v.size( ); ++i )
-        std::cout << v[ i ].URL << '\n' << v[ i ].title << '\n' << v[ i ].score << std::endl << std::endl;
+        std::cout << v[ i ].URL << '\n' 
+                << v[ i ].title << '\n' 
+                << v[ i ].score << std::endl << std::endl;
     }

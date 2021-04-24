@@ -107,6 +107,9 @@ template <typename T> class vector
             _size = std::move( other._size );
             _capacity = std::move( other._capacity );
             arr = std::move( other.arr );
+            other._size = 0;
+            other._capacity = 0;
+            other.arr = nullptr;
             }
          return *this;
          }
