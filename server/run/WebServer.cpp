@@ -40,8 +40,8 @@ using namespace std;
 // The constructor for any plugin should set Plugin = this so that
 // LinuxTinyServer knows it exists and can call it.
 
-#include "../include/Plugin.h"
-#include "../include/SearchPlugin.h"
+#include "Plugin.h"
+#include "SearchPlugin.h"
 
 PluginObject *Plugin = nullptr;
 
@@ -439,6 +439,7 @@ int main(int argc, char **argv) {
         perror("listen");
     }
 
+    std::cout << "Webserver listening on port: " << port << std::endl;
     // TO DO;  Accept each new connection and create a thread to talk with
     // the client over the new talk socket that's created by Linux
     // when we accept the connection.

@@ -1,11 +1,10 @@
 #pragma once
 #include <cstring>
 #include "Plugin.h"
-//#include "../../ranker/include/ranker.h"
 #include "mString.h"
 #include "Concurrency.h"
 #include "Vector.h"
-#include "RankerManager.h"
+#include "QueryServer.h"
 
 // Handle requests for the path /search?query=university+of+michigan
 
