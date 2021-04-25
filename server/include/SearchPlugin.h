@@ -14,7 +14,6 @@ class SearchPlugin : public PluginObject
     public:
         SearchPlugin() 
             {
-            queryServer.Start();
             }
         ~SearchPlugin() { };
 

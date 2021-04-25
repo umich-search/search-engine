@@ -187,7 +187,7 @@ const char* extract_url(String a) {
     String result;
     if (loc1<0) return "";
     for (int i=loc1+1;i<loc2;i++) result+=a[i];
-    return result.c_str();
+    return result.cstr();
 }
 
 float

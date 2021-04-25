@@ -14,6 +14,7 @@
 #include "CrawlerManager.h"
 #include "HashTable.h"
 #include "ThreadPool.h"
+#include "Concurrency.h"
 
 #define MAX_MESSAGE_SIZE 512
 
@@ -266,11 +267,11 @@ class QueryServer : ThreadPool
                         break;
                         }
                     }
+                }
                 catch( std::string e )
                     {
                     std::cerr << e << std::endl;
                     }
-                }
             }
 
         void handleConnect( int connectionfd )
@@ -294,7 +295,7 @@ class QueryServer : ThreadPool
                 throw std::string("Empty message rec");
             buf[ cumsum ] = 0;
             
-
+            std::string urlStr( buf, cumsum );
             ::vector< url_score > scores = deserializeScores( urlStr );
             std::cout << "Rank received: \n";
             printRanks( scores );
@@ -326,7 +327,7 @@ class QueryServer : ThreadPool
                 queueSize( qSize ), port( myPort ), mergeSize( mSize )
             { 
             std::cout << "input port = " << port << std::endl;
-            MutexInit(&mutex);
+            MutexInit(&mutex, nullptr);
             }
         ~QueryServer( ) 
             { 
