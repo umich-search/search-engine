@@ -79,7 +79,6 @@ class RankServer
                 throw std::string("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
                 throw std::string("Incorrect listen port");
-            std::cout << "Ranker Server Listening on port " << ntohs( addr.sin_port ) << std::endl;
             }
 
         // start the server to listen traffics
@@ -89,8 +88,7 @@ class RankServer
             if ( listen( sockfd, queueSize ) == -1 )
                 throw std::string("Socket listen failed");
             
-            std::string output = "Listening on port ";
-            output += ltos( port ).cstr( );
+            std::cout << "Ranker Server Listening on port " << port << std::endl;
 
             // (5) Serve incoming connections one by one forever.
             while ( true ) 
@@ -164,16 +162,8 @@ class RankServer
 
             struct sockaddr_in addr;
             addr.sin_family = AF_INET;
-            int result = inet_pton( AF_INET, managerIP.c_str( ), &addr.sin_addr );
-            if ( result == -1 )
-                throw std::string("Error creating IP address: invalid family");
-            else if ( result == 0 )
-                throw std::string("Error creating IP address: invalid cstr");
+            inet_pton( AF_INET, managerIP.c_str( ), &addr.sin_addr );
             addr.sin_port = htons( mPort );
-
-            std::string address( managerIP );
-            address += std::string(":") + ltos( mPort ).cstr( );
-            // String machine = ltos(machineID) + String(" (") + address + String(")");
 
             std::cout << "trying to connect\n";
             if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
