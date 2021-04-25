@@ -7,7 +7,7 @@ const int port = 8888;
 
 int main( )
     {
-    std::string query1 = "Google | Facebook", query2 = "Amazon", query3 = "google";
+    std::string query1 = "Google | Facebook", query2 = "C++", query3 = "EECS";
     QueryServer qServer;
     try
         {
