@@ -78,42 +78,75 @@ class QueryServer : ThreadPool
             {
             ::vector< url_score > res;
             size_t iter = 0, start = iter;
-            const char urlTag = '$', titleTag = '#', scoreTag = '@';
+            // const char urlTag = '$', titleTag = '#', scoreTag = '@';
+            const char *urlTag = "\r\r\n", *titleTag = "\r\r\r\n", *scoreTag = "\r\r\r\r\n";
             int score, completedSecNum = 0;  // when finish = 3
             std::string URL, title;
-            for ( ; iter < urlStr.size( ); ++iter )
+            for ( ; iter < urlStr.size( ); )
                 {
-                if ( urlStr[ iter ] == urlTag )
+                if ( !strncmp( urlStr.c_str( ) + iter, urlTag, 3 ) )
                     {
-                    URL = std::string( urlStr.c_str( ) + start, iter - start );
-                    start = iter + 1;
                     if ( completedSecNum != 0 )
-                        throw "Malformed rank server response1\n";
+                        {
+                        std::cerr << "Malformed rank server response1\n";
+                        completedSecNum = 0;
+                        while( strncmp( urlStr.c_str( ) + iter, scoreTag, 5 ) )
+                            ++iter;
+                        iter += 5;
+                        start = iter;
+                        continue;
+                        }
+
+                    URL = std::string( urlStr.c_str( ) + start, iter - start );
+                    iter += 3;
+                    start = iter;
                     
                     ++completedSecNum;
                     }
-                else if ( urlStr[ iter ] == titleTag )
+                else if ( !strncmp( urlStr.c_str( ) + iter, titleTag, 4 ) )
                     {
-                    title = std::string( urlStr.c_str( ) + start, iter - start );
-                    start = iter + 1;
                     if ( completedSecNum != 1 )
-                        throw "Malformed rank server response1\n";
+                        {
+                        std::cerr << "Malformed rank server response1\n";
+                        completedSecNum = 0;
+                        while( strncmp( urlStr.c_str( ) + iter, scoreTag, 5 ) )
+                            ++iter;
+                        iter += 5;
+                        start = iter;
+                        continue;
+                        }
+                    title = std::string( urlStr.c_str( ) + start, iter - start );
+                    iter += 4;
+                    start = iter;
                         
                     ++completedSecNum;
                     }
-                else if ( urlStr[ iter ] == scoreTag )
+                else if ( !strncmp( urlStr.c_str( ) + iter, scoreTag, 5 ) )
                     {
-                    score = atoi( std::string( urlStr.c_str( ) + start, iter - start ).c_str( ) );
-                    start = iter + 1;
                     if ( completedSecNum != 2 )
-                        throw "Malformed rank server response1\n";
-                        
+                        {
+                        std::cerr << "Malformed rank server response1\n";
+                        completedSecNum = 0;
+                        while( strncmp( urlStr.c_str( ) + iter, scoreTag, 5 ) )
+                            ++iter;
+                        iter += 5;
+                        start = iter;
+                        continue;
+                        }
+                    score = atoi( std::string( urlStr.c_str( ) + start, iter - start ).c_str( ) );
+                    iter += 5;
+                    start = iter;
+                    
+                    // store the parsed result
                     completedSecNum = 0;
                     url_score tmp( URL, title, score );
                     res.pushBack( tmp );
+                    std::cout << "+++++\n" << "deserialized message:\n" << URL << std::endl << title << std::endl << score << "\n++++++++++++++++\n";
                     }
                 else
-                    continue;
+                    {
+                    ++iter;
+                    }
                 }
             return res;
             }

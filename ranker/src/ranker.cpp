@@ -2,28 +2,48 @@
 #include "Dictionary.h"
 #include "ISRSpan.h"
 #include "constraint_solver.h"
+#include "BloomFilter.h"
 
 float getDynamic(Match* document, ISR* queryRoot);
 
 vector<url_score> Ranker::getHighest( ConstraintSolver& solver, ISR* queryRoot )
     {
     vector<url_score> arr;
+
     // for ( size_t i = 0; i < ( *matches ).size(); ++i )
     while (Match* document = solver.findMatch())
         {
         float staticScore = calculate_static_scores( document );
         // Match *document = ( *matches )[ i ];
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
-        float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
-        float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
         String url, title; 
         Dictionary *dict = new Dictionary( 0 );
         DocumentDetails *docs = dict->GetDocumentDetials( document->id );
         url = docs->url;
         title = docs->title;
-        url_score newDoc( url, title, totalScore );
+        
         delete docs;
         delete dict;
+
+        // filtering
+        bool flagExist = false;
+        for ( size_t i = 0; i < arr.size( ); ++i )
+            {
+            if ( arr[ i ].URL == std::string( url.cstr( ) ) )
+                {
+                flagExist = true;
+                break;
+                }
+            }
+        if ( flagExist )
+            {
+            delete document;
+            continue;
+            }
+
+        float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
+        float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
+        url_score newDoc( url, title, totalScore );
 
         // insertion sort
         if ( arr.size() == 0 ) 
@@ -92,9 +112,9 @@ float getDynamic(Match* document, ISR* queryRoot)
 std::string serializeUrlScore( url_score *us )
     {
     // [URL]$[title]#[score]@
-    return us->URL + '$' + 
-        us->title + '#' + 
-        ltos( us->score ).cstr( ) + '@';
+    return us->URL + "\r\r\n" + 
+        us->title + "\r\r\r\n" + 
+        ltos( us->score ).cstr( ) + "\r\r\r\r\n";
     }
 
 void freeResults( ::vector< url_score * >& v )

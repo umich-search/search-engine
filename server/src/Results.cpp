@@ -2,6 +2,7 @@
 
 ::vector<url_score> Results(Dictionary *dict, char* input)
    {
+   std::cout << "Querying for words: " << input << std::endl;
    ISR* queryRoot = Query_Compiler( dict, input );
    ISREndDoc* EndDoc = dict->OpenISREndDoc();
    Ranker results;

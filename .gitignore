@@ -12,3 +12,8 @@ crawler/run/bloomfilter
 crawler/run/frontier
 crawler/run/.FirstCrawl
 *.o
+m*/
+disk-index/
+seedFile.txt
+testdoc.txt
+debug

@@ -14,7 +14,8 @@ String tolower( String input )
 
 ISR* StringToISR ( Dictionary *dict, String input )
    {
-   input = tolower( input );
+   // input = tolower( input );
+   std::cout << "***query after lower casing: " << input << std::endl;
    //   std::cout<< "We are in string to isr!!!!" << std::endl;
   //    std::cout<< input.cstr() << std::endl;
    // true - AND, false - OR
@@ -90,6 +91,8 @@ ISR* StringToISR ( Dictionary *dict, String input )
             ISRWord* currentWordISR = dict->OpenISRWord(currentWord.cstr());
             currentAndStream.pushBack(currentWordISR);
          }
+      if ( *currentChar == 0 )
+         break;
       currentChar++;
       }
    ISR** currentAndISR = new ISR*[currentAndStream.size()];
