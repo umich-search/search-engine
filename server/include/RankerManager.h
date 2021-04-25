@@ -18,34 +18,37 @@
 
 #define MAX_MESSAGE_SIZE 512
 
-const size_t NUM_RANKERS = 3;  // 14;
+const size_t NUM_RANKERS = 14;  // 14;
 // const size_t QUEUE_SIZE = 1024;
 
 static const char *RANKER_HOST[ ] = 
     {
-        // "35.202.123.51",
-        // "104.197.37.30",
-        // "146.148.73.38",
-        // "34.69.231.181",
-        // "34.66.107.136",
-        // "34.68.201.74",
-        // "35.188.164.185",
-        // "35.221.27.146",
-        // "35.199.41.233",
-        // "35.245.62.74",
-        // "34.86.92.34",
-        // "35.236.254.45",
-        // "35.230.186.30",
-        // "35.221.49.174",
-        "127.0.0.1",
-        "127.0.0.1",
-        "127.0.0.1",
+        "35.202.123.51",
+        "104.197.37.30",
+        "146.148.73.38",
+        "34.69.231.181",
+        "34.66.107.136",
+        "34.68.201.74",
+        "35.188.164.185",
+        "35.221.27.146",
+        "35.199.41.233",
+        "35.245.62.74",
+        "34.86.92.34",
+        "35.236.254.45",
+        "35.230.186.30",
+        "35.221.49.174",
+        // "127.0.0.1",
+        // "127.0.0.1",
+        // "127.0.0.1",
     };
 
-const int RANKER_PORT[ ] = 
-    {
-    8000, 8001, 8002
-    };
+// cloud use
+const int RANKER_PORT = 8888;
+
+// const int RANKER_PORT[ ] = 
+//     {
+//     8000, 8001, 8002
+//     };
 
 // struct message 
 //     {
@@ -183,10 +186,12 @@ class QueryServer : ThreadPool
                 std::cerr << "Error creating IP address: invalid cstr";
                 return -1;
                 }
-            addr.sin_port = htons( port );
+            // TODO:change it to 8888
+            // addr.sin_port = htons( port );
+            addr.sin_port = htons( RANKER_PORT );
 
             std::string address( RANKER_HOST[ machineID ] );
-            address += std::string(":") + ltos( port ).cstr( );
+            address += std::string(":") + ltos( ntohs( addr.sin_port ) ).cstr( );
             std::string machine = ltos( machineID ).cstr( ) + std::string(" (") + address + std::string(")");
 
             if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
@@ -254,7 +259,7 @@ class QueryServer : ThreadPool
             // (5) Serve incoming connections one by one forever.
             struct sockaddr_in addr;
             socklen_t addr_len = sizeof( addr );
-            int connectionfd = accept( sockfd, (struct sockaddr *)&addr, &addr_len);
+            int connectionfd = accept( sockfd, (struct sockaddr *)&addr, &addr_len );
             if ( connectionfd == -1 ) 
                 throw std::string("Unable to accept connection");
             try
@@ -353,23 +358,33 @@ class QueryServer : ThreadPool
         ::vector< url_score > CollectRanks( std::string& query )
             {
             CriticalSection s(&mutex);
-            ++requestID;
+            // ++requestID;
 
             if ( mergedScores.size( ) > 0 )
                 mergedScores.resize( 0 );  // clear buffer
 
+            startServer();
+
+            size_t aliveRankers = 0;
             for ( size_t i = 0; i < NUM_RANKERS; ++i )
                 {
+                std::cout << "Sending to the " << i << "th machine\n";
                 finished[i] = false;
-                while ( sendQuery( i, query ) == -1 )
+                size_t attempts = 0;  // only allow 10 attemps to connect
+                while ( sendQuery( i, query ) == -1 && attempts++ < 10 )
                     continue;
+                if ( attempts < 10 )
+                    ++aliveRankers;
                 }
             
-            startServer();
-            for ( size_t i = 0; i < NUM_RANKERS; ++i )
+            // startServer();
+            for ( size_t i = 0; i < aliveRankers; ++i )
                 {
-                collectResult();
+                // if ( finished[ i ] )
+                collectResult( );
                 }
+
+            close( sockfd );
 
             // Send the query to each ranker until we have received a response
             // from each of the rankers

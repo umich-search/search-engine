@@ -1,0 +1,52 @@
+input port = 8888
+Sending to the 0th machine
+Sending to machine: 0
+Connection succeeds to machine 0 (127.0.0.1:8000)
+Google | Facebook sent sucessfully to machine: 0 (127.0.0.1:8000)
+Sending to the 1th machine
+Sending to machine: 1
+Connection succeeds to machine 1 (127.0.0.1:8001)
+Google | Facebook sent sucessfully to machine: 1 (127.0.0.1:8001)
+Sending to the 2th machine
+Sending to machine: 2
+Connection succeeds to machine 2 (127.0.0.1:8002)
+Google | Facebook sent sucessfully to machine: 2 (127.0.0.1:8002)
+Listening on port: 8888
+Rank received: 
+taobao.com
+淘宝网(淘寶網) 
+4
+
+taobao.com
+淘宝网(淘寶網) 
+4
+
+Rank received: 
+tmall.com
+天猫tmall.com--理想生活上天猫 
+19
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+9
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+9
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+9
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+9
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+4
+
+tmall.com
+天猫tmall.com--理想生活上天猫 
+4
+

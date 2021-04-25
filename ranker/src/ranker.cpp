@@ -5,9 +5,8 @@
 
 float getDynamic(Match* document, ISR* queryRoot);
 
-vector<url_score> Ranker::getHighest(ConstraintSolver& solver, ISR* queryRoot)
+vector<url_score> Ranker::getHighest( ConstraintSolver& solver, ISR* queryRoot )
     {
-    
     vector<url_score> arr;
     // for ( size_t i = 0; i < ( *matches ).size(); ++i )
     while (Match* document = solver.findMatch())
@@ -19,12 +18,13 @@ vector<url_score> Ranker::getHighest(ConstraintSolver& solver, ISR* queryRoot)
         float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
         String url, title; 
         Dictionary *dict = new Dictionary( 0 );
-        DocumentDetails *docs = dict->GetDocumentDetials( i );
+        DocumentDetails *docs = dict->GetDocumentDetials( document->id );
         url = docs->url;
         title = docs->title;
         url_score newDoc( url, title, totalScore );
         delete docs;
         delete dict;
+
         // insertion sort
         if ( arr.size() == 0 ) 
             arr.pushBack( newDoc );
@@ -50,7 +50,7 @@ vector<url_score> Ranker::getHighest(ConstraintSolver& solver, ISR* queryRoot)
                 }
             if ( j + 1 < N ) arr[j + 1] = newDoc;
             }
-        
+        delete document;
         }
     return arr;
     }

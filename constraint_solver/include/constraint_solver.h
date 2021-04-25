@@ -15,9 +15,6 @@ class ConstraintSolver
 
    private:
       Location currentLocation;
-<<<<<<< HEAD
-=======
       ISREndDoc* EndDoc;
       ISR* queryRoot;
->>>>>>> a9ac9a905d37172b33cdabe9395831b0347bd911
    };

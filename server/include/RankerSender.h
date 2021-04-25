@@ -181,7 +181,8 @@ class RankServer
                 std::cerr << "Unable to send the message\n";
                 return -1;
                 }
-            std::cout << "message sent to the manager\n";
+
+            std::cout << "message sent to the manager: \n" << inet_ntoa( addr.sin_addr ) << ":" << ntohs( addr.sin_port ) << std::endl;
 
             close( sockfd );
             return 0;
