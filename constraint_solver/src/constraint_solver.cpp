@@ -8,27 +8,29 @@
 #include "Dictionary.h"
 #include "constraint_solver.h"
 
-// FOR TESTING ONLY!
-// using namespace std;
+// using namespace std;    // FOR TESTING ONLY!
 
-::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
-    {
-    Location currentLocation = 0;
-    Post* match = nullptr;
-    ::vector<Match*>* matches = new ::vector<Match*>(); 
-    while ( match = queryRoot->Seek( currentLocation ) )
-        {
-        // find the next endDoc location in "Post endDoc"
-        Post* endDoc = EndDoc->Seek(match->GetStartLocation());
-        currentLocation = endDoc->GetStartLocation();
-        // calculate doc length and doc start location
-        Location startLocation = currentLocation - EndDoc->GetDocumentLength();
-        // output index (not start, end location) of matching doc
-        Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
-        matches->pushBack(matchDoc);
-        // Post* document = new Post(startLocation, currentLocation);
-        // posts->pushBack(document);
-        // delete match;
-        }
-    return matches;
-    }
+ConstraintSolver::ConstraintSolver() : currentLocation(0) {}
+
+Match* ConstraintSolver::findMatch(ISREndDoc* EndDoc, ISR* queryRoot)
+   {
+   if (currentLocation == SIZE_MAX)
+      return nullptr;
+   Post* match = nullptr;
+   match = queryRoot->Seek( currentLocation );
+   if (!match)    // no more matches
+      {
+      currentLocation = SIZE_MAX;
+      return nullptr;
+      }
+   // find the next endDoc location in "Post endDoc"
+   Post* endDoc = EndDoc->Seek(match->GetStartLocation());
+   currentLocation = endDoc->GetStartLocation();
+   // output index + start/end location of matching doc
+   return new Match(EndDoc->GetCurrIndex(), currentLocation - EndDoc->GetDocumentLength(), currentLocation);
+   }
+
+ConstraintSolver::setLocation(Location location)
+   {
+   currentLocation = location;
+   }
