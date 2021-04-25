@@ -248,25 +248,22 @@ class QueryServer : ThreadPool
         void collectResult( )
             {
             // (5) Serve incoming connections one by one forever.
-            while ( true )
+            struct sockaddr_in addr;
+            socklen_t addr_len = sizeof( addr );
+            int connectionfd = accept( sockfd, (struct sockaddr *)&addr, &addr_len);
+            if ( connectionfd == -1 ) 
+                throw std::string("Unable to accept connection");
+            try
                 {
-                struct sockaddr_in addr;
-                socklen_t addr_len = sizeof( addr );
-                int connectionfd = accept( sockfd, (struct sockaddr *)&addr, &addr_len);
-                if ( connectionfd == -1 ) 
-                    throw std::string("Unable to accept connection");
-                try
+                handleConnect( connectionfd );
+                char client[INET_ADDRSTRLEN];
+                inet_ntop( AF_INET, (void *)&addr.sin_addr, client, INET_ADDRSTRLEN );
+                for ( size_t i = 0; i < NUM_RANKERS; ++i )
                     {
-                    handleConnect( connectionfd );
-                    char client[INET_ADDRSTRLEN];
-                    inet_ntop( AF_INET, (void *)&addr.sin_addr, client, INET_ADDRSTRLEN );
-                    for ( size_t i = 0; i < NUM_RANKERS; ++i )
+                    if ( strcmp( client, RANKER_HOST[i] ) == 0 )
                         {
-                        if ( strcmp( client, RANKER_HOST[i] ) == 0 )
-                            {
-                            finished[i] = true;
-                            break;
-                            }
+                        finished[i] = true;
+                        break;
                         }
                     }
                 catch( std::string e )
@@ -311,7 +308,10 @@ class QueryServer : ThreadPool
                 try
                     {
                     startServer();
-                    collectResult();
+                    while ( true )
+                        {
+                        collectResult();
+                        }
                     }
                 catch ( std::string e )
                     {
@@ -360,25 +360,30 @@ class QueryServer : ThreadPool
                 while ( sendQuery( i, query ) == -1 )
                     continue;
                 }
+            
+            startServer();
+            for ( size_t i = 0; i < NUM_RANKERS; ++i )
+                {
+                collectResult();
+                }
 
             // Send the query to each ranker until we have received a response
             // from each of the rankers
-            bool allFinished = false;
-            while ( !allFinished )
-                {
-                allFinished = true;
-                for ( size_t i = 0; i < NUM_RANKERS; ++i )
-                    {
-                    if ( !finished[ i ] )
-                        {
-                        //sendQuery( i , query );
-                        allFinished = false;
-                        }
-                    }
-                if ( !allFinished )
-                    sleep( 10 );
-                }
-
+            // bool allFinished = false;
+            // while ( !allFinished )
+            //     {
+            //     allFinished = true;
+            //     for ( size_t i = 0; i < NUM_RANKERS; ++i )
+            //         {
+            //         if ( !finished[ i ] )
+            //             {
+            //             //sendQuery( i , query );
+            //             allFinished = false;
+            //             }
+            //         }
+            //     if ( !allFinished )
+            //         sleep( 10 );
+            //     }
 
             return mergedScores;
             }
