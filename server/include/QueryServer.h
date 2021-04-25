@@ -12,18 +12,17 @@
 #include "mString.h"
 #include "Vector.h"
 #include "CrawlerManager.h"
-#include "HashTable.h"
 #include "ThreadPool.h"
 #include "Concurrency.h"
 
 #define MAX_MESSAGE_SIZE 512
 
-const size_t NUM_RANKERS = 3;  // 14;
+const size_t NUM_RANKERS = 1;
 // const size_t QUEUE_SIZE = 1024;
 
-static const char *RANKER_HOST[ ] = 
+static const char *RANKER_HOST[ NUM_RANKERS ] = 
     {
-        // "35.202.123.51",
+        "35.202.123.51",
         // "104.197.37.30",
         // "146.148.73.38",
         // "34.69.231.181",
@@ -37,9 +36,10 @@ static const char *RANKER_HOST[ ] =
         // "35.236.254.45",
         // "35.230.186.30",
         // "35.221.49.174",
-        "127.0.0.1",
-        "127.0.0.1",
-        "127.0.0.1",
+        
+        // "127.0.0.1",
+        // "127.0.0.1",
+        // "127.0.0.1",
     };
 
 // cloud use
@@ -62,7 +62,7 @@ class QueryServer : ThreadPool
     private:
         mutex_t mutex;
 
-        int port, sockfd;  // network interface to rank servers (sockfd for test)
+        int port;  // network interface to rank servers (sockfd for test)
         size_t queueSize;
 
         ::vector< url_score > mergedScores;
@@ -187,8 +187,8 @@ class QueryServer : ThreadPool
                 return -1;
                 }
             // TODO:change it to 8888
-            // addr.sin_port = htons( port );
-            addr.sin_port = htons( RANKER_PORT[ machineID ] );
+            addr.sin_port = htons( port );
+            //addr.sin_port = htons( RANKER_PORT[ machineID ] );
 
             std::string address( RANKER_HOST[ machineID ] );
             address += std::string(":") + ltos( ntohs( addr.sin_port ) ).cstr( );
@@ -218,10 +218,10 @@ class QueryServer : ThreadPool
             return 0;
             }
 
-        void startServer( )
+        int startServer( )
             {
             // (1) Create socket
-            sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+            int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
             if ( sockfd == -1 ) 
                 throw std::string("Unable to open stream socket");
 
@@ -250,11 +250,12 @@ class QueryServer : ThreadPool
             if ( listen( sockfd, queueSize ) == -1 )
                 throw std::string("Socket listen failed");
             
-            std::cout << "Listening on port: " << ntohs( addr.sin_port ) << std::endl;
+            std::cout << "Query Server listening on port: " << ntohs( addr.sin_port ) << std::endl;
+            return sockfd;
             }
 
         // collect the results from all distributed rank servers
-        void collectResult( )
+        void collectResult( int sockfd )
             {
             // (5) Serve incoming connections one by one forever.
             struct sockaddr_in addr;
@@ -316,10 +317,10 @@ class QueryServer : ThreadPool
                 {
                 try
                     {
-                    startServer();
+                    int sockfd = startServer();
                     while ( true )
                         {
-                        collectResult();
+                        collectResult( sockfd );
                         }
                     }
                 catch ( std::string e )
@@ -358,18 +359,16 @@ class QueryServer : ThreadPool
         ::vector< url_score > CollectRanks( std::string& query )
             {
             CriticalSection s(&mutex);
-            // ++requestID;
+            int sockfd = startServer();
+            //++requestID;
 
             if ( mergedScores.size( ) > 0 )
                 mergedScores = ::vector< url_score >();  // clear buffer
-
-            startServer();
 
             size_t aliveRankers = 0;
             for ( size_t i = 0; i < NUM_RANKERS; ++i )
                 {
                 std::cout << "Sending to the " << i << "th machine\n";
-                finished[i] = false;
                 size_t attempts = 0;  // only allow 10 attemps to connect
                 while ( sendQuery( i, query ) == -1 && attempts++ < 10 )
                     continue;
@@ -377,11 +376,9 @@ class QueryServer : ThreadPool
                     ++aliveRankers;
                 }
             
-            // startServer();
             for ( size_t i = 0; i < aliveRankers; ++i )
                 {
-                // if ( finished[ i ] )
-                collectResult( );
+                collectResult( sockfd );
                 }
 
             close( sockfd );

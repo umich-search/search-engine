@@ -1,5 +1,5 @@
 #include <iostream>
-#include "RankerSender.h"
+#include "RankServer.h"
 
 static const char * managerIP = "34.75.224.47";
 static const int port = 8888;

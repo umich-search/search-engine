@@ -18,7 +18,7 @@ class RankServer
     {
     private:
         // communication attributes
-        int sockfd, port, mPort;  // listen socket fd and port, manager port
+        int port, mPort;  // listen socket fd and port, manager port
         size_t queueSize;  // the size of the listen queue
         std::string managerIP;  // the ip address of the manager
 
@@ -51,10 +51,10 @@ class RankServer
             }
 
         // set up socket parameters
-        void startServer( )
+        int startServer( )
             {
             // (1) Create socket
-            sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+            int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
             if ( sockfd == -1 ) 
                 throw std::string("Unable to open stream socket");
 
@@ -79,16 +79,18 @@ class RankServer
                 throw std::string("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
                 throw std::string("Incorrect listen port");
+            
+            return sockfd;
             }
 
         // start the server to listen traffics
-        void runServer( )
+        void runServer( int sockfd )
             {
             // (4) Begin listening for incoming connections.
             if ( listen( sockfd, queueSize ) == -1 )
                 throw std::string("Socket listen failed");
             
-            std::cout << "Ranker Server Listening on port " << port << std::endl;
+            std::cout << "Ranker Server listening on port: " << port << std::endl;
 
             // (5) Serve incoming connections one by one forever.
             while ( true ) 
@@ -142,10 +144,8 @@ class RankServer
             // send message to the manager
             
             // TODO: change docRank to the ranker result
-            std::string docRank = retrieveDocRank( msg );
-            // if ( docRank.empty( ) )
-            //     docRank = "$#0@";
-            // std::string docRank = "google.com$GOOGLE#4@";
+            //std::string docRank = retrieveDocRank( msg );
+            std::string docRank = "google.com$GOOGLE#4@";
             std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
             if ( sendMessage( docRank ) == -1 )
                 {
@@ -205,8 +205,8 @@ class RankServer
             {
             try
                 {
-                startServer( );
-                runServer( );
+                int sockfd = startServer( );
+                runServer( sockfd );
                 }
             catch( const char *e )
                 {
