@@ -17,4 +17,4 @@ class ConstraintSolver
       Location currentLocation;
       ISREndDoc* EndDoc;
       ISR* queryRoot;
-   }
+   };
