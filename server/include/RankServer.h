@@ -18,9 +18,8 @@ class RankServer
     {
     private:
         // communication attributes
-        int port, mPort;  // listen socket fd and port, manager port
+        int port;
         size_t queueSize;  // the size of the listen queue
-        std::string managerIP;  // the ip address of the manager
 
         // ranking attributes
         Dictionary dict;
@@ -54,13 +53,13 @@ class RankServer
         int startServer( )
             {
             // (1) Create socket
-            int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
-            if ( sockfd == -1 ) 
+            int sockFD = socket( AF_INET, SOCK_STREAM, 0 );
+            if ( sockFD == -1 ) 
                 throw std::string("Unable to open stream socket");
 
             // (2) Set the "reuse port" socket option
             int yesval = 1;
-            if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
+            if ( setsockopt( sockFD, SOL_SOCKET, SO_REUSEADDR, &yesval, sizeof( yesval ) ) == -1) 
                 throw std::string("Unable to set socket options");
 
             // (3) Create a sockaddr_in struct for the proper port and bind() to it.
@@ -70,130 +69,92 @@ class RankServer
             addr.sin_port = htons( port );
 
             // (3b) Bind to the port.
-            if ( bind( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
+            if ( bind( sockFD, ( sockaddr * ) &addr, sizeof( addr ) ) == -1 ) 
                 throw std::string("Unable to bind stream socket");
 
             // (3c) Detect which port was chosen.
             socklen_t length = sizeof( addr );
-            if ( getsockname( sockfd, ( sockaddr * ) &addr, &length ) == -1 ) 
+            if ( getsockname( sockFD, ( sockaddr * ) &addr, &length ) == -1 ) 
                 throw std::string("Unable to detect port");
             if ( ntohs( addr.sin_port ) != port )
                 throw std::string("Incorrect listen port");
             
-            return sockfd;
+            return sockFD;
             }
 
         // start the server to listen traffics
-        void runServer( int sockfd )
+        void runServer( int sockFD )
             {
             // (4) Begin listening for incoming connections.
-            if ( listen( sockfd, queueSize ) == -1 )
+            if ( listen( sockFD, queueSize ) == -1 )
                 throw std::string("Socket listen failed");
             
-            std::cout << "Ranker Server listening on port: " << port << std::endl;
+            std::cout << "Rank Server listening on port: " << port << std::endl;
 
             // (5) Serve incoming connections one by one forever.
             while ( true ) 
                 {
-                std::cout << "waiting to accept\n";
-                int connectionfd = accept( sockfd, 0, 0 );
-                std::cout << "accepted\n";
-                if ( connectionfd == -1 ) 
+                int connectFD = accept( sockFD, 0, 0 );
+                if ( connectFD == -1 ) 
                     throw std::string("Unable to accept connection");
                 try
                     {
-                    // Add the connection to be handled
-                    handleConnect( connectionfd );
+                    std::cout << "Connection received: " << connectFD << std::endl;
+                    std::string query = handleConnect( connectFD );
+                    std::cout << "Received query: " << query << std::endl;
+                    // TODO: change docRank to the ranker result
+                    //std::string docRank = retrieveDocRank( msg );
+                    std::string docRank = "google.com$GOOGLE#4@";
+                    std::cout << "query: " << query << "result: " << docRank << std::endl;
+                    sendResponse( connectFD, docRank );
                     }
-                catch( const char * e )
+                catch( std::string e )
                     {
                     std::cerr << e << std::endl;
                     }
+                close( connectFD );
                 }
-
-            close( sockfd );
             }
     
         // handle an established connection:
         // retrieve document ranks and send to the manager
-        int handleConnect( int connectFd )
+        std::string handleConnect( int connectFD )
             {
             char msg[ MAX_MESSAGE_SIZE + 1 ];
             memset( msg, 0, MAX_MESSAGE_SIZE + 1 );
             size_t cumsum = 0;
             ssize_t bytes = 0;
             do {
-                bytes = recv( connectFd, msg + cumsum, MAX_MESSAGE_SIZE - cumsum, 0 );
+                bytes = recv( connectFD, msg + cumsum, MAX_MESSAGE_SIZE - cumsum, 0 );
                 if (bytes == -1)
                     {
-                    close( connectFd );
-                    std::cerr << "Problem reading byte stream with errno = " << strerror( errno ) << std::endl;
-                    return -1;
-                    }
+                    close( connectFD );
+                    throw std::string("Problem reading byte stream with errno = ") + strerror( errno );
+                    }          
                 cumsum += bytes;
+                std::cout << msg << std::endl;
+                if ( msg[ cumsum - 1 ] == '\0' )
+                    break;
             } while ( bytes > 0 );
 
-            close( connectFd );
             if ( cumsum == 0 )
-                {
-                std::cerr << "Empty message rec";
-                return -1;
-                }
-            msg[ cumsum ] = 0;
-
-            // send message to the manager
+                throw std::string("Empty message received");
             
-            // TODO: change docRank to the ranker result
-            //std::string docRank = retrieveDocRank( msg );
-            std::string docRank = "google.com$GOOGLE#4@";
-            std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
-            if ( sendMessage( docRank ) == -1 )
-                {
-                std::cerr << "Unable to send messages to the manager\n";
-                return -1;
-                }
-            return 0;
+            msg[ cumsum ] = 0;
+            return std::string( msg, cumsum );
             }
 
         // send the ranked result to the manager
-        int sendMessage( std::string& msg )
+        void sendResponse( int connectFD, std::string& msg )
             {
-            int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
-            if ( sockfd == -1 )
-                throw std::string("Unable to open stream socket");
-
-            struct sockaddr_in addr;
-            addr.sin_family = AF_INET;
-            inet_pton( AF_INET, managerIP.c_str( ), &addr.sin_addr );
-            addr.sin_port = htons( mPort );
-
-            std::cout << "trying to connect\n";
-            if ( connect( sockfd, ( sockaddr * ) &addr, sizeof( addr ) ) == -1)
-                {
-                close( sockfd );
-                std::cerr << "Unable to connect to the ranker manager\n";
-                return -1;
-                }
-            std::cout << "connection established\n";
-
-            int bytes = send( sockfd, msg.c_str(), msg.size( ), 0 );
+            int bytes = send( connectFD, msg.c_str(), msg.size( ), 0 );
             if ( bytes == -1 )
-                {
-                close( sockfd );
-                std::cerr << "Unable to send the message\n";
-                return -1;
-                }
-
-            std::cout << "message sent to the manager: \n" << inet_ntoa( addr.sin_addr ) << ":" << ntohs( addr.sin_port ) << std::endl;
-
-            close( sockfd );
-            return 0;
+                throw std::string("Unable to send the message");
             }
     
     public:
-        RankServer( std::string mIP, int port_, int mPort_, size_t qSize = 1024 ) 
-            : port( port_ ), mPort( mPort_ ), managerIP( mIP ), 
-            queueSize( qSize ), dict( 0 )
+        RankServer( int port_, size_t qSize = 1024 ) 
+            : port( port_ ), queueSize( qSize ), dict( 0 ), rk()
             {
             }
         
@@ -205,10 +166,11 @@ class RankServer
             {
             try
                 {
-                int sockfd = startServer( );
-                runServer( sockfd );
+                int sockFD = startServer( );
+                runServer( sockFD );
+                close( sockFD );
                 }
-            catch( const char *e )
+            catch( std::string e )
                 {
                 std::cerr << e << std::endl;
                 }

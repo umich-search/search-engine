@@ -43,6 +43,7 @@ using namespace std;
 #include "Plugin.h"
 #include "SearchPlugin.h"
 
+SearchPlugin searchPlugin;
 PluginObject *Plugin = nullptr;
 
 // Root directory for the website, taken from argv[ 2 ].
@@ -283,7 +284,6 @@ void GetFile(int talkSocket, const char *contentType, off_t contentSize, const c
                               "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %lld\r\nConnection: close\r\n\r\n",
                               contentType, ( long long int )contentSize);
     memcpy(response + responseLength, body, contentSize);
-    cout << response<<endl;
     send(talkSocket, response, responseLength+contentSize, 0);
 }
 
@@ -321,7 +321,6 @@ void *Talk(void *talkSocket) {
     path = UnencodeUrlEncoding(path);
     
     // Handle the path /search?query=university+of+michigan
-    SearchPlugin searchPlugin;
     if(searchPlugin.MagicPath(path)){
         string results = searchPlugin.ProcessRequest( action, path );
         string root(RootDirectory);
@@ -349,7 +348,7 @@ void *Talk(void *talkSocket) {
     if (strcmp(action, "GET") == 0 && SafePath(path.c_str())) {
         int file = open(path.c_str(), O_RDONLY);
         off_t fileSize = ServerFileSize(file);
-        cout << fileSize << endl;
+        //cout << fileSize << endl;
         if (fileSize == -1)AccessDenied(sockfd);
         if (fileSize == -2)FileNotFound(sockfd);
         else {

@@ -25,8 +25,8 @@ class SearchPlugin : public PluginObject
             {
             if ( action != "GET" )
                 return "";
-            std::string query = queryServer.deserializeQueryMsg( path );
-            ::vector<url_score> scores = queryServer.CollectRanks( query );
+            std::string query = parseQuery( path );
+            ::vector<url_score> scores = queryServer.GetScores( query );
             std::string html;
             for ( size_t i = 0; i < scores.size(); ++i )
                 {
@@ -44,4 +44,14 @@ class SearchPlugin : public PluginObject
 
     private:
         QueryServer queryServer;
+
+        std::string parseQuery( std::string path )
+            {
+            const char * search = "?query=";
+            size_t start = path.find( search );
+            if ( start == std::string::npos )
+                return "";
+            start += strlen( search );
+            return path.substr(start);
+            }
     };

@@ -62,11 +62,15 @@ private:
 
     // Entry point for the pthread
     static void * ThreadStart( void *context ) 
-        { ((ThreadPool *) context)->Work();  return NULL; }
+        { 
+            ThreadPool *me = (ThreadPool *) context;
+            me->Work( me->threadID++ );
+            return NULL; 
+        }
     
     // Infinite loop that waits for tasks from the task queue
     // TODO: Linux Signal Handler? 
     // A signal to terminate a thread will terminate the
     // entire process, losing the frontier/index in memory 
-    void Work();
+    void Work( size_t ID );
     };

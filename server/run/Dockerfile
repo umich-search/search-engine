@@ -14,4 +14,4 @@ CMD ./WebServer 80 /website
 
 # --- RANK SERVER
 # COPY RankServer .
-# CMD ./RankServer
+# CMD ./RankServer 8888
