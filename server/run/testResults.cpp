@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
 
 // query 3: quick fox
    cout << "q3 Results:---------------------------------" << endl;
-   ::vector<url_score> results3 = Results ( &dict, "Quick Fox" );
+   ::vector<url_score> results3 = Results ( &dict, "quick fox" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
        std::cout << results3[i].score << std::endl;
