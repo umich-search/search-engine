@@ -18,37 +18,37 @@
 
 #define MAX_MESSAGE_SIZE 512
 
-const size_t NUM_RANKERS = 14;  // 14;
+const size_t NUM_RANKERS = 3;  // 14;
 // const size_t QUEUE_SIZE = 1024;
 
 static const char *RANKER_HOST[ ] = 
     {
-        "35.202.123.51",
-        "104.197.37.30",
-        "146.148.73.38",
-        "34.69.231.181",
-        "34.66.107.136",
-        "34.68.201.74",
-        "35.188.164.185",
-        "35.221.27.146",
-        "35.199.41.233",
-        "35.245.62.74",
-        "34.86.92.34",
-        "35.236.254.45",
-        "35.230.186.30",
-        "35.221.49.174",
-        // "127.0.0.1",
-        // "127.0.0.1",
-        // "127.0.0.1",
+        // "35.202.123.51",
+        // "104.197.37.30",
+        // "146.148.73.38",
+        // "34.69.231.181",
+        // "34.66.107.136",
+        // "34.68.201.74",
+        // "35.188.164.185",
+        // "35.221.27.146",
+        // "35.199.41.233",
+        // "35.245.62.74",
+        // "34.86.92.34",
+        // "35.236.254.45",
+        // "35.230.186.30",
+        // "35.221.49.174",
+        "127.0.0.1",
+        "127.0.0.1",
+        "127.0.0.1",
     };
 
 // cloud use
-const int RANKER_PORT = 8888;
+// const int RANKER_PORT = 8888;
 
-// const int RANKER_PORT[ ] = 
-//     {
-//     8000, 8001, 8002
-//     };
+const int RANKER_PORT[ ] = 
+    {
+    8000, 8001, 8002
+    };
 
 // struct message 
 //     {
@@ -188,7 +188,7 @@ class QueryServer : ThreadPool
                 }
             // TODO:change it to 8888
             // addr.sin_port = htons( port );
-            addr.sin_port = htons( RANKER_PORT );
+            addr.sin_port = htons( RANKER_PORT[ machineID ] );
 
             std::string address( RANKER_HOST[ machineID ] );
             address += std::string(":") + ltos( ntohs( addr.sin_port ) ).cstr( );

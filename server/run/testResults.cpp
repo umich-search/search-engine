@@ -14,47 +14,47 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-   std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
-   std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
-   ifstream docs;
-   docs.open("testdoc.txt");
-   if (docs.bad()) cerr << "1111";
-   if (docs.fail()) cerr << "Error: " << strerror(errno);
-   if (docs.is_open())
-      cout<<"Open!!!\n";
-   IndexConstructor ic(0);
-   String term;
-   char term0[10];
-   char* pos=term0;
-   char charr;
-   while (docs.get(charr))
-      {
-      if (charr == '#')
-         break;
-      else if (charr == '/') 
-         {
-         ic.Insert("cat_title", "cat.com");
-         // cout<<"URL Inserted!\n";
-         }
-      else if (charr != '\t')
-         *pos++ = charr;
-      else if (pos != term0)
-         {
-         *pos = 0;
-         pos = term0;
-         String term(term0);
-         ic.Insert(term, Body);
-         // cout<<"Inserted "<<term0<<"\n";
-         // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
-         ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
-         // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
-         //    std::cout << chunkEnds[i] ;
-         // }
-         // std::cout << std::endl;
-         }
-      }
-   ic.FinishConstruction();
-   FileManager manager = ic.fileManager;
+   // std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+   // std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+   // ifstream docs;
+   // docs.open("testdoc.txt");
+   // if (docs.bad()) cerr << "1111";
+   // if (docs.fail()) cerr << "Error: " << strerror(errno);
+   // if (docs.is_open())
+   //    cout<<"Open!!!\n";
+   // IndexConstructor ic(0);
+   // String term;
+   // char term0[10];
+   // char* pos=term0;
+   // char charr;
+   // while (docs.get(charr))
+   //    {
+   //    if (charr == '#')
+   //       break;
+   //    else if (charr == '/') 
+   //       {
+   //       ic.Insert("cat_title", "cat.com");
+   //       // cout<<"URL Inserted!\n";
+   //       }
+   //    else if (charr != '\t')
+   //       *pos++ = charr;
+   //    else if (pos != term0)
+   //       {
+   //       *pos = 0;
+   //       pos = term0;
+   //       String term(term0);
+   //       ic.Insert(term, Body);
+   //       // cout<<"Inserted "<<term0<<"\n";
+   //       // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
+   //       ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
+   //       // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
+   //       //    std::cout << chunkEnds[i] ;
+   //       // }
+   //       // std::cout << std::endl;
+   //       }
+   //    }
+   // ic.FinishConstruction();
+   // FileManager manager = ic.fileManager;
    Dictionary dict(0);
    // char word[] = {'c', 'a', 't', '\0'};
    // ISRWord isrword = *dict.OpenISRWord(word);
@@ -128,10 +128,7 @@ int main(int argc, char *argv[]) {
 
 
    // query 2: "quick brown quick"
-<<<<<<< HEAD
-=======
    cout << "q2 Results:--------------------------------" << endl;
->>>>>>> dccffa09f163ed5fa47c33ac2637cf96ded03fab
    ::vector<url_score> results2 = Results ( &dict, "quick brown quick" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
@@ -179,12 +176,8 @@ int main(int argc, char *argv[]) {
       
 
 // query 3: quick fox
-<<<<<<< HEAD
-   cout << "q3 Results:" << endl;
-=======
    cout << "q3 Results:---------------------------------" << endl;
->>>>>>> dccffa09f163ed5fa47c33ac2637cf96ded03fab
-   ::vector<url_score> results3 = Results ( &dict, "quick fox" );
+   ::vector<url_score> results3 = Results ( &dict, "Quick Fox" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
        std::cout << results3[i].score << std::endl;
