@@ -18,4 +18,4 @@ class ConstraintSolver
 
    private:
       Location currentLocation;
-   }
+   };

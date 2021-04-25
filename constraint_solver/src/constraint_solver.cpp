@@ -10,7 +10,7 @@
 
 // using namespace std;    // FOR TESTING ONLY!
 
-ConstraintSolver::ConstraintSolver() : currentLocation(0) {}
+ConstraintSolver::ConstraintSolver() : currentLocation(0) { }
 
 Match* ConstraintSolver::findMatch(ISREndDoc* EndDoc, ISR* queryRoot)
    {
@@ -30,7 +30,7 @@ Match* ConstraintSolver::findMatch(ISREndDoc* EndDoc, ISR* queryRoot)
    return new Match(EndDoc->GetCurrIndex(), currentLocation - EndDoc->GetDocumentLength(), currentLocation);
    }
 
-ConstraintSolver::setLocation(Location location)
+void ConstraintSolver::setLocation(Location location)
    {
    currentLocation = location;
    }
