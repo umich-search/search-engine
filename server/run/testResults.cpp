@@ -14,47 +14,47 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-   // std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
-   // std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
-   // ifstream docs;
-   // docs.open("testdoc.txt");
-   // if (docs.bad()) cerr << "1111";
-   // if (docs.fail()) cerr << "Error: " << strerror(errno);
-   // if (docs.is_open())
-   //    cout<<"Open!!!\n";
-   // IndexConstructor ic(0);
-   // String term;
-   // char term0[10];
-   // char* pos=term0;
-   // char charr;
-   // while (docs.get(charr))
-   //    {
-   //    if (charr == '#')
-   //       break;
-   //    else if (charr == '/') 
-   //       {
-   //       ic.Insert("cat_title", "cat.com");
-   //       // cout<<"URL Inserted!\n";
-   //       }
-   //    else if (charr != '\t')
-   //       *pos++ = charr;
-   //    else if (pos != term0)
-   //       {
-   //       *pos = 0;
-   //       pos = term0;
-   //       String term(term0);
-   //       ic.Insert(term, Body);
-   //       // cout<<"Inserted "<<term0<<"\n";
-   //       // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
-   //       ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
-   //       // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
-   //       //    std::cout << chunkEnds[i] ;
-   //       // }
-   //       // std::cout << std::endl;
-   //       }
-   //    }
-   // ic.FinishConstruction();
-   // FileManager manager = ic.fileManager;
+   std::__fs::filesystem::remove_all(CHUNK_DIRECTORY);
+   std::__fs::filesystem::create_directory(CHUNK_DIRECTORY);
+   ifstream docs;
+   docs.open("testdoc.txt");
+   if (docs.bad()) cerr << "1111";
+   if (docs.fail()) cerr << "Error: " << strerror(errno);
+   if (docs.is_open())
+      cout<<"Open!!!\n";
+   IndexConstructor ic(0);
+   String term;
+   char term0[10];
+   char* pos=term0;
+   char charr;
+   while (docs.get(charr))
+      {
+      if (charr == '#')
+         break;
+      else if (charr == '/') 
+         {
+         ic.Insert("cat_title", "cat.com");
+         // cout<<"URL Inserted!\n";
+         }
+      else if (charr != '\t')
+         *pos++ = charr;
+      else if (pos != term0)
+         {
+         *pos = 0;
+         pos = term0;
+         String term(term0);
+         ic.Insert(term, Body);
+         // cout<<"Inserted "<<term0<<"\n";
+         // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
+         ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
+         // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
+         //    std::cout << chunkEnds[i] ;
+         // }
+         // std::cout << std::endl;
+         }
+      }
+   ic.FinishConstruction();
+   FileManager manager = ic.fileManager;
    Dictionary dict(0);
    // char word[] = {'c', 'a', 't', '\0'};
    // ISRWord isrword = *dict.OpenISRWord(word);
@@ -77,14 +77,16 @@ int main(int argc, char *argv[]) {
 
    ::vector<url_score> results1 = Results ( &dict, "quick | fox" );
 
+   std::cerr << "q1 Results:------------------------------" << endl;
    for ( size_t i = 0; i < results1.size(); ++i )
    {
-       std::cerr << results1[i].score << std::endl;
+       std::cout << results1[i].score << std::endl;
    }
+    cout << "--------------------------------------" << endl;
    //Post* res = nullptr;
    //::vector<Match*>* res_ptr = nullptr;
 // query 1: quick | fox
-   std::cerr << "q1 Results:" << endl;
+   
    //ISR *terms_q1[] = {word_quick, word_fox};
    //ISROr *q1 = new ISROr(terms_q1, 2);
    //ISR* q1 = Query_Compiler(&dict, (char *) "quick | fox");
@@ -126,15 +128,17 @@ int main(int argc, char *argv[]) {
 
 
    // query 2: "quick brown quick"
-   ::vector<url_score> results2 = Results ( &dict, "quick | fox" );
+   cout << "q2 Results:--------------------------------" << endl;
+   ::vector<url_score> results2 = Results ( &dict, "quick brown quick" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
-       std::cerr << results2[i].score << std::endl;
+       std::cout << results2[i].score << std::endl;
    }
+   cout << "--------------------------------------" << endl;
 //    ISR *terms_q2[] = {word_quick, word_brown, word_quick};
 //    ISRPhrase *q2 = new ISRPhrase(terms_q2, 3);
 
-   cerr << "q2 Results:" << endl;
+ 
 //    cout<<"ISRPhrase Seek tests:"<<endl;
 //    res = q2->Seek(0);
 //    ASSERT(res->GetStartLocation(), ==, 5);
@@ -172,12 +176,13 @@ int main(int argc, char *argv[]) {
       
 
 // query 3: quick fox
-   cout << "q3 Results:" << endl;
-   ::vector<url_score> results3 = Results ( &dict, "quicker foxes" );
+   cout << "q3 Results:---------------------------------" << endl;
+   ::vector<url_score> results3 = Results ( &dict, "quick fox" );
    for ( size_t i = 0; i < results3.size(); ++i )
    {
-       std::cerr << results3[i].score << std::endl;
+       std::cout << results3[i].score << std::endl;
    }
+   cout << "--------------------------------------" << endl;
 //    ISR *terms_q3[] = {word_quick, word_fox};
 //    ISRAnd *q3 = new ISRAnd(terms_q3, 2, &dict);
 
