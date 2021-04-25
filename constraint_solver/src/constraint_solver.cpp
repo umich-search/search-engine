@@ -10,9 +10,14 @@
 
 // using namespace std;    // FOR TESTING ONLY!
 
-ConstraintSolver::ConstraintSolver() : currentLocation(0) { }
+ConstraintSolver::ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
+   {
+   currentLocation = 0;
+   this->EndDoc = EndDoc;
+   this->queryRoot = queryRoot;
+   }
 
-Match* ConstraintSolver::findMatch(ISREndDoc* EndDoc, ISR* queryRoot)
+Match* ConstraintSolver::findMatch()
    {
    if (currentLocation == SIZE_MAX)
       return nullptr;
