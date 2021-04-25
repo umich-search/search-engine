@@ -361,7 +361,7 @@ class QueryServer : ThreadPool
             // ++requestID;
 
             if ( mergedScores.size( ) > 0 )
-                mergedScores.resize( 0 );  // clear buffer
+                mergedScores = ::vector< url_score >();  // clear buffer
 
             startServer();
 

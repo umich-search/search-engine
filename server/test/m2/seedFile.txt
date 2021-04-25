@@ -1,11 +1,7 @@
-tmall.com
 facebook.com
-jd.com
-sina.com.cn
 netflix.com
 office.com
 google.com.hk
-zhanqi.tv
 vk.com
 yahoo.co.jp
 bongacams.com
@@ -13,7 +9,6 @@ yandex.ru
 so.com
 livejasmin.com
 google.cn
-aliyun.com
 paypal.com
 hotstar.com
 padlet.com
@@ -33,9 +28,6 @@ google.com.mx
 washingtonpost.com
 varzesh3.com
 liputan6.com
-google.co.th
-ltn.com.tw
-gosuslugi.ru
 flipkart.com
 manoramaonline.com
 coinmarketcap.com
