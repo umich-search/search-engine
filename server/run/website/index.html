@@ -1,18 +1,82 @@
 <html>
-    <h1>
-        &#128270;The Usual Programmers&#128269;
-        <br>
-    </h1>
-    <div>
-        <form action="/search" method="get">
-            <label for="query">Search:</label>
-            <input type="text" id="query" name="query"><br><br>
-        </form>
-    </div>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>
+            &#128270;The Usual Programmers&#128269;
+            <br>
+        </h1>
+    
+        <div class="row justify-content-center padding">
+            <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
+                <form action="#" class="domain-form">
+                    <div class="form-group d-md-flex"> <input type="text" class="form-control px-4" placeholder="Search"> <input type="submit" class="search-domain btn btn-primary px-5" value="Search Domain"> </div>
+                </form>
+            </div>
+        </div>
+    </body>
+          
 </html>
 
 <style>
     h1 {text-align: center;}
     div {text-align: center;}
     .resultTag {border: 2px solid black; margin: 5px;}
+
+    .padding {
+    padding: 10rem !important
+}
+
+body {
+    background-image: url("http://efdreams.com/data_images/dreams/green/green-06.jpg");
+    background-color: #f8fafe
+}
+
+.domain-form .form-group {
+    border: 1px solid #9ff0c8;
+    padding: 20px
+}
+
+.domain-form .form-group input {
+    height: 70px !important;
+    border: transparent
+}
+
+.form-control {
+    height: 52px !important;
+    background: #fff !important;
+    color: #3a4348 !important;
+    font-size: 18px;
+    border-radius: 0px;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important
+}
+
+.px-4 {
+    padding-left: 1.5rem !important
+}
+
+.domain-form .form-group .search-domain {
+    background: #22d47b;
+    border: 2px solid #22d47b;
+    color: #fff;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    border-radius: 0
+}
+
+.domain-price span {
+    color: #3a4348;
+    margin: 0 10px
+}
+
+.domain-price span small {
+    color: #24bdc9
+}
 </style>
