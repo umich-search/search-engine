@@ -143,6 +143,8 @@ class RankServer
             
             // TODO: change docRank to the ranker result
             std::string docRank = retrieveDocRank( msg );
+            // if ( docRank.empty( ) )
+            //     docRank = "$#0@";
             // std::string docRank = "google.com$GOOGLE#4@";
             std::cout << "message and returns: " << msg << "; " << docRank << std::endl;
             if ( sendMessage( docRank ) == -1 )
