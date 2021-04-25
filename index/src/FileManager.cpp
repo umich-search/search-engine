@@ -354,16 +354,18 @@ int FileManager::ReadMetadata(Offset givenChunk) {
     else {
         f_metadata = 0;
         while(f_metadata != - 1) {
-        cNum++;
-        resolveMetadataPath(cNum, metadataFile, threadID);
+            if ( f_metadata != 0 )
+                close( f_metadata );
+            cNum++;
+            resolveMetadataPath(cNum, metadataFile, threadID);
 
-        f_metadata = open( metadataFile,
+            f_metadata = open( metadataFile,
                         O_RDWR,
                         S_IRWXU | S_IRWXG | S_IRWXO );
         }
         resolveMetadataPath(cNum - 1, metadataFile, threadID); 
         //managerNumChunks = cNum - 1;
-
+        close( f_metadata );
         f_metadata = open( metadataFile,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );

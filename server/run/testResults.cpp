@@ -128,7 +128,10 @@ int main(int argc, char *argv[]) {
 
 
    // query 2: "quick brown quick"
+<<<<<<< HEAD
+=======
    cout << "q2 Results:--------------------------------" << endl;
+>>>>>>> dccffa09f163ed5fa47c33ac2637cf96ded03fab
    ::vector<url_score> results2 = Results ( &dict, "quick brown quick" );
    for ( size_t i = 0; i < results2.size(); ++i )
    {
