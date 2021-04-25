@@ -5,8 +5,8 @@
 #include "ISR.h"
 
 const size_t N = 10; // number of url_score that a ranker return
-const float dynamicWeight = 0.95;
-const float staticWeight = 0.05;
+const float dynamicWeight = 0.8;
+const float staticWeight = 0.2;
 
 struct url_score {
     std::string URL;
