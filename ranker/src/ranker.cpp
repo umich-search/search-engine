@@ -1,16 +1,19 @@
 #include "ranker.h"
 #include "Dictionary.h"
 
+#include "constraint_solver.h"
 
 float getDynamic(Match* document, ISR* queryRoot);
 
-vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
+vector<url_score> Ranker::getHighest(ConstraintSolver& solver, ISR* queryRoot)
     {
+    
     vector<url_score> arr;
-    for ( size_t i = 0; i < ( *matches ).size(); ++i ) 
+    // for ( size_t i = 0; i < ( *matches ).size(); ++i )
+    while (Match* document = solver.findMatch())
         {
         float staticScore = 0;
-        Match *document = ( *matches )[ i ];
+        // Match *document = ( *matches )[ i ];
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
         float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
         float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
