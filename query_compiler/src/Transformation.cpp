@@ -2,8 +2,19 @@
 #include "Transformation.h"
 #include <cctype>
 
+String tolower( String input )
+   {
+   String res;
+   for ( size_t i = 0; i < input.size( ); ++i )
+      {
+      res += tolower( input[ i ] );
+      }
+   return res;
+   }
+
 ISR* StringToISR ( Dictionary *dict, String input )
    {
+   input = tolower( input );
    //   std::cout<< "We are in string to isr!!!!" << std::endl;
   //    std::cout<< input.cstr() << std::endl;
    // true - AND, false - OR

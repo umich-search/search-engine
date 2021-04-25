@@ -203,18 +203,20 @@ calculate_scores( Match *document, ISRWord **Terms, size_t numTerms, size_t posi
     return isrspan.get_score();
     }
 
- Dictionary dictionary(0);
 
- float
- calculate_static_scores(Match *document, struct StaticWeights *weights) {
-     float score = 0;
-     DocumentDetails *documentDetails = dictionary.GetDocumentDetials(document->id);
-     score += (1.0 / documentDetails->url.size()) * weights->weightURL;
-     score += (1.0 / documentDetails->title.size()) * weights->weightTitle;
-     for (auto x:DomainsTable){
-         if (strcmp(x,extract_url(documentDetails->url))==0) score+=weights->weightDomain;
-     }
-     return score;
- }
+float calculate_static_scores( Match *document ) 
+    {
+    Dictionary dictionary(0);
+    struct StaticWeights weights; 
+    float score = 0;
+    DocumentDetails *documentDetails = dictionary.GetDocumentDetials( document->id );
+    if ( documentDetails->url.size() <= 75 ) score += weights.weightURL;
+    if ( documentDetails->title.size() <= 60 ) score += weights.weightTitle;
+    for ( auto x:DomainsTable ) 
+        {
+        if ( strcmp( x,extract_url( documentDetails->url )) == 0 ) score += weights.weightDomain;
+        }
+    return score;
+    }
 
 

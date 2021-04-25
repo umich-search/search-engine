@@ -24,9 +24,10 @@ struct Statistics {
 
 
 struct StaticWeights{
-    float weightDomain;
-    float weightURL;
-    float weightTitle;
+    float weightDomain = 5;
+    float weightURL = 2;
+    float weightTitle = 3;
+
 };
 
 static const char* DomainsTable[]{
@@ -110,4 +111,4 @@ calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t posit
 
 
 float
-calculate_static_scores(Match *document, struct StaticWeights *weights);
+calculate_static_scores( Match *document );

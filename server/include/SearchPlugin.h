@@ -4,7 +4,7 @@
 #include "mString.h"
 #include "Concurrency.h"
 #include "Vector.h"
-#include "RankerManager.h"
+#include "QueryServer.h"
 
 // Handle requests for the path /search?query=university+of+michigan
 

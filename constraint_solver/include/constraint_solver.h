@@ -1,7 +1,20 @@
 #pragma once
 #include "ISR.h"
+#include "abstractISR.h"
 #include "Common.h"
 #include "Vector.h"
 
+class ConstraintSolver
+   {
+   public:
+      ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot);
+      // return the first match starting from location currentLocation
+      Match* findMatch();
+      // manually set currentLocation to begin search
+      void setLocation(Location location);
 
-::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot);
+   private:
+      Location currentLocation;
+      ISREndDoc* EndDoc;
+      ISR* queryRoot;
+   };
