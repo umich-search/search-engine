@@ -248,7 +248,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
         resolveChunkPath(chunkIndex, chunkFile, threadID);
-        std::cout << "Path resolve to " << chunkFile << std::endl
+        std::cout << "Path resolve to " << chunkFile << std::endl;
 
         void * blob;
         int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
@@ -261,13 +261,13 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         if (blob == MAP_FAILED ) {
            throw "Mapping failed";
         }
-        std::cout << "Mapped end doc blob, returning with cast" << std::endl
+        std::cout << "Mapped end doc blob, returning with cast" << std::endl;
         endDocListBlob = (SerialEndDocs *)blob;
         size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
         char* curr = (char*)blob + endDocEnd;
         termIndexBlob = (HashBlob *)curr;
         close(f_chunk);
-        std::cout << "Returning from read chunk" << std::endl
+        std::cout << "Returning from read chunk" << std::endl;
 
         return 0;
     }
