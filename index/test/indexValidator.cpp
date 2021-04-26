@@ -18,12 +18,18 @@ int main() {
         EndDocPostingListRaw endDocList = m.GetEndDocList();
         size_t currDocIndex = 0;
         size_t numChunks = m.getNumChunks();
-        for(unsigned int currChunk = 0; currChunk < m.getNumChunks(); ++currChunk) {
+        std::cout << "Num chunks: " << m.getNumChunks() << std::endl;
+        for(unsigned int currChunk = 0; currChunk < m.getNumChunks() - 1; ++currChunk) {
+            std::cout << "NEW CHUNK" << std::endl;
             EndDocPostingListRaw endDocList = m.GetEndDocList(i);
-            for(unsigned int docIndex = 0; docIndex < endDocList.getHeader()->numOfDocument; ++docIndex) {
+            std::cout <<"Num documents: " << endDocList.getHeader()->numOfDocument;
+            for(unsigned int docIndex = 0; docIndex < endDocList.getHeader()->numOfDocument - 1; ++docIndex) {
+                if(docIndex == 80) {
+                    std::cout << "" << std::endl;
+                }
                 DocumentDetails d = m.GetDocumentDetails(currDocIndex, currChunk);
                 currDocIndex++;
-                std::cout << "Document " << currDocIndex << ": " << "Title: " << d.title.cstr() << " URL: " << d.url.cstr() << " Unique Words: " << d.numUniqueWords << " Length: " << d.lengthOfDocument << std::endl;
+                std::cout << "Document " << docIndex << " " << currDocIndex << ": " << "Title: " << d.title.cstr() << " URL: " << d.url.cstr() << " Unique Words: " << d.numUniqueWords << " Length: " << d.lengthOfDocument << std::endl;
             }
         }
         

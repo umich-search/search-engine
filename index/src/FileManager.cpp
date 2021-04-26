@@ -321,6 +321,9 @@ EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
 }
 
 DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
+    if (docIndex == 80) {
+        std::cout << "" << std::endl;
+    }
     if(docsChunkIndex == -1) {
         throw "Error: No chunk initalized";
     }
@@ -330,7 +333,7 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     }
     Offset normalize = 0;
     if(docsChunkIndex > 0) {
-        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex - 1) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
+        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
     }
     
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
@@ -338,7 +341,6 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
     const char * url = curr + 2 * sizeof(w_Occurence);
     const char * title = curr + 2 * sizeof(w_Occurence) + MAX_URL_LENGTH;
-    
 
     return DocumentDetails(url, title, numWords, numUniqueWords);
 }

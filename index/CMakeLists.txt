@@ -6,12 +6,8 @@ set(CMAKE_BUILD_TYPE Debug)
 
 project(search_engine_index)
 
-set(SOURCES 	../constraint_solver/test.cpp
-../constraint_solver/abstractISR.cpp
-../constraint_solver/constraint_solver.cpp
-		src/Dictionary.cpp		
+set(SOURCES 	test/indexValidator.cpp
 		src/FileManager.cpp		
-		src/ISR.cpp			
 		src/Post.cpp		
 		src/PostingListBlob.cpp
 		src/DocumentInfo.cpp	
@@ -25,19 +21,14 @@ set(HEADERS	include/CommonUtil.h
 		include/DocumentsSerializer.h	
 		include/FileManager.h		
 		include/HashTable.h		
-		include/ISR.h			
 		include/Post.h			
 		include/PostingListBlob.h
-		include/Dictionary.h		
 		include/DocumentInfo.h		
 		include/EndDocSerializer.h	
 		include/Global.h		
 		include/IPost.h			
 		include/IndexConstructor.h	
 		include/PostingList.h
-		../utility/include/Common.h
-		../constraint_solver/abstractISR.h
-../constraint_solver/constraint_solver.h
 
 		)
 
