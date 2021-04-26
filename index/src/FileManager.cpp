@@ -248,6 +248,8 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
         resolveChunkPath(chunkIndex, chunkFile, threadID);
+        std::cout << "Path resolve to " << chunkFile << std::endl
+
         void * blob;
         int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
         if (f_chunk == -1 ) {
@@ -259,11 +261,14 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         if (blob == MAP_FAILED ) {
            throw "Mapping failed";
         }
+        std::cout << "Mapped end doc blob, returning with cast" << std::endl
         endDocListBlob = (SerialEndDocs *)blob;
         size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
         char* curr = (char*)blob + endDocEnd;
         termIndexBlob = (HashBlob *)curr;
         close(f_chunk);
+        std::cout << "Returning from read chunk" << std::endl
+
         return 0;
     }
 
@@ -313,10 +318,12 @@ EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
     if(chunkIndex >= chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
+    std::cout << "Reading chunk: " << chunkIndex << std::endl;
     ReadChunk(chunkIndex);
     if(!endDocListBlob) {
         throw "Error: No chunk has been read";
     }
+    std::cout << "Returning raw posting list" << std::endl;
     return EndDocPostingListRaw(endDocListBlob->DynamicSpace);
 }
 
