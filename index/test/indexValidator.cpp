@@ -21,7 +21,7 @@ int main() {
         std::cout << "Num chunks: " << m.getNumChunks() << std::endl;
         for(unsigned int currChunk = 0; currChunk < m.getNumChunks() - 1; ++currChunk) {
             std::cout << "NEW CHUNK" << std::endl;
-            EndDocPostingListRaw endDocList = m.GetEndDocList(i);
+            EndDocPostingListRaw endDocList = m.GetEndDocList(currChunk);
             std::cout <<"Num documents: " << endDocList.getHeader()->numOfDocument;
             for(unsigned int docIndex = 0; docIndex < endDocList.getHeader()->numOfDocument - 1; ++docIndex) {
                 if(docIndex == 80) {
