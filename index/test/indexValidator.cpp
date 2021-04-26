@@ -109,6 +109,17 @@ int main() {
     
     for(unsigned int i = 0; i < 10; ++i) {
         FileManager m(i);
+        EndDocPostingListRaw endDocList = m.GetEndDocList();
+        size_t currDocIndex = 0;
+        for(unsigned int currChunk = 0; currChunk < m.getNumChunks() - 1; ++currChunk) {
+            EndDocPostingListRaw endDocList = m.GetEndDocList(i);
+            for(unsigned int i = 0; i < endDocList.getHeader()->numOfDocument; ++i) {
+                DocumentDetails d = m.GetDocumentDetails(currDocIndex, currChunk)
+                i++;
+                cout << "Document " << i << ": " << "Title: " << d.title << "URL: " << d.url << "Unique Words: " << d.numUniqueWords << " Length: " << d.lengthOfDocument << std::endl;
+            }
+        }
+        m.
         if(i == 7) {
             std::cout << "" << std::endl;
         }
