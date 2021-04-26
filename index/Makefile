@@ -129,30 +129,6 @@ search_engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/build
 .PHONY : search_engine/fast
 
-src/Dictionary.o: src/Dictionary.cpp.o
-.PHONY : src/Dictionary.o
-
-# target to build an object file
-src/Dictionary.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/Dictionary.cpp.o
-.PHONY : src/Dictionary.cpp.o
-
-src/Dictionary.i: src/Dictionary.cpp.i
-.PHONY : src/Dictionary.i
-
-# target to preprocess a source file
-src/Dictionary.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/Dictionary.cpp.i
-.PHONY : src/Dictionary.cpp.i
-
-src/Dictionary.s: src/Dictionary.cpp.s
-.PHONY : src/Dictionary.s
-
-# target to generate assembly for a file
-src/Dictionary.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/Dictionary.cpp.s
-.PHONY : src/Dictionary.cpp.s
-
 src/DocumentInfo.o: src/DocumentInfo.cpp.o
 .PHONY : src/DocumentInfo.o
 
@@ -200,54 +176,6 @@ src/FileManager.s: src/FileManager.cpp.s
 src/FileManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/FileManager.cpp.s
 .PHONY : src/FileManager.cpp.s
-
-src/IPost.o: src/IPost.cpp.o
-.PHONY : src/IPost.o
-
-# target to build an object file
-src/IPost.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/IPost.cpp.o
-.PHONY : src/IPost.cpp.o
-
-src/IPost.i: src/IPost.cpp.i
-.PHONY : src/IPost.i
-
-# target to preprocess a source file
-src/IPost.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/IPost.cpp.i
-.PHONY : src/IPost.cpp.i
-
-src/IPost.s: src/IPost.cpp.s
-.PHONY : src/IPost.s
-
-# target to generate assembly for a file
-src/IPost.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/IPost.cpp.s
-.PHONY : src/IPost.cpp.s
-
-src/ISR.o: src/ISR.cpp.o
-.PHONY : src/ISR.o
-
-# target to build an object file
-src/ISR.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/ISR.cpp.o
-.PHONY : src/ISR.cpp.o
-
-src/ISR.i: src/ISR.cpp.i
-.PHONY : src/ISR.i
-
-# target to preprocess a source file
-src/ISR.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/ISR.cpp.i
-.PHONY : src/ISR.cpp.i
-
-src/ISR.s: src/ISR.cpp.s
-.PHONY : src/ISR.s
-
-# target to generate assembly for a file
-src/ISR.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/ISR.cpp.s
-.PHONY : src/ISR.cpp.s
 
 src/IndexConstructor.o: src/IndexConstructor.cpp.o
 .PHONY : src/IndexConstructor.o
@@ -345,29 +273,29 @@ src/PostingListBlob.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/src/PostingListBlob.cpp.s
 .PHONY : src/PostingListBlob.cpp.s
 
-test/main.o: test/main.cpp.o
-.PHONY : test/main.o
+test/indexValidator.o: test/indexValidator.cpp.o
+.PHONY : test/indexValidator.o
 
 # target to build an object file
-test/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/main.cpp.o
-.PHONY : test/main.cpp.o
+test/indexValidator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/indexValidator.cpp.o
+.PHONY : test/indexValidator.cpp.o
 
-test/main.i: test/main.cpp.i
-.PHONY : test/main.i
+test/indexValidator.i: test/indexValidator.cpp.i
+.PHONY : test/indexValidator.i
 
 # target to preprocess a source file
-test/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/main.cpp.i
-.PHONY : test/main.cpp.i
+test/indexValidator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/indexValidator.cpp.i
+.PHONY : test/indexValidator.cpp.i
 
-test/main.s: test/main.cpp.s
-.PHONY : test/main.s
+test/indexValidator.s: test/indexValidator.cpp.s
+.PHONY : test/indexValidator.s
 
 # target to generate assembly for a file
-test/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/main.cpp.s
-.PHONY : test/main.cpp.s
+test/indexValidator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/search_engine.dir/build.make CMakeFiles/search_engine.dir/test/indexValidator.cpp.s
+.PHONY : test/indexValidator.cpp.s
 
 # Help Target
 help:
@@ -378,21 +306,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... search_engine"
-	@echo "... src/Dictionary.o"
-	@echo "... src/Dictionary.i"
-	@echo "... src/Dictionary.s"
 	@echo "... src/DocumentInfo.o"
 	@echo "... src/DocumentInfo.i"
 	@echo "... src/DocumentInfo.s"
 	@echo "... src/FileManager.o"
 	@echo "... src/FileManager.i"
 	@echo "... src/FileManager.s"
-	@echo "... src/IPost.o"
-	@echo "... src/IPost.i"
-	@echo "... src/IPost.s"
-	@echo "... src/ISR.o"
-	@echo "... src/ISR.i"
-	@echo "... src/ISR.s"
 	@echo "... src/IndexConstructor.o"
 	@echo "... src/IndexConstructor.i"
 	@echo "... src/IndexConstructor.s"
@@ -405,9 +324,9 @@ help:
 	@echo "... src/PostingListBlob.o"
 	@echo "... src/PostingListBlob.i"
 	@echo "... src/PostingListBlob.s"
-	@echo "... test/main.o"
-	@echo "... test/main.i"
-	@echo "... test/main.s"
+	@echo "... test/indexValidator.o"
+	@echo "... test/indexValidator.i"
+	@echo "... test/indexValidator.s"
 .PHONY : help
 
 
