@@ -1,8 +1,9 @@
 # The Usual Programmers: Search Engine
-TODO
+Each of the search engine components are listed with some of their major include files.
 ## The Seven Components of a Search Engine
 
-- [HTML Parser (HtmlParser.h)](https://github.com/eecs440-w21/search-engine/tree/main/crawler/include)
+- [HTML Parser](https://github.com/eecs440-w21/search-engine/tree/main/crawler/include)
+    - (HtmlParser.h): Parse the html for words, titlewords, and URLs
 - [Crawler](https://github.com/eecs440-w21/search-engine/tree/main/crawler/include)
     - (CrawlerApp.h): Start/stop all crawlers
     - (CrawlerManager.h): Manage the distribution of URLs between machines
@@ -18,6 +19,6 @@ TODO
 - [Ranker](https://github.com/eecs440-w21/search-engine/tree/main/ranker/include)
   - TODO
 - [Front End / Web Server](https://github.com/eecs440-w21/search-engine/tree/main/server/include)
-  - (SearchPlugin.h): Parse the user query, hand off to Query Server, return HTML with results
+  - (SearchPlugin.h): Parse the user query, hand off to QueryServer, return HTML with results
   - (QueryServer.h): Send the query to each RankServer, wait for results, and merge results
   - (RankServer.h): Listen for queries, search index, and return ranked results
