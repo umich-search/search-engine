@@ -11,7 +11,12 @@ Each of the search engine components are listed with some of their major include
        - (GetUrl.h): Download the HTML from the URL
     - (Fontier.h): Manage the queue of URLs to be crawled
 - [Index](https://github.com/eecs440-w21/search-engine/tree/main/index/include)
-  - TODO
+  - (IndexConstructor.h): Define Index Construction internal interface
+  - (FileManager.h): Defines interface interacation with disk file chunks
+  - (Dictionary.h): Defines interface for index read access
+  - (DocumentsSerializer.h) Defines interface to serialzie document data
+  - (DictionarySerializer.h) Defines interface to serialize in-memory term postings list hashtable
+  - (EndDocSerializer.h) Defines interface to serialize end doc postings list
 - [Constraint Solver](https://github.com/eecs440-w21/search-engine/tree/main/constraint_solver/include)
   - (abstractISR.h): Define AbstractISRs interface
   - (constraint_solver.h): Find matching documents given query tree
