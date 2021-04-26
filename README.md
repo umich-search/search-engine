@@ -13,9 +13,11 @@ Each of the search engine components are listed with some of their major include
 - [Index](https://github.com/eecs440-w21/search-engine/tree/main/index/include)
   - TODO
 - [Constraint Solver](https://github.com/eecs440-w21/search-engine/tree/main/constraint_solver/include)
-  - TODO
+  - (abstractISR.h): Define AbstractISRs interface
+  - (constraint_solver.h): Find matching documents given query tree
 - [Query Compiler](https://github.com/eecs440-w21/search-engine/tree/main/query_compiler/include)
-  - TODO
+  - (query_Compiler.h): Preprocess query string, output final query tree
+  - (Transformation.h): Transform preprocesed string into query tree
 - [Ranker](https://github.com/eecs440-w21/search-engine/tree/main/ranker/include)
   - TODO
 - [Front End / Web Server](https://github.com/eecs440-w21/search-engine/tree/main/server/include)
