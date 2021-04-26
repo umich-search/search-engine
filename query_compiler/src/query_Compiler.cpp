@@ -14,13 +14,13 @@ void incorrectQuery(const char* errMessage){
 // 3. &&/AND -> &, ||/OR -> |
 // 4. quick fox -> quick & fox
 // 5. space before and after | and &
-String Normalize (char* input)
+String Normalize (const char* input)
    {
       //std::cout << "We are in NOrmalize!!!" << std::endl;
       //std::cout << input << std::endl;
    const String AND_OP = " & ";
    const String OR_OP = " | ";
-   char *currentChar = input;
+   const char *currentChar = input;
    // check requirement 1
    unsigned bracketCount = 0;
    while (*currentChar != '\0')
@@ -115,7 +115,7 @@ String Normalize (char* input)
    }
 
 
-ISR* Query_Compiler (Dictionary *dict, char* input)
+ISR* Query_Compiler (Dictionary *dict, const char* input)
    {
      // std::cout << "We are in query compiler!!!!!!!!!" << std::endl;
    String normInput = Normalize(input);

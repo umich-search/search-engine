@@ -123,6 +123,10 @@ public:
     float GetCombinedScore( vector <float> scores ) { return 0; }
 
     // debug
+    const char * getTerm( )
+        {
+        return term;
+        }
     void printTerm( )
         {
         std::cout << term << std::endl;

@@ -2,6 +2,7 @@
 #include "Dictionary.h"
 #include "ISRSpan.h"
 #include "constraint_solver.h"
+#include "BloomFilter.h"
 
 
 std::string serializeUrlScore( url_score *us )
@@ -33,22 +34,42 @@ float getDynamic(Match* document, ISR* queryRoot);
 
 vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
+        std::cout << "Performing calculations for ranker\n" << std::endl;
     vector<url_score> arr;
     for ( size_t i = 0; i < (*matches).size(); ++i ) 
         {
         Match *document = (*matches)[i];
         float staticScore = calculate_static_scores( document );;
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
-        float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
-        float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
         String url, title; 
         Dictionary *dict = new Dictionary(0);
         DocumentDetails *docs = dict->GetDocumentDetials(document->id);
         url = docs->url;
         title = docs->title;
-        url_score newDoc( url, title, totalScore );
+        
         delete docs;
         delete dict;
+
+        // filtering
+        bool flagExist = false;
+        for ( size_t i = 0; i < arr.size( ); ++i )
+            {
+            if ( arr[ i ].URL == std::string( url.cstr( ) ) )
+                {
+                flagExist = true;
+                break;
+                }
+            }
+        if ( flagExist )
+            {
+            delete document;
+            continue;
+            }
+
+        float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
+        float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
+        url_score newDoc( url, title, totalScore );
+
         // insertion sort
         if ( arr.size() == 0 ) arr.pushBack( newDoc );
         else if ( arr.size() < N ) 
@@ -75,6 +96,8 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
             }
         
         }
+        std::cout << "Finished calculations for ranker\n" << std::endl;
+
     return arr;
     }
 

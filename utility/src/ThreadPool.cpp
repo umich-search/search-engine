@@ -28,6 +28,8 @@ void ThreadPool::Start()
     if ( alive )
         return;
     alive = true;
+    threadID = 0;
+    taskQueue.Unblock();
     for ( size_t i = 0; i < threads.size(); ++i )
         alive = alive && !pthread_create( &threads[i], NULL, ThreadStart, this );
     if ( !alive )
@@ -81,9 +83,8 @@ void ThreadPool::Print( String output, size_t threadID )
     Unlock(printMutex);
     }
 
-void ThreadPool::Work( )
+void ThreadPool::Work( size_t ID )
     {
-    size_t ID = threadID++;
     if ( type == LoopPool ) 
         {
         DoLoop( ID );

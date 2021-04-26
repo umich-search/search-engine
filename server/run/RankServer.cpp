@@ -1,11 +1,13 @@
 #include <iostream>
 #include "RankServer.h"
 
-static const char * managerIP = "34.75.224.47";
-static const int port = 8888;
-
 int main ( int argc, char **argv )
     {
-    RankServer server( managerIP, port, port );
+    if ( argc != 2 )
+        {
+        std::cerr << "Usage: " << argv[0] << " port " << std::endl;
+        }
+    size_t port = atoi( argv[1] );
+    RankServer server( port );
     server.Start();
     }
