@@ -19,7 +19,8 @@ Each of the search engine components are listed with some of their major include
   - (query_Compiler.h): Preprocess query string, output final query tree
   - (Transformation.h): Transform preprocesed string into query tree
 - [Ranker](https://github.com/eecs440-w21/search-engine/tree/main/ranker/include)
-  - TODO
+  - (ranker.h) Return the total score together with the url.
+  - (ISRSpan.h) Operations on the spans of ISRs.
 - [Front End / Web Server](https://github.com/eecs440-w21/search-engine/tree/main/server/include)
   - (SearchPlugin.h): Parse the user query, hand off to QueryServer, return HTML with results
   - (QueryServer.h): Send the query to each RankServer, wait for results, and merge results
