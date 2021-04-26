@@ -243,7 +243,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
 
     int FileManager::ReadChunk(size_t chunkIndex) {
         ReadMetadata(chunkIndex);
-        if(chunkIndex > chunksMetadata->numChunks) {
+        if(chunkIndex >= chunksMetadata->numChunks) {
             throw "Error: Attempting to read more than available chunks";
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
@@ -269,7 +269,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
 
 int FileManager::ReadDocuments(Offset docsChunkIndex) {
     ReadMetadata(docsChunkIndex);
-    if(docsChunkIndex > chunksMetadata->numChunks) {
+    if(docsChunkIndex >= chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
     char docsChunkFile[MAX_PATHNAME_LENGTH];
@@ -310,7 +310,7 @@ TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkIndex
 }
 
 EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
-    if(chunkIndex > chunksMetadata->numChunks) {
+    if(chunkIndex >= chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
     ReadChunk(chunkIndex);
