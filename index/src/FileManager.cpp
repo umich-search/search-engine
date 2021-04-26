@@ -263,7 +263,7 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         }
         std::cout << "Mapped end doc blob, returning with cast" << std::endl;
         endDocListBlob = (SerialEndDocs *)blob;
-        size_t endDocEnd = RoundUp(endDocListBlob->Length + sizeof(size_t), sizeof(size_t));
+        size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
         char* curr = (char*)blob + endDocEnd;
         termIndexBlob = (HashBlob *)curr;
         close(f_chunk);
