@@ -73,6 +73,7 @@ protected:
 
 };
 
+<<<<<<< HEAD
 class ISRWord : public ISR {
 public:
     ISRWord(FileManager fileManager, const char* word) : manager(fileManager), currChunk(0), currIndex(0),
@@ -83,6 +84,94 @@ public:
             // Initalize with term seek to 0
             Seek(0);
     }
+=======
+class ISRWord : public ISR 
+   {
+   public:
+      ISRWord( FileManager fileManager, const char* word ) : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
+         currPost( 0 ), Doc( 0 ) 
+         {
+         char* word_copy = new char[ strlen( word ) ];
+         strcpy( word_copy, word );
+         term = word_copy;
+         // Initalize with term seek to 0
+         Seek( 0 );
+         }
+
+      ~ISRWord( ) 
+         {
+         delete[] term;
+         }
+
+      // Returns next post
+      Post *Next( );
+
+      Post *NextEndDoc( );
+
+      // Get the first post after the target
+      Post *Seek( size_t target );
+
+      // Get position of first term
+      Location GetStartLocation( );
+
+      // Get position of last term
+      Location GetEndLocation( );
+
+      // get number of documents word is in
+      d_Occurence GetDocumentCount( );
+
+      // get number of occurances in index
+      w_Occurence GetNumberOfOccurrences( );
+
+      // get current post
+      Post *GetCurrentPost( );
+
+      // Get Terms data of an ISR
+      ISR **GetTerms( );
+
+      int GetTermNum( ) { return 0; }
+
+      // float GetHeuristicScore( Match *document );
+
+      Weights *getWeights( ) { return &( this->weights ); }
+
+      float GetCombinedScore( vector <float> scores ) { return 0; }
+
+      // debug
+      void printTerm( )
+         {
+         std::cout << term << std::endl;
+         }
+
+   private:
+      FileManager manager;
+      const char *term;
+      size_t currChunk;
+      Offset currIndex;
+      Post currPost;
+      Post Doc;
+      TermPostingListRaw termPostingListRaw;
+      struct Weights weights {
+         weightShortSpan: 1,
+         weightOrderSpan: 0,
+         weightPhrase: 0, 
+         weightTopSpan: 0.5,
+         weightAll: 0,
+         weightMost: 0,
+         weightSome: 5
+      };
+   };
+
+class ISREndDoc : public ISR 
+   {
+   public:
+      ISREndDoc( FileManager filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
+         endDocPostingListRaw( manager.GetEndDocList( 0 ) ),
+         currPost( 0 )
+         {
+         Seek( 0 );
+         }
+>>>>>>> 6ded0d2 (test cloud index)
 
     ~ISRWord() {
         delete[] term;
