@@ -17,10 +17,10 @@
    ::vector< Match * > *matches = ConstraintSolver( EndDoc, queryRoot );
    ::vector<url_score> res = results.getHighest( matches, queryRoot );
    for ( size_t i = 0; i < matches->size( ); ++i )
-   {
-   delete ( *matches )[ i ];
-   ( *matches )[ i ] = nullptr;
-   }
+      {
+      delete ( *matches )[ i ];
+      ( *matches )[ i ] = nullptr;
+      }
    delete matches;
    delete queryRoot;
    delete EndDoc;
