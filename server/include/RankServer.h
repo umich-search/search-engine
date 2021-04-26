@@ -41,7 +41,7 @@ class RankServer
 
         // build the query compiler and the constraint solver 
         // call the ranker to obtain results
-        std::string retrieveDocRank( char *query )
+        std::string retrieveDocRank( const char *query )
             {
             Dictionary d( 0 );
             ::vector< url_score > scores = Results( &d, query );
@@ -103,9 +103,9 @@ class RankServer
                     std::string query = handleConnect( connectFD );
                     std::cout << "Received query: " << query << std::endl;
                     // TODO: change docRank to the ranker result
-                    //std::string docRank = retrieveDocRank( msg );
-                    std::string docRank = "google.com$GOOGLE#4@";
-                    std::cout << "query: " << query << "result: " << docRank << std::endl;
+                    std::string docRank = retrieveDocRank( query.c_str() );
+                    //std::string docRank = "https://google.com$GOOGLE#4@";
+                    std::cout << "query: " << query << " result: " << docRank << std::endl;
                     sendResponse( connectFD, docRank );
                     }
                 catch( std::string e )
@@ -132,7 +132,7 @@ class RankServer
                     throw std::string("Problem reading byte stream with errno = ") + strerror( errno );
                     }          
                 cumsum += bytes;
-                std::cout << msg << std::endl;
+                //std::cout << msg << std::endl;
                 if ( msg[ cumsum - 1 ] == '\0' )
                     break;
             } while ( bytes > 0 );

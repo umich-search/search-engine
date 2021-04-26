@@ -5,4 +5,4 @@
 #include "ranker.h"
 #include "ISRSpan.h"
 
-::vector<url_score> Results(Dictionary *dict, char* input);
+::vector<url_score> Results(Dictionary *dict, const char* input);

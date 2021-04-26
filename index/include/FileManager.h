@@ -18,11 +18,11 @@ private:
       return fileInfo.st_size;
    }
    struct ChunksMetadata {
-      Offset numChunks;
-      w_Occurence numWords;
-      w_Occurence numUniqueWords;
-      d_Occurence numDocs;
-      Location endLocation;
+      Offset numChunks; // 8
+      w_Occurence numWords; // 8
+      w_Occurence numUniqueWords; // 8
+      d_Occurence numDocs; //4
+      Location endLocation;// 8
       char dynamicSpace[];
    };
    Offset managerNumChunks = -1;

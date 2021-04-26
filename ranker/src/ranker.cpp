@@ -8,11 +8,13 @@ float getDynamic(Match* document, ISR* queryRoot);
 
 vector<url_score> Ranker::getHighest( ConstraintSolver& solver, ISR* queryRoot )
     {
+        std::cout << "Performing calculations for ranker\n" << std::endl;
     vector<url_score> arr;
 
     // for ( size_t i = 0; i < ( *matches ).size(); ++i )
     while (Match* document = solver.findMatch())
         {
+            std::cout << "Found match, calculating score" << std::endl;
         float staticScore = calculate_static_scores( document );
         // Match *document = ( *matches )[ i ];
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
@@ -72,6 +74,8 @@ vector<url_score> Ranker::getHighest( ConstraintSolver& solver, ISR* queryRoot )
             }
         delete document;
         }
+        std::cout << "Finished calculations for ranker\n" << std::endl;
+
     return arr;
     }
 

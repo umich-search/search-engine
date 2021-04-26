@@ -22,14 +22,14 @@ const size_t MAX_ATTEMPTS = 10;
 
 static const char *RANKER_HOST[ NUM_RANKERS ] = 
     {
-        "35.202.123.51",
+        //"35.202.123.51",
         // "104.197.37.30",
         // "146.148.73.38",
         // "34.69.231.181",
         // "34.66.107.136",
         // "34.68.201.74",
         // "35.188.164.185",
-        // "35.221.27.146",
+        "35.221.27.146",
         // "35.199.41.233",
         // "35.245.62.74",
         // "34.86.92.34",
@@ -247,9 +247,9 @@ class QueryServer : public ThreadPool
 
         void queryRankServer( size_t machineID, std::string query )
             {   
-            std::cout << "Sending to machine: " << machineID << std::endl;
+            std::cout << "Sending query to machine: " << machineID << std::endl;
             int sockFD = sendQuery( machineID, query );
-            std::cout << "Listening for response from machine: " << machineID << std::endl;
+            std::cout << "Waiting for response from machine: " << machineID << std::endl;
             std::string response = getQueryResponse( sockFD );
             close( sockFD );
             ::vector< url_score > scores = deserializeScores( response );
@@ -276,6 +276,7 @@ class QueryServer : public ThreadPool
                     String exception = "Exception: ";
                     exception += String( e.c_str() );
                     Print( exception, threadID );
+                    sleep(2);
                     ++attempts;
                     }
                 }
@@ -316,7 +317,7 @@ class QueryServer : public ThreadPool
         ::vector< url_score > GetScores( std::string& query )
             {
             CriticalSection s(&mutex); // handle one query at a time
-            std::cout << "Serving query: " << query << std::endl;
+            std::cout << "--- BLOCKING: Serving query: " << query << std::endl;
 
             if ( mergedScores.size( ) > 0 )
                 mergedScores = ::vector< url_score >();  // clear buffer
