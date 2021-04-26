@@ -8,38 +8,27 @@
 #include "Dictionary.h"
 #include "constraint_solver.h"
 
-// using namespace std;    // FOR TESTING ONLY!
+// FOR TESTING ONLY!
+// using namespace std;
 
-ConstraintSolver::ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
-   {
-   currentLocation = 0;
-   this->EndDoc = EndDoc;
-   this->queryRoot = queryRoot;
-   }
-
-Match* ConstraintSolver::findMatch()
-   {
-   if (currentLocation == SIZE_MAX)
-      return nullptr;
-   Post* match = nullptr;
-   std::cout << "Searching for match for query" << std::endl;
-   match = queryRoot->Seek( currentLocation );
-   if (!match)    // no more matches
-      {
-      currentLocation = SIZE_MAX;
-      return nullptr;
-      }
-   std::cout << "Found matching query" << std::endl;
-   // find the next endDoc location in "Post endDoc"
-   std::cout << "Seeking on end doc list" << std::endl;
-   Post* endDoc = EndDoc->Seek(match->GetStartLocation());
-   std::cout << "Finish end doc seek" << std::endl;
-   currentLocation = endDoc->GetStartLocation();
-   // output index + start/end location of matching doc
-   return new Match(EndDoc->GetCurrIndex(), currentLocation - EndDoc->GetDocumentLength(), currentLocation);
-   }
-
-void ConstraintSolver::setLocation(Location location)
-   {
-   currentLocation = location;
-   }
+::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
+    {
+    Location currentLocation = 0;
+    Post* match = nullptr;
+    ::vector<Match*>* matches = new ::vector<Match*>(); 
+    while ( match = queryRoot->Seek( currentLocation ) )
+        {
+        // find the next endDoc location in "Post endDoc"
+        Post* endDoc = EndDoc->Seek(match->GetStartLocation());
+        currentLocation = endDoc->GetStartLocation();
+        // calculate doc length and doc start location
+        Location startLocation = currentLocation - EndDoc->GetDocumentLength();
+        // output index (not start, end location) of matching doc
+        Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
+        matches->pushBack(matchDoc);
+        // Post* document = new Post(startLocation, currentLocation);
+        // posts->pushBack(document);
+        delete match;
+        }
+    return matches;
+    }
