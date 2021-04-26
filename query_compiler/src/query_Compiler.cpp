@@ -3,7 +3,8 @@
 #include "query_Compiler.h"
 #include <cctype>
 
-void incorrectQuery(const char* errMessage){
+void incorrectQuery(const char* errMessage)
+   {
    std::cerr << errMessage;
    exit(1);
    }
