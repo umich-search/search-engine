@@ -1,5 +1,5 @@
  #include "ISR.h"
-// #include "ISRSpan.h"
+ #include "ISRSpan.h"
 
 // ISRWord Functions
 
@@ -30,9 +30,9 @@ float ISR::GetHeuristicScore( Match *document )
             rarestlocation = i;
             }
         } 
-//    if ( minOccurence == 0xFFFFFFFFFFFFFFFF ) return 0;
-//    return calculate_scores( document, ( ISRWord ** )( this->GetTerms( ) ), this->GetTermNum( ), rarestlocation, this->getWeights( ) );
-	return 0.1;
+    if ( minOccurence == 0xFFFFFFFFFFFFFFFF ) return 0;
+    return calculate_scores( document, ( ISRWord ** )( this->GetTerms( ) ), this->GetTermNum( ), rarestlocation, this->getWeights( ) );
+//	return 0.1;
     }
 
 Post *ISRWord::Next() 

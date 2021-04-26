@@ -100,7 +100,7 @@ ISR* StringToISR ( Dictionary *dict, String input )
             currentWord += *(currentChar++);
             //std::cout<<"(else) currentWord = \""<<   currentWord.cstr() << "\"" << std::endl;
             ISRWord* currentWordISR = dict->OpenISRWord(currentWord.cstr());
-            std::cout << "Pushing back isr word term: " << currentWordISR->getTerm() << " found at " << currentWordISR->GetStartLocation() << std::endl;
+            // std::cout << "Pushing back isr word term: " << currentWordISR->getTerm() << " found at " << currentWordISR->GetStartLocation() << std::endl;
             currentAndStream.pushBack(currentWordISR);
             std::cout << "On line: " <<  __LINE__ << std::endl;
 
