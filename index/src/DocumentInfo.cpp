@@ -1,37 +1,45 @@
 #include "Global.h"
 #include "DocumentInfo.h"
 
-size_t DocumentInfo::getNumberOfUniqueWords() {
+size_t DocumentInfo::getNumberOfUniqueWords() 
+    {
     return numUniqueDocWords;
-};
+    };
 
-void DocumentInfo::incrementUniqueNumberOfWords() {
+void DocumentInfo::incrementUniqueNumberOfWords() 
+    {
     numUniqueDocWords++;
-}
+    }
 
-size_t DocumentInfo::getNumberOfWords() {
+size_t DocumentInfo::getNumberOfWords() 
+    {
     return numDocWords;
-};
+    };
 
-void DocumentInfo::incrementNumberOfWords(){
+void DocumentInfo::incrementNumberOfWords() 
+    {
     numDocWords++;
-};
+    };
 
-size_t DocumentInfo::getPrevEndLocation() {
+size_t DocumentInfo::getPrevEndLocation() 
+    {
     return prevEndLocation;
-};
+    };
 
-char* DocumentInfo::getTitle() {
+char* DocumentInfo::getTitle() 
+    {
     return title;
-};
+    };
 
-char* DocumentInfo::getURL() {
+char* DocumentInfo::getURL() 
+    {
     return URL;
-};
+    };
 
-void DocumentInfo::reset( size_t dID, Location recentEndLocation ){
+void DocumentInfo::reset( size_t dID, Location recentEndLocation ) 
+    {
     numDocWords = 0;
     numUniqueDocWords = 0;
     prevEndLocation = recentEndLocation;
     DocID = dID;
-};
+    };

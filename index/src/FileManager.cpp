@@ -1,36 +1,41 @@
 
 #include "../include/FileManager.h"
 
-int FileManager::resolveChunkPath(size_t offset, char * pathname, size_t threadID) {
+int FileManager::resolveChunkPath(size_t offset, char * pathname, size_t threadID) 
+    {
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNK_DIRECTORY);
     strcat(buffer, "thread-%zu-%zu.chunk");
     sprintf(pathname, buffer, threadID, offset);
     return 0;
-}
-int FileManager::resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID) {
+    }
+int FileManager::resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID) 
+    {
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNK_DIRECTORY);
     strcat(buffer, "thread-%zu-%zu.dchunk");
     sprintf(pathname, buffer, threadID, offset);
     return 0;
-}
+    }   
 
-int FileManager::resolveMetadataPath(size_t offset, char * pathname, size_t threadID) {
-    if(offset == -1) {
+int FileManager::resolveMetadataPath(size_t offset, char * pathname, size_t threadID) 
+    {
+    if(offset == -1) 
+        {
         pathname[0] = '\0';
         return 0;
-    }
+        }
     char buffer[MAX_PATHNAME_LENGTH];
     strcpy(buffer, CHUNKS_METADATA_DIRECTORY);
     strcat(buffer,"thread-%zu-%zu-metadata.mdata");
     sprintf(pathname, buffer, threadID, offset);
     return 0;
-}
+    }
 
 int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                         SharedPointer<EndDocPostingList>
-                                         endDocList, const char *pathname){
+                                         endDocList, const char *pathname)
+    {
     // << "Writing chunks to file:  " << pathname << std::endl;
 
     void * blob;
@@ -38,10 +43,11 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                         O_CREAT | O_RDWR,
                         S_IRWXU | S_IRWXG | S_IRWXO);
     
-    if ( f_chunk == -1) {
+    if ( f_chunk == -1) 
+        {
        std::cout << "Failed to open file: " << pathname << ", with error number " << errno << std::endl;
        throw "File open failed";
-    }
+        }
     
     size_t termListSize, endDocEnd;
     
@@ -58,22 +64,26 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                 f_chunk,
                                 0);
     
-    if (blob == MAP_FAILED ) {
+    if (blob == MAP_FAILED ) 
+        {
        throw "Mapping failed";
-    }
+        }
 
-    else {
-        try {
+    else 
+        {
+        try 
+            {
             blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
             blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
-        }
-        catch (const char* excp){
+            }
+        catch (const char* excp)
+            {
             return -1;
+            }
         }
-    }
     close(f_chunk);
     return 0;
-}
+    }
 
 
 

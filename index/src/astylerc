@@ -1,0 +1,30 @@
+# braces
+style=whitesmith
+remove-braces
+
+# indentation
+indent=spaces=3
+indent-after-parens
+indent-classes
+indent-switches
+indent-continuation=2
+
+# one-liners
+break-one-line-headers
+
+# preprocessor niceties
+indent-preproc-block
+indent-preproc-define
+indent-preproc-cond
+
+# padding
+pad-oper
+pad-comma
+pad-paren
+pad-header
+
+# misc.
+align-pointer=type
+attach-return-type
+close-templates
+max-code-length=80
