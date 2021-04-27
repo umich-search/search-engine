@@ -24,7 +24,7 @@
         if ( !match )
             std::cout << "match is nullptr!";
         Post* endDoc = EndDoc->Seek( matchStart );
-        currentLocation = endDoc->GetStartLocation();
+        currentLocation = endDoc->GetStartLocation( );
         // calculate doc length and doc start location
         Location startLocation = currentLocation - EndDoc->GetDocumentLength();
         // output index (not start, end location) of matching doc
