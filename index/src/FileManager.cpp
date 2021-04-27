@@ -429,6 +429,7 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
+		std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
