@@ -264,6 +264,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
     blob = ( HashBlob *)mmap( nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0 );  // Q?: assigning HashBlob * to void * 
     if ( blob == MAP_FAILED ) 
         {
+        std::cout << "FileManager::ReadChunk: map failed with errno = " << strerror( errno ) << std::endl;
         throw "Mapping failed";
         }
     std::cout << "FileManager::ReadChunk: Mapped end doc blob, returning with cast" << std::endl;
