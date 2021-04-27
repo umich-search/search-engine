@@ -370,67 +370,85 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 
 int FileManager::ReadMetadata(Offset givenChunk) {
     // Use manager idea of num of chunks if no chunk given
-    if(givenChunk == -1) {
+    if( givenChunk == -1 ) 
+        {
         givenChunk = managerNumChunks;
-    }
-    char metadataFile[MAX_PATHNAME_LENGTH];
+        }
+    char metadataFile[ MAX_PATHNAME_LENGTH ];
+    std::cout << "FileManager::ReadMetadata: Allocated metadataFile buffer\n";
     int f_metadata = 0;
-    size_t cNum = 0;
 
+    // try to open metadata file
     // TODO: Initalize to skip search if num chunks is known
-    if(givenChunk != -1) {
-        resolveMetadataPath(givenChunk, metadataFile, threadID);
+    if( givenChunk != -1 ) 
+        {
+        std::cout << "FileManager::ReadMetadata: givenChunk is non negative\n";
+        resolveMetadataPath( givenChunk, metadataFile, threadID );
         f_metadata = open( metadataFile,
-                        O_RDWR,
-                        S_IRWXU | S_IRWXG | S_IRWXO );
+                        O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );
         //managerNumChunks = givenChunk;
-    }
-    else {
+        }
+    else 
+        {
+        std::cout << "FileManager::ReadMetadata: given Chunk is -1, finding an existing chunk\n";
         f_metadata = 0;
-        while(f_metadata != - 1) {
-            if ( f_metadata != 0 )
+        size_t cNum = 0;
+        bool flagFirstIter = true;
+        while( f_metadata != - 1 ) 
+            {
+            if ( flagFirstIter )
+                {
                 close( f_metadata );
+                flagFirstIter = false;
+                }
             cNum++;
-            resolveMetadataPath(cNum, metadataFile, threadID);
+            resolveMetadataPath( cNum, metadataFile, threadID );
 
             f_metadata = open( metadataFile,
                         O_RDWR,
                         S_IRWXU | S_IRWXG | S_IRWXO );
-        }
-        resolveMetadataPath(cNum - 1, metadataFile, threadID); 
+            }
+        resolveMetadataPath( cNum - 1, metadataFile, threadID ); 
         //managerNumChunks = cNum - 1;
         close( f_metadata );
         f_metadata = open( metadataFile,
                            O_CREAT | O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
 
-    }
-
-    if(f_metadata == -1) {
+        }
+    // fail to open
+    if( f_metadata == -1 ) 
+        {
         std::cout << "WRITE FAILED" << std::endl;
         std::cerr << "Error openning file " << metadataFile << " with errno = " << strerror( errno ) << std::endl;
         return -1;
-    }
-    if(FileSize(f_metadata) == 0) {
-        ftruncate(f_metadata, sizeof(ChunksMetadata));
-        chunksMetadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
-        if (chunksMetadata == MAP_FAILED ) {
-           throw "Mapping failed";
         }
+    // file is empty
+    if( FileSize( f_metadata ) == 0 ) 
+        {
+        ftruncate( f_metadata, sizeof( ChunksMetadata ) );
+        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
+        if ( chunksMetadata == MAP_FAILED ) 
+            {
+            throw "Mapping failed";
+            }
         chunksMetadata->numWords = 0;
         chunksMetadata->numDocs = 0;
         chunksMetadata->endLocation = 0;
         chunksMetadata->numUniqueWords = 0;
         chunksMetadata->endLocation = 0;
         chunksMetadata->numChunks = 0;
-    }
-    else {
-        chunksMetadata = (ChunksMetadata*)mmap( nullptr, FileSize(f_metadata), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0);
-        if (chunksMetadata == MAP_FAILED ) {
-           throw "Mapping failed";
         }
-    }
-    close(f_metadata);
+    else 
+        {
+        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
+        if ( chunksMetadata == MAP_FAILED ) 
+            {
+           throw "Mapping failed";
+            }
+        }
+    std::cout << "FileManager::ReadMetadata: metadata file mapped successfully\n";
+    close( f_metadata );
     return 0;
 }
    

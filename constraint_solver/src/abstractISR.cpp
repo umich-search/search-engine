@@ -142,9 +142,10 @@ float ISROr::GetCombinedScore( vector< float > scores )
    return res;
    }
 
-ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) : Terms(Terms), NumberOfTerms(NumberOfTerms) 
+ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) 
+   : Terms(Terms), NumberOfTerms(NumberOfTerms) 
    {
-   EndDoc = dict->OpenISREndDoc();
+   EndDoc = dict->OpenISREndDoc( );
    nearestTerm = 0;
    farthestTerm = 0;
    nearestStartLocation = 0;
@@ -190,14 +191,14 @@ Post* ISRAnd::Seek( Location target )
          return nullptr;
       Location nextStartLocation = nextPost->GetStartLocation( );
       Location nextEndLocation = nextPost->GetEndLocation( );
-      if (nextStartLocation < minLoc)
+      if ( nextStartLocation < minLoc )
          {
          nearestTerm = i;
          minLoc = nextStartLocation;
          nearestStartLocation = nextStartLocation;
          nearestEndLocation = nextEndLocation;
          }
-      if (nextEndLocation > maxLoc) // what is farthest term? when to use it?
+      if ( nextEndLocation > maxLoc ) // what is farthest term? when to use it?
          {
          farthestTerm = i;
          maxLoc = nextEndLocation;
@@ -209,10 +210,10 @@ Post* ISRAnd::Seek( Location target )
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.   
       // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
-      Post* endDoc = EndDoc->Seek(maxLoc);
-      Location docEndLocation = endDoc->GetEndLocation();
+      Post* endDoc = EndDoc->Seek( maxLoc );
+      Location docEndLocation = endDoc->GetEndLocation( );
       // TODO: doc length
-      Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength();
+      Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
       //std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
       maxLoc = 0;
