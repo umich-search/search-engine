@@ -294,7 +294,8 @@ int FileManager::ReadDocuments(Offset docsChunkIndex) {
     size_t fileSize = FileSize(f_doc_chunk);
     blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_doc_chunk, 0);
     if (blob == MAP_FAILED ) {
-       throw "Mapping failed";
+        std::cout << "FileManager::ReadDocuments: blob mapping failed with errno = " << strerror( errno ) << std::endl;
+        throw "Mapping failed";
     }
     docsBlob = (const char *)blob;
     close(f_doc_chunk);
@@ -430,7 +431,11 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
+<<<<<<< HEAD
 		std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
+=======
+            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;s
+>>>>>>> 96ef702c8c2da77a868abf8ebdcf61929a70370e
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
@@ -446,7 +451,8 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
-           throw "Mapping failed";
+            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
+            throw "Mapping failed";
             }
         }
     std::cout << "FileManager::ReadMetadata: metadata file mapped successfully to " << metadataFile << std::endl;
