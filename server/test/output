@@ -1,73 +1,17 @@
 --- BLOCKING: Serving query: Google | Facebook
 Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
+M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
+Sending query to machine: 0
 Waiting for response from machine: 0
-M:0 Thread(QueryServer:0): Exception: Empty message received
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-M:0 Thread(QueryServer:0): Too many attempts; ignoring rank results from machine: 0
-M:0 Thread(QueryServer:0): Exited
-Results for query=Google | Facebook
---- BLOCKING: Serving query: C++
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-M:0 Thread(QueryServer:0): Too many attempts; ignoring rank results from machine: 0
-M:0 Thread(QueryServer:0): Exited
-Results for query=C++
---- BLOCKING: Serving query: EECS
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-Sending query to machine: 0
-M:0 Thread(QueryServer:0): Exception: Connection failed to machine: 0 (127.0.0.1:8888)
-M:0 Thread(QueryServer:0): Too many attempts; ignoring rank results from machine: 0
-M:0 Thread(QueryServer:0): Exited
-Results for query=EECS
