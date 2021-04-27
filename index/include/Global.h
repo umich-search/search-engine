@@ -12,7 +12,7 @@
 // Max number of sync points
 #define NUM_SYNC_POINTS 64
 // Size of bytes to write in memory before writing to disk
-#define CHUNK_SIZE_BYTES 200000000 
+#define CHUNK_SIZE_BYTES 20 
 // titles > MAX_TITLE_LENGTH will be cutoff
 #define MAX_TITLE_LENGTH 128
 // Documents with URLs > MAX_URL_LENGTH will be skipped

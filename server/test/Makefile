@@ -80,7 +80,11 @@ LIBS = -lssl -lcrypto -pthread
 LIBCRYPTO_CFLAGS = -I/usr/local/include 
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
+<<<<<<< HEAD
 EXEC = rankerServerTest
+=======
+EXEC = tinyCrawler
+>>>>>>> b97931f37a3718638f33a7244dde0b68c3af8809
 
 all: $(EXEC)
 
