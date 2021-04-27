@@ -81,62 +81,73 @@ Post *ISRWord::NextEndDoc()
 
 Post *ISRWord::Seek(size_t target) 
     {
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    vector<Location> endLocs = manager.getChunkEndLocations( );
     size_t numChunks = endLocs.size();
-    std::cout << "numChunks: " << numChunks << std::endl;
+    std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
     size_t chunkIndex;
     Location result = -1;
     std::cout << std::endl;
-    for (chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) 
+    for ( chunkIndex = 0; chunkIndex < numChunks; chunkIndex++ ) 
         {
-        if (endLocs[chunkIndex] >= target) break;
+        if ( endLocs[ chunkIndex ] >= target ) 
+            break;
         }
-    if (chunkIndex >= numChunks) 
+    if ( chunkIndex >= numChunks ) 
         {
-        std::cout << "chunkIndex greater than num chunks: " << chunkIndex << " " << numChunks << std::endl;
+        std::cout << "ISRWord::Seek: chunkIndex greater than num chunks: " << chunkIndex << " " << numChunks << std::endl;
         return nullptr;
         }
-    std::cout << "starting at chunkIndex: " << chunkIndex << " and iterating until: " << numChunks << std::endl;
+    std::cout << "ISRWord::Seek: starting at chunkIndex: " << chunkIndex << " and iterating until: " << numChunks << std::endl;
     for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) 
         {
         std::cout << "Searching in chunk: " << chunk << std::endl;
         try 
             {
             TermPostingListRaw termraw = manager.GetTermList(term, chunk);
-            std::cout << "Found term: " << termraw.getHeader()->term << " with num doc: " <<  termraw.getHeader()->numOfDocument << std::endl;
-            if (termraw.getHeader()->numOfOccurence == 0) continue;
-            else {
+            std::cout << "ISRWord::Seek: Found term: " << termraw.getHeader()->term << " with num doc: " <<  termraw.getHeader()->numOfDocument << std::endl;
+            if ( termraw.getHeader( )->numOfOccurence == 0 ) 
+                continue;
+            else 
+                {
                 size_t temp;
                 Offset chunkSize;
                 size_t offset;
                 size_t searchTarget;
-                if (chunk > 0) {
-                    chunkSize = endLocs[chunk] - endLocs[chunk - 1];
-                    offset = endLocs[chunk - 1];
-                } else {
-                    chunkSize = endLocs[chunk];
+                if ( chunk > 0 ) 
+                    {
+                    chunkSize = endLocs[ chunk ] - endLocs[ chunk - 1 ];
+                    offset = endLocs[ chunk - 1 ];
+                    } 
+                else 
+                    {
+                    chunkSize = endLocs[ chunk ];
                     offset = 0;
-                }
-                if (target < offset) searchTarget = 0;
-                else searchTarget = target - offset;
-                result = seekTermTarget(&termraw, searchTarget, temp, chunkSize);
-                if (result == -1) continue;
-                if (chunk != 0)result += endLocs[chunk - 1];
-                currChunk = chunk;
-                termPostingListRaw = termraw;
-                currIndex = temp;
+                    }
+                if ( target < offset ) 
+                    searchTarget = 0;
+                else 
+                    searchTarget = target - offset;
+                result = seekTermTarget( &termraw, searchTarget, temp, chunkSize );
+                if ( result == -1 ) 
+                    continue;
+                if ( chunk != 0 )
+                    result += endLocs[ chunk - 1 ];
+                currChunk = chunk;  // current chunk
+                termPostingListRaw = termraw;  // current posting list
+                currIndex = temp;  // current index into the posting list
                 break;
                 }
             }
-        catch (const char *excep) 
+        catch ( const char *excep ) 
             {
-            std::cout << "Did not find term" << std::endl;
+            std::cout << "ISRWord::Seek: Did not find term" << std::endl;
             continue;
             }
         }
-    if (result == -1) return nullptr;
-    currPost.SetLocation(result);
-    std::cout << "Returning from seek result" << std::endl;
+    if ( result == -1 ) 
+        return nullptr;
+    currPost.SetLocation( result );
+    std::cout << "ISRWord::Seek: Returning from seek result, location = " << result << std::endl;
     return &currPost;
 
 }

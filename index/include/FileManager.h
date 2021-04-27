@@ -62,6 +62,7 @@ class FileManager
     static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname, const char * prevMetadata);
 
 
+<<<<<<< HEAD
 public:
    HashBlob * termIndexBlob;
    SerialEndDocs * endDocListBlob;
@@ -74,6 +75,23 @@ public:
       threadID = thread;
       ReadMetadata();
     }
+=======
+   public: 
+      // attributes
+      HashBlob * termIndexBlob;
+      SerialEndDocs * endDocListBlob;
+      ChunksMetadata * chunksMetadata;
+      const char * docsBlob;
+      void * chunkDetails;
+      size_t threadID;
+      
+      // constructor
+      FileManager( size_t thread ) 
+         {
+         threadID = thread;
+         ReadMetadata( );
+         }
+>>>>>>> 9102d46 (added some prints)
 
     static int WriteChunk(SharedPointer<TermHash> termIndex, 
                   SharedPointer<EndDocPostingList> endDocList,

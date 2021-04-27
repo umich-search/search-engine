@@ -241,36 +241,41 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
        return 0;
    }
 
-    int FileManager::ReadChunk(size_t chunkIndex) {
-        ReadMetadata(chunkIndex);
-        if(chunkIndex >= chunksMetadata->numChunks) {
-            throw "Error: Attempting to read more than available chunks";
+int FileManager::ReadChunk( size_t chunkIndex ) 
+    {
+    ReadMetadata( chunkIndex );
+    if( chunkIndex >= chunksMetadata->numChunks ) 
+        {
+        throw "Error: Attempting to read more than available chunks";
         }
-        char chunkFile[MAX_PATHNAME_LENGTH];
-        resolveChunkPath(chunkIndex, chunkFile, threadID);
-        std::cout << "Path resolve to " << chunkFile << std::endl;
+    char chunkFile[ MAX_PATHNAME_LENGTH ];
+    resolveChunkPath( chunkIndex, chunkFile, threadID );
+    std::cout << "Path resolve to " << chunkFile << std::endl;
 
-        void * blob;
-        int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
-        if (f_chunk == -1 ) {
-            std::cerr << "Error openning file " << chunkFile << " with errno = " << strerror( errno ) << std::endl;
-            return -1;
-         }
-        size_t fileSize = FileSize(f_chunk);
-        blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0);
-        if (blob == MAP_FAILED ) {
-           throw "Mapping failed";
+    void * blob;
+    int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
+    if ( f_chunk == -1 ) 
+        {
+        std::cerr << "Error openning file " << chunkFile << " with errno = " << strerror( errno ) << std::endl;
+        return -1;
         }
-        std::cout << "Mapped end doc blob, returning with cast" << std::endl;
-        endDocListBlob = (SerialEndDocs *)blob;
-        size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
-        char* curr = (char*)blob + endDocEnd;
-        termIndexBlob = (HashBlob *)curr;
-        close(f_chunk);
-        std::cout << "Returning from read chunk" << std::endl;
+    size_t fileSize = FileSize( f_chunk );
+    std::cout << "Chunk file opened size = " << chunkFile << std::endl;
+    blob = ( HashBlob *)mmap( nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0 );  // Q?: assigning HashBlob * to void * 
+    if ( blob == MAP_FAILED ) 
+        {
+        throw "Mapping failed";
+        }
+    std::cout << "Mapped end doc blob, returning with cast" << std::endl;
+    endDocListBlob = ( SerialEndDocs * )blob;
+    size_t endDocEnd = RoundUp( endDocListBlob->Length, sizeof( size_t ) );
+    char* curr = ( char* )blob + endDocEnd;
+    termIndexBlob = ( HashBlob * )curr;
+    close( f_chunk );
+    std::cout << "Returning posting lists from read chunk" << std::endl;
 
-        return 0;
-    }
+    return 0;
+}
 
 int FileManager::ReadDocuments(Offset docsChunkIndex) {
     ReadMetadata(docsChunkIndex);
@@ -296,36 +301,46 @@ int FileManager::ReadDocuments(Offset docsChunkIndex) {
 }
 
 // May return refernece
-TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkIndex) {
-    if(chunkIndex == -1) {
+TermPostingListRaw FileManager::GetTermList( const char * term, size_t chunkIndex ) 
+    {
+    if( chunkIndex == -1 ) 
+        {
         throw "Error: No chunk initialized";
-    }
-    ReadChunk(chunkIndex);
-    if(!termIndexBlob) {
+        }
+    ReadChunk( chunkIndex );
+    if( !termIndexBlob ) 
+        {
         throw "Error: No chunk has been read";
-    }
+        }
 
-    const SerialTuple * tuple = termIndexBlob->Find(term);
-    if(!tuple) {
+    // get the posting list of that tuple
+    const SerialTuple * tuple = termIndexBlob->Find( term );
+    if( !tuple ) 
+        {
         throw "Error: Term does not exist";
+        }
+    else 
+        {
+        std::cout << "FileManager::GetTermList: Term post list selected and returned\n";
+        return TermPostingListRaw( tuple->DynamicSpace );
+        }
     }
-    else {
-        return TermPostingListRaw(tuple->DynamicSpace);
-    }
-}
 
-EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
-    if(chunkIndex >= chunksMetadata->numChunks) {
+EndDocPostingListRaw FileManager::GetEndDocList( size_t chunkIndex ) 
+    {
+    if( chunkIndex >= chunksMetadata->numChunks ) 
+        {
         throw "Error: Attempting to read more than available chunks";
-    }
+        }
     std::cout << "Reading chunk: " << chunkIndex << std::endl;
-    ReadChunk(chunkIndex);
-    if(!endDocListBlob) {
+    ReadChunk( chunkIndex );
+    if( !endDocListBlob ) 
+        {
         throw "Error: No chunk has been read";
-    }
+        }
     std::cout << "Returning raw posting list" << std::endl;
-    return EndDocPostingListRaw(endDocListBlob->DynamicSpace);
-}
+    return EndDocPostingListRaw( endDocListBlob->DynamicSpace );
+    }
 
 DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
     if (docIndex == 80) {
@@ -344,7 +359,7 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     }
     
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
-    w_Occurence numWords = *(w_Occurence *)curr;
+    w_Occurence numWords = *(w_Occurence *)curr;  // segfault in indexValidator
     w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
     const char * url = curr + 2 * sizeof(w_Occurence);
     const char * title = curr + 2 * sizeof(w_Occurence) + MAX_URL_LENGTH;
