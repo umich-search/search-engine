@@ -10,6 +10,7 @@
 
 using TermHash = HashTable< String, TermPostingList* >;
 
+<<<<<<< HEAD
 class FileManager {
 private:
    static size_t FileSize( int f) {
@@ -26,6 +27,27 @@ private:
       char dynamicSpace[];
    };
    Offset managerNumChunks = -1;
+=======
+class FileManager 
+   {
+   private:
+      static size_t FileSize( int f) 
+         {
+         struct stat fileInfo;
+         fstat( f, &fileInfo );
+         return fileInfo.st_size;
+         }
+      struct ChunksMetadata 
+         {
+         Offset numChunks;
+         w_Occurence numWords;
+         w_Occurence numUniqueWords;
+         d_Occurence numDocs;
+         Location endLocation;
+         char dynamicSpace[ ];
+         };
+      Offset managerNumChunks = -1;
+>>>>>>> 6ded0d2 (test cloud index)
 
     static int resolveChunkPath(size_t offset, char * pathname, size_t threadID);
     static int resolveDocsChunkPath(size_t offset, char * pathname, size_t threadID);

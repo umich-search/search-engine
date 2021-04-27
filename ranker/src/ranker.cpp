@@ -8,9 +8,9 @@
 std::string serializeUrlScore( url_score *us )
     {
     // [URL]$[title]#[score]@
-    return us->URL + '$' + 
-        us->title + '#' + 
-        ltos( us->score ).cstr( ) + '@';
+    return us->URL + "\r\r\n" + 
+        us->title + "\r\r\r\n" + 
+        ltos( us->score ).cstr( ) + "\r\r\r\r\n";
     }
 
 void freeResults( ::vector< url_score * >& v )

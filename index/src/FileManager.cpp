@@ -243,11 +243,13 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
 
     int FileManager::ReadChunk(size_t chunkIndex) {
         ReadMetadata(chunkIndex);
-        if(chunkIndex > chunksMetadata->numChunks) {
+        if(chunkIndex >= chunksMetadata->numChunks) {
             throw "Error: Attempting to read more than available chunks";
         }
         char chunkFile[MAX_PATHNAME_LENGTH];
         resolveChunkPath(chunkIndex, chunkFile, threadID);
+        std::cout << "Path resolve to " << chunkFile << std::endl;
+
         void * blob;
         int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
         if (f_chunk == -1 ) {
@@ -259,17 +261,20 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
         if (blob == MAP_FAILED ) {
            throw "Mapping failed";
         }
+        std::cout << "Mapped end doc blob, returning with cast" << std::endl;
         endDocListBlob = (SerialEndDocs *)blob;
         size_t endDocEnd = RoundUp(endDocListBlob->Length, sizeof(size_t));
         char* curr = (char*)blob + endDocEnd;
         termIndexBlob = (HashBlob *)curr;
         close(f_chunk);
+        std::cout << "Returning from read chunk" << std::endl;
+
         return 0;
     }
 
 int FileManager::ReadDocuments(Offset docsChunkIndex) {
     ReadMetadata(docsChunkIndex);
-    if(docsChunkIndex > chunksMetadata->numChunks) {
+    if(docsChunkIndex >= chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
     char docsChunkFile[MAX_PATHNAME_LENGTH];
@@ -310,17 +315,22 @@ TermPostingListRaw FileManager::GetTermList(const char * term, size_t chunkIndex
 }
 
 EndDocPostingListRaw FileManager::GetEndDocList(size_t chunkIndex) {
-    if(chunkIndex > chunksMetadata->numChunks) {
+    if(chunkIndex >= chunksMetadata->numChunks) {
         throw "Error: Attempting to read more than available chunks";
     }
+    std::cout << "Reading chunk: " << chunkIndex << std::endl;
     ReadChunk(chunkIndex);
     if(!endDocListBlob) {
         throw "Error: No chunk has been read";
     }
+    std::cout << "Returning raw posting list" << std::endl;
     return EndDocPostingListRaw(endDocListBlob->DynamicSpace);
 }
 
 DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
+    if (docIndex == 80) {
+        std::cout << "" << std::endl;
+    }
     if(docsChunkIndex == -1) {
         throw "Error: No chunk initalized";
     }
@@ -330,7 +340,7 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     }
     Offset normalize = 0;
     if(docsChunkIndex > 0) {
-        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex - 1) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
+        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
     }
     
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
@@ -338,7 +348,6 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
     const char * url = curr + 2 * sizeof(w_Occurence);
     const char * title = curr + 2 * sizeof(w_Occurence) + MAX_URL_LENGTH;
-    
 
     return DocumentDetails(url, title, numWords, numUniqueWords);
 }
