@@ -302,7 +302,8 @@ Post *ISREndDoc::Seek(Location target)
         if ( endLocs[ chunkIndex ] >= target ) 
             break;
         }
-    if (chunkIndex >= numChunks) return nullptr;
+    if (chunkIndex >= numChunks) 
+        return nullptr;
     std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
     for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) 
         {

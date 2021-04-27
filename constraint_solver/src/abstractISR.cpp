@@ -75,6 +75,7 @@ Post* ISROr::Seek( Location target )
       nearestEndLocation = firstPost->GetEndLocation( ); 
       }
    //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
+   std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
    return new Post( firstPost->GetStartLocation( ), firstPost->GetEndLocation( ) );
    }
 
