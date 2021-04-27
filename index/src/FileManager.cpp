@@ -252,7 +252,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
     resolveChunkPath( chunkIndex, chunkFile, threadID );
     std::cout << "FileManager::ReadChunk: Path resolve to " << chunkFile << std::endl;
 
-    void * blob;
+    
     int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
     if ( f_chunk == -1 ) 
         {
@@ -261,13 +261,20 @@ int FileManager::ReadChunk( size_t chunkIndex )
         }
     size_t fileSize = FileSize( f_chunk );
     std::cout << "FileManager::ReadChunk: Chunk file opened size = " << fileSize << std::endl;
-    blob = ( HashBlob *)mmap( nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0 );  // Q?: assigning HashBlob * to void * 
+    
+    // free previously mapped chunk
+    unmapChunk( );
+
+    // map chunk file
+    void * blob = mmap( nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0 );  // Q?: assigning HashBlob * to void * 
     if ( blob == MAP_FAILED ) 
         {
         std::cout << "FileManager::ReadChunk: map failed with errno = " << strerror( errno ) << std::endl;
         throw "Mapping failed";
         }
     std::cout << "FileManager::ReadChunk: Mapped end doc blob, returning with cast" << std::endl;
+
+    chunkSize = fileSize;
     endDocListBlob = ( SerialEndDocs * )blob;
     size_t endDocEnd = RoundUp( endDocListBlob->Length, sizeof( size_t ) );
     char* curr = ( char* )blob + endDocEnd;
@@ -292,11 +299,18 @@ int FileManager::ReadDocuments(Offset docsChunkIndex) {
         return -1;
      }
     size_t fileSize = FileSize(f_doc_chunk);
+
+    // unmap old doc file 
+    unmapDocs( );
+
+    // map new doc file
     blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_doc_chunk, 0);
     if (blob == MAP_FAILED ) {
         std::cout << "FileManager::ReadDocuments: blob mapping failed with errno = " << strerror( errno ) << std::endl;
         throw "Mapping failed";
     }
+
+    docsBlobSize = fileSize;
     docsBlob = (const char *)blob;
     close(f_doc_chunk);
     return 0;
@@ -428,9 +442,17 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
     if( FileSize( f_metadata ) == 0 ) 
         {
         ftruncate( f_metadata, sizeof( ChunksMetadata ) );
-        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
+        
+        // unmap previous metadata chunk
+        unmapMetadata( );
+        
+        // map new metadata chunk
+        chunksMetadataSize = FileSize( f_metadata );
+        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, chunksMetadataSize, PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
+        
         if ( chunksMetadata == MAP_FAILED ) 
             {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 		std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
@@ -440,6 +462,11 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
 =======
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
 >>>>>>> d2cb41c (merge conflict)
+=======
+            chunksMetadata = nullptr;
+            chunksMetadataSize = 0;
+            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
+>>>>>>> ce70ba1c5420e9dde9b4badb4a72d34c7e9519be
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
@@ -452,9 +479,17 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
     else 
         {
         std::cout << "FileManager::ReadMetadata: trying to map the file\n";
-        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
+        
+        // unmap old metadata chunk
+        unmapMetadata( );
+
+        // map new metadata chunk
+        chunksMetadataSize = FileSize( f_metadata );
+        chunksMetadata = ( ChunksMetadata* )mmap( nullptr, chunksMetadataSize, PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
+            chunksMetadata = nullptr;
+            chunksMetadataSize = 0;
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
             throw "Mapping failed";
             }
@@ -505,3 +540,37 @@ Location FileManager::getIndexEndLocation() {
     return docCounts;
     
 }
+
+void FileManager::unmapMetadata( )
+    {
+    if ( !chunksMetadata )
+        {
+        std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
+        munmap( ( void * )chunksMetadata, chunksMetadataSize );
+        chunksMetadata = nullptr;
+        chunksMetadataSize = 0;
+        }
+    }
+
+void FileManager::unmapChunk( )
+    {
+    if ( !endDocListBlob )
+        {
+        std::cout << "Unmap chunks of size " << chunkSize << std::endl;
+        munmap( ( void * )endDocListBlob, chunkSize );
+        endDocListBlob = nullptr;
+        termIndexBlob = nullptr;
+        chunkSize = 0;
+        }
+    }
+
+void FileManager::unmapDocs( )
+    {
+    if ( !docsBlob )
+        {
+        std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
+        munmap( ( void * )docsBlob, docsBlobSize );
+        docsBlob = nullptr;
+        docsBlobSize = 0;
+        }
+    }

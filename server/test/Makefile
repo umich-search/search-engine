@@ -81,10 +81,14 @@ LIBCRYPTO_CFLAGS = -I/usr/local/include
 LIBCRYPTO_LIBS = -L/usr/local/lib -lcrypto
 # TODO: add the name of the main source file here
 <<<<<<< HEAD
+<<<<<<< HEAD
 EXEC = rankerServerTest
 =======
 EXEC = tinyCrawler
 >>>>>>> b97931f37a3718638f33a7244dde0b68c3af8809
+=======
+EXEC = rankerServerTest
+>>>>>>> ce70ba1c5420e9dde9b4badb4a72d34c7e9519be
 
 all: $(EXEC)
 

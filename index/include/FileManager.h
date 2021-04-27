@@ -61,6 +61,10 @@ class FileManager
     static int writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname );
     static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname, const char * prevMetadata);
 
+      // unmap previously mapped files
+      void unmapMetadata( );
+      void unmapChunk( );
+      void unmapDocs( );
 
 <<<<<<< HEAD
 public:
@@ -82,13 +86,19 @@ public:
       SerialEndDocs * endDocListBlob;
       ChunksMetadata * chunksMetadata;
       const char * docsBlob;
-      void * chunkDetails;
+      // void * chunkDetails;
       size_t threadID;
+
+      size_t chunksMetadataSize;  // size of the metadata file to unmap
+      size_t chunkSize;  // size of the chunk to unmap
+      size_t docsBlobSize;  // size of the document to unmap
       
       // constructor
       FileManager( size_t thread ) 
+         : termIndexBlob( nullptr ), endDocListBlob( nullptr ), chunksMetadata( nullptr ), docsBlob( nullptr ),
+         threadID( thread ), chunksMetadataSize( 0 ), chunkSize( 0 ), docsBlobSize( 0 ) 
          {
-         threadID = thread;
+         // threadID = thread;
          ReadMetadata( );
          }
 >>>>>>> 9102d46 (added some prints)
