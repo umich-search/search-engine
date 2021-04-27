@@ -250,7 +250,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
         }
     char chunkFile[ MAX_PATHNAME_LENGTH ];
     resolveChunkPath( chunkIndex, chunkFile, threadID );
-    std::cout << "Path resolve to " << chunkFile << std::endl;
+    std::cout << "FileManager::ReadChunk: Path resolve to " << chunkFile << std::endl;
 
     void * blob;
     int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
@@ -260,19 +260,19 @@ int FileManager::ReadChunk( size_t chunkIndex )
         return -1;
         }
     size_t fileSize = FileSize( f_chunk );
-    std::cout << "Chunk file opened size = " << chunkFile << std::endl;
+    std::cout << "FileManager::ReadChunk: Chunk file opened size = " << fileSize << std::endl;
     blob = ( HashBlob *)mmap( nullptr, fileSize, PROT_READ, MAP_SHARED, f_chunk, 0 );  // Q?: assigning HashBlob * to void * 
     if ( blob == MAP_FAILED ) 
         {
         throw "Mapping failed";
         }
-    std::cout << "Mapped end doc blob, returning with cast" << std::endl;
+    std::cout << "FileManager::ReadChunk: Mapped end doc blob, returning with cast" << std::endl;
     endDocListBlob = ( SerialEndDocs * )blob;
     size_t endDocEnd = RoundUp( endDocListBlob->Length, sizeof( size_t ) );
     char* curr = ( char* )blob + endDocEnd;
     termIndexBlob = ( HashBlob * )curr;
     close( f_chunk );
-    std::cout << "Returning posting lists from read chunk" << std::endl;
+    std::cout << "FileManager::ReadChunk: Returning posting lists from read chunk" << std::endl;
 
     return 0;
 }
@@ -439,13 +439,14 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         }
     else 
         {
+        std::cout << "FileManager::ReadMetadata: trying to map the file\n";
         chunksMetadata = ( ChunksMetadata* )mmap( nullptr, FileSize( f_metadata ), PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
            throw "Mapping failed";
             }
         }
-    std::cout << "FileManager::ReadMetadata: metadata file mapped successfully\n";
+    std::cout << "FileManager::ReadMetadata: metadata file mapped successfully to " << metadataFile << std::endl;
     close( f_metadata );
     return 0;
 }
