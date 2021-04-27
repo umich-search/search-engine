@@ -309,6 +309,7 @@ Post *ISREndDoc::Seek(Location target)
     if ( !containFlag )  // check chunkIndex 
         return nullptr;
     std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
+    std::cout << "ISREndDoc::Seek: manager with numChunks" << manager.getNumChunks( ) << std::endl;
     for ( size_t chunk = chunkIndex; chunk < numChunks; chunk++ ) 
         {
         try 
