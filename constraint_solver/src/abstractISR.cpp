@@ -15,7 +15,8 @@ Location max( Location locx, Location locy )
 ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) 
    : Terms( Terms ), NumberOfTerms( NumberOfTerms ), 
       nearestTerm( 0 ), 
-      nearestStartLocation( 0 ), nearestEndLocation( 0 )
+      nearestStartLocation( 0 ), nearestEndLocation( 0 ),
+      currPost( 0 )
    {
    }
 
@@ -64,7 +65,8 @@ Post* ISROr::Seek( Location target )
          {
          //std::cout << "hehe" << std:: endl;
          nearestTerm = i;
-         firstPost = nextPost;
+         delete firstPost;  // delete nullptr is allowed
+         firstPost = new Post( *nextPost );
          minLoc = nextLocation;
          }
       }
@@ -73,10 +75,14 @@ Post* ISROr::Seek( Location target )
       {
       nearestStartLocation = firstPost->GetStartLocation( );
       nearestEndLocation = firstPost->GetEndLocation( ); 
+      currPost = *firstPost;
+      delete firstPost;
+      //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
+      std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
+      return &currPost;
       }
-   //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
-   std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
-   return new Post( firstPost->GetStartLocation( ), firstPost->GetEndLocation( ) );
+   else
+      return nullptr;
    }
 
 Post* ISROr::Next( )
@@ -144,7 +150,7 @@ float ISROr::GetCombinedScore( vector< float > scores )
    }
 
 ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) 
-   : Terms(Terms), NumberOfTerms(NumberOfTerms) 
+   : Terms(Terms), NumberOfTerms(NumberOfTerms), currPost( 0 )
    {
    EndDoc = dict->OpenISREndDoc( );
    nearestTerm = 0;
@@ -221,28 +227,28 @@ Post* ISRAnd::Seek( Location target )
 
       // 3. Seek all the other terms to past the document begin.
       bool flag = false;   // check if any term is past the enddoc
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
-         Post *nextPost = Term->Seek(max(docStartLocation, target));
+         ISR *Term = *( Terms + i );
+         Post *nextPost = Term->Seek( max( docStartLocation, target ) );
          // If any ISR reaches the end, there is no match.
-         if (!nextPost)
+         if ( !nextPost )
             return nullptr;
-         Location nextStartLocation = nextPost->GetStartLocation();
-         Location nextEndLocation = nextPost->GetEndLocation();
-         if (nextStartLocation < minLoc)
+         Location nextStartLocation = nextPost->GetStartLocation( );
+         Location nextEndLocation = nextPost->GetEndLocation( );
+         if ( nextStartLocation < minLoc )
             {
             nearestTerm = i;
             minLoc = nextStartLocation;
             nearestStartLocation = nextStartLocation;
             nearestEndLocation = nextEndLocation;
             }
-         if (nextEndLocation > maxLoc)
+         if ( nextEndLocation > maxLoc )
             {
             farthestTerm = i;
             maxLoc = nextEndLocation;
             // 4. If any term is past the document end, return to step 2.
-            if (maxLoc > docEndLocation)
+            if ( maxLoc > docEndLocation )
                {
                flag = true;
                break;
@@ -251,9 +257,10 @@ Post* ISRAnd::Seek( Location target )
          }
       if ( flag )
          continue;
-      Post* nearestMatch = new Post( minLoc, maxLoc );
-      return nearestMatch;
-      } while ( 1 );
+      currPost.SetLocation( minLoc, maxLoc );
+      return &currPost;
+      } 
+      while ( true );
    }
 
 Post* ISRAnd::Next( )
@@ -293,7 +300,9 @@ float ISRAnd::GetCombinedScore(vector<float> scores)
    return res;
    }
 
-ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)
+ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) 
+   : Terms( Terms ), NumberOfTerms( NumberOfTerms ), 
+   nearestStartLocation( 0 ), currPost( 0 )
    {
    }
 
@@ -330,35 +339,35 @@ Post* ISRPhrase::Seek( Location target )
    // used algorithm on textbook
    do
       {
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
-         Post* nextPost = Term->Seek(target);
-         if (!nextPost)
+         ISR *Term = *( Terms + i );
+         Post* nextPost = Term->Seek( target );
+         if ( !nextPost )
             return nullptr;
          else
-            target = nextPost->GetStartLocation() + 1;
+            target = nextPost->GetStartLocation( ) + 1;
          }
       Location nextStartLocation = target - NumberOfTerms;
       bool flag = 0;
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
+         ISR *Term = *( Terms + i );
          Location desiredLocation = nextStartLocation + i;
-         if (Term->Seek(desiredLocation)->GetStartLocation() != desiredLocation)
+         if ( Term->Seek( desiredLocation )->GetStartLocation( ) != desiredLocation )
             {
             target = nextStartLocation + 1;
             flag = 1;
             break;
             }
          }
-      if (flag)
+      if ( flag )
          continue;
       nearestStartLocation = nextStartLocation;
       //cout<<nearestStartLocation<<' '<< nextStartLocation + NumberOfTerms - 1<<endl;
-      Post* nearestMatch = new Post(nearestStartLocation, nextStartLocation + NumberOfTerms - 1 );
-      return nearestMatch;
-      } while (1);
+      currPost.SetLocation( nearestStartLocation, nextStartLocation + NumberOfTerms - 1 );
+      return &currPost;
+      } while ( true );
    }
 
 Post* ISRPhrase::Next( )

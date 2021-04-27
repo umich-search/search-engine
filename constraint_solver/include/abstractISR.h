@@ -48,6 +48,8 @@ class ISROr: public ISR
 
    private:
       unsigned nearestTerm;
+      Post currPost;  // to store stack return value
+
       // nearStartLocation and nearestEndLocation are
       // the start and end of the nearestTerm.
       Location nearestStartLocation, nearestEndLocation;
@@ -96,6 +98,8 @@ class ISRAnd: public ISR
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
+      Post currPost;  // used to store stack return value
+
       struct Weights weights {
         weightShortSpan: 5,
         weightOrderSpan: 2,
@@ -139,6 +143,8 @@ class ISRPhrase: public ISR
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation;
+      Post currPost;  // store stack return value
+
       struct Weights weights {
         weightShortSpan: 1,
         weightOrderSpan: 1,
