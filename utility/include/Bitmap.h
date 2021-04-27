@@ -62,6 +62,7 @@ class bitmap_f  // bitmap in file
         String f_name;
         size_t bitSize;
         uint32_t *v;
+        size_t mapSize;
 
     public:
         // ctor needs absolute path to the file

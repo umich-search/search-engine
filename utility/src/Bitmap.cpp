@@ -24,6 +24,7 @@ bitmap_f::bitmap_f( const char *filename, size_t numBits )
     v = ( uint32_t * )mmap( nullptr, fileSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0 );
     if ( v == MAP_FAILED )
         std::cerr << "Map failed with errno = " << strerror( errno ) << std::endl;
+    mapSize = fileSize;
     close( fd );
     }
 
