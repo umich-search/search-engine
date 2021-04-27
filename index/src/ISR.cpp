@@ -45,7 +45,7 @@ Post *ISRWord::Next()
         Location delta = termPostingListRaw.getPostAt(currIndex).delta;
         currPost.SetLocation(delta + currPost.GetStartLocation());
         } else {
-        std::cout << "Reseeking" << std::endl;
+        std::cout << "ISRWord::Next(): Reseeking to the next chunk" << std::endl;
         Post *post = Seek(currPost.GetStartLocation() + 1);
         if ( post == nullptr ) 
             { 
@@ -299,10 +299,11 @@ Post *ISREndDoc::Seek(Location target)
     Location result = -1;
     for (chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) 
         {
-        if (endLocs[chunkIndex] >= target) break;
+        if ( endLocs[ chunkIndex ] >= target ) 
+            break;
         }
     if (chunkIndex >= numChunks) return nullptr;
-    std::cout << "seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
+    std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
     for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) 
         {
         try 
@@ -334,7 +335,8 @@ Post *ISREndDoc::Seek(Location target)
             continue;
             }
         }
-    if (result == -1) return nullptr;
+    if (result == -1) 
+        return nullptr;
     currPost.SetLocation(result);
     return &currPost;
     }
@@ -369,25 +371,25 @@ Location ISREndDoc::GetStartLocation()
     return result;
     }
 
-Location ISREndDoc::GetEndLocation() 
+Location ISREndDoc::GetEndLocation( ) 
     {
-    size_t numChunks = manager.getChunkEndLocations().size();
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    size_t numChunks = manager.getChunkEndLocations( ).size( );
+    vector< Location > endLocs = manager.getChunkEndLocations( );
     size_t result = -1;
-    for (size_t chunk = numChunks - 1; chunk >= 0; chunk--) 
+    for ( size_t chunk = numChunks - 1; chunk >= 0; chunk-- ) 
         {
         try 
             {
-            EndDocPostingListRaw docraw = manager.GetEndDocList(chunk);
+            EndDocPostingListRaw docraw = manager.GetEndDocList( chunk );
             size_t temp;
             size_t chunkSize;
             size_t numOccurence = docraw.header->numOfDocument;
-            if (chunk > 0) 
+            if ( chunk > 0 ) 
                 {
-                chunkSize = endLocs[chunk] - endLocs[chunk - 1];
+                chunkSize = endLocs[ chunk ] - endLocs[ chunk - 1 ];
                 } else 
                 {
-                chunkSize = endLocs[chunk];
+                chunkSize = endLocs[ chunk ];
                 }
             result = seekEndDocTarget(&docraw, 0, temp, chunkSize);
             for (int i = 1; i < numOccurence; i++) 

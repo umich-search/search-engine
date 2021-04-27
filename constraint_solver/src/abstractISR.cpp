@@ -12,9 +12,10 @@ Location max( Location locx, Location locy )
      return (locx > locy)?locx:locy;
    }
 
-ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms),
-      NumberOfTerms(NumberOfTerms), nearestTerm(0), nearestStartLocation(0),
-      nearestEndLocation(0)
+ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) 
+   : Terms( Terms ), NumberOfTerms( NumberOfTerms ), 
+      nearestTerm( 0 ), 
+      nearestStartLocation( 0 ), nearestEndLocation( 0 )
    {
    }
 
@@ -48,17 +49,18 @@ Post* ISROr::Seek( Location target )
    Post* firstPost = nullptr;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
-         //std::cout << "Term " << i << std::endl;
-      ISR* Term = *(Terms + i); 
-      Post* nextPost = Term->Seek(target);
+      // std::cout << "Term " << i << std::endl;
+      ISR* Term = *( Terms + i ); 
+      Post* nextPost = Term->Seek( target );
       // this term has no next match
-      if (!nextPost) {
+      if ( !nextPost )   // there is no term after the target 
+         {
           //std::cout << "skipped" << std::endl;
          continue;
-      }
-      Location nextLocation = nextPost->GetStartLocation();
+         }
+      Location nextLocation = nextPost->GetStartLocation( );
       // std::cout << nextLocation << std::endl;
-      if (nextLocation < minLoc)
+      if ( nextLocation < minLoc )
          {
          //std::cout << "hehe" << std:: endl;
          nearestTerm = i;
@@ -67,13 +69,13 @@ Post* ISROr::Seek( Location target )
          }
       }
   // std::cout << nearestTerm << std::endl;
-   if (firstPost)
+   if ( firstPost )
       {
-      nearestStartLocation = firstPost->GetStartLocation();
-      nearestEndLocation = firstPost->GetEndLocation(); 
+      nearestStartLocation = firstPost->GetStartLocation( );
+      nearestEndLocation = firstPost->GetEndLocation( ); 
       }
    //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
-   return firstPost;
+   return new Post( firstPost->GetStartLocation( ), firstPost->GetEndLocation( ) );
    }
 
 Post* ISROr::Next( )
@@ -105,7 +107,7 @@ Post* ISROr::Next( )
 
    // Post* nearestMatch = new Post(minLoc, nearestEndLocation);
    // return nearestMatch;
-   return ISROr::Seek(nearestStartLocation + 1);
+   return ISROr::Seek( nearestStartLocation + 1 );
    }
 
 // Post* ISROr::NextDocument( )
@@ -120,17 +122,17 @@ Post* ISROr::Next( )
 //    return Seek( EndDoc->Seek(nearestEndLocation)->GetEndLocation( ) );
 //    }
 
- Post* ISROr::NextEndDoc()
+ Post* ISROr::NextEndDoc( )
     {
     return nullptr;
     }
 
-ISR **ISROr::GetTerms()
+ISR **ISROr::GetTerms( )
    {
    return this->Terms;
    }
 
-float ISROr::GetCombinedScore( vector<float> scores )
+float ISROr::GetCombinedScore( vector< float > scores )
    {
    float res = 0;
    for ( size_t i = 0; i < scores.size(); ++i )
@@ -179,15 +181,15 @@ Post* ISRAnd::Seek( Location target )
    // 5. If any ISR reaches the end, there is no match.
    //std::cout<< "Entered ISRAnd Seek" << std::endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
-   for (size_t i = 0; i < NumberOfTerms; ++i)
+   for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
-      ISR *Term = *(Terms + i);
-      Post *nextPost = Term->Seek(target);
+      ISR *Term = *( Terms + i );
+      Post *nextPost = Term->Seek( target );
       // If any ISR reaches the end, there is no match.
-      if (!nextPost)
+      if ( !nextPost )
          return nullptr;
-      Location nextStartLocation = nextPost->GetStartLocation();
-      Location nextEndLocation = nextPost->GetEndLocation();
+      Location nextStartLocation = nextPost->GetStartLocation( );
+      Location nextEndLocation = nextPost->GetEndLocation( );
       if (nextStartLocation < minLoc)
          {
          nearestTerm = i;
@@ -245,11 +247,11 @@ Post* ISRAnd::Seek( Location target )
                }
             }
          }
-      if (flag)
+      if ( flag )
          continue;
-      Post* nearestMatch = new Post(minLoc, maxLoc);
+      Post* nearestMatch = new Post( minLoc, maxLoc );
       return nearestMatch;
-      } while (1);
+      } while ( 1 );
    }
 
 Post* ISRAnd::Next( )

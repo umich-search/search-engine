@@ -332,7 +332,7 @@ EndDocPostingListRaw FileManager::GetEndDocList( size_t chunkIndex )
         {
         throw "Error: Attempting to read more than available chunks";
         }
-    std::cout << "Reading chunk: " << chunkIndex << std::endl;
+    std::cout << "FileManager::GetEndDocList: Reading chunk: " << chunkIndex << std::endl;
     ReadChunk( chunkIndex );
     if( !endDocListBlob ) 
         {
