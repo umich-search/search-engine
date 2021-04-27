@@ -292,6 +292,7 @@ class HashFile
    private:
 
       HashBlob *blob;
+      size_t blobSize;
 
       size_t FileSize( int f )
          {
@@ -322,6 +323,7 @@ class HashFile
             {
             // TODO: check the blob header ( MagicNumber, Version ) here
             }
+         blobSize = fileSize;
          close( f );
          }
 
@@ -346,12 +348,14 @@ class HashFile
             std::cerr << "Map failed with errno = " << strerror( errno ) << std::endl;
             exit(0);
             // TODO: ADD not exiting status checks
+         blobSize = fileSize;
          close( f );
          }
 
       ~HashFile( )
          {
          // HashBlob::Discard( blob );
+         munmap( blob, blobSize );
          }
    };
 
