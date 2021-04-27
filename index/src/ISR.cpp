@@ -149,8 +149,7 @@ Post *ISRWord::Seek(size_t target)
     currPost.SetLocation( result );
     std::cout << "ISRWord::Seek: Returning from seek result, location = " << result << std::endl;
     return &currPost;
-
-}
+    }
 
 Location ISRWord::GetStartLocation() 
     {

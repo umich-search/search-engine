@@ -32,7 +32,7 @@
         matches->pushBack(matchDoc);
         // Post* document = new Post(startLocation, currentLocation);
         // posts->pushBack(document);
-        delete match;
+        // delete match;
         match = nullptr;
         }
     return matches;
