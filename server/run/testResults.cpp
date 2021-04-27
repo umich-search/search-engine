@@ -1,10 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include "../../query_compiler/include/query_Compiler.h"
-#include "../../constraint_solver/include/constraint_solver.h"
-#include "../../index/include/IndexConstructor.h"
-#include "../../index/include/Dictionary.h"
-#include "../../utility/include/mString.h"
+#include "query_Compiler.h"
+#include "constraint_solver.h"
+#include "IndexConstructor.h"
+#include "Dictionary.h"
+#include "mString.h"
 #include "Results.h"
 #include <filesystem>
 #include <string>
