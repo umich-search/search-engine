@@ -297,19 +297,24 @@ Post *ISREndDoc::Seek(Location target)
     size_t numChunks = endLocs.size();
     size_t chunkIndex;
     Location result = -1;
-    for (chunkIndex = 0; chunkIndex < numChunks; chunkIndex++) 
+    bool containFlag = false;
+    for ( chunkIndex = 0; chunkIndex < numChunks; chunkIndex++ ) // 3925
         {
         if ( endLocs[ chunkIndex ] >= target ) 
+            {
+            containFlag = true;
             break;
+            }
         }
-    if (chunkIndex >= numChunks) 
+    if ( !containFlag )  // check chunkIndex 
         return nullptr;
     std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
-    for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) 
+    for ( size_t chunk = chunkIndex; chunk < numChunks; chunk++ ) 
         {
         try 
             {
-            EndDocPostingListRaw docraw = manager.GetEndDocList(chunk);
+            std::cout << "ISREndDoc::Seek(): trying to get chunk at " << chunk << std::endl;
+            EndDocPostingListRaw docraw = manager.GetEndDocList( chunk );
             size_t temp;
             Offset chunkSize;
             size_t offset;
@@ -324,21 +329,23 @@ Post *ISREndDoc::Seek(Location target)
             if (target < offset) searchTarget = 0;
             else searchTarget = target - offset;
             result = seekEndDocTarget(&docraw, searchTarget, temp, chunkSize);
-            if (result == -1) continue;
+            if (result == -1) 
+                continue;
             if (chunk != 0)result += endLocs[chunk - 1];
             currChunk = chunk;
             endDocPostingListRaw = docraw;
             currIndex = temp;
             break;
             }
-        catch (const char * excep) 
+        catch ( const char * excep ) 
             {
+            std::cout << "ISREndDoc::Seek(): Exception received " << excep << std::endl;
             continue;
             }
         }
     if (result == -1) 
         return nullptr;
-    currPost.SetLocation(result);
+    currPost.SetLocation( result );
     return &currPost;
     }
 
