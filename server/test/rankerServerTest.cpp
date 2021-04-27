@@ -26,5 +26,12 @@ int main( int argc, char *argv[ ] )
         {
         std::cout << e << std::endl;
         }
-    
+    catch( const char *e )
+	{
+	std::cout << e << std::endl;
+	}
+    catch( ... )
+	{
+        std::cout << "rankerSererTest other exceptions\n"; 
+	}
     }
