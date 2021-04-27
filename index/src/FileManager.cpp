@@ -368,7 +368,7 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 }
 
 
-int FileManager::ReadMetadata(Offset givenChunk) {
+int FileManager::ReadMetadata( Offset givenChunk ) {
     // Use manager idea of num of chunks if no chunk given
     if( givenChunk == -1 ) 
         {
@@ -393,13 +393,11 @@ int FileManager::ReadMetadata(Offset givenChunk) {
         std::cout << "FileManager::ReadMetadata: given Chunk is -1, finding an existing chunk\n";
         f_metadata = 0;
         size_t cNum = 0;
-        bool flagFirstIter = true;
         while( f_metadata != - 1 ) 
             {
-            if ( flagFirstIter )
+            if ( f_metadata != 0 )
                 {
                 close( f_metadata );
-                flagFirstIter = false;
                 }
             cNum++;
             resolveMetadataPath( cNum, metadataFile, threadID );
