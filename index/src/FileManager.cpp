@@ -432,10 +432,14 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         if ( chunksMetadata == MAP_FAILED ) 
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
 =======
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;s
 >>>>>>> 96ef702c8c2da77a868abf8ebdcf61929a70370e
+=======
+            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
+>>>>>>> d2cb41c (merge conflict)
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
