@@ -19,7 +19,7 @@
    ::vector<Match*>* matches = new ::vector<Match*>(); 
    while ( match = queryRoot->Seek( currentLocation ) )
       {
-      // std::cout << "ConstraintSolver: get next query location\n";
+      // // std::cout << "ConstraintSolver: get next query location\n";
       // find the next endDoc location in "Post endDoc"
       Location matchStart = match->GetStartLocation( );
       if ( !match )

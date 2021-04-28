@@ -25,7 +25,7 @@ void freeResults( ::vector< url_score * >& v )
 void printRanks( ::vector< url_score >& v )
     {
     for ( int i = 0; i < v.size( ); ++i )
-        std::cout << v[ i ].URL << '\n' 
+        // std::cout << v[ i ].URL << '\n' 
                 << v[ i ].title << '\n' 
                 << v[ i ].score << std::endl << std::endl;
     }
@@ -34,7 +34,7 @@ float getDynamic(Match* document, ISR* queryRoot);
 
 vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
-        std::cout << "Performing calculations for ranker\n" << std::endl;
+        // std::cout << "Performing calculations for ranker\n" << std::endl;
     vector<url_score> arr;
     for ( size_t i = 0; i < (*matches).size(); ++i ) 
         {
@@ -62,7 +62,6 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
             }
         if ( flagExist )
             {
-            delete document;
             continue;
             }
 
@@ -96,7 +95,7 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
             }
         
         }
-        std::cout << "Finished calculations for ranker\n" << std::endl;
+        // std::cout << "Finished calculations for ranker\n" << std::endl;
 
     return arr;
     }
@@ -106,7 +105,7 @@ float getDynamic(Match* document, ISR* queryRoot)
     bool abstractISRExists = false;
     for ( int i = 0; i < queryRoot->GetTermNum(); ++i )
         {
-        std::cout << (*( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
+        // std::cout << (*( queryRoot->GetTerms() + i ))->GetTermNum()<<std::endl;
         if ((*( queryRoot->GetTerms() + i ))->GetTermNum() > 0) 
             {
             abstractISRExists = true;

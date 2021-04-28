@@ -203,7 +203,7 @@ class ISRWord : public ISR
       // debug
       void printTerm( )
          {
-         std::cout << term << std::endl;
+         // std::cout << term << std::endl;
          }
 
    private:
