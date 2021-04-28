@@ -60,11 +60,11 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
                 break;
                 }
             }
-        // if ( flagExist )
-        //     {
-        //     delete document;
-        //     continue;
-        //     }
+        if ( flagExist )
+            {
+            delete document;
+            continue;
+            }
 
         float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
         float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
