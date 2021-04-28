@@ -543,7 +543,7 @@ Location FileManager::getIndexEndLocation() {
 
 void FileManager::unmapMetadata( )
     {
-    if ( !chunksMetadata )
+    if ( chunksMetadata )
         {
         std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
         munmap( ( void * )chunksMetadata, chunksMetadataSize );
@@ -554,7 +554,7 @@ void FileManager::unmapMetadata( )
 
 void FileManager::unmapChunk( )
     {
-    if ( !endDocListBlob )
+    if ( endDocListBlob )
         {
         std::cout << "Unmap chunks of size " << chunkSize << std::endl;
         munmap( ( void * )endDocListBlob, chunkSize );
@@ -566,7 +566,7 @@ void FileManager::unmapChunk( )
 
 void FileManager::unmapDocs( )
     {
-    if ( !docsBlob )
+    if ( docsBlob )
         {
         std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
         munmap( ( void * )docsBlob, docsBlobSize );
