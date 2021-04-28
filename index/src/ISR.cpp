@@ -59,8 +59,8 @@ Post *ISRWord::Next()
 
 Post *ISRWord::NextEndDoc() 
     {
-    EndDocPostingListRaw endDoc = manager.GetEndDocList(currChunk);
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    EndDocPostingListRaw endDoc = manager->GetEndDocList(currChunk);
+    vector<Location> endLocs = manager->getChunkEndLocations();
     size_t target = currPost.GetStartLocation();
     size_t chunkSize;
     size_t temp;
@@ -81,7 +81,7 @@ Post *ISRWord::NextEndDoc()
 
 Post *ISRWord::Seek(size_t target) 
     {
-    vector<Location> endLocs = manager.getChunkEndLocations( );
+    vector<Location> endLocs = manager->getChunkEndLocations( );
     size_t numChunks = endLocs.size();
     std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
     size_t chunkIndex;
@@ -103,7 +103,7 @@ Post *ISRWord::Seek(size_t target)
         std::cout << "Searching in chunk: " << chunk << std::endl;
         try 
             {
-            TermPostingListRaw termraw = manager.GetTermList(term, chunk);
+            TermPostingListRaw termraw = manager->GetTermList(term, chunk);
             std::cout << "ISRWord::Seek: Found term: " << termraw.getHeader()->term << " with num doc: " <<  termraw.getHeader()->numOfDocument << std::endl;
             if ( termraw.getHeader( )->numOfOccurence == 0 ) 
                 continue;
@@ -154,14 +154,14 @@ Post *ISRWord::Seek(size_t target)
 Location ISRWord::GetStartLocation() 
     {
     //fetch termpostinglistraw for the first chunk
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    vector<Location> endLocs = manager->getChunkEndLocations();
     size_t numChunks = endLocs.size();
     Location result = -1;
     for (size_t chunk = 0; chunk < numChunks; chunk++) 
         {
         try 
             {
-            TermPostingListRaw termraw = manager.GetTermList(term, chunk);
+            TermPostingListRaw termraw = manager->GetTermList(term, chunk);
             if (termraw.getHeader()->numOfOccurence == 0) continue;
             else {
                 size_t temp;
@@ -186,14 +186,14 @@ Location ISRWord::GetStartLocation()
 
 Location ISRWord::GetEndLocation() 
     {
-    size_t numChunks = manager.getChunkEndLocations().size();
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    size_t numChunks = manager->getChunkEndLocations().size();
+    vector<Location> endLocs = manager->getChunkEndLocations();
     size_t result = -1;
     for (size_t chunk = numChunks - 1; chunk >= 0; chunk--) 
         {
         try 
             {
-            TermPostingListRaw termraw = manager.GetTermList(term, chunk);
+            TermPostingListRaw termraw = manager->GetTermList(term, chunk);
             if (termraw.getHeader()->numOfOccurence == 0) continue;
             else {
                 size_t numOccurence = termraw.getHeader()->numOfOccurence;
@@ -221,12 +221,12 @@ Location ISRWord::GetEndLocation()
 
 d_Occurence ISRWord::GetDocumentCount() 
     {
-    size_t numChunks = manager.getChunkEndLocations().size();
+    size_t numChunks = manager->getChunkEndLocations().size();
     w_Occurence total = 0;
     for (int i = 0; i < numChunks; i++) 
         {
         try {
-            total += manager.GetTermList(term, i).getHeader()->numOfDocument;
+            total += manager->GetTermList(term, i).getHeader()->numOfDocument;
             }
         catch(const char* excep)
             {
@@ -238,13 +238,13 @@ d_Occurence ISRWord::GetDocumentCount()
 
 w_Occurence ISRWord::GetNumberOfOccurrences() 
     {
-    size_t numChunks = manager.getChunkEndLocations().size();
+    size_t numChunks = manager->getChunkEndLocations().size();
     w_Occurence total = 0;
     for (int i = 0; i < numChunks; i++) 
         {
         try 
             {
-            total += manager.GetTermList(term, i).getHeader()->numOfOccurence;
+            total += manager->GetTermList(term, i).getHeader()->numOfOccurence;
             }
         catch(const char* excep)
             {
@@ -292,7 +292,7 @@ Post *ISREndDoc::NextEndDoc(){
 
 Post *ISREndDoc::Seek(Location target) 
     {
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    vector<Location> endLocs = manager->getChunkEndLocations();
     size_t numChunks = endLocs.size();
     size_t chunkIndex;
     Location result = -1;
@@ -308,13 +308,13 @@ Post *ISREndDoc::Seek(Location target)
     if ( !containFlag )  // check chunkIndex 
         return nullptr;
     std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
-    std::cout << "ISREndDoc::Seek: manager with numChunks" << manager.getNumChunks( ) << std::endl;
+    std::cout << "ISREndDoc::Seek: manager with numChunks" << manager->getNumChunks( ) << std::endl;
     for ( size_t chunk = chunkIndex; chunk < numChunks; chunk++ ) 
         {
         try 
             {
             std::cout << "ISREndDoc::Seek(): trying to get chunk at " << chunk << std::endl;
-            EndDocPostingListRaw docraw = manager.GetEndDocList( chunk );
+            EndDocPostingListRaw docraw = manager->GetEndDocList( chunk );
             size_t temp;
             Offset chunkSize;
             size_t offset;
@@ -352,14 +352,14 @@ Post *ISREndDoc::Seek(Location target)
 Location ISREndDoc::GetStartLocation() 
     {
     //fetch termpostinglistraw for the first chunk
-    vector<Location> endLocs = manager.getChunkEndLocations();
+    vector<Location> endLocs = manager->getChunkEndLocations();
     size_t numChunks = endLocs.size();
     Location result = -1;
     for (size_t chunk = 0; chunk < numChunks; chunk++) 
         {
         try 
             {
-            EndDocPostingListRaw docRaw = manager.GetEndDocList(chunk);
+            EndDocPostingListRaw docRaw = manager->GetEndDocList(chunk);
             size_t temp;
             Offset chunkSize;
             if (chunk > 0) {
@@ -381,14 +381,14 @@ Location ISREndDoc::GetStartLocation()
 
 Location ISREndDoc::GetEndLocation( ) 
     {
-    size_t numChunks = manager.getChunkEndLocations( ).size( );
-    vector< Location > endLocs = manager.getChunkEndLocations( );
+    size_t numChunks = manager->getChunkEndLocations( ).size( );
+    vector< Location > endLocs = manager->getChunkEndLocations( );
     size_t result = -1;
     for ( size_t chunk = numChunks - 1; chunk >= 0; chunk-- ) 
         {
         try 
             {
-            EndDocPostingListRaw docraw = manager.GetEndDocList( chunk );
+            EndDocPostingListRaw docraw = manager->GetEndDocList( chunk );
             size_t temp;
             size_t chunkSize;
             size_t numOccurence = docraw.header->numOfDocument;
@@ -417,7 +417,7 @@ Location ISREndDoc::GetEndLocation( )
 
 unsigned ISREndDoc::GetDocumentLength() 
     {
-    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager->getDocCountsAfterChunk();
     
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
@@ -432,14 +432,14 @@ unsigned ISREndDoc::GetDocumentLength()
         return -1;
         }
     else {
-        return manager.GetDocumentDetails(currIndex, currChunk).lengthOfDocument;
+        return manager->GetDocumentDetails(currIndex, currChunk).lengthOfDocument;
         }
     }
 
 
 unsigned ISREndDoc::GetTitleLength() 
     {
-    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager->getDocCountsAfterChunk();
     
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
@@ -455,13 +455,13 @@ unsigned ISREndDoc::GetTitleLength()
         }
     else 
         {
-        return strlen(manager.GetDocumentDetails(currIndex, currChunk).title.cstr());
+        return strlen(manager->GetDocumentDetails(currIndex, currChunk).title.cstr());
         }
  }
 
 unsigned ISREndDoc::GetUrlLength() 
     {
-    ::vector<d_Occurence> docOccurenceAfterChunk = manager.getDocCountsAfterChunk();    
+    ::vector<d_Occurence> docOccurenceAfterChunk = manager->getDocCountsAfterChunk();    
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
         {
@@ -476,7 +476,7 @@ unsigned ISREndDoc::GetUrlLength()
         }
     else 
         {
-        return strlen(manager.GetDocumentDetails(currIndex, currChunk).url.cstr());
+        return strlen(manager->GetDocumentDetails(currIndex, currChunk).url.cstr());
         }
     }
 

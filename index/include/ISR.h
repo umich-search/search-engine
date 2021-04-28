@@ -88,7 +88,7 @@ public:
 class ISRWord : public ISR 
    {
    public:
-      ISRWord( FileManager fileManager, const char* word ) : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
+      ISRWord( FileManager * fileManager, const char* word ) : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
          currPost( 0 ), Doc( 0 ) 
          {
          char* word_copy = new char[ strlen( word ) ];
@@ -144,7 +144,7 @@ class ISRWord : public ISR
          }
 
    private:
-      FileManager manager;
+      FileManager *manager;
       const char *term;
       size_t currChunk;
       Offset currIndex;
@@ -165,7 +165,7 @@ class ISRWord : public ISR
 class ISREndDoc : public ISR 
    {
    public:
-      ISREndDoc( FileManager filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
+      ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
          endDocPostingListRaw( manager.GetEndDocList( 0 ) ),
          currPost( 0 )
          {
@@ -221,6 +221,7 @@ class ISREndDoc : public ISR
         std::cout << term << std::endl;
         }
 
+<<<<<<< HEAD
 private:
     FileManager manager;
     const char *term;
@@ -292,3 +293,12 @@ private:
     Post currPost;
     EndDocPostingListRaw endDocPostingListRaw;
 };
+=======
+   private:
+      FileManager *manager;
+      size_t currChunk;
+      Offset currIndex;
+      Post currPost;
+      EndDocPostingListRaw endDocPostingListRaw;
+   };
+>>>>>>> 8fe8e36 (Pass filemanager by ptr to ISR)
