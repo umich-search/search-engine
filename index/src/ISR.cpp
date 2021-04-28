@@ -13,7 +13,7 @@ float ISR::GetHeuristicScore( Match *document )
         {
         ISRWord *term = ( ISRWord* )*( this->GetTerms() + i );
         std::cout << "word term: ";
-        term->printTerm( );
+        // term->printTerm( );
         // term->Seek( document->start );
         Post *curPost = term->Seek( document->start );
         while ( curPost != nullptr && curPost->GetStartLocation( ) < document->end ) 

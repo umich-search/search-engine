@@ -166,7 +166,7 @@ class ISREndDoc : public ISR
    {
    public:
       ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
-         endDocPostingListRaw( manager.GetEndDocList( 0 ) ),
+         endDocPostingListRaw( manager->GetEndDocList( 0 ) ),
          currPost( 0 )
          {
          Seek( 0 );
