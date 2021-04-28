@@ -138,7 +138,7 @@ Post *ISROr::GetCurrentPost(){
     return &currPost;
 }
 
-ISR **ISROr::GetTerms( )r
+ISR **ISROr::GetTerms( )
    {
    return this->Terms;
    }
@@ -226,7 +226,7 @@ Post* ISRAnd::Seek( Location target )
          EndDoc->Next();
       Post* endDoc = EndDoc->GetCurrentPost();
       // Post* endDoc = EndDoc->Seek( maxLoc );
-      
+
       Location docEndLocation = endDoc->GetEndLocation( );
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
       //std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
