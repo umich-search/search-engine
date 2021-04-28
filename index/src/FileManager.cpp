@@ -400,6 +400,10 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
 
 
 int FileManager::ReadMetadata( Offset givenChunk ) {
+
+    if( !chunksMetadata ) {
+        return 0;
+    }
     // Use manager idea of num of chunks if no chunk given
     if( givenChunk == -1 ) 
         {
@@ -557,6 +561,7 @@ Location FileManager::getIndexEndLocation() {
 
 void FileManager::unmapMetadata( )
     {
+        return;
     if ( chunksMetadata )
         {
         std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
