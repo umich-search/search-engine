@@ -134,7 +134,11 @@ Post* ISROr::Next( )
     return nullptr;
     }
 
-ISR **ISROr::GetTerms( )
+Post *ISROr::GetCurrentPost(){
+    return &currPost;
+}
+
+ISR **ISROr::GetTerms( )r
    {
    return this->Terms;
    }
@@ -217,9 +221,13 @@ Post* ISRAnd::Seek( Location target )
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.   
       // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
-      Post* endDoc = EndDoc->Seek( maxLoc );
+
+      while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
+         EndDoc->Next();
+      Post* endDoc = EndDoc->GetCurrentPost();
+      // Post* endDoc = EndDoc->Seek( maxLoc );
+      
       Location docEndLocation = endDoc->GetEndLocation( );
-      // TODO: doc length
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
       //std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
@@ -230,7 +238,12 @@ Post* ISRAnd::Seek( Location target )
       for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
          ISR *Term = *( Terms + i );
-         Post *nextPost = Term->Seek( max( docStartLocation, target ) );
+
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            Term->Next();
+         Post *nextPost = Term->GetCurrentPost();
+         // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
+
          // If any ISR reaches the end, there is no match.
          if ( !nextPost )
             return nullptr;
@@ -284,6 +297,10 @@ Post* ISRAnd::NextEndDoc()
    {
    return nullptr;
    }
+
+Post *ISRAnd::GetCurrentPost(){
+    return &currPost;
+}
 
 ISR **ISRAnd::GetTerms()
    {
@@ -375,6 +392,10 @@ Post* ISRPhrase::Next( )
    // Finds overlapping phrase matches.
    return Seek( nearestStartLocation + 1 );
    }
+
+Post *ISRPhrase::GetCurrentPost(){
+    return &currPost;
+}
 
 // Post* ISRPhrase::NextDocument( )
 //    {

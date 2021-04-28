@@ -38,6 +38,9 @@ class ISROr: public ISR
 
       Post *NextEndDoc();
 
+      // get current post
+      Post *GetCurrentPost( );
+
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
@@ -61,7 +64,7 @@ class ISROr: public ISR
         weightAll: 10,
         weightMost: 10,
         weightSome: 10
-    };
+   };
    };
 
 class ISRAnd: public ISR
@@ -86,6 +89,9 @@ class ISRAnd: public ISR
       // Post *NextDocument( );
 
       Post *NextEndDoc();
+
+      // get current post
+      Post *GetCurrentPost( );
 
       ISR **GetTerms();
 
@@ -131,6 +137,9 @@ class ISRPhrase: public ISR
       // Post *NextDocument( );
 
       Post *NextEndDoc();
+
+      // get current post
+      Post *GetCurrentPost( );
 
       ISR **GetTerms();
 

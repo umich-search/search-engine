@@ -18,7 +18,70 @@ struct Match
    {
    Offset id;
    Location start, end;
+<<<<<<< HEAD
    Match(Offset d, Location s, Location e): id(d), start(s), end(e){}
+=======
+   Match( Offset d, Location s, Location e ): id( d ), start( s ), end( e )
+      {
+      }
+   };
+
+struct Weights 
+   {
+   float weightShortSpan;
+   float weightOrderSpan;
+   float weightPhrase;
+   float weightTopSpan;
+   float weightAll;
+   float weightMost;
+   float weightSome;
+   };
+
+class ISR 
+   {
+   public:
+      //Get post of next term
+      virtual Post *Next( ) = 0;
+
+      // Get post of next endDoc
+      virtual Post *NextEndDoc( ) = 0;
+
+      // Get the first post after the target
+      virtual Post *Seek( Location target ) = 0;
+
+      // Get position of first term
+      virtual Location GetStartLocation( ) = 0;
+
+      // Get position of last term
+      virtual Location GetEndLocation( ) = 0;
+
+      // get current post
+      virtual Post *GetCurrentPost( ) = 0;
+
+      // Get Terms data of an ISR
+      virtual ISR **GetTerms( ) = 0;
+
+      // Get number of Terms of and ISR
+      virtual int GetTermNum( ) = 0;
+
+      // Calculate according to heuristics
+      float GetHeuristicScore( Match *document );
+
+      virtual Weights *getWeights( ) = 0;
+
+      virtual float GetCombinedScore( vector<float> scores ) = 0;
+
+   protected:
+      int num_short_spans = 0;
+      int num_inorder_spans = 0;
+      int num_exact_phrase = 0;
+      int num_spans_near_top = 0;
+      bool all_words_freq = false;
+      bool most_words_freq = false;
+      bool some_words_freq = false;
+      const int freq_threshold = 3;
+
+>>>>>>> 85a9810 (reduced usage of seek in ISRAnd::Seek())
    };
 
 struct Weights {
@@ -166,7 +229,7 @@ class ISREndDoc : public ISR
    {
    public:
       ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
-         endDocPostingListRaw( manager.GetEndDocList( 0 ) ),
+         endDocPostingListRaw( manager->GetEndDocList( 0 ) ),
          currPost( 0 )
          {
          Seek( 0 );
