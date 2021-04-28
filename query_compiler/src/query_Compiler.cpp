@@ -17,8 +17,8 @@ void incorrectQuery(const char* errMessage)
 // 5. space before and after | and &
 String Normalize (const char* input)
    {
-      //std::cout << "We are in NOrmalize!!!" << std::endl;
-      //std::cout << input << std::endl;
+      //// std::cout << "We are in NOrmalize!!!" << std::endl;
+      //// std::cout << input << std::endl;
    const String AND_OP = " & ";
    const String OR_OP = " | ";
    const char *currentChar = input;
@@ -26,7 +26,7 @@ String Normalize (const char* input)
    unsigned bracketCount = 0;
    while (*currentChar != '\0')
       {
-        // std::cout << "currentChar = " << *currentChar << std::endl;
+        // // std::cout << "currentChar = " << *currentChar << std::endl;
       if (*currentChar == '(')
          ++bracketCount;
       if (*currentChar == ')')
@@ -47,7 +47,7 @@ String Normalize (const char* input)
    if (bracketCount)
       incorrectQuery("Please check brackets and quotes!\n");
 
-   //std::cout << "I am still alive!!!!" << std::endl;
+   //// std::cout << "I am still alive!!!!" << std::endl;
    // check requirement 3 & 5
    String output;
    currentChar = input;
@@ -111,14 +111,14 @@ String Normalize (const char* input)
       }
    if (prevIsOp)
       incorrectQuery("Illegal logical operator!\n");
-   //std::cout << "We are leaving normalize!!!" << std::endl;
+   //// std::cout << "We are leaving normalize!!!" << std::endl;
    return output;
    }
 
 
 ISR* Query_Compiler (Dictionary *dict, const char* input)
    {
-     // std::cout << "We are in query compiler!!!!!!!!!" << std::endl;
+     // // std::cout << "We are in query compiler!!!!!!!!!" << std::endl;
    String normInput = Normalize(input);
    return StringToISR(dict, normInput);
    }

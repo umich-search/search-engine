@@ -12,8 +12,8 @@ float ISR::GetHeuristicScore( Match *document )
     for ( size_t i = 0; i < this->GetTermNum(); ++i ) 
         {
         ISRWord *term = ( ISRWord* )*( this->GetTerms() + i );
-        std::cout << "word term: ";
-        term->printTerm( );
+        // std::cout << "word term: ";
+        // term->printTerm( );
         // term->Seek( document->start );
         Post *curPost = term->Seek( document->start );
         while ( curPost != nullptr && curPost->GetStartLocation( ) < document->end ) 
@@ -45,11 +45,11 @@ Post *ISRWord::Next()
         Location delta = termPostingListRaw.getPostAt(currIndex).delta;
         currPost.SetLocation(delta + currPost.GetStartLocation());
         } else {
-        std::cout << "ISRWord::Next(): Reseeking to the next chunk" << std::endl;
+        // std::cout << "ISRWord::Next(): Reseeking to the next chunk" << std::endl;
         Post *post = Seek(currPost.GetStartLocation() + 1);
         if ( post == nullptr ) 
             { 
-            std::cout << ' ' << "post not found after reseek" << std::endl;
+            // std::cout << ' ' << "post not found after reseek" << std::endl;
             return nullptr;
             }
         else currPost = *post;
@@ -83,10 +83,10 @@ Post *ISRWord::Seek(size_t target)
     {
     vector<Location> endLocs = manager->getChunkEndLocations( );
     size_t numChunks = endLocs.size();
-    std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
+    // std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
     size_t chunkIndex;
     Location result = -1;
-    std::cout << std::endl;
+    // std::cout << std::endl;
     for ( chunkIndex = 0; chunkIndex < numChunks; chunkIndex++ ) 
         {
         if ( endLocs[ chunkIndex ] >= target ) 
@@ -94,17 +94,17 @@ Post *ISRWord::Seek(size_t target)
         }
     if ( chunkIndex >= numChunks ) 
         {
-        std::cout << "ISRWord::Seek: chunkIndex greater than num chunks: " << chunkIndex << " " << numChunks << std::endl;
+        // std::cout << "ISRWord::Seek: chunkIndex greater than num chunks: " << chunkIndex << " " << numChunks << std::endl;
         return nullptr;
         }
-    std::cout << "ISRWord::Seek: starting at chunkIndex: " << chunkIndex << " and iterating until: " << numChunks << std::endl;
+    // std::cout << "ISRWord::Seek: starting at chunkIndex: " << chunkIndex << " and iterating until: " << numChunks << std::endl;
     for (size_t chunk = chunkIndex; chunk < numChunks; chunk++) 
         {
-        std::cout << "Searching in chunk: " << chunk << std::endl;
+        // std::cout << "Searching in chunk: " << chunk << std::endl;
         try 
             {
             TermPostingListRaw termraw = manager->GetTermList(term, chunk);
-            std::cout << "ISRWord::Seek: Found term: " << termraw.getHeader()->term << " with num doc: " <<  termraw.getHeader()->numOfDocument << std::endl;
+            // std::cout << "ISRWord::Seek: Found term: " << termraw.getHeader()->term << " with num doc: " <<  termraw.getHeader()->numOfDocument << std::endl;
             if ( termraw.getHeader( )->numOfOccurence == 0 ) 
                 continue;
             else 
@@ -140,14 +140,14 @@ Post *ISRWord::Seek(size_t target)
             }
         catch ( const char *excep ) 
             {
-            std::cout << "ISRWord::Seek: Did not find term" << std::endl;
+            // std::cout << "ISRWord::Seek: Did not find term" << std::endl;
             continue;
             }
         }
     if ( result == -1 ) 
         return nullptr;
     currPost.SetLocation( result );
-    std::cout << "ISRWord::Seek: Returning from seek result, location = " << result << std::endl;
+    // std::cout << "ISRWord::Seek: Returning from seek result, location = " << result << std::endl;
     return &currPost;
     }
 
@@ -307,13 +307,13 @@ Post *ISREndDoc::Seek(Location target)
         }
     if ( !containFlag )  // check chunkIndex 
         return nullptr;
-    std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
-    std::cout << "ISREndDoc::Seek: manager with numChunks" << manager->getNumChunks( ) << std::endl;
+    // std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
+    // std::cout << "ISREndDoc::Seek: manager with numChunks" << manager->getNumChunks( ) << std::endl;
     for ( size_t chunk = chunkIndex; chunk < numChunks; chunk++ ) 
         {
         try 
             {
-            std::cout << "ISREndDoc::Seek(): trying to get chunk at " << chunk << std::endl;
+            // std::cout << "ISREndDoc::Seek(): trying to get chunk at " << chunk << std::endl;
             EndDocPostingListRaw docraw = manager->GetEndDocList( chunk );
             size_t temp;
             Offset chunkSize;
@@ -339,7 +339,7 @@ Post *ISREndDoc::Seek(Location target)
             }
         catch ( const char * excep ) 
             {
-            std::cout << "ISREndDoc::Seek(): Exception received " << excep << std::endl;
+            // std::cout << "ISREndDoc::Seek(): Exception received " << excep << std::endl;
             continue;
             }
         }

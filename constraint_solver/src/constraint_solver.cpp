@@ -19,11 +19,11 @@
    ::vector<Match*>* matches = new ::vector<Match*>(); 
    while ( match = queryRoot->Seek( currentLocation ) )
       {
-      std::cout << "ConstraintSolver: get next query location\n";
+      // // std::cout << "ConstraintSolver: get next query location\n";
       // find the next endDoc location in "Post endDoc"
       Location matchStart = match->GetStartLocation( );
       if ( !match )
-            std::cout << "match is nullptr!";
+            std::cerr << "match is nullptr!";
       Post* endDoc = EndDoc->Seek( matchStart );
       currentLocation = endDoc->GetStartLocation( );
       // calculate doc length and doc start location

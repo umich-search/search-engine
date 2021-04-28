@@ -105,8 +105,8 @@ void ISRSpan::update_score() {
         score += weights->weightPhrase * statistics.numPhrases;
     }
     score += weights->weightTopSpan * statistics.numTopSpans;
-    //std::cout<<"hhhhhhhhh"<<std::endl;
-    //std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
+    //// std::cout<<"hhhhhhhhh"<<std::endl;
+    //// std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
 }
 
 bool ISRSpan::ifShortSpan() {

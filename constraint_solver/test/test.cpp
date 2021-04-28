@@ -39,12 +39,12 @@ int main(int argc, char *argv[]) {
          String term(term0);
          ic.Insert(term, Body);
          // cout<<"Inserted "<<term0<<"\n";
-         // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
+         // // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
          ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
          // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
-         //    std::cout << chunkEnds[i] ;
+         //    // std::cout << chunkEnds[i] ;
          // }
-         // std::cout << std::endl;
+         // // std::cout << std::endl;
          }
       }
    ic.FinishConstruction();
@@ -63,9 +63,9 @@ int main(int argc, char *argv[]) {
    ISRWord *word_brown = dict.OpenISRWord(brown);
    ISRWord *word_fox = dict.OpenISRWord(fox);
 
-   //std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   //// std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
    // while(word_quick->Next()) {
-   //    std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   //    // std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
    // }
 
    Post* res = nullptr;
