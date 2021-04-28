@@ -8,32 +8,35 @@
 #include "Dictionary.h"
 #include "constraint_solver.h"
 
-// FOR TESTING ONLY!
-// using namespace std;
+#define MAX_DOC 20000
+
+// FOR TESTING ONLY!    // using namespace std;
 
 ::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
-    {
-    Location currentLocation = 0;
-    Post* match = nullptr;
-    ::vector<Match*>* matches = new ::vector<Match*>(); 
-    while ( match = queryRoot->Seek( currentLocation ) )
-        {
-        std::cout << "ConstraintSolver: get next query location\n";
-        // find the next endDoc location in "Post endDoc"
-        Location matchStart = match->GetStartLocation( );
-        if ( !match )
+   {
+   Location currentLocation = 0;
+   Post* match = nullptr;
+   ::vector<Match*>* matches = new ::vector<Match*>(); 
+   while ( match = queryRoot->Seek( currentLocation ) )
+      {
+      std::cout << "ConstraintSolver: get next query location\n";
+      // find the next endDoc location in "Post endDoc"
+      Location matchStart = match->GetStartLocation( );
+      if ( !match )
             std::cout << "match is nullptr!";
-        Post* endDoc = EndDoc->Seek( matchStart );
-        currentLocation = endDoc->GetStartLocation( );
-        // calculate doc length and doc start location
-        Location startLocation = currentLocation - EndDoc->GetDocumentLength();
-        // output index (not start, end location) of matching doc
-        Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
-        matches->pushBack(matchDoc);
-        // Post* document = new Post(startLocation, currentLocation);
-        // posts->pushBack(document);
-        // delete match;
-        match = nullptr;
-        }
-    return matches;
-    }
+      Post* endDoc = EndDoc->Seek( matchStart );
+      currentLocation = endDoc->GetStartLocation( );
+      // calculate doc length and doc start location
+      Location startLocation = currentLocation - EndDoc->GetDocumentLength();
+      // output index (not start, end location) of matching doc
+      Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
+      matches->pushBack(matchDoc);
+      // Post* document = new Post(startLocation, currentLocation);
+      // posts->pushBack(document);
+      // delete match;
+      match = nullptr;
+      if ( matches->size() >= MAX_DOC )
+         return matches;
+      }
+   return matches;
+   }
