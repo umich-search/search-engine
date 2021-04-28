@@ -374,7 +374,7 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     if(docsChunkIndex > 0) {
         normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
     }
-    
+    std::cout << "Normalize value: " << normalize << " chunkIndex: " << docsChunkIndex << std::endl;
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
     w_Occurence numWords = *(w_Occurence *)curr;  // segfault in indexValidator
     w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
