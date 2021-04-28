@@ -372,9 +372,23 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     }
     Offset normalize = 0;
     if(docsChunkIndex > 0) {
-        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
+        normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex - 1 ) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
     }
     std::cout << "Normalize value: " << normalize << " chunkIndex: " << docsChunkIndex << std::endl;
+    std::cout << "requested index::) " << docIndex << " docsBlobSize  " << docsBlobSize << std::endl;
+    ::vector<Location> endLocs = getChunkEndLocations();
+    for (size_t i = 0; i < 5; ++i )
+	 {
+		 std::cout << endLocs[i] << " ";
+	 }
+    std::cout << std::endl;
+    ::vector<d_Occurence> docCounts = getDocCountsAfterChunk();
+    for ( size_t i = 0; i < 5; ++i )
+    	{
+		std::cout << docCounts[i] << " ";
+	}
+    std::cout << std::endl;
+
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
     w_Occurence numWords = *(w_Occurence *)curr;  // segfault in indexValidator
     w_Occurence numUniqueWords = *(w_Occurence *)(curr + sizeof(w_Occurence));
