@@ -59,11 +59,14 @@ Post *ISRWord::Next()
 
  Post *ISRWord::NextNoUpdate( )
  {
-     Offset nextIndex;
-     nextIndex = currIndex+=1;
-     Location delta = termPostingListRaw.getPostAt(nextIndex).delta;
-     nextPost.SetLocation(delta + currPost.GetStartLocation());
-     return &nextPost;
+     if ( currIndex < numOccurence - 1 ) {
+         Offset nextIndex;
+         nextIndex = currIndex += 1;
+         Location delta = termPostingListRaw.getPostAt(nextIndex).delta;
+         nextPost.SetLocation(delta + currPost.GetStartLocation());
+         return &nextPost;
+     }
+     else return nullptr
  }
 
 Post *ISRWord::NextEndDoc() 
