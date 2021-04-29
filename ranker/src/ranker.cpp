@@ -102,6 +102,7 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
         // std::cout << "Finished calculations for ranker\n" << std::endl;
         std::cout << "*************** print ranks: " << std::endl;
         printRanks( arr );
+	std::cout << "**********************************************" << std::endl;
     return arr;
     }
 
