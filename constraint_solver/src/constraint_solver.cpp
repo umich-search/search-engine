@@ -19,6 +19,7 @@ using namespace std;    // FOR TESTING ONLY!
    ::vector<Match*>* matches = new ::vector<Match*>(); 
    while ( match = queryRoot->Seek( currentLocation ) )
       {
+	std::cout << "-------currentLocations = " << currentLocation << std::endl;
       // // std::cout << "ConstraintSolver: get next query location\n";
       // find the next endDoc location in "Post endDoc"
       Location matchStart = match->GetStartLocation( );
@@ -36,5 +37,6 @@ using namespace std;    // FOR TESTING ONLY!
       if ( matches->size() >= MAX_DOC )
          return matches;
       }
+   std::cout << "----------------after while loop-------------------" << std::endl;
    return matches;
    }
