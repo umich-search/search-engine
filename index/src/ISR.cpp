@@ -134,7 +134,12 @@ Post *ISRWord::Seek(size_t target)
                     result += endLocs[ chunk - 1 ];
                 currChunk = chunk;  // current chunk
                 termPostingListRaw = termraw;  // current posting list
-                currIndex = temp;  // current index into the posting list
+                size_t normalize = 0;
+                if (chunk > 0) {
+                    normalize = endLocs[chunk - 1];
+                }
+                currIndex = normalize + temp;
+                //currIndex = endLocs[ chunk - 1] + temp//temp;  // current index into the posting list
                 break;
                 }
             }
@@ -293,6 +298,7 @@ Post *ISREndDoc::NextEndDoc(){
 Post *ISREndDoc::Seek(Location target) 
     {
     vector<Location> endLocs = manager->getChunkEndLocations();
+    vector<d_Occurence> docCounts = manager->getDocCountsAfterChunk();
     size_t numChunks = endLocs.size();
     size_t chunkIndex;
     Location result = -1;
@@ -334,7 +340,11 @@ Post *ISREndDoc::Seek(Location target)
             if (chunk != 0)result += endLocs[chunk - 1];
             currChunk = chunk;
             endDocPostingListRaw = docraw;
-            currIndex = temp;
+            size_t normalize = 0;
+            if (chunk > 0) {
+                normalize = docCounts[chunk - 1];
+            }
+            currIndex = normalize + temp;
             break;
             }
         catch ( const char * excep ) 
