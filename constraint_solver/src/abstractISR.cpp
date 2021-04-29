@@ -142,7 +142,7 @@ ISR **ISROr::GetTerms( )
    return this->Terms;
    }
 
-float ISROr::GetCombinedScore( vector< float > scores )
+float ISROr::GetCombinedScore( ::vector< float > scores )
    {
    float res = 0;
    for ( size_t i = 0; i < scores.size(); ++i )
@@ -320,7 +320,7 @@ ISR **ISRAnd::GetTerms()
    return this->Terms;
    }
 
-float ISRAnd::GetCombinedScore(vector<float> scores)
+float ISRAnd::GetCombinedScore(::vector<float> scores)
    {
    float res = 1;
    for ( size_t i = 0; i < scores.size(); ++i )
