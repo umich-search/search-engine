@@ -250,7 +250,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
         }
     char chunkFile[ MAX_PATHNAME_LENGTH ];
     resolveChunkPath( chunkIndex, chunkFile, threadID );
-    std::cout << "FileManager::ReadChunk: Path resolve to " << chunkFile << std::endl;
+    // std::cout << "FileManager::ReadChunk: Path resolve to " << chunkFile << std::endl;
 
     
     int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );

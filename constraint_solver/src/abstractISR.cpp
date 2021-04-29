@@ -47,6 +47,8 @@ Post* ISROr::Seek( Location target )
    //// std::cout<< "Entered ISROr Seek" << std::endl;
    Location minLoc = SIZE_MAX;
    Post* firstPost = nullptr;
+
+   std::cout << "ISROr::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
       // // std::cout << "Term " << i << std::endl;
@@ -69,14 +71,14 @@ Post* ISROr::Seek( Location target )
          minLoc = nextLocation;
          }
       }
-  // // std::cout << nearestTerm << std::endl;
+   std::cout << "ISROr::Seek(): nearestTerm = " << nearestTerm << std::endl;
    if ( firstPost )
       {
       nearestStartLocation = firstPost->GetStartLocation( );
       nearestEndLocation = firstPost->GetEndLocation( ); 
       currPost = *firstPost;
       delete firstPost;
-      //// std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
+      std::cout << "ISROr::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
       // // std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
       return &currPost;
       }
@@ -113,6 +115,7 @@ Post* ISROr::Next( )
 
    // Post* nearestMatch = new Post(minLoc, nearestEndLocation);
    // return nearestMatch;
+   std::cout << "********* ISROr::Next() calls ISROr::Seek() *********** \n";
    return ISROr::Seek( nearestStartLocation + 1 );
    }
 
@@ -193,6 +196,7 @@ Post* ISRAnd::Seek( Location target )
    //// std::cout<< "Entered ISRAnd Seek" << std::endl;
    // cout<<"seek initial enddocloc: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
+   std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
       ISR *Term = *( Terms + i );
@@ -284,6 +288,7 @@ Post* ISRAnd::Seek( Location target )
       if ( flag )
          continue;
       currPost.SetLocation( minLoc, maxLoc );
+      std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
       return &currPost;
       } 
       while ( true );
@@ -291,6 +296,7 @@ Post* ISRAnd::Seek( Location target )
 
 Post* ISRAnd::Next( )
    {
+   std::cout << "********* ISRAnd::Next() calls ISRAnd::Seek() *********** \n";
    return ISRAnd::Seek( nearestStartLocation + 1 );
    }
 
