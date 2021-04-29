@@ -57,6 +57,18 @@ Post *ISRWord::Next()
     return &currPost;
     }
 
+ Post *ISRWord::NextNoUpdate( )
+ {
+     if ( currIndex < numOccurence - 1 ) {
+         Offset nextIndex;
+         nextIndex = currIndex += 1;
+         Location delta = termPostingListRaw.getPostAt(nextIndex).delta;
+         nextPost.SetLocation(delta + currPost.GetStartLocation());
+         return &nextPost;
+     }
+     else return nullptr
+ }
+
 Post *ISRWord::NextEndDoc() 
     {
     EndDocPostingListRaw endDoc = manager->GetEndDocList(currChunk);
