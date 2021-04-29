@@ -127,14 +127,14 @@ float ISRSpan::get_score() {
 }
 
 void ISRSpan::update_score() {
-    calculate_num_frequent_words();
-    if (numTerms != 1) {
-        if ((float) statistics.numFrequentWords / numTerms == 1) score += weights->weightAll;
-        else if ((float) statistics.numFrequentWords / numTerms >= MINMOST) score += weights->weightMost;
-        else if ((float) statistics.numFrequentWords / numTerms >= MINSOME) score += weights->weightSome;
-    } else {
-        if (statistics.numFrequentWords == 1)score += weights->weightSome;
-    }
+    // calculate_num_frequent_words();
+    // if (numTerms != 1) {
+    //     if ((float) statistics.numFrequentWords / numTerms == 1) score += weights->weightAll;
+    //     else if ((float) statistics.numFrequentWords / numTerms >= MINMOST) score += weights->weightMost;
+    //     else if ((float) statistics.numFrequentWords / numTerms >= MINSOME) score += weights->weightSome;
+    // } else {
+    //     if (statistics.numFrequentWords == 1)score += weights->weightSome;
+    // }
     score += weights->weightShortSpan * statistics.numShortSpans;
     if (numTerms != 1) {
         score += weights->weightOrderSpan * statistics.numOrderSpans;

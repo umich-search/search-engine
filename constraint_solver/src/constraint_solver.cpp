@@ -38,5 +38,6 @@ using namespace std;    // FOR TESTING ONLY!
          return matches;
       }
    std::cout << "----------------after while loop-------------------" << std::endl;
+   std::cout << "----------------match size: " << matches->size() << "-------------------" << std::endl;
    return matches;
    }
