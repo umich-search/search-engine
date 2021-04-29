@@ -57,7 +57,7 @@ Post *ISRWord::Next()
     return &currPost;
     }
 
- Post *ISRWord::NextNoUpdate()
+ Post *ISRWord::NextNoUpdate( )
  {
      Offset nextIndex;
      nextIndex = currIndex+=1;

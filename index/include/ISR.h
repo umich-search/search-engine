@@ -151,8 +151,9 @@ public:
 class ISRWord : public ISR 
    {
    public:
-      ISRWord( FileManager * fileManager, const char* word ) : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
-         currPost( 0 ), Doc( 0 ) 
+      ISRWord( FileManager * fileManager, const char* word ) 
+         : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
+         currPost( 0 ), nextPost( 0 ), Doc( 0 ) 
          {
          char* word_copy = new char[ strlen( word ) ];
          strcpy( word_copy, word );
@@ -168,6 +169,8 @@ class ISRWord : public ISR
 
       // Returns next post
       Post *Next( );
+
+      Post *NextNoUpdate( );
 
       Post *NextEndDoc( );
 
