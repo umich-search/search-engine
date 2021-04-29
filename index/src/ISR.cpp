@@ -158,7 +158,8 @@ Post *ISRWord::Seek(size_t target)
                 if (chunk > 0) {
                     normalize = endLocs[chunk - 1];
                 }
-                currIndex = normalize + temp;
+                currIndex = temp;
+                absoluteIndex = normalize + temp;
                 //currIndex = endLocs[ chunk - 1] + temp//temp;  // current index into the posting list
                 break;
                 }
@@ -364,7 +365,8 @@ Post *ISREndDoc::Seek(Location target)
             if (chunk > 0) {
                 normalize = docCounts[chunk - 1];
             }
-            currIndex = normalize + temp;
+            currIndex =  temp;
+            absoluteIndex = normalize + temp;
             break;
             }
         catch ( const char * excep ) 
@@ -452,7 +454,7 @@ unsigned ISREndDoc::GetDocumentLength()
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
         {
-        if(currIndex < docOccurenceAfterChunk[currChunk]) 
+        if(absoluteIndex < docOccurenceAfterChunk[currChunk]) 
             {
             break;
             }
@@ -462,7 +464,7 @@ unsigned ISREndDoc::GetDocumentLength()
         return -1;
         }
     else {
-        return manager->GetDocumentDetails(currIndex, currChunk).lengthOfDocument;
+        return manager->GetDocumentDetails(absoluteIndex, currChunk).lengthOfDocument;
         }
     }
 
@@ -474,7 +476,7 @@ unsigned ISREndDoc::GetTitleLength()
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
         {
-        if(currIndex < docOccurenceAfterChunk[currChunk]) 
+        if(absoluteIndex < docOccurenceAfterChunk[currChunk]) 
             {
             break;
             }
@@ -485,7 +487,7 @@ unsigned ISREndDoc::GetTitleLength()
         }
     else 
         {
-        return strlen(manager->GetDocumentDetails(currIndex, currChunk).title.cstr());
+        return strlen(manager->GetDocumentDetails(absoluteIndex, currChunk).title.cstr());
         }
  }
 
@@ -495,7 +497,7 @@ unsigned ISREndDoc::GetUrlLength()
     size_t currChunk = 0;
     for(; currChunk < docOccurenceAfterChunk.size(); ++currChunk ) 
         {
-        if(currIndex < docOccurenceAfterChunk[currChunk]) 
+        if(absoluteIndex < docOccurenceAfterChunk[currChunk]) 
             {
             break;
             }
@@ -506,13 +508,13 @@ unsigned ISREndDoc::GetUrlLength()
         }
     else 
         {
-        return strlen(manager->GetDocumentDetails(currIndex, currChunk).url.cstr());
+        return strlen(manager->GetDocumentDetails(absoluteIndex, currChunk).url.cstr());
         }
     }
 
 Offset ISREndDoc::GetCurrIndex() 
     {
-    return currIndex;
+    return absoluteIndex;
     }
 
 ISR **ISREndDoc::GetTerms() 
