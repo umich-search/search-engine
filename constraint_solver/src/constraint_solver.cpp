@@ -19,7 +19,7 @@ using namespace std;    // FOR TESTING ONLY!
    ::vector<Match*>* matches = new ::vector<Match*>(); 
    while ( match = queryRoot->Seek( currentLocation ) )
       {
-	std::cout << "-------currentLocations = " << currentLocation << std::endl;
+      std::cout << "-------currentLocations = " << currentLocation << std::endl;
       // // std::cout << "ConstraintSolver: get next query location\n";
       // find the next endDoc location in "Post endDoc"
       Location matchStart = match->GetStartLocation( );
@@ -28,8 +28,8 @@ using namespace std;    // FOR TESTING ONLY!
       // calculate doc length and doc start location
       Location startLocation = currentLocation - EndDoc->GetDocumentLength();
       // output index (not start, end location) of matching doc
-      Match* matchDoc=new Match(EndDoc->GetCurrIndex(), startLocation, currentLocation);
-      matches->pushBack(matchDoc);
+      Match* matchDoc=new Match( EndDoc->GetCurrIndex( ), startLocation, currentLocation );
+      matches->pushBack( matchDoc );
       // Post* document = new Post(startLocation, currentLocation);
       // posts->pushBack(document);
       // delete match;

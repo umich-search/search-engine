@@ -62,8 +62,11 @@ bool ISRSpan::Start() {
 
 bool ISRSpan::Next() {
     Location docEndLocation = document->end;
+    std::cout << "ISRSpan::Next() docEndLocation = " << docEndLocation << std::endl;
     auto next = (*(Terms + positionRarestTerm))->Next();
-    if (next == nullptr || next->GetStartLocation() > docEndLocation) return false;
+    if (next == nullptr || next->GetStartLocation() > docEndLocation)
+        return false;
+        
     location[positionRarestTerm] = next->GetStartLocation();
     smallest = farthest = location[positionRarestTerm];
     for (int i = 0; i < numTerms; i++) {
@@ -77,7 +80,8 @@ bool ISRSpan::Next() {
         while (true) {
             prev = after;
             auto next = term->NextNoUpdate();
-            if (next == nullptr) break;
+            if (next == nullptr) 
+                break;
             after = next->GetStartLocation();
             if (after < location[positionRarestTerm]){
                 term->Next();
@@ -222,9 +226,12 @@ const char *extract_url(String a) {
 float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
                  struct Weights *weights) {
+    std::cout << "calculate_scores(): construct isr span\n";
     ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
-    if (isrspan.Start()) {
-        while (isrspan.Next());
+    
+    if ( isrspan.Start( ) ) {
+        while ( isrspan.Next( ) )
+            std::cout << "calculate_score(): calls isrspan.Next()";
     }
     isrspan.update_score();
     return isrspan.get_score();

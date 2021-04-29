@@ -34,7 +34,7 @@ float getDynamic(Match* document, ISR* queryRoot);
 
 vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
     {
-        // std::cout << "Performing calculations for ranker\n" << std::endl;
+    std::cout << "Ranker::getHighest: Performing calculations for ranker\n" << std::endl;
     vector<url_score> arr;
     for ( size_t i = 0; i < (*matches).size(); ++i ) 
         {
@@ -43,13 +43,15 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
         //if ( queryRoot->GetTermNum() == 0 ) getDynamic( document ); // only searching for a word
         String url, title; 
         Dictionary *dict = new Dictionary(0);
-        DocumentDetails *docs = dict->GetDocumentDetials(document->id);
+        DocumentDetails *docs = dict->GetDocumentDetials( document->id );
         url = docs->url;
         title = docs->title;
         
         delete docs;
         delete dict;
 
+        std::cout << "Ranker::getHighest: document details retrieved\n";
+        
         // filtering
         bool flagExist = false;
         for ( size_t i = 0; i < arr.size( ); ++i )
@@ -65,7 +67,9 @@ vector<url_score> Ranker::getHighest(::vector<Match*>* matches, ISR* queryRoot)
             continue;
             }
 
+        std::cout << "Ranker::getHighest: try to get dynamic\n";
         float dynScore = getDynamic( document, queryRoot); // searching for an abstract ISR
+        std::cout << "Ranker::getHighest: dynamic score = " << dynScore << std::endl;
         float totalScore = dynScore * dynamicWeight + staticScore * staticWeight;
         url_score newDoc( url, title, totalScore );
 
@@ -113,7 +117,11 @@ float getDynamic(Match* document, ISR* queryRoot)
             }
         }
     // this ISR has only WordISRs, calculate score according to heuristics
-    if ( !abstractISRExists ) return queryRoot->GetHeuristicScore(document);
+    if ( !abstractISRExists ) 
+        {
+        std::cout << "getDynamic(): ISRWord\n";
+        return queryRoot->GetHeuristicScore( document );
+        }
     else 
         {
         vector<float> scores;
@@ -122,10 +130,12 @@ float getDynamic(Match* document, ISR* queryRoot)
             ISR *root = *( queryRoot->GetTerms() + i );
             if ( root->GetTermNum() > 0 ) // abstract ISR
                 {
+                std::cout << "getDynamic(): abstract child\n";
                 scores.pushBack( getDynamic(document, root) );
                 }
             else // treat the ISRWord as ISRPhrase
                 {
+                std::cout << "getDynamic(): ISRWord child\n";
                 scores.pushBack(root->GetHeuristicScore(document));
                 }
             }

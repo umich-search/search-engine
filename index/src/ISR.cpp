@@ -15,10 +15,12 @@ float ISR::GetHeuristicScore( Match *document )
         // std::cout << "word term: ";
         // term->printTerm( );
         // term->Seek( document->start );
+        std::cout << "ISR::GetHeuristicScore(): seek term number " << i << std::endl;
         Post *curPost = term->Seek( document->start );
         while ( curPost != nullptr && curPost->GetStartLocation( ) < document->end ) 
             {
             occ += 1;
+            std::cout << "ISR::GetHeuristicScore(): term number " << i << " calls next\n";
             curPost = term->Next();
             // if ( next == nullptr ) break;
             // if ( next->GetStartLocation() >= document->end ) break;
@@ -31,12 +33,14 @@ float ISR::GetHeuristicScore( Match *document )
             }
         } 
     if ( minOccurence == 0xFFFFFFFFFFFFFFFF ) return 0;
+    std::cout << "ISR::GetHeuristicScore(): prepare to call calculate_score with rarest term\n";
     return calculate_scores( document, ( ISRWord ** )( this->GetTerms( ) ), this->GetTermNum( ), rarestlocation, this->getWeights( ) );
 //	return 0.1;
     }
 
 Post *ISRWord::Next() 
     {
+    std::cout << "ISRWord::Next(): from currlocation = " << this->currPost.GetStartLocation( ) << std::endl;
     // currIdx: the index into the posting list
     size_t numOccurence = termPostingListRaw.getHeader( )->numOfOccurence;
     if ( currIndex < numOccurence - 1 ) 
@@ -54,6 +58,7 @@ Post *ISRWord::Next()
             }
         else currPost = *post;
         }
+    std::cout << "ISRWord::Next() find next word at " << currPost.GetStartLocation( ) << std::endl;
     return &currPost;
     }
 
@@ -95,8 +100,9 @@ Post *ISRWord::NextEndDoc()
 
 Post *ISRWord::Seek(size_t target) 
     {
+    std::cout << "ISRWord::Seek(): term = " << this->term << " target = " << target << std::endl;
     vector<Location> endLocs = manager->getChunkEndLocations( );
-    size_t numChunks = endLocs.size();
+    size_t numChunks = endLocs.size( );
     // std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
     size_t chunkIndex;
     Location result = -1;
@@ -166,7 +172,7 @@ Post *ISRWord::Seek(size_t target)
     if ( result == -1 ) 
         return nullptr;
     currPost.SetLocation( result );
-    // std::cout << "ISRWord::Seek: Returning from seek result, location = " << result << std::endl;
+    std::cout << "ISRWord::Seek(): Returning from seek result, location = " << result << std::endl;
     return &currPost;
     }
 
