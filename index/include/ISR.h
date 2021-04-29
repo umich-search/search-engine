@@ -152,7 +152,7 @@ class ISRWord : public ISR
    {
    public:
       ISRWord( FileManager * fileManager, const char* word ) 
-         : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
+         : manager( fileManager ), currChunk( 0 ), currIndex( 0 ), absoluteIndex(0),
          currPost( 0 ), nextPost( 0 ), Doc( 0 ) 
          {
          char* word_copy = new char[ strlen( word ) ];
@@ -214,6 +214,7 @@ class ISRWord : public ISR
       const char *term;
       size_t currChunk;
       Offset currIndex;
+      Offset absoluteIndex;
       Post currPost;
       Post nextPost;
       Post Doc;
@@ -232,7 +233,7 @@ class ISRWord : public ISR
 class ISREndDoc : public ISR 
    {
    public:
-      ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
+      ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ), absoluteIndex(0),
          endDocPostingListRaw( manager->GetEndDocList( 0 ) ),
          currPost( 0 )
          {
@@ -372,6 +373,7 @@ private:
       FileManager *manager;
       size_t currChunk;
       Offset currIndex;
+      Offset absoluteIndex;
       Post currPost;
       EndDocPostingListRaw endDocPostingListRaw;
    };
