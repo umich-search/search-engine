@@ -25,7 +25,7 @@ bool ISRSpan::Start() {
             if (next == nullptr) break;
             after = next->GetStartLocation();
             if (after < location[positionRarestTerm]){
-                term->Next()
+                term->Next();
             }
             else{
                 break;
@@ -38,7 +38,7 @@ bool ISRSpan::Start() {
                 location[i] = prev;
             else {
                 location[i] = after;
-                term->Next()
+                term->Next();
             }
         } else {
             if (after >= docEndLocation ||
@@ -46,7 +46,7 @@ bool ISRSpan::Start() {
                 location[i] = prev;
             else {
                 location[i] = after;
-                term->Next()
+                term->Next();
             }
         }
 
@@ -72,7 +72,7 @@ bool ISRSpan::Next() {
         Location prev;
         Location after;
         //after = prev = term->Seek(location[i])->GetStartLocation();
-        after = prev = location[i]
+        after = prev = location[i];
 
         while (true) {
             prev = after;
@@ -80,7 +80,7 @@ bool ISRSpan::Next() {
             if (next == nullptr) break;
             after = next->GetStartLocation();
             if (after < location[positionRarestTerm]){
-                term->Next()
+                term->Next();
             }
             else{
                 break;
@@ -93,7 +93,7 @@ bool ISRSpan::Next() {
                 location[i] = prev;
             else {
                 location[i] = after;
-                term->Next()
+                term->Next();
             }
         }
         //After is better
@@ -103,7 +103,7 @@ bool ISRSpan::Next() {
                 location[i] = prev;
             else {
                 location[i] = after;
-                term->Next()
+                term->Next();
             }
         }
 
