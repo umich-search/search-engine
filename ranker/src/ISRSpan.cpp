@@ -233,6 +233,7 @@ calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t posit
         while ( isrspan.Next( ) )
             std::cout << "calculate_score(): calls isrspan.Next()";
     }
+    std::cout << "calculate_score(): reach the end of the document, updating scores\n;"
     isrspan.update_score();
     return isrspan.get_score();
 }
