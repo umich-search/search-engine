@@ -1,7 +1,6 @@
 // Abstract ISR definition.
 #include<limits>
-#include "Dictionary.h"
-#include "abstractISR.h"
+#include "../include/abstractISR.h"
 
 // // FOR TEST ONLY!!!
 // #include<iostream>
@@ -209,7 +208,7 @@ Post* ISRAnd::Seek( Location target )
          nearestStartLocation = nextStartLocation;
          nearestEndLocation = nextEndLocation;
          }
-      if ( nextEndLocation > maxLoc ) // what is farthest term? when to use it?
+      if ( nextEndLocation > maxLoc )
          {
          farthestTerm = i;
          maxLoc = nextEndLocation;
@@ -219,13 +218,13 @@ Post* ISRAnd::Seek( Location target )
    do
       {
       // 2. Move the document end ISR to just past the furthest
-      // word, then calculate the document begin location.   
-      // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
+      // word, then calculate the document begin location.
 
-      while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
-         EndDoc->Next();
-      Post* endDoc = EndDoc->GetCurrentPost();
-      // Post* endDoc = EndDoc->Seek( maxLoc );
+      // while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
+      //    if (!EndDoc->Next())
+      //       break;
+      // Post* endDoc = EndDoc->GetCurrentPost();
+      Post* endDoc = EndDoc->Seek( maxLoc );
 
       Location docEndLocation = endDoc->GetEndLocation( );
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
@@ -239,10 +238,11 @@ Post* ISRAnd::Seek( Location target )
          {
          ISR *Term = *( Terms + i );
 
-         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
-            Term->Next();
-         Post *nextPost = Term->GetCurrentPost();
-         // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
+         // while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+         //    if (!Term->Next())
+         //       break;
+         // Post *nextPost = Term->GetCurrentPost();
+         Post *nextPost = Term->Seek( max( docStartLocation, target ) );
 
          // If any ISR reaches the end, there is no match.
          if ( !nextPost )

@@ -1,8 +1,8 @@
 // Abstract ISR declaration.
-#include "Dictionary.h"
-#include "ISR.h"
-#include "Post.h"
-#include "PostingList.h"
+#include "../../index/include/Dictionary.h"
+#include "../../index/include/ISR.h"
+#include "../../index/include/Post.h"
+#include "../../index/include/PostingList.h"
 #pragma once
 #define MAX_SIZE 18446744073709551615
 
