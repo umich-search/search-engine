@@ -15,7 +15,7 @@
 #include "ThreadPool.h"
 #include "Concurrency.h"
 
-#define MAX_MESSAGE_SIZE 512
+#define MAX_MESSAGE_SIZE 10240
 
 const size_t NUM_RANKERS = 1;
 const size_t MAX_ATTEMPTS = 10;

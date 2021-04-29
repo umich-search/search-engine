@@ -253,7 +253,7 @@ d_Occurence ISRWord::GetDocumentCount()
     for (int i = 0; i < numChunks; i++) 
         {
         try {
-            total += manager->GetTermList(term, i).getHeader()->numOfDocument;
+            total += manager->GetTermList(  term, i ).getHeader( )->numOfDocument;
             }
         catch(const char* excep)
             {
