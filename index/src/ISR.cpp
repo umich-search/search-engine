@@ -59,6 +59,8 @@ Post *ISRWord::Next()
 
  Post *ISRWord::NextNoUpdate( )
  {
+     size_t numOccurence = termPostingListRaw.getHeader( )->numOfOccurence;
+
      if ( currIndex < numOccurence - 1 ) {
          Offset nextIndex;
          nextIndex = currIndex += 1;
@@ -66,7 +68,7 @@ Post *ISRWord::Next()
          nextPost.SetLocation(delta + currPost.GetStartLocation());
          return &nextPost;
      }
-     else return nullptr
+     else return nullptr;
  }
 
 Post *ISRWord::NextEndDoc() 
