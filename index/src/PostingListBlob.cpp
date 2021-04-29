@@ -121,28 +121,28 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
 
 Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize)
     {
-    // std::cout << "Seeking endDocTarget with target: " << target << std::endl;
+    // // std::cout << "Seeking endDocTarget with target: " << target << std::endl;
     size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
     try
         {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
-        // std::cout << "Starting with curr: " << curr << " num points: " << NUM_SYNC_POINTS << std::endl;
+        // // std::cout << "Starting with curr: " << curr << " num points: " << NUM_SYNC_POINTS << std::endl;
         if(curr >= NUM_SYNC_POINTS) {
-            std::cout << "Num sync points out of range 1" << std::endl;
+            // std::cout << "Num sync points out of range 1" << std::endl;
             throw "seek out of range";
         }
         Location loc = raw->getPostLocationAt(syncPoint);
         if(loc == -1) {
             while(loc == -1) {
                 if(++curr >= NUM_SYNC_POINTS) {
-                    std::cout << "Num sync points out of range 2" << std::endl;
+                    // std::cout << "Num sync points out of range 2" << std::endl;
                     throw "seek out of range";
                 }
                 loc = raw->getPostLocationAt(curr);
             }
             if(loc != -1) {
-                std::cout << "Found loc in seekEndDocTarget at curr " << curr << ", setting index to be: " << raw->getPostingsListOffsetAt(curr) << std::endl;
+                // std::cout << "Found loc in seekEndDocTarget at curr " << curr << ", setting index to be: " << raw->getPostingsListOffsetAt(curr) << std::endl;
                 index = raw->getPostingsListOffsetAt(curr);
             }
             return loc;
@@ -169,19 +169,19 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
                     }
                 if(loc >= target) 
                     {
-                    // std::cout << "Found loc in seekEndDocTarget at, setting index to be: " << i << std::endl;
+                    // // std::cout << "Found loc in seekEndDocTarget at, setting index to be: " << i << std::endl;
 
                     index = i;
                     return loc;
                     }
                 }
             }
-        std::cout << "Throwing seek out of range" << std::endl;
+        // std::cout << "Throwing seek out of range" << std::endl;
         throw "seek out of range";
         }
     catch(char *excp) 
         {
-        std::cout << "Unkown error" << std::endl;
+        // std::cout << "Unkown error" << std::endl;
         throw "unkown error";
         }
     }

@@ -8,7 +8,7 @@
 #include "../../index/include/Dictionary.h"
 #include "../include/constraint_solver.h"
 
-#define MAX_DOC 2000
+#define MAX_DOC 500
 
 using namespace std;    // FOR TESTING ONLY!
 
@@ -35,7 +35,9 @@ using namespace std;    // FOR TESTING ONLY!
       // delete match;
       match = nullptr;
       if ( matches->size() >= MAX_DOC )
-         return matches;
+         {
+         break;
+         }
       }
    std::cout << "----------------after while loop-------------------" << std::endl;
    std::cout << "----------------match size: " << matches->size() << "-------------------" << std::endl;

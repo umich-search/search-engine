@@ -12,7 +12,7 @@
 #include "query_Compiler.h"
 #include "Results.h"
 
-#define MAX_MESSAGE_SIZE 512
+#define MAX_MESSAGE_SIZE 10240
 
 class RankServer
     {
@@ -105,7 +105,11 @@ class RankServer
                     // TODO: change docRank to the ranker result
                     std::string docRank = retrieveDocRank( query.c_str() );
                     //std::string docRank = "https://google.com$GOOGLE#4@";
+                    std::ofstream os;
+                    os.open( "printRankOutput.txt" );
                     std::cout << "query: " << query << " result: " << docRank << std::endl;
+                    os << "query: " << query << " result: " << docRank << std::endl;
+                    os.close( );
                     sendResponse( connectFD, docRank );
                     }
                 catch( std::string e )

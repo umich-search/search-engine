@@ -12,7 +12,7 @@ float ISR::GetHeuristicScore( Match *document )
     for ( size_t i = 0; i < this->GetTermNum(); ++i ) 
         {
         ISRWord *term = ( ISRWord* )*( this->GetTerms() + i );
-        // std::cout << "word term: ";
+        std::cout << "word term: ";
         // term->printTerm( );
         // term->Seek( document->start );
         std::cout << "ISR::GetHeuristicScore(): seek term number " << i << std::endl;
@@ -40,7 +40,7 @@ float ISR::GetHeuristicScore( Match *document )
 
 Post *ISRWord::Next() 
     {
-    std::cout << "ISRWord::Next(): from currlocation = " << this->currPost.GetStartLocation( ) << std::endl;
+    // std::cout << "ISRWord::Next(): from currlocation = " << this->currPost.GetStartLocation( ) << std::endl;
     // currIdx: the index into the posting list
     size_t numOccurence = termPostingListRaw.getHeader( )->numOfOccurence;
     if ( currIndex < numOccurence - 1 ) 
@@ -58,7 +58,7 @@ Post *ISRWord::Next()
             }
         else currPost = *post;
         }
-    std::cout << "ISRWord::Next() find next word at " << currPost.GetStartLocation( ) << std::endl;
+    // std::cout << "ISRWord::Next() find next word at " << currPost.GetStartLocation( ) << std::endl;
     return &currPost;
     }
 
@@ -100,7 +100,7 @@ Post *ISRWord::NextEndDoc()
 
 Post *ISRWord::Seek(size_t target) 
     {
-    std::cout << "ISRWord::Seek(): term = " << this->term << " target = " << target << std::endl;
+    // std::cout << "ISRWord::Seek(): term = " << this->term << " target = " << target << std::endl;
     vector<Location> endLocs = manager->getChunkEndLocations( );
     size_t numChunks = endLocs.size( );
     // std::cout << "ISRWord::Seek: numChunks: " << numChunks << std::endl;
@@ -173,7 +173,7 @@ Post *ISRWord::Seek(size_t target)
     if ( result == -1 ) 
         return nullptr;
     currPost.SetLocation( result );
-    std::cout << "ISRWord::Seek(): Returning from seek result, location = " << result << std::endl;
+    // std::cout << "ISRWord::Seek(): Returning from seek result, location = " << result << std::endl;
     return &currPost;
     }
 
@@ -261,6 +261,7 @@ d_Occurence ISRWord::GetDocumentCount()
             continue;
             }
         }
+    std::cout << "ISRWord::GetDocumentCount() returning\n";
     return total;
     }
 
@@ -281,6 +282,7 @@ w_Occurence ISRWord::GetNumberOfOccurrences()
             continue;
             }
         }
+    std::cout << "ISRWord::GetNumberOfOccurences(): returning with res = " << total << std::endl;
     return total;
     }
 
@@ -339,7 +341,7 @@ Post *ISREndDoc::Seek(Location target)
     if ( !containFlag )  // check chunkIndex 
         return nullptr;
     // std::cout << "ISREndDoc::Seek: seek on enddoc from: " << chunkIndex << " to " << numChunks << std::endl;
-    // std::cout << "ISREndDoc::Seek: manager with numChunks" << manager->getNumChunks( ) << std::endl;
+    // // std::cout << "ISREndDoc::Seek: manager with numChunks" << manager->getNumChunks( ) << std::endl;
     for ( size_t chunk = chunkIndex; chunk < numChunks; chunk++ ) 
         {
         try 

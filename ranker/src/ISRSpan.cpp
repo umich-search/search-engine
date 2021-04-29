@@ -141,8 +141,8 @@ void ISRSpan::update_score() {
         score += weights->weightPhrase * statistics.numPhrases;
     }
     score += weights->weightTopSpan * statistics.numTopSpans;
-    //// std::cout<<"hhhhhhhhh"<<std::endl;
-    //// std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
+    //// // std::cout<<"hhhhhhhhh"<<std::endl;
+    //// // std::cout<<statistics.numShortSpans<<" "<<statistics.numOrderSpans<<" "<<statistics.numPhrases<<" "<<statistics.numTopSpans<<std::endl;
 }
 
 bool ISRSpan::ifShortSpan() {
@@ -226,14 +226,14 @@ const char *extract_url(String a) {
 float
 calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
                  struct Weights *weights) {
-    std::cout << "calculate_scores(): construct isr span\n";
+    // std::cout << "calculate_scores(): construct isr span\n";
     ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
     
     if ( isrspan.Start( ) ) {
-        while ( isrspan.Next( ) )
-            std::cout << "calculate_score(): calls isrspan.Next()";
+        while ( isrspan.Next( ) );
+            // std::cout << "calculate_score(): calls isrspan.Next()";
     }
-    std::cout << "calculate_score(): reach the end of the document, updating scores\n";
+    // std::cout << "calculate_score(): reach the end of the document, updating scores\n";
     isrspan.update_score();
     return isrspan.get_score();
 }
