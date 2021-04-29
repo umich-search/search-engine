@@ -156,17 +156,15 @@ int main(int argc, char *argv[]) {
    ASSERT(res->GetStartLocation(), ==, 14);
    ASSERT(res->GetEndLocation(), ==, 15);
    res = q3->Seek(15);
-   cout<<"scheisse\n";
-   if (!res) cout << "Seek13empty\n";
    ASSERT(res->GetStartLocation(), ==, 18);
    ASSERT(res->GetEndLocation(), ==, 19);
-   res = q2->Seek(19);
+   res = q3->Seek(19);
    ASSERT(res, ==, nullptr);
-   res = q2->Seek(29);
+   res = q3->Seek(29);
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // [0,2,3]
+   // (0,0,3)(2,12,16)(3,18,22)
    res_ptr = ConstraintSolver(EndDoc, q3);
    ::vector<Match*> result3 = *res_ptr;
    for (unsigned i = 0; i < result3.size(); ++i)
@@ -175,8 +173,6 @@ int main(int argc, char *argv[]) {
       delete result3[i];
       }
    delete res_ptr;
-
-
 
 // // query 4: quick
 //    ISR *terms_q4[] = {word_quick};
@@ -188,13 +184,12 @@ int main(int argc, char *argv[]) {
 //       cout << result4[i]->GetStartLocation() << " " << result4[i]->GetEndLocation() << endl;
 //       delete result4[i];
 //       }
-
    // delete(result1);
    // delete(result2);
    // delete(result3);
-   delete(q1);
-   delete (q2);
-   delete (q3);
+   // delete(q1);
+   // delete (q2);
+   // delete (q3);
    //delete (q4);
 
    delete (word_quick);

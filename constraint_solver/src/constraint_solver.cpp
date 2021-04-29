@@ -8,9 +8,9 @@
 #include "../../index/include/Dictionary.h"
 #include "../include/constraint_solver.h"
 
-#define MAX_DOC 20000
+#define MAX_DOC 2000
 
-// FOR TESTING ONLY!    // using namespace std;
+using namespace std;    // FOR TESTING ONLY!
 
 ::vector<Match*>* ConstraintSolver(ISREndDoc* EndDoc, ISR* queryRoot)
    {
@@ -22,8 +22,6 @@
       // // std::cout << "ConstraintSolver: get next query location\n";
       // find the next endDoc location in "Post endDoc"
       Location matchStart = match->GetStartLocation( );
-      if ( !match )
-            std::cerr << "match is nullptr!";
       Post* endDoc = EndDoc->Seek( matchStart );
       currentLocation = endDoc->GetStartLocation( );
       // calculate doc length and doc start location

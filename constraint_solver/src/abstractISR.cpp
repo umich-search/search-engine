@@ -2,9 +2,9 @@
 #include<limits>
 #include "../include/abstractISR.h"
 
-// // FOR TEST ONLY!!!
-// #include<iostream>
-// using namespace std;
+// FOR TEST ONLY!!!
+#include<iostream>
+using namespace std;
 
 Location max( Location locx, Location locy )
    {
@@ -191,6 +191,7 @@ Post* ISRAnd::Seek( Location target )
    // step 2.
    // 5. If any ISR reaches the end, there is no match.
    //// std::cout<< "Entered ISRAnd Seek" << std::endl;
+   // cout<<"seek initial enddocloc: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
@@ -215,18 +216,25 @@ Post* ISRAnd::Seek( Location target )
          }
       }
       //// std::cout<<nearestTerm<<" " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   // cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+   EndDoc->Seek(maxLoc);   // adding this line somehow works
    do
       {
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.
-
-      // while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
-      //    if (!EndDoc->Next())
-      //       break;
-      // Post* endDoc = EndDoc->GetCurrentPost();
-      Post* endDoc = EndDoc->Seek( maxLoc );
+      // cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      // cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
+         {
+         if (!EndDoc->Next())
+            break;
+         // cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+         }
+      Post* endDoc = EndDoc->GetCurrentPost();
+      // Post* endDoc = EndDoc->Seek( maxLoc );
 
       Location docEndLocation = endDoc->GetEndLocation( );
+      // cout<<"docendloc: "<<docEndLocation<<';'<<endl;
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
       //// std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
@@ -237,12 +245,17 @@ Post* ISRAnd::Seek( Location target )
       for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
          ISR *Term = *( Terms + i );
-
-         // while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
-         //    if (!Term->Next())
-         //       break;
-         // Post *nextPost = Term->GetCurrentPost();
-         Post *nextPost = Term->Seek( max( docStartLocation, target ) );
+         // cout<<"Term "<<i<<endl;
+         // cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            // cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+            if (!Term->Next())
+               break;
+            // cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         Post *nextPost = Term->GetCurrentPost();
+         // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
 
          // If any ISR reaches the end, there is no match.
          if ( !nextPost )
