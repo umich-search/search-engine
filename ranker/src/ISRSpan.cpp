@@ -5,7 +5,7 @@ bool ISRSpan::Start() {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
     auto seek = (*(Terms + positionRarestTerm))->Seek(docStartLocation);
-    if (seek==nullptr) return false;
+    if (seek == nullptr) return false;
     location[positionRarestTerm] = seek->GetStartLocation();
     if (location[positionRarestTerm] > docEndLocation)return false;
     smallest = farthest = location[positionRarestTerm];
@@ -18,23 +18,38 @@ bool ISRSpan::Start() {
         if (seek == nullptr) return false;
         after = prev = seek->GetStartLocation();
         if (after > docEndLocation) return false;
-        while (after < location[positionRarestTerm]) {
+
+        while (true) {
             prev = after;
-            auto next = term->Next();
+            auto next = term->NextNoUpdate();
             if (next == nullptr) break;
             after = next->GetStartLocation();
+            if (after < location[positionRarestTerm]){
+                term->Next()
+            }
+            else{
+                break;
+            }
         }
+
         if (i < positionRarestTerm) {
             if (after >= docEndLocation ||
                 location[positionRarestTerm] - prev <= after - location[positionRarestTerm])
                 location[i] = prev;
-            else location[i] = after;
+            else {
+                location[i] = after;
+                term->Next()
+            }
         } else {
             if (after >= docEndLocation ||
                 location[positionRarestTerm] - prev < after - location[positionRarestTerm])
                 location[i] = prev;
-            else location[i] = after;
+            else {
+                location[i] = after;
+                term->Next()
+            }
         }
+
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -46,7 +61,6 @@ bool ISRSpan::Start() {
 }
 
 bool ISRSpan::Next() {
-    //TODO: maybe call seek is inefficient
     Location docEndLocation = document->end;
     auto next = (*(Terms + positionRarestTerm))->Next();
     if (next == nullptr || next->GetStartLocation() > docEndLocation) return false;
@@ -57,25 +71,43 @@ bool ISRSpan::Next() {
         ISRWord *term = *(Terms + i);
         Location prev;
         Location after;
-        after = prev = term->Seek(location[i])->GetStartLocation();
-        while (after < location[positionRarestTerm]) {
+        //after = prev = term->Seek(location[i])->GetStartLocation();
+        after = prev = location[i]
+
+        while (true) {
             prev = after;
-            auto next = term->Next();
+            auto next = term->NextNoUpdate();
             if (next == nullptr) break;
             after = next->GetStartLocation();
+            if (after < location[positionRarestTerm]){
+                term->Next()
+            }
+            else{
+                break;
+            }
         }
-        //Previous is better
+        //Previous/after is better
         if (i < positionRarestTerm) {
             if (after >= docEndLocation ||
                 location[positionRarestTerm] - prev <= after - location[positionRarestTerm])
                 location[i] = prev;
-            else location[i] = after;
-        } else {
+            else {
+                location[i] = after;
+                term->Next()
+            }
+        }
+        //After is better
+        else {
             if (after >= docEndLocation ||
                 location[positionRarestTerm] - prev < after - location[positionRarestTerm])
                 location[i] = prev;
-            else location[i] = after;
+            else {
+                location[i] = after;
+                term->Next()
+            }
         }
+
+
         if (location[i] < smallest) smallest = location[i];
         if (location[i] > farthest) farthest = location[i];
     }
@@ -132,43 +164,40 @@ bool ISRSpan::ifExactPhrases() {
 }
 
 
-void ISRSpan::calculate_num_frequent_words( ) 
-    {
+void ISRSpan::calculate_num_frequent_words() {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
-    for (int i = 0; i < numTerms; i++) 
-        {
-        ISRWord *term = *( Terms + i );
+    for (int i = 0; i < numTerms; i++) {
+        ISRWord *term = *(Terms + i);
         size_t count = 1;
-        term->Seek( docStartLocation );
-        while ( true ) 
-            {
+        term->Seek(docStartLocation);
+        while (true) {
             auto next = term->Next();
-            if ( next == nullptr ) 
+            if (next == nullptr)
                 break;
-            if ( next->GetStartLocation( ) >= docEndLocation ) 
+            if (next->GetStartLocation() >= docEndLocation)
                 break;
             count += 1;
-            }
-        float expected = ( float ) term->GetNumberOfOccurrences( ) / ( float ) term->GetDocumentCount( );
-        if ( count >= expected * 2 ) 
-            statistics.numFrequentWords += 1;
         }
+        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();
+        if (count >= expected * 2)
+            statistics.numFrequentWords += 1;
     }
+}
 
 
-const char* extract_url(String a) {
+const char *extract_url(String a) {
     int count = 0;
-    int loc1=-1;
-    int loc2=-1;
+    int loc1 = -1;
+    int loc2 = -1;
     bool flag = false;
-    for(int i=0;i<a.size()-2;i++){
-        if(a[i]==':'&&a[i+1]=='/'&&a[i+2]=='/'){
+    for (int i = 0; i < a.size() - 2; i++) {
+        if (a[i] == ':' && a[i + 1] == '/' && a[i + 2] == '/') {
             flag = true;
             break;
         }
     }
-    int cmp = flag? 3:1;
+    int cmp = flag ? 3 : 1;
     for (int i = 0; i < a.size(); i++) {
         if (a[i] == '/') count += 1;
         if (count == cmp) {
@@ -176,47 +205,43 @@ const char* extract_url(String a) {
             break;
         }
     }
-    if(count==cmp-1) loc2=a.size();
-    if(loc2>a.size()) return "";
+    if (count == cmp - 1) loc2 = a.size();
+    if (loc2 > a.size()) return "";
     for (int i = loc2; i > 0; i--) {
-        if (i<a.size()&&a[i] == '.') {
+        if (i < a.size() && a[i] == '.') {
             loc1 = i;
             break;
         }
     }
     String result;
-    if (loc1<0) return "";
-    for (int i=loc1+1;i<loc2;i++) result+=a[i];
+    if (loc1 < 0) return "";
+    for (int i = loc1 + 1; i < loc2; i++) result += a[i];
     return result.cstr();
 }
 
 float
-calculate_scores( Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
-                 struct Weights *weights ) 
-    {
-    ISRSpan isrspan( document, Terms, numTerms, positionRarestTerm, weights );
-    if ( isrspan.Start( ) ) 
-        {
+calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t positionRarestTerm,
+                 struct Weights *weights) {
+    ISRSpan isrspan(document, Terms, numTerms, positionRarestTerm, weights);
+    if (isrspan.Start()) {
         while (isrspan.Next());
-        }
+    }
     isrspan.update_score();
     return isrspan.get_score();
-    }
+}
 
 
-float calculate_static_scores( Match *document ) 
-    {
+float calculate_static_scores(Match *document) {
     Dictionary dictionary(0);
-    struct StaticWeights weights; 
+    struct StaticWeights weights;
     float score = 0;
-    DocumentDetails *documentDetails = dictionary.GetDocumentDetials( document->id );
-    if ( documentDetails->url.size() <= 75 ) score += weights.weightURL;
-    if ( documentDetails->title.size() <= 60 ) score += weights.weightTitle;
-    for ( auto x:DomainsTable ) 
-        {
-        if ( strcmp( x,extract_url( documentDetails->url )) == 0 ) score += weights.weightDomain;
-        }
-    return score;
+    DocumentDetails *documentDetails = dictionary.GetDocumentDetials(document->id);
+    if (documentDetails->url.size() <= 75) score += weights.weightURL;
+    if (documentDetails->title.size() <= 60) score += weights.weightTitle;
+    for (auto x:DomainsTable) {
+        if (strcmp(x, extract_url(documentDetails->url)) == 0) score += weights.weightDomain;
     }
+    return score;
+}
 
 
