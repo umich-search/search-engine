@@ -171,19 +171,19 @@ bool ISRSpan::ifExactPhrases() {
 void ISRSpan::calculate_num_frequent_words() {
     Location docStartLocation = document->start;
     Location docEndLocation = document->end;
-    for (int i = 0; i < numTerms; i++) {
-        ISRWord *term = *(Terms + i);
+    for ( int i = 0; i < numTerms; i++ ) {
+        ISRWord *term = *( Terms + i );
         size_t count = 1;
-        term->Seek(docStartLocation);
-        while (true) {
-            auto next = term->Next();
-            if (next == nullptr)
+        term->Seek( docStartLocation );
+        while ( true ) {
+            auto next = term->Next( );
+            if ( next == nullptr )
                 break;
-            if (next->GetStartLocation() >= docEndLocation)
+            if ( next->GetStartLocation( ) >= docEndLocation )
                 break;
             count += 1;
         }
-        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount();
+        float expected = (float) term->GetNumberOfOccurrences() / (float) term->GetDocumentCount( );
         if (count >= expected * 2)
             statistics.numFrequentWords += 1;
     }
@@ -233,7 +233,7 @@ calculate_scores(Match *document, ISRWord **Terms, size_t numTerms, size_t posit
         while ( isrspan.Next( ) )
             std::cout << "calculate_score(): calls isrspan.Next()";
     }
-    std::cout << "calculate_score(): reach the end of the document, updating scores\n;"
+    std::cout << "calculate_score(): reach the end of the document, updating scores\n";
     isrspan.update_score();
     return isrspan.get_score();
 }

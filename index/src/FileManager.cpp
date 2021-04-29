@@ -544,7 +544,7 @@ Location FileManager::getIndexEndLocation() {
 }
 
 ::vector<Location> FileManager::getChunkEndLocations() {
-    ReadMetadata();
+    ReadMetadata( );
     ::vector<Location> endLocs;
     
     for(unsigned int i = 0; i < chunksMetadata->numChunks; ++i) {

@@ -247,6 +247,7 @@ Location ISRWord::GetEndLocation()
 
 d_Occurence ISRWord::GetDocumentCount() 
     {
+    std::cout << "ISRWord::GetDocumentCount():\n";
     size_t numChunks = manager->getChunkEndLocations().size();
     w_Occurence total = 0;
     for (int i = 0; i < numChunks; i++) 
@@ -256,6 +257,7 @@ d_Occurence ISRWord::GetDocumentCount()
             }
         catch(const char* excep)
             {
+            std::cerr << "ISRWord::GetDocumentCound() exception = " << excep << std::endl;
             continue;
             }
         }
@@ -264,16 +266,18 @@ d_Occurence ISRWord::GetDocumentCount()
 
 w_Occurence ISRWord::GetNumberOfOccurrences() 
     {
-    size_t numChunks = manager->getChunkEndLocations().size();
+    std::cout << "ISRWord::GetNumberOfOccurences()\n";
+    size_t numChunks = manager->getChunkEndLocations( ).size( );
     w_Occurence total = 0;
-    for (int i = 0; i < numChunks; i++) 
+    for ( int i = 0; i < numChunks; i++ ) 
         {
         try 
             {
-            total += manager->GetTermList(term, i).getHeader()->numOfOccurence;
+            total += manager->GetTermList( term, i ).getHeader( )->numOfOccurence;
             }
         catch(const char* excep)
             {
+            std::cerr << "ISRWord::GetNumberOfOccurences() exception = " << excep << std::endl;
             continue;
             }
         }
