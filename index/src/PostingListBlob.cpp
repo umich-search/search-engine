@@ -121,13 +121,13 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
 
 Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &index, size_t chunkSize)
     {
-    std::cout << "Seeking endDocTarget with target: " << target << std::endl;
+    // std::cout << "Seeking endDocTarget with target: " << target << std::endl;
     size_t numLowBits = getNumLowBits(chunkSize, NUM_SYNC_POINTS);
     try
         {
         Location syncPoint = target >> numLowBits;
         Location curr = syncPoint;
-        std::cout << "Starting with curr: " << curr << " num points: " << NUM_SYNC_POINTS << std::endl;
+        // std::cout << "Starting with curr: " << curr << " num points: " << NUM_SYNC_POINTS << std::endl;
         if(curr >= NUM_SYNC_POINTS) {
             std::cout << "Num sync points out of range 1" << std::endl;
             throw "seek out of range";
@@ -169,7 +169,7 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
                     }
                 if(loc >= target) 
                     {
-                    std::cout << "Found loc in seekEndDocTarget at, setting index to be: " << i << std::endl;
+                    // std::cout << "Found loc in seekEndDocTarget at, setting index to be: " << i << std::endl;
 
                     index = i;
                     return loc;
