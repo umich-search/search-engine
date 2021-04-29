@@ -212,6 +212,7 @@ class ISRWord : public ISR
       size_t currChunk;
       Offset currIndex;
       Post currPost;
+      Post nextPost;
       Post Doc;
       TermPostingListRaw termPostingListRaw;
       struct Weights weights {
@@ -245,8 +246,15 @@ class ISREndDoc : public ISR
 
     Post *NextEndDoc();
 
+<<<<<<< HEAD
     // Get the first post after the target
     Post *Seek(size_t target);
+=======
+      Post *NextNoUpdate();
+
+      // Get the first post after the target
+      Post *Seek( Location target );
+>>>>>>> 614928b (add NextNoUpdate)
 
     // Get position of first term
     Location GetStartLocation();
