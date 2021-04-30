@@ -196,7 +196,7 @@ Post* ISRAnd::Seek( Location target )
    //// std::// std::cout<< "Entered ISRAnd Seek" << std::endl;
    // // std::cout<<"seek initial enddocloc: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
-   std::// std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
+   std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
       ISR *Term = *( Terms + i );
@@ -220,17 +220,23 @@ Post* ISRAnd::Seek( Location target )
          }
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
    std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
    std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
 =======
       std::// std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
    // // std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+   std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
    EndDoc->Seek(maxLoc);   // adding this line somehow works
    do
       {
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.
+<<<<<<< HEAD
 <<<<<<< HEAD
       std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
       std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
@@ -240,28 +246,41 @@ Post* ISRAnd::Seek( Location target )
       // std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
       // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+      std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
       while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
          {
          if (!EndDoc->Next())
             break;
          }
 <<<<<<< HEAD
+<<<<<<< HEAD
       std::cout<< "after moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
 =======
       // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+      std::cout<< "after moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
 
       Post* endDoc = EndDoc->GetCurrentPost();
       // Post* endDoc = EndDoc->Seek( maxLoc );
 
       Location docEndLocation = endDoc->GetEndLocation( );
 <<<<<<< HEAD
+<<<<<<< HEAD
       std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
 =======
       // std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+      std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+>>>>>>> f8fca50 (dbg)
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
-      std::// std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
+      std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
       maxLoc = 0;
 
@@ -270,6 +289,7 @@ Post* ISRAnd::Seek( Location target )
       for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
          ISR *Term = *( Terms + i );
+<<<<<<< HEAD
 <<<<<<< HEAD
          std::cout<<"Term "<<i<<endl;
          std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
@@ -283,11 +303,19 @@ Post* ISRAnd::Seek( Location target )
             {
             // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+         std::cout<<"Term "<<i<<endl;
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> f8fca50 (dbg)
             if (!Term->Next())
                {
-               std::// std::cout << "term exhausts\n";
+               std::cout << "term exhausts\n";
                break;
                }
+<<<<<<< HEAD
 <<<<<<< HEAD
             std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
             }
@@ -297,6 +325,11 @@ Post* ISRAnd::Seek( Location target )
             }
          // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
 >>>>>>> 4971cbc (dbg)
+=======
+            std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> f8fca50 (dbg)
          Post *nextPost = Term->GetCurrentPost();
          // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
 
@@ -327,7 +360,7 @@ Post* ISRAnd::Seek( Location target )
       if ( flag )
          continue;
       currPost.SetLocation( minLoc, maxLoc );
-      std::// std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
+      std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
       return &currPost;
       } 
       while ( true );
