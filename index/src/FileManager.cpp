@@ -611,30 +611,33 @@ Location FileManager::getIndexEndLocation() {
 void FileManager::unmapMetadata( )
     {
         return;
-    // if ( chunksMetadata )
-    //     {
-    //     // // std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
-    //     munmap( ( void * )chunksMetadata, chunksMetadataSize );
-    //     chunksMetadata = nullptr;
-    //     chunksMetadataSize = 0;
-    //     }
+    if ( chunksMetadata )
+        {
+        // // std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
+        munmap( ( void * )chunksMetadata, chunksMetadataSize );
+        chunksMetadata = nullptr;
+        chunksMetadataSize = 0;
+        }
     }
 
 void FileManager::unmapChunk( )
     {
-    // if ( endDocListBlob )
-    //     {
-    //     // // std::cout << "Unmap chunks of size " << chunkSize << std::endl;
-    //     munmap( ( void * )endDocListBlob, chunkSize );
-    //     endDocListBlob = nullptr;
-    //     termIndexBlob = nullptr;
-    //     chunkSize = 0;
-    //     }
+    if ( endDocListBlob )
+        {
+        // // std::cout << "Unmap chunks of size " << chunkSize << std::endl;
+        munmap( ( void * )endDocListBlob, chunkSize );
+        endDocListBlob = nullptr;
+        termIndexBlob = nullptr;
+        chunkSize = 0;
+        }
     }
 
 void FileManager::unmapDocs( )
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9132e39 (unmap back)
     if ( docsBlob )
         {
         // // std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
@@ -642,6 +645,7 @@ void FileManager::unmapDocs( )
         docsBlob = nullptr;
         docsBlobSize = 0;
         }
+<<<<<<< HEAD
     }
 =======
     // if ( docsBlob )
@@ -651,5 +655,7 @@ void FileManager::unmapDocs( )
     //     docsBlob = nullptr;
     //     docsBlobSize = 0;
     //     }
+=======
+>>>>>>> 9132e39 (unmap back)
     }
 >>>>>>> d91fb91 (rm unmap)
