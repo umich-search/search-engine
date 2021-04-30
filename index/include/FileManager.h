@@ -103,6 +103,7 @@ public:
          }
 >>>>>>> 9102d46 (added some prints)
 
+<<<<<<< HEAD
     static int WriteChunk(SharedPointer<TermHash> termIndex, 
                   SharedPointer<EndDocPostingList> endDocList,
                   w_Occurence numWords,
@@ -135,3 +136,39 @@ public:
     // get vector of total doc count up to chunk
     ::vector<d_Occurence> getDocCountsAfterChunk();
 };
+=======
+      static int WriteChunk( SharedPointer< TermHash > termIndex, 
+                     SharedPointer< EndDocPostingList > endDocList,
+                     w_Occurence numWords,
+                     w_Occurence numUniqueWords, 
+                     d_Occurence numDocs, 
+                     Location endLocation,
+                     ::vector< SharedPointer< DocumentDetails > > docDetails,
+                     size_t chunkIndex,
+                     size_t threadID );
+      // Bring chunk into memory
+      int ReadChunk( Offset chunkIndex );
+      // Bring documents into memory
+      int ReadDocuments( Offset docsChunkIndex );
+      // Returns term list given term and optional chunk_path
+      TermPostingListRaw GetTermList( const char* term , size_t chunkIndex = 0 );
+      TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ); 
+
+      // Returns end doc list given term and optional chunk_path
+      EndDocPostingListRaw GetEndDocList( size_t chunkIndex = 0 );
+      // Returns document details of doc index
+      DocumentDetails GetDocumentDetails( Offset docIndex, Offset docsChunkIndex );
+      // Get the number of chunks in the index
+      Offset getNumChunks( );
+      // Get total number of words in index
+      w_Occurence getIndexWords( );
+      // get end location of index
+      Location getIndexEndLocation( );
+      // get number of documents in index
+      d_Occurence getNumDocuments( );
+      // get vector of chunk endlocations
+      ::vector<Location> getChunkEndLocations( );
+      // get vector of total doc count up to chunk
+      ::vector<d_Occurence> getDocCountsAfterChunk( );
+   };
+>>>>>>> 85cfbcc (Refind term list every next() in ISRWord)

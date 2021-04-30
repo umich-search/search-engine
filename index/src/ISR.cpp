@@ -42,6 +42,7 @@ Post *ISRWord::Next()
     {
     // std::cout << "ISRWord::Next(): from currlocation = " << this->currPost.GetStartLocation( ) << std::endl;
     // currIdx: the index into the posting list
+    termPostingListRaw = manager->GetTermListCurrMap( term, currChunk);
     size_t numOccurence = termPostingListRaw.getHeader( )->numOfOccurence;
     if ( currIndex < numOccurence - 1 ) 
         {

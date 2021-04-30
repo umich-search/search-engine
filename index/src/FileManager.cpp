@@ -342,6 +342,31 @@ TermPostingListRaw FileManager::GetTermList( const char * term, size_t chunkInde
         }
     }
 
+// May return refernece
+TermPostingListRaw FileManager::GetTermListCurrMap( const char * term, size_t chunkIndex ) 
+    {
+    if( chunkIndex == -1 ) 
+        {
+        throw "Error: No chunk initialized";
+        }
+    if( !termIndexBlob ) 
+        {
+        throw "Error: No chunk has been read";
+        }
+
+    // get the posting list of that tuple
+    const SerialTuple * tuple = termIndexBlob->Find( term );
+    if( !tuple ) 
+        {
+        throw "Error: Term does not exist";
+        }
+    else 
+        {
+        // // std::cout << "FileManager::GetTermList: Term post list selected and returned\n";
+        return TermPostingListRaw( tuple->DynamicSpace );
+        }
+    }
+
 EndDocPostingListRaw FileManager::GetEndDocList( size_t chunkIndex ) 
     {
     if( chunkIndex >= chunksMetadata->numChunks ) 
