@@ -196,7 +196,7 @@ Post* ISRAnd::Seek( Location target )
    //// std::// std::cout<< "Entered ISRAnd Seek" << std::endl;
    // // std::cout<<"seek initial enddocloc: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
-   std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
+   std::// std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
       ISR *Term = *( Terms + i );
@@ -219,30 +219,49 @@ Post* ISRAnd::Seek( Location target )
          maxLoc = nextEndLocation;
          }
       }
+<<<<<<< HEAD
    std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
    std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      std::// std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   // // std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
    EndDoc->Seek(maxLoc);   // adding this line somehow works
    do
       {
       // 2. Move the document end ISR to just past the furthest
       // word, then calculate the document begin location.
+<<<<<<< HEAD
       std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
       std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
       std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      // std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      // std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
       while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
          {
          if (!EndDoc->Next())
             break;
          }
+<<<<<<< HEAD
       std::cout<< "after moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
 
       Post* endDoc = EndDoc->GetCurrentPost();
       // Post* endDoc = EndDoc->Seek( maxLoc );
 
       Location docEndLocation = endDoc->GetEndLocation( );
+<<<<<<< HEAD
       std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+=======
+      // std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+>>>>>>> 4971cbc (dbg)
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
-      std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
+      std::// std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
       maxLoc = 0;
 
@@ -251,19 +270,33 @@ Post* ISRAnd::Seek( Location target )
       for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
          ISR *Term = *( Terms + i );
+<<<<<<< HEAD
          std::cout<<"Term "<<i<<endl;
          std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
          while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
             {
             std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+=======
+         // std::cout<<"Term "<<i<<endl;
+         // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> 4971cbc (dbg)
             if (!Term->Next())
                {
-               std::cout << "term exhausts\n";
+               std::// std::cout << "term exhausts\n";
                break;
                }
+<<<<<<< HEAD
             std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
             }
          std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+=======
+            // std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> 4971cbc (dbg)
          Post *nextPost = Term->GetCurrentPost();
          // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
 
@@ -294,7 +327,7 @@ Post* ISRAnd::Seek( Location target )
       if ( flag )
          continue;
       currPost.SetLocation( minLoc, maxLoc );
-      std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
+      std::// std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
       return &currPost;
       } 
       while ( true );

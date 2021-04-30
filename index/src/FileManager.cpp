@@ -384,6 +384,22 @@ EndDocPostingListRaw FileManager::GetEndDocList( size_t chunkIndex )
     return EndDocPostingListRaw( endDocListBlob->DynamicSpace );
     }
 
+EndDocPostingListRaw FileManager::GetEndDocListCurrMap( size_t chunkIndex ) 
+    {
+    if( chunkIndex >= chunksMetadata->numChunks ) 
+        {
+        // // std::cout << "FileManager::GetEndDocList(): chunksMetadata->numChunks " << chunksMetadata->numChunks << std::endl;
+        throw "Error: Attempting to read more than available chunks";
+        }
+    // // std::cout << "FileManager::GetEndDocList: Reading chunk: " << chunkIndex << std::endl;
+    if( !endDocListBlob ) 
+        {
+        throw "Error: No chunk has been read";
+        }
+    // // std::cout << "Returning raw posting list" << std::endl;
+    return EndDocPostingListRaw( endDocListBlob->DynamicSpace );
+    }
+
 DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
     if (docIndex == 80) {
         // // std::cout << "" << std::endl;

@@ -156,6 +156,8 @@ public:
 
       // Returns end doc list given term and optional chunk_path
       EndDocPostingListRaw GetEndDocList( size_t chunkIndex = 0 );
+      EndDocPostingListRaw GetEndDocListCurrMap( size_t chunkIndex ); 
+
       // Returns document details of doc index
       DocumentDetails GetDocumentDetails( Offset docIndex, Offset docsChunkIndex );
       // Get the number of chunks in the index

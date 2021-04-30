@@ -305,6 +305,9 @@ Post *ISREndDoc::GetCurrentPost(){
 
 Post *ISREndDoc::Next() 
     {
+                     
+
+    endDocPostingListRaw = manager->GetEndDocListCurrMap( currChunk );
     size_t numDoc = endDocPostingListRaw.getHeader()->numOfDocument;
     if (currIndex < numDoc - 1) 
         {
