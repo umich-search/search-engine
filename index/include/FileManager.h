@@ -152,7 +152,11 @@ public:
       int ReadDocuments( Offset docsChunkIndex );
       // Returns term list given term and optional chunk_path
       TermPostingListRaw GetTermList( const char* term , size_t chunkIndex = 0 );
+<<<<<<< HEAD
       TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ); 
+=======
+      TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ) 
+>>>>>>> fe54b22 (Refind term list every next() in ISRWord)
 
       // Returns end doc list given term and optional chunk_path
       EndDocPostingListRaw GetEndDocList( size_t chunkIndex = 0 );

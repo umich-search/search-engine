@@ -343,7 +343,11 @@ TermPostingListRaw FileManager::GetTermList( const char * term, size_t chunkInde
     }
 
 // May return refernece
+<<<<<<< HEAD
 TermPostingListRaw FileManager::GetTermListCurrMap( const char * term, size_t chunkIndex ) 
+=======
+TermPostingListRaw FileManager::GetCachedTermList( const char * term, size_t chunkIndex ) 
+>>>>>>> fe54b22 (Refind term list every next() in ISRWord)
     {
     if( chunkIndex == -1 ) 
         {
