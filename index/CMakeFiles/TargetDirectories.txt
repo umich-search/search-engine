@@ -1,3 +1,0 @@
-/Users/andrewjiang/Desktop/eecs440/search-engine/index/CMakeFiles/rebuild_cache.dir
-/Users/andrewjiang/Desktop/eecs440/search-engine/index/CMakeFiles/edit_cache.dir
-/Users/andrewjiang/Desktop/eecs440/search-engine/index/CMakeFiles/search_engine.dir
