@@ -347,15 +347,7 @@ TermPostingListRaw FileManager::GetTermList( const char * term, size_t chunkInde
     }
 
 // May return refernece
-<<<<<<< HEAD
-<<<<<<< HEAD
 TermPostingListRaw FileManager::GetTermListCurrMap( const char * term, size_t chunkIndex ) 
-=======
-TermPostingListRaw FileManager::GetCachedTermList( const char * term, size_t chunkIndex ) 
->>>>>>> fe54b22 (Refind term list every next() in ISRWord)
-=======
-TermPostingListRaw FileManager::GetTermListCurrMap( const char * term, size_t chunkIndex ) 
->>>>>>> 478486e (1)
     {
     if( chunkIndex == -1 ) 
         {
@@ -650,7 +642,11 @@ void FileManager::unmapMetadata( )
 =======
     if ( !chunksMetadata )
         {
+<<<<<<< HEAD
 >>>>>>> 89861d6 (debug)
+=======
+        std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
+>>>>>>> 8ad101e (dbg)
         munmap( ( void * )chunksMetadata, chunksMetadataSize );
         chunksMetadata = nullptr;
         chunksMetadataSize = 0;
@@ -666,7 +662,11 @@ void FileManager::unmapChunk( )
 =======
     if ( !endDocListBlob )
         {
+<<<<<<< HEAD
 >>>>>>> 89861d6 (debug)
+=======
+        std::cout << "Unmap chunks of size " << chunkSize << std::endl;
+>>>>>>> 8ad101e (dbg)
         munmap( ( void * )endDocListBlob, chunkSize );
         endDocListBlob = nullptr;
         termIndexBlob = nullptr;
@@ -689,7 +689,11 @@ void FileManager::unmapDocs( )
 =======
     if ( !docsBlob )
         {
+<<<<<<< HEAD
 >>>>>>> 89861d6 (debug)
+=======
+        std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
+>>>>>>> 8ad101e (dbg)
         munmap( ( void * )docsBlob, docsBlobSize );
         docsBlob = nullptr;
         docsBlobSize = 0;
