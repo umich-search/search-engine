@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "constraint_solver.h"
-#include "abstractISR.h"
-#include "../index/include/IndexConstructor.h"
-#include "../index/include/Dictionary.h"
-#include "../utility/include/mString.h"
+#include "../include/constraint_solver.h"
+#include "../include/abstractISR.h"
+#include "../../index/include/IndexConstructor.h"
+#include "../../utility/include/mString.h"
 #include <filesystem>
 #include <string>
 #define ASSERT(left,operator,right) { if(!((left) operator (right))){ std::cerr << "ASSERT FAILED: " << #left << #operator << #right << " @ " << __FILE__ << " (" << __LINE__ << "). " << #left << "=" << (left) << "; " << #right << "=" << (right) << std::endl; } }
@@ -13,7 +12,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
    filesystem::remove_all(CHUNK_DIRECTORY);
    filesystem::create_directory(CHUNK_DIRECTORY);
-
+   int doccount = 0;
    ifstream docs;
    docs.open("testdoc.txt");
    IndexConstructor ic(0);
@@ -28,6 +27,7 @@ int main(int argc, char *argv[]) {
       else if (charr == '/') 
          {
          ic.Insert("cat_title", "cat.com");
+         doccount++;
          // cout<<"URL Inserted!\n";
          }
       else if (charr != '\t')
@@ -39,12 +39,12 @@ int main(int argc, char *argv[]) {
          String term(term0);
          ic.Insert(term, Body);
          // cout<<"Inserted "<<term0<<"\n";
-         // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
+         // // std::cout << "Metadta chunk ends in TEST>CPP: " << std::endl;
          ::vector<Location> chunkEnds = ic.fileManager.getChunkEndLocations();
          // for( unsigned int i = 0; i < chunkEnds.size(); ++i) {
-         //    std::cout << chunkEnds[i] ;
+         //    // std::cout << chunkEnds[i] ;
          // }
-         // std::cout << std::endl;
+         // // std::cout << std::endl;
          }
       }
    ic.FinishConstruction();
@@ -63,9 +63,9 @@ int main(int argc, char *argv[]) {
    ISRWord *word_brown = dict.OpenISRWord(brown);
    ISRWord *word_fox = dict.OpenISRWord(fox);
 
-   //std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   //// std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
    // while(word_quick->Next()) {
-   //    std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
+   //    // std::cout << word_quick->GetCurrentPost()->GetStartLocation() << std::endl;
    // }
 
    Post* res = nullptr;
@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // [0,1,2,3,4]
+   // (0,0,3)(1,5,10)(2,12,16)(3,18,22)(4,24,26)
    res_ptr = ConstraintSolver(EndDoc, q1);
    ::vector<Match*> result1 = *res_ptr;
    for (unsigned i = 0; i < result1.size(); ++i)
@@ -110,23 +110,18 @@ int main(int argc, char *argv[]) {
    res = q2->Seek(0);
    ASSERT(res->GetStartLocation(), ==, 5);
    ASSERT(res->GetEndLocation(), ==, 7);
-   delete res;
    res = q2->Seek(4);
    ASSERT(res->GetStartLocation(), ==, 5);
    ASSERT(res->GetEndLocation(), ==, 7);
-   delete res;
    res = q2->Seek(6);
    ASSERT(res->GetStartLocation(), ==, 7);
    ASSERT(res->GetEndLocation(), ==, 9);
-   delete res;
    res = q2->Seek(7);
    ASSERT(res->GetStartLocation(), ==, 7);
    ASSERT(res->GetEndLocation(), ==, 9);
-   delete res;
    res = q2->Seek(9);
    ASSERT(res->GetStartLocation(), ==, 19);
    ASSERT(res->GetEndLocation(), ==, 21);
-   delete res;
    res = q2->Seek(20);
    ASSERT(res, ==, nullptr);
 
@@ -151,30 +146,25 @@ int main(int argc, char *argv[]) {
    res = q3->Seek(0);
    ASSERT(res->GetStartLocation(), ==, 0);
    ASSERT(res->GetEndLocation(), ==, 2);
-   delete res;
    res = q3->Seek(4);
    ASSERT(res->GetStartLocation(), ==, 12);
    ASSERT(res->GetEndLocation(), ==, 14);
-   delete res;
    res = q3->Seek(12);
    ASSERT(res->GetStartLocation(), ==, 12);
    ASSERT(res->GetEndLocation(), ==, 14);
-   delete res;
    res = q3->Seek(13);
    ASSERT(res->GetStartLocation(), ==, 14);
    ASSERT(res->GetEndLocation(), ==, 15);
-   delete res;
    res = q3->Seek(15);
    ASSERT(res->GetStartLocation(), ==, 18);
    ASSERT(res->GetEndLocation(), ==, 19);
-   delete res;
-   res = q2->Seek(19);
+   res = q3->Seek(19);
    ASSERT(res, ==, nullptr);
-   res = q2->Seek(29);
+   res = q3->Seek(29);
    ASSERT(res, ==, nullptr);
 
    cout<<"constraint solver output: (see comment under line " << __LINE__ << " for correct output)"<<endl;
-   // [0,2,3]
+   // (0,0,3)(2,12,16)(3,18,22)
    res_ptr = ConstraintSolver(EndDoc, q3);
    ::vector<Match*> result3 = *res_ptr;
    for (unsigned i = 0; i < result3.size(); ++i)
@@ -183,8 +173,6 @@ int main(int argc, char *argv[]) {
       delete result3[i];
       }
    delete res_ptr;
-
-
 
 // // query 4: quick
 //    ISR *terms_q4[] = {word_quick};
@@ -196,13 +184,12 @@ int main(int argc, char *argv[]) {
 //       cout << result4[i]->GetStartLocation() << " " << result4[i]->GetEndLocation() << endl;
 //       delete result4[i];
 //       }
-
    // delete(result1);
    // delete(result2);
    // delete(result3);
-   delete(q1);
-   delete (q2);
-   delete (q3);
+   // delete(q1);
+   // delete (q2);
+   // delete (q3);
    //delete (q4);
 
    delete (word_quick);

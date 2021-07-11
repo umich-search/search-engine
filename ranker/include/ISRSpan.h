@@ -53,7 +53,7 @@ public:
         statistics.numOrderSpans = 0;
         statistics.numTopSpans = 0;
         statistics.numShortSpans = 0;
-        statistics.numFrequentWords = 0;
+        // statistics.numFrequentWords = 0;
         }
 
     //Move the rarest term to the next occurrence

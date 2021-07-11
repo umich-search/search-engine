@@ -61,6 +61,10 @@ class FileManager
     static int writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname );
     static int writeMetadataToFile(w_Occurence numWords, w_Occurence numUniqueWords, d_Occurence numDocs, Location endLocation, size_t numChunks, const char * pathname, const char * prevMetadata);
 
+      // unmap previously mapped files
+      void unmapMetadata( );
+      void unmapChunk( );
+      void unmapDocs( );
 
 <<<<<<< HEAD
 public:
@@ -82,17 +86,24 @@ public:
       SerialEndDocs * endDocListBlob;
       ChunksMetadata * chunksMetadata;
       const char * docsBlob;
-      void * chunkDetails;
+      // void * chunkDetails;
       size_t threadID;
+
+      size_t chunksMetadataSize;  // size of the metadata file to unmap
+      size_t chunkSize;  // size of the chunk to unmap
+      size_t docsBlobSize;  // size of the document to unmap
       
       // constructor
       FileManager( size_t thread ) 
+         : termIndexBlob( nullptr ), endDocListBlob( nullptr ), chunksMetadata( nullptr ), docsBlob( nullptr ),
+         threadID( thread ), chunksMetadataSize( 0 ), chunkSize( 0 ), docsBlobSize( 0 ) 
          {
-         threadID = thread;
+         // threadID = thread;
          ReadMetadata( );
          }
 >>>>>>> 9102d46 (added some prints)
 
+<<<<<<< HEAD
     static int WriteChunk(SharedPointer<TermHash> termIndex, 
                   SharedPointer<EndDocPostingList> endDocList,
                   w_Occurence numWords,
@@ -125,3 +136,49 @@ public:
     // get vector of total doc count up to chunk
     ::vector<d_Occurence> getDocCountsAfterChunk();
 };
+=======
+      static int WriteChunk( SharedPointer< TermHash > termIndex, 
+                     SharedPointer< EndDocPostingList > endDocList,
+                     w_Occurence numWords,
+                     w_Occurence numUniqueWords, 
+                     d_Occurence numDocs, 
+                     Location endLocation,
+                     ::vector< SharedPointer< DocumentDetails > > docDetails,
+                     size_t chunkIndex,
+                     size_t threadID );
+      // Bring chunk into memory
+      int ReadChunk( Offset chunkIndex );
+      // Bring documents into memory
+      int ReadDocuments( Offset docsChunkIndex );
+      // Returns term list given term and optional chunk_path
+      TermPostingListRaw GetTermList( const char* term , size_t chunkIndex = 0 );
+<<<<<<< HEAD
+<<<<<<< HEAD
+      TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ); 
+=======
+      TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ) 
+>>>>>>> fe54b22 (Refind term list every next() in ISRWord)
+=======
+      TermPostingListRaw GetTermListCurrMap( const char * term, size_t chunkIndex ); 
+>>>>>>> 478486e (1)
+
+      // Returns end doc list given term and optional chunk_path
+      EndDocPostingListRaw GetEndDocList( size_t chunkIndex = 0 );
+      EndDocPostingListRaw GetEndDocListCurrMap( size_t chunkIndex ); 
+
+      // Returns document details of doc index
+      DocumentDetails GetDocumentDetails( Offset docIndex, Offset docsChunkIndex );
+      // Get the number of chunks in the index
+      Offset getNumChunks( );
+      // Get total number of words in index
+      w_Occurence getIndexWords( );
+      // get end location of index
+      Location getIndexEndLocation( );
+      // get number of documents in index
+      d_Occurence getNumDocuments( );
+      // get vector of chunk endlocations
+      ::vector<Location> getChunkEndLocations( );
+      // get vector of total doc count up to chunk
+      ::vector<d_Occurence> getDocCountsAfterChunk( );
+   };
+>>>>>>> 85cfbcc (Refind term list every next() in ISRWord)

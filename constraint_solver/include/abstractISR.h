@@ -1,8 +1,8 @@
 // Abstract ISR declaration.
-#include "Dictionary.h"
-#include "ISR.h"
-#include "Post.h"
-#include "PostingList.h"
+#include "../../index/include/Dictionary.h"
+#include "../../index/include/ISR.h"
+#include "../../index/include/Post.h"
+#include "../../index/include/PostingList.h"
 #pragma once
 #define MAX_SIZE 18446744073709551615
 
@@ -38,6 +38,9 @@ class ISROr: public ISR
 
       Post *NextEndDoc();
 
+      // get current post
+      Post *GetCurrentPost( );
+
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
@@ -48,6 +51,8 @@ class ISROr: public ISR
 
    private:
       unsigned nearestTerm;
+      Post currPost;  // to store stack return value
+
       // nearStartLocation and nearestEndLocation are
       // the start and end of the nearestTerm.
       Location nearestStartLocation, nearestEndLocation;
@@ -59,7 +64,7 @@ class ISROr: public ISR
         weightAll: 10,
         weightMost: 10,
         weightSome: 10
-    };
+   };
    };
 
 class ISRAnd: public ISR
@@ -85,6 +90,9 @@ class ISRAnd: public ISR
 
       Post *NextEndDoc();
 
+      // get current post
+      Post *GetCurrentPost( );
+
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
@@ -96,6 +104,8 @@ class ISRAnd: public ISR
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation, nearestEndLocation;
+      Post currPost;  // used to store stack return value
+
       struct Weights weights {
         weightShortSpan: 5,
         weightOrderSpan: 2,
@@ -128,6 +138,9 @@ class ISRPhrase: public ISR
 
       Post *NextEndDoc();
 
+      // get current post
+      Post *GetCurrentPost( );
+
       ISR **GetTerms();
 
       int GetTermNum() { return this->NumberOfTerms; }
@@ -139,6 +152,8 @@ class ISRPhrase: public ISR
    private:
       unsigned nearestTerm, farthestTerm;
       Location nearestStartLocation;
+      Post currPost;  // store stack return value
+
       struct Weights weights {
         weightShortSpan: 1,
         weightOrderSpan: 1,

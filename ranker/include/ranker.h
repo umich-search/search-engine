@@ -41,6 +41,8 @@ const float dynamic_weight = 0.9;
 ::vector<url_score> getHighest(::vector<Match*>* matches, ISR* queryRoot);
 };
 
+float getDynamic(Match* document, ISR* queryRoot);
+
 std::string serializeUrlScore( url_score *us );
 void freeResults( ::vector< url_score * >& v );
 

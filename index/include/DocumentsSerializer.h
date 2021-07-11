@@ -112,7 +112,7 @@ class DocumentFile
          int f = open( filename, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );  // if file not exist, create it
          if ( f == -1)
             {
-            std::cout << "Failed to open file: " << filename << ", with error number " << errno << std::endl;
+            // std::cout << "Failed to open file: " << filename << ", with error number " << errno << std::endl;
             }
          size_t fileSize = DocumentBlob::BytesRequired( docs );
          ftruncate( f, fileSize );

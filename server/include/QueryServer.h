@@ -15,25 +15,39 @@
 #include "ThreadPool.h"
 #include "Concurrency.h"
 
-#define MAX_MESSAGE_SIZE 512
+#define MAX_MESSAGE_SIZE 10240
 
-const size_t NUM_RANKERS = 1;
+const size_t NUM_RANKERS = 9;
 const size_t MAX_ATTEMPTS = 10;
 
 static const char *RANKER_HOST[ NUM_RANKERS ] = 
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         // "35.202.123.51",
 >>>>>>> 2286fb0 (cloud debugging in process)
         //"35.202.123.51",
+=======
+        "35.221.49.174",
+        "35.230.186.30",
+        "34.68.201.74",
+        "104.197.37.30",
+        "35.199.41.233",
+        "34.66.107.136",
+        "35.236.254.45",
+        // "104.198.78.118",
+        "35.193.89.179",
+        "34.86.92.34"
+        // "35.193.89.179",
+>>>>>>> 1c3b5d4 (parent 49d653174ad1238956881134bb20bb3caad4fb23)
         // "104.197.37.30",
         // "146.148.73.38",
         // "34.69.231.181",
         // "34.66.107.136",
         // "34.68.201.74",
         // "35.188.164.185",
-        // "35.221.27.146",
+        // "34.86.92.34",
         // "35.199.41.233",
         // "35.245.62.74",
         // "34.86.92.34",
@@ -246,6 +260,7 @@ class QueryServer : public ThreadPool
                 }
 
             buf[ cumsum ] = 0;
+            std::cout << std::endl << "Buffer received: length " << cumsum << std::endl << buf << std::endl << std::endl;
             return std::string( buf, cumsum );
             }
 
@@ -255,6 +270,7 @@ class QueryServer : public ThreadPool
             int sockFD = sendQuery( machineID, query );
             std::cout << "Waiting for response from machine: " << machineID << std::endl;
             std::string response = getQueryResponse( sockFD );
+            std::cout << "Response: " << response << std::endl;
             close( sockFD );
             ::vector< url_score > scores = deserializeScores( response );
             std::cout << "Rank received: \n";

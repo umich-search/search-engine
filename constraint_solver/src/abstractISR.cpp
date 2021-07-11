@@ -1,11 +1,10 @@
 // Abstract ISR definition.
 #include<limits>
-#include "Dictionary.h"
-#include "abstractISR.h"
+#include "../include/abstractISR.h"
 
-// // FOR TEST ONLY!!!
-// #include<iostream>
-// using namespace std;
+// FOR TEST ONLY!!!
+#include<iostream>
+using namespace std;
 
 Location max( Location locx, Location locy )
    {
@@ -15,7 +14,8 @@ Location max( Location locx, Location locy )
 ISROr::ISROr( ISR **Terms, unsigned NumberOfTerms ) 
    : Terms( Terms ), NumberOfTerms( NumberOfTerms ), 
       nearestTerm( 0 ), 
-      nearestStartLocation( 0 ), nearestEndLocation( 0 )
+      nearestStartLocation( 0 ), nearestEndLocation( 0 ),
+      currPost( 0 )
    {
    }
 
@@ -44,39 +44,46 @@ Post* ISROr::Seek( Location target )
    // The document is the document containing the nearest term.
    
    // return (start, end) of the match
-   //std::cout<< "Entered ISROr Seek" << std::endl;
+   //// std::// std::cout<< "Entered ISROr Seek" << std::endl;
    Location minLoc = SIZE_MAX;
    Post* firstPost = nullptr;
+
+   // std::// std::cout << "ISROr::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
-      // std::cout << "Term " << i << std::endl;
+      // // std::// std::cout << "Term " << i << std::endl;
       ISR* Term = *( Terms + i ); 
       Post* nextPost = Term->Seek( target );
       // this term has no next match
       if ( !nextPost )   // there is no term after the target 
          {
-          //std::cout << "skipped" << std::endl;
+          //// std::// std::cout << "skipped" << std::endl;
          continue;
          }
       Location nextLocation = nextPost->GetStartLocation( );
-      // std::cout << nextLocation << std::endl;
+      // // std::// std::cout << nextLocation << std::endl;
       if ( nextLocation < minLoc )
          {
-         //std::cout << "hehe" << std:: endl;
+         //// std::// std::cout << "hehe" << std:: endl;
          nearestTerm = i;
-         firstPost = nextPost;
+         delete firstPost;  // delete nullptr is allowed
+         firstPost = new Post( *nextPost );
          minLoc = nextLocation;
          }
       }
-  // std::cout << nearestTerm << std::endl;
+   // std::// std::cout << "ISROr::Seek(): nearestTerm = " << nearestTerm << std::endl;
    if ( firstPost )
       {
       nearestStartLocation = firstPost->GetStartLocation( );
       nearestEndLocation = firstPost->GetEndLocation( ); 
+      currPost = *firstPost;
+      delete firstPost;
+      // std::// std::cout << "ISROr::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
+      // // std::// std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
+      return &currPost;
       }
-   //std::cout << nearestStartLocation << " " << nearestEndLocation << std::endl;
-   std::cout << "ISROR::Seek: return with start, end = " << firstPost->GetStartLocation( ) << ' ' << firstPost->GetEndLocation( ) << std::endl;
-   return new Post( firstPost->GetStartLocation( ), firstPost->GetEndLocation( ) );
+   else
+      return nullptr;
    }
 
 Post* ISROr::Next( )
@@ -108,6 +115,7 @@ Post* ISROr::Next( )
 
    // Post* nearestMatch = new Post(minLoc, nearestEndLocation);
    // return nearestMatch;
+   // std::// std::cout << "********* ISROr::Next() calls ISROr::Seek() *********** \n";
    return ISROr::Seek( nearestStartLocation + 1 );
    }
 
@@ -128,12 +136,16 @@ Post* ISROr::Next( )
     return nullptr;
     }
 
+Post *ISROr::GetCurrentPost(){
+    return &currPost;
+}
+
 ISR **ISROr::GetTerms( )
    {
    return this->Terms;
    }
 
-float ISROr::GetCombinedScore( vector< float > scores )
+float ISROr::GetCombinedScore( ::vector< float > scores )
    {
    float res = 0;
    for ( size_t i = 0; i < scores.size(); ++i )
@@ -144,7 +156,7 @@ float ISROr::GetCombinedScore( vector< float > scores )
    }
 
 ISRAnd::ISRAnd( ISR **Terms, unsigned NumberOfTerms, Dictionary* dict ) 
-   : Terms(Terms), NumberOfTerms(NumberOfTerms) 
+   : Terms(Terms), NumberOfTerms(NumberOfTerms), currPost( 0 )
    {
    EndDoc = dict->OpenISREndDoc( );
    nearestTerm = 0;
@@ -181,8 +193,10 @@ Post* ISRAnd::Seek( Location target )
    // 4. If any term is past the document end, return to
    // step 2.
    // 5. If any ISR reaches the end, there is no match.
-   //std::cout<< "Entered ISRAnd Seek" << std::endl;
+   //// std::// std::cout<< "Entered ISRAnd Seek" << std::endl;
+   // // std::cout<<"seek initial enddocloc: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
    Location minLoc = SIZE_MAX, maxLoc = 0;
+   std::cout << "ISRAnd::Seek(): searching terms " << NumberOfTerms << " for target " << target << std::endl;
    for ( size_t i = 0; i < NumberOfTerms; ++i )
       {
       ISR *Term = *( Terms + i );
@@ -199,50 +213,144 @@ Post* ISRAnd::Seek( Location target )
          nearestStartLocation = nextStartLocation;
          nearestEndLocation = nextEndLocation;
          }
-      if ( nextEndLocation > maxLoc ) // what is farthest term? when to use it?
+      if ( nextEndLocation > maxLoc )
          {
          farthestTerm = i;
          maxLoc = nextEndLocation;
          }
       }
-      //std::cout<<nearestTerm<<" " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+<<<<<<< HEAD
+<<<<<<< HEAD
+   std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      std::// std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   // // std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+   std::cout<<nearestTerm<<" xxx " << minLoc << " " << nearestStartLocation << " " << nearestEndLocation << " " << farthestTerm << " " << maxLoc << std::endl;
+   std::cout<<"enddocloc before do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
+   EndDoc->Seek(maxLoc);   // adding this line somehow works
    do
       {
       // 2. Move the document end ISR to just past the furthest
-      // word, then calculate the document begin location.   
-      // TODO: whether +1 or not, whether docStartLocation is the actual case or -1
-      Post* endDoc = EndDoc->Seek( maxLoc );
+      // word, then calculate the document begin location.
+<<<<<<< HEAD
+<<<<<<< HEAD
+      std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      // std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      // std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+      std::cout<<"Do while start with maxloc = "<<maxLoc<<"!\n";
+      std::cout<<"enddocloc entering do-while: "<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+      std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
+      while (EndDoc->GetCurrentPost()->GetStartLocation() < maxLoc)
+         {
+         if (!EndDoc->Next())
+            break;
+         }
+<<<<<<< HEAD
+<<<<<<< HEAD
+      std::cout<< "after moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+=======
+      // std::cout<< "before moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+      std::cout<< "after moving" << EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+>>>>>>> f8fca50 (dbg)
+
+      Post* endDoc = EndDoc->GetCurrentPost();
+      // Post* endDoc = EndDoc->Seek( maxLoc );
+
       Location docEndLocation = endDoc->GetEndLocation( );
-      // TODO: doc length
+<<<<<<< HEAD
+<<<<<<< HEAD
+      std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+=======
+      // std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+      std::cout<<"docendloc: "<<docEndLocation<<';'<<endl;
+>>>>>>> f8fca50 (dbg)
       Location docStartLocation = docEndLocation - EndDoc->GetDocumentLength( );
-      //std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
+      std::cout<<docStartLocation<< "---"<<docEndLocation<<std::endl;
       minLoc = SIZE_MAX;
       maxLoc = 0;
 
       // 3. Seek all the other terms to past the document begin.
       bool flag = false;   // check if any term is past the enddoc
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
-         Post *nextPost = Term->Seek(max(docStartLocation, target));
+         ISR *Term = *( Terms + i );
+<<<<<<< HEAD
+<<<<<<< HEAD
+         std::cout<<"Term "<<i<<endl;
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+=======
+         // std::cout<<"Term "<<i<<endl;
+         // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+         std::cout<<"Term "<<i<<endl;
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+         while (Term->GetCurrentPost()->GetStartLocation() < target || Term->GetCurrentPost()->GetStartLocation() < docStartLocation)
+            {
+            std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> f8fca50 (dbg)
+            if (!Term->Next())
+               {
+               std::cout << "term exhausts\n";
+               break;
+               }
+<<<<<<< HEAD
+<<<<<<< HEAD
+            std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+=======
+            // std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         // std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> 4971cbc (dbg)
+=======
+            std::cout<<EndDoc->GetCurrentPost()->GetStartLocation()<<endl;
+            }
+         std::cout<<Term->GetCurrentPost()->GetStartLocation()<<", target = "<<target<<", docstart = "<<docStartLocation<<endl;
+>>>>>>> f8fca50 (dbg)
+         Post *nextPost = Term->GetCurrentPost();
+         // Post *nextPost = Term->Seek( max( docStartLocation, target ) );
+
          // If any ISR reaches the end, there is no match.
-         if (!nextPost)
+         if ( !nextPost )
             return nullptr;
-         Location nextStartLocation = nextPost->GetStartLocation();
-         Location nextEndLocation = nextPost->GetEndLocation();
-         if (nextStartLocation < minLoc)
+         Location nextStartLocation = nextPost->GetStartLocation( );
+         Location nextEndLocation = nextPost->GetEndLocation( );
+         if ( nextStartLocation < minLoc )
             {
             nearestTerm = i;
             minLoc = nextStartLocation;
             nearestStartLocation = nextStartLocation;
             nearestEndLocation = nextEndLocation;
             }
-         if (nextEndLocation > maxLoc)
+         if ( nextEndLocation > maxLoc )
             {
             farthestTerm = i;
             maxLoc = nextEndLocation;
             // 4. If any term is past the document end, return to step 2.
-            if (maxLoc > docEndLocation)
+            if ( maxLoc > docEndLocation )
                {
                flag = true;
                break;
@@ -251,13 +359,16 @@ Post* ISRAnd::Seek( Location target )
          }
       if ( flag )
          continue;
-      Post* nearestMatch = new Post( minLoc, maxLoc );
-      return nearestMatch;
-      } while ( 1 );
+      currPost.SetLocation( minLoc, maxLoc );
+      std::cout << "ISRAnd::Seek(): result nearestStart, nearestEnd = " << nearestStartLocation << ", " << nearestEndLocation << std::endl << std::endl;
+      return &currPost;
+      } 
+      while ( true );
    }
 
 Post* ISRAnd::Next( )
    {
+   // std::// std::cout << "********* ISRAnd::Next() calls ISRAnd::Seek() *********** \n";
    return ISRAnd::Seek( nearestStartLocation + 1 );
    }
 
@@ -278,12 +389,16 @@ Post* ISRAnd::NextEndDoc()
    return nullptr;
    }
 
+Post *ISRAnd::GetCurrentPost(){
+    return &currPost;
+}
+
 ISR **ISRAnd::GetTerms()
    {
    return this->Terms;
    }
 
-float ISRAnd::GetCombinedScore(vector<float> scores)
+float ISRAnd::GetCombinedScore(::vector<float> scores)
    {
    float res = 1;
    for ( size_t i = 0; i < scores.size(); ++i )
@@ -293,7 +408,9 @@ float ISRAnd::GetCombinedScore(vector<float> scores)
    return res;
    }
 
-ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) : Terms(Terms), NumberOfTerms(NumberOfTerms), nearestStartLocation(0)
+ISRPhrase::ISRPhrase( ISR **Terms, unsigned NumberOfTerms ) 
+   : Terms( Terms ), NumberOfTerms( NumberOfTerms ), 
+   nearestStartLocation( 0 ), currPost( 0 )
    {
    }
 
@@ -330,35 +447,35 @@ Post* ISRPhrase::Seek( Location target )
    // used algorithm on textbook
    do
       {
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
-         Post* nextPost = Term->Seek(target);
-         if (!nextPost)
+         ISR *Term = *( Terms + i );
+         Post* nextPost = Term->Seek( target );
+         if ( !nextPost )
             return nullptr;
          else
-            target = nextPost->GetStartLocation() + 1;
+            target = nextPost->GetStartLocation( ) + 1;
          }
       Location nextStartLocation = target - NumberOfTerms;
       bool flag = 0;
-      for (size_t i = 0; i < NumberOfTerms; ++i)
+      for ( size_t i = 0; i < NumberOfTerms; ++i )
          {
-         ISR *Term = *(Terms + i);
+         ISR *Term = *( Terms + i );
          Location desiredLocation = nextStartLocation + i;
-         if (Term->Seek(desiredLocation)->GetStartLocation() != desiredLocation)
+         if ( Term->Seek( desiredLocation )->GetStartLocation( ) != desiredLocation )
             {
             target = nextStartLocation + 1;
             flag = 1;
             break;
             }
          }
-      if (flag)
+      if ( flag )
          continue;
       nearestStartLocation = nextStartLocation;
-      //cout<<nearestStartLocation<<' '<< nextStartLocation + NumberOfTerms - 1<<endl;
-      Post* nearestMatch = new Post(nearestStartLocation, nextStartLocation + NumberOfTerms - 1 );
-      return nearestMatch;
-      } while (1);
+      //// std::cout<<nearestStartLocation<<' '<< nextStartLocation + NumberOfTerms - 1<<endl;
+      currPost.SetLocation( nearestStartLocation, nextStartLocation + NumberOfTerms - 1 );
+      return &currPost;
+      } while ( true );
    }
 
 Post* ISRPhrase::Next( )
@@ -366,6 +483,10 @@ Post* ISRPhrase::Next( )
    // Finds overlapping phrase matches.
    return Seek( nearestStartLocation + 1 );
    }
+
+Post *ISRPhrase::GetCurrentPost(){
+    return &currPost;
+}
 
 // Post* ISRPhrase::NextDocument( )
 //    {

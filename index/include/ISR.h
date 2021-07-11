@@ -18,7 +18,70 @@ struct Match
    {
    Offset id;
    Location start, end;
+<<<<<<< HEAD
    Match(Offset d, Location s, Location e): id(d), start(s), end(e){}
+=======
+   Match( Offset d, Location s, Location e ): id( d ), start( s ), end( e )
+      {
+      }
+   };
+
+struct Weights 
+   {
+   float weightShortSpan;
+   float weightOrderSpan;
+   float weightPhrase;
+   float weightTopSpan;
+   float weightAll;
+   float weightMost;
+   float weightSome;
+   };
+
+class ISR 
+   {
+   public:
+      //Get post of next term
+      virtual Post *Next( ) = 0;
+
+      // Get post of next endDoc
+      virtual Post *NextEndDoc( ) = 0;
+
+      // Get the first post after the target
+      virtual Post *Seek( Location target ) = 0;
+
+      // Get position of first term
+      virtual Location GetStartLocation( ) = 0;
+
+      // Get position of last term
+      virtual Location GetEndLocation( ) = 0;
+
+      // get current post
+      virtual Post *GetCurrentPost( ) = 0;
+
+      // Get Terms data of an ISR
+      virtual ISR **GetTerms( ) = 0;
+
+      // Get number of Terms of and ISR
+      virtual int GetTermNum( ) = 0;
+
+      // Calculate according to heuristics
+      float GetHeuristicScore( Match *document );
+
+      virtual Weights *getWeights( ) = 0;
+
+      virtual float GetCombinedScore( vector<float> scores ) = 0;
+
+   protected:
+      int num_short_spans = 0;
+      int num_inorder_spans = 0;
+      int num_exact_phrase = 0;
+      int num_spans_near_top = 0;
+      bool all_words_freq = false;
+      bool most_words_freq = false;
+      bool some_words_freq = false;
+      const int freq_threshold = 3;
+
+>>>>>>> 85a9810 (reduced usage of seek in ISRAnd::Seek())
    };
 
 struct Weights {
@@ -88,8 +151,9 @@ public:
 class ISRWord : public ISR 
    {
    public:
-      ISRWord( FileManager fileManager, const char* word ) : manager( fileManager ), currChunk( 0 ), currIndex( 0 ),
-         currPost( 0 ), Doc( 0 ) 
+      ISRWord( FileManager * fileManager, const char* word ) 
+         : manager( fileManager ), currChunk( 0 ), currIndex( 0 ), absoluteIndex(0),
+         currPost( 0 ), nextPost( 0 ), Doc( 0 ) 
          {
          char* word_copy = new char[ strlen( word ) ];
          strcpy( word_copy, word );
@@ -105,6 +169,8 @@ class ISRWord : public ISR
 
       // Returns next post
       Post *Next( );
+
+      Post *NextNoUpdate( );
 
       Post *NextEndDoc( );
 
@@ -140,15 +206,17 @@ class ISRWord : public ISR
       // debug
       void printTerm( )
          {
-         std::cout << term << std::endl;
+         // std::cout << term << std::endl;
          }
 
    private:
-      FileManager manager;
+      FileManager *manager;
       const char *term;
       size_t currChunk;
       Offset currIndex;
+      Offset absoluteIndex;
       Post currPost;
+      Post nextPost;
       Post Doc;
       TermPostingListRaw termPostingListRaw;
       struct Weights weights {
@@ -165,8 +233,8 @@ class ISRWord : public ISR
 class ISREndDoc : public ISR 
    {
    public:
-      ISREndDoc( FileManager filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ),
-         endDocPostingListRaw( manager.GetEndDocList( 0 ) ),
+      ISREndDoc( FileManager *filemanager ) : manager( filemanager ), currChunk( 0 ),currIndex( 0 ), absoluteIndex(0),
+         endDocPostingListRaw( manager->GetEndDocList( 0 ) ),
          currPost( 0 )
          {
          Seek( 0 );
@@ -182,8 +250,15 @@ class ISREndDoc : public ISR
 
     Post *NextEndDoc();
 
+<<<<<<< HEAD
     // Get the first post after the target
     Post *Seek(size_t target);
+=======
+      Post *NextNoUpdate();
+
+      // Get the first post after the target
+      Post *Seek( Location target );
+>>>>>>> 614928b (add NextNoUpdate)
 
     // Get position of first term
     Location GetStartLocation();
@@ -221,6 +296,7 @@ class ISREndDoc : public ISR
         std::cout << term << std::endl;
         }
 
+<<<<<<< HEAD
 private:
     FileManager manager;
     const char *term;
@@ -292,3 +368,13 @@ private:
     Post currPost;
     EndDocPostingListRaw endDocPostingListRaw;
 };
+=======
+   private:
+      FileManager *manager;
+      size_t currChunk;
+      Offset currIndex;
+      Offset absoluteIndex;
+      Post currPost;
+      EndDocPostingListRaw endDocPostingListRaw;
+   };
+>>>>>>> 8fe8e36 (Pass filemanager by ptr to ISR)

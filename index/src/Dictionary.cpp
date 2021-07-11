@@ -3,12 +3,12 @@
 ISRWord *Dictionary::OpenISRWord(const char *word) 
     {
     //construct commonHeader
-    return new ISRWord(manager, word);
+    return new ISRWord(&manager, word);
     }
 
 ISREndDoc *Dictionary::OpenISREndDoc() 
     {
-    return new ISREndDoc(manager);
+    return new ISREndDoc(&manager);
     }
 
 Location Dictionary::GetNumberOfWords() 
