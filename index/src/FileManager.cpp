@@ -260,7 +260,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
         return -1;
         }
     size_t fileSize = FileSize( f_chunk );
-    // // std::cout << "FileManager::ReadChunk: Chunk file opened size = " << fileSize << std::endl;
+    std::cout << "FileManager::ReadChunk: Chunk file opened size = " << fileSize << std::endl;
     
     // free previously mapped chunk
     unmapChunk( );
@@ -272,7 +272,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
         // // std::cout << "FileManager::ReadChunk: map failed with errno = " << strerror( errno ) << std::endl;
         throw "Mapping failed";
         }
-    // // std::cout << "FileManager::ReadChunk: Mapped end doc blob, returning with cast" << std::endl;
+    std::cout << "FileManager::ReadChunk: Mapped end doc blob, returning with cast" << std::endl;
 
     chunkSize = fileSize;
     endDocListBlob = ( SerialEndDocs * )blob;
@@ -538,6 +538,7 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
             chunksMetadataSize = 0;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
 >>>>>>> ce70ba1c5420e9dde9b4badb4a72d34c7e9519be
 =======
@@ -546,6 +547,12 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
 =======
             // // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
 >>>>>>> 1c3b5d4 (parent 49d653174ad1238956881134bb20bb3caad4fb23)
+=======
+            // // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
+=======
+            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
+>>>>>>> 89861d6 (debug)
+>>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
@@ -557,7 +564,11 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         }
     else 
         {
+<<<<<<< HEAD
         // // std::cout << "FileManager::ReadMetadata: trying to map the file\n";
+=======
+        std::cout << "FileManager::ReadMetadata: trying to map the file\n";
+>>>>>>> 89861d6 (debug)
         
         // unmap old metadata chunk
         unmapMetadata( );
@@ -568,6 +579,11 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         if ( chunksMetadata == MAP_FAILED ) 
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            chunksMetadata = nullptr;
+            chunksMetadataSize = 0;
+>>>>>>> 89861d6 (debug)
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
 =======
             chunksMetadata = nullptr;
@@ -626,10 +642,15 @@ Location FileManager::getIndexEndLocation() {
 
 void FileManager::unmapMetadata( )
     {
+<<<<<<< HEAD
         return;
     if ( chunksMetadata )
         {
         // // std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
+=======
+    if ( !chunksMetadata )
+        {
+>>>>>>> 89861d6 (debug)
         munmap( ( void * )chunksMetadata, chunksMetadataSize );
         chunksMetadata = nullptr;
         chunksMetadataSize = 0;
@@ -638,9 +659,14 @@ void FileManager::unmapMetadata( )
 
 void FileManager::unmapChunk( )
     {
+<<<<<<< HEAD
     if ( endDocListBlob )
         {
         // // std::cout << "Unmap chunks of size " << chunkSize << std::endl;
+=======
+    if ( !endDocListBlob )
+        {
+>>>>>>> 89861d6 (debug)
         munmap( ( void * )endDocListBlob, chunkSize );
         endDocListBlob = nullptr;
         termIndexBlob = nullptr;
@@ -652,11 +678,18 @@ void FileManager::unmapDocs( )
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9132e39 (unmap back)
+=======
+>>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
     if ( docsBlob )
         {
         // // std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
+=======
+    if ( !docsBlob )
+        {
+>>>>>>> 89861d6 (debug)
         munmap( ( void * )docsBlob, docsBlobSize );
         docsBlob = nullptr;
         docsBlobSize = 0;
@@ -664,6 +697,7 @@ void FileManager::unmapDocs( )
 <<<<<<< HEAD
     }
 =======
+<<<<<<< HEAD
     // if ( docsBlob )
     //     {
     //     // // std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
@@ -675,3 +709,7 @@ void FileManager::unmapDocs( )
 >>>>>>> 9132e39 (unmap back)
     }
 >>>>>>> d91fb91 (rm unmap)
+=======
+    }
+>>>>>>> 89861d6 (debug)
+>>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
