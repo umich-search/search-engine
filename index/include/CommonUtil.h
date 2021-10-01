@@ -54,14 +54,9 @@ static size_t UtfToInt(const uint8_t *buffer) {
 }
 
 // returns number of low bits given total count and number of syncs
-<<<<<<< HEAD
-static size_t getNumLowBits(size_t count, size_t spacing) {
-    size_t leftShift = ( count + spacing - 1 )/ spacing;
-=======
 static size_t getNumLowBits( size_t count, size_t spacing ) 
     {
     size_t leftShift = ( count + spacing - 1 ) / spacing;
->>>>>>> 9102d46 (added some prints)
     int numLowBits=0;
     leftShift--;
     while(leftShift)

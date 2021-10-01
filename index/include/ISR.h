@@ -18,9 +18,6 @@ struct Match
    {
    Offset id;
    Location start, end;
-<<<<<<< HEAD
-   Match(Offset d, Location s, Location e): id(d), start(s), end(e){}
-=======
    Match( Offset d, Location s, Location e ): id( d ), start( s ), end( e )
       {
       }
@@ -81,7 +78,6 @@ class ISR
       bool some_words_freq = false;
       const int freq_threshold = 3;
 
->>>>>>> 85a9810 (reduced usage of seek in ISRAnd::Seek())
    };
 
 struct Weights {
@@ -136,18 +132,6 @@ protected:
 
 };
 
-<<<<<<< HEAD
-class ISRWord : public ISR {
-public:
-    ISRWord(FileManager fileManager, const char* word) : manager(fileManager), currChunk(0), currIndex(0),
-                                                         currPost(0),Doc(0) {
-            char* word_copy = new char[strlen(word)];
-            strcpy (word_copy, word);
-            term = word_copy;
-            // Initalize with term seek to 0
-            Seek(0);
-    }
-=======
 class ISRWord : public ISR 
    {
    public:
@@ -239,7 +223,6 @@ class ISREndDoc : public ISR
          {
          Seek( 0 );
          }
->>>>>>> 6ded0d2 (test cloud index)
 
     ~ISRWord() {
         delete[] term;
@@ -250,15 +233,10 @@ class ISREndDoc : public ISR
 
     Post *NextEndDoc();
 
-<<<<<<< HEAD
-    // Get the first post after the target
-    Post *Seek(size_t target);
-=======
       Post *NextNoUpdate();
 
       // Get the first post after the target
       Post *Seek( Location target );
->>>>>>> 614928b (add NextNoUpdate)
 
     // Get position of first term
     Location GetStartLocation();
@@ -296,7 +274,6 @@ class ISREndDoc : public ISR
         std::cout << term << std::endl;
         }
 
-<<<<<<< HEAD
 private:
     FileManager manager;
     const char *term;
@@ -368,13 +345,3 @@ private:
     Post currPost;
     EndDocPostingListRaw endDocPostingListRaw;
 };
-=======
-   private:
-      FileManager *manager;
-      size_t currChunk;
-      Offset currIndex;
-      Offset absoluteIndex;
-      Post currPost;
-      EndDocPostingListRaw endDocPostingListRaw;
-   };
->>>>>>> 8fe8e36 (Pass filemanager by ptr to ISR)

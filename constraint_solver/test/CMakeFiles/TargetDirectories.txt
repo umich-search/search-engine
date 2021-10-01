@@ -1,3 +1,0 @@
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/test/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/test/CMakeFiles/edit_cache.dir
-/mnt/c/Users/tiger/onedrive/eecs440/search-engine/search-engine/constraint_solver/test/CMakeFiles/search_engine.dir

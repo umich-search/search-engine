@@ -36,8 +36,6 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
                                         SharedPointer<EndDocPostingList>
                                          endDocList, const char *pathname)
     {
-    // << "Writing chunks to file:  " << pathname << std::endl;
-
     void * blob;
     int f_chunk = open( pathname,
                         O_CREAT | O_RDWR,
@@ -45,7 +43,6 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
     
     if ( f_chunk == -1) 
         {
-       // // std::cout << "Failed to open file: " << pathname << ", with error number " << errno << std::endl;
        throw "File open failed";
         }
     
@@ -57,35 +54,27 @@ int FileManager::writePostingListsToFile(SharedPointer<TermHash> termIndex,
     size_t fileSize = endDocEnd + termListSize;
     ftruncate( f_chunk, fileSize );
 
-    blob = ( HashBlob * )mmap( nullptr,
-                                fileSize,
-                                PROT_READ | PROT_WRITE,
-                                MAP_SHARED,
-                                f_chunk,
-                                0);
+    blob = ( HashBlob * )mmap( nullptr,fileSize, PROT_READ | PROT_WRITE, MAP_SHARED, f_chunk, 0);
     
     if (blob == MAP_FAILED ) 
         {
        throw "Mapping failed";
         }
-
     else 
         {
         try 
             {
-            blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
-            blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
+                blob = SerialEndDocs::Write((char*)blob, (char *)blob + endDocEnd, endDocList);
+                blob = HashBlob::Write((HashBlob *)blob, termListSize, termIndex);
             }
         catch (const char* excp)
             {
-            return -1;
+                return -1;
             }
         }
     close(f_chunk);
     return 0;
     }
-
-
 
 int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDetails, const char *pathname ) {
     // << "Writing docs to file:  " << pathname << std::endl;
@@ -99,7 +88,6 @@ int FileManager::writeDocsToFile(::vector<SharedPointer<DocumentDetails>> &docDe
                               S_IRWXU | S_IRWXG | S_IRWXO );
     
     if (f_doc_details == -1) {
-        // // std::cout << "Failed to open file: " << pathname << ", with error number " << errno << std::endl;
         throw "file open failed";
     }
     
@@ -141,7 +129,6 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
                            S_IRWXU | S_IRWXG | S_IRWXO );
 
     if (f_metadata == -1) {
-        // // std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
          throw "file open failed";
     }
 
@@ -168,7 +155,6 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
                            S_IRWXU | S_IRWXG | S_IRWXO );
 
         if (f_metadata == -1) {
-            // // std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
             throw "file open failed";
         }
 
@@ -177,7 +163,6 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
                            O_RDWR,
                            S_IRWXU | S_IRWXG | S_IRWXO );
         if (f_new_metadata == -1) {
-            // // std::cout << "Failed to open file: " << f_metadata << ", with error number " << errno << std::endl;
             throw "file open failed";
         }
         ftruncate(f_metadata, FileSize(f_metadata) + sizeof(Location) + sizeof(d_Occurence));
@@ -206,11 +191,8 @@ int FileManager::writeMetadataToFile(w_Occurence numWords, w_Occurence numUnique
         memcpy(curr + sizeof(Location), (char*)&numDocs, sizeof(d_Occurence));
 
         new_metadata->numChunks = numChunks + 1;
-         close(f_metadata);
-         close(f_new_metadata);
-
-    
-    //return endLocs;
+         lose(f_metadata);
+        close(f_new_metadata);
 
     }
     return 0;
@@ -236,7 +218,6 @@ int FileManager::WriteChunk(SharedPointer<HashTable<String, TermPostingList *>> 
        resolveMetadataPath(numChunks - 1, prevMetadataFile, threadID);
        writePostingListsToFile(termIndex, endDocList, chunkFile);
        writeDocsToFile(docDetails, docsFile);
-       // // std::cout << "writing metadatafile: " << metadataFile << std::endl;
        writeMetadataToFile(numWords, numUniqueWords, numDocs, endLocation, numChunks, metadataFile, prevMetadataFile  );
        return 0;
    }
@@ -250,9 +231,7 @@ int FileManager::ReadChunk( size_t chunkIndex )
         }
     char chunkFile[ MAX_PATHNAME_LENGTH ];
     resolveChunkPath( chunkIndex, chunkFile, threadID );
-    // std::cout << "FileManager::ReadChunk: Path resolve to " << chunkFile << std::endl;
 
-    
     int f_chunk = open( chunkFile, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
     if ( f_chunk == -1 ) 
         {
@@ -306,11 +285,6 @@ int FileManager::ReadDocuments(Offset docsChunkIndex) {
     // map new doc file
     blob = ( HashBlob *)mmap(nullptr, fileSize, PROT_READ, MAP_SHARED, f_doc_chunk, 0);
     if (blob == MAP_FAILED ) {
-<<<<<<< HEAD
-        std::cout << "FileManager::ReadDocuments: blob mapping failed with errno = " << strerror( errno ) << std::endl;
-=======
-        // // std::cout << "FileManager::ReadDocuments: blob mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> 779d9d72ace277a7584ac762729fa72d3a792122
         throw "Mapping failed";
     }
 
@@ -341,7 +315,6 @@ TermPostingListRaw FileManager::GetTermList( const char * term, size_t chunkInde
         }
     else 
         {
-        // // std::cout << "FileManager::GetTermList: Term post list selected and returned\n";
         return TermPostingListRaw( tuple->DynamicSpace );
         }
     }
@@ -366,7 +339,6 @@ TermPostingListRaw FileManager::GetTermListCurrMap( const char * term, size_t ch
         }
     else 
         {
-        // // std::cout << "FileManager::GetTermList: Term post list selected and returned\n";
         return TermPostingListRaw( tuple->DynamicSpace );
         }
     }
@@ -375,16 +347,13 @@ EndDocPostingListRaw FileManager::GetEndDocList( size_t chunkIndex )
     {
     if( chunkIndex >= chunksMetadata->numChunks ) 
         {
-        // // std::cout << "FileManager::GetEndDocList(): chunksMetadata->numChunks " << chunksMetadata->numChunks << std::endl;
         throw "Error: Attempting to read more than available chunks";
         }
-    // // std::cout << "FileManager::GetEndDocList: Reading chunk: " << chunkIndex << std::endl;
     ReadChunk( chunkIndex );
     if( !endDocListBlob ) 
         {
         throw "Error: No chunk has been read";
         }
-    // // std::cout << "Returning raw posting list" << std::endl;
     return EndDocPostingListRaw( endDocListBlob->DynamicSpace );
     }
 
@@ -392,22 +361,16 @@ EndDocPostingListRaw FileManager::GetEndDocListCurrMap( size_t chunkIndex )
     {
     if( chunkIndex >= chunksMetadata->numChunks ) 
         {
-        // // std::cout << "FileManager::GetEndDocList(): chunksMetadata->numChunks " << chunksMetadata->numChunks << std::endl;
         throw "Error: Attempting to read more than available chunks";
         }
-    // // std::cout << "FileManager::GetEndDocList: Reading chunk: " << chunkIndex << std::endl;
     if( !endDocListBlob ) 
         {
         throw "Error: No chunk has been read";
         }
-    // // std::cout << "Returning raw posting list" << std::endl;
     return EndDocPostingListRaw( endDocListBlob->DynamicSpace );
     }
 
 DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChunkIndex) {
-    if (docIndex == 80) {
-        // // std::cout << "" << std::endl;
-    }
     if(docsChunkIndex == -1) {
         throw "Error: No chunk initalized";
     }
@@ -419,20 +382,9 @@ DocumentDetails FileManager::GetDocumentDetails(Offset docIndex, Offset docsChun
     if(docsChunkIndex > 0) {
         normalize = *(d_Occurence *)((chunksMetadata->dynamicSpace + ( docsChunkIndex - 1 ) * (sizeof(Location) + sizeof(d_Occurence))) + sizeof(Location));
     }
-    // // std::cout << "Normalize value: " << normalize << " chunkIndex: " << docsChunkIndex << std::endl;
-    // // std::cout << "requested index::) " << docIndex << " docsBlobSize  " << docsBlobSize << std::endl;
     ::vector<Location> endLocs = getChunkEndLocations();
-    for (size_t i = 0; i < 5; ++i )
-	 {
-		 // // std::cout << endLocs[i] << " ";
-	 }
-    // // std::cout << std::endl;
+
     ::vector<d_Occurence> docCounts = getDocCountsAfterChunk();
-    for ( size_t i = 0; i < 5; ++i )
-    	{
-		// // std::cout << docCounts[i] << " ";
-	}
-    // // std::cout << std::endl;
 
     const char * curr = (docsBlob + DOCUMENT_SIZE * (docIndex - normalize));
     w_Occurence numWords = *(w_Occurence *)curr;  // segfault in indexValidator
@@ -449,20 +401,17 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
     if( chunksMetadata ) {
         return 0;
     }
-    // Use manager idea of num of chunks if no chunk given
     if( givenChunk == -1 ) 
         {
         givenChunk = managerNumChunks;
         }
     char metadataFile[ MAX_PATHNAME_LENGTH ];
-    // // std::cout << "FileManager::ReadMetadata: Allocated metadataFile buffer\n";
     int f_metadata = 0;
 
     // try to open metadata file
     // TODO: Initalize to skip search if num chunks is known
     if( givenChunk != -1 ) 
         {
-        // // std::cout << "FileManager::ReadMetadata: givenChunk is non negative\n";
         resolveMetadataPath( givenChunk, metadataFile, threadID );
         f_metadata = open( metadataFile,
                         O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );
@@ -470,7 +419,6 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         }
     else 
         {
-        // // std::cout << "FileManager::ReadMetadata: given Chunk is -1, finding an existing chunk\n";
         f_metadata = 0;
         size_t cNum = 0;
         while( f_metadata != - 1 ) 
@@ -497,7 +445,6 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
     // fail to open
     if( f_metadata == -1 ) 
         {
-        // // std::cout << "WRITE FAILED" << std::endl;
         std::cerr << "Error openning file " << metadataFile << " with errno = " << strerror( errno ) << std::endl;
         return -1;
         }
@@ -515,36 +462,13 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         
         if ( chunksMetadata == MAP_FAILED ) 
             {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
-=======
+		    std::cout << "map failed with errno = " << strerror(  errno ) << std::endl;
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;s
->>>>>>> 96ef702c8c2da77a868abf8ebdcf61929a70370e
-=======
-            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> d2cb41c (merge conflict)
-=======
+
             chunksMetadata = nullptr;
             chunksMetadataSize = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
             std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> ce70ba1c5420e9dde9b4badb4a72d34c7e9519be
-=======
-            // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> 94b5728 (mute all couts)
-=======
-            // // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> 1c3b5d4 (parent 49d653174ad1238956881134bb20bb3caad4fb23)
-=======
-            // // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
-=======
-            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> 89861d6 (debug)
->>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
+
             throw "Mapping failed";
             }
         chunksMetadata->numWords = 0;
@@ -555,13 +479,7 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         chunksMetadata->numChunks = 0;
         }
     else 
-        {
-<<<<<<< HEAD
-        // // std::cout << "FileManager::ReadMetadata: trying to map the file\n";
-=======
-        std::cout << "FileManager::ReadMetadata: trying to map the file\n";
->>>>>>> 89861d6 (debug)
-        
+        {        
         // unmap old metadata chunk
         unmapMetadata( );
 
@@ -570,22 +488,12 @@ int FileManager::ReadMetadata( Offset givenChunk ) {
         chunksMetadata = ( ChunksMetadata* )mmap( nullptr, chunksMetadataSize, PROT_READ | PROT_WRITE, MAP_SHARED, f_metadata, 0 );
         if ( chunksMetadata == MAP_FAILED ) 
             {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
             chunksMetadata = nullptr;
             chunksMetadataSize = 0;
->>>>>>> 89861d6 (debug)
-            std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
-=======
-            chunksMetadata = nullptr;
-            chunksMetadataSize = 0;
-            // // std::cout << "FileManager::ReadMetadata: chunks metadata mapping failed with errno = " << strerror( errno ) << std::endl;
->>>>>>> 779d9d72ace277a7584ac762729fa72d3a792122
             throw "Mapping failed";
             }
         }
-    // // std::cout << "FileManager::ReadMetadata: metadata file mapped successfully to " << metadataFile << std::endl;
     close( f_metadata );
     return 0;
 }
@@ -634,19 +542,9 @@ Location FileManager::getIndexEndLocation() {
 
 void FileManager::unmapMetadata( )
     {
-<<<<<<< HEAD
-        return;
-    if ( chunksMetadata )
-        {
-        // // std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
-=======
     if ( !chunksMetadata )
         {
-<<<<<<< HEAD
->>>>>>> 89861d6 (debug)
-=======
         std::cout << "Unmap chunks metadata of size " << chunksMetadataSize << std::endl;
->>>>>>> 8ad101e (dbg)
         munmap( ( void * )chunksMetadata, chunksMetadataSize );
         chunksMetadata = nullptr;
         chunksMetadataSize = 0;
@@ -655,18 +553,10 @@ void FileManager::unmapMetadata( )
 
 void FileManager::unmapChunk( )
     {
-<<<<<<< HEAD
-    if ( endDocListBlob )
-        {
-        // // std::cout << "Unmap chunks of size " << chunkSize << std::endl;
-=======
     if ( !endDocListBlob )
         {
-<<<<<<< HEAD
->>>>>>> 89861d6 (debug)
-=======
+
         std::cout << "Unmap chunks of size " << chunkSize << std::endl;
->>>>>>> 8ad101e (dbg)
         munmap( ( void * )endDocListBlob, chunkSize );
         endDocListBlob = nullptr;
         termIndexBlob = nullptr;
@@ -676,44 +566,11 @@ void FileManager::unmapChunk( )
 
 void FileManager::unmapDocs( )
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9132e39 (unmap back)
-=======
->>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
-    if ( docsBlob )
-        {
-        // // std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
-=======
     if ( !docsBlob )
         {
-<<<<<<< HEAD
->>>>>>> 89861d6 (debug)
-=======
         std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
->>>>>>> 8ad101e (dbg)
         munmap( ( void * )docsBlob, docsBlobSize );
         docsBlob = nullptr;
         docsBlobSize = 0;
         }
-<<<<<<< HEAD
     }
-=======
-<<<<<<< HEAD
-    // if ( docsBlob )
-    //     {
-    //     // // std::cout << "Unmap docs of size " << docsBlobSize << std::endl;
-    //     munmap( ( void * )docsBlob, docsBlobSize );
-    //     docsBlob = nullptr;
-    //     docsBlobSize = 0;
-    //     }
-=======
->>>>>>> 9132e39 (unmap back)
-    }
->>>>>>> d91fb91 (rm unmap)
-=======
-    }
->>>>>>> 89861d6 (debug)
->>>>>>> f6efeb2 (Removed server/test/rankerServerTest)
