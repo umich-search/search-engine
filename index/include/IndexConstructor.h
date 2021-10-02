@@ -9,6 +9,8 @@
 
 class IndexConstructor {
 public:
+
+    // Construct with given attributes
     IndexConstructor(w_Occurence uniqueWords, d_Occurence numDocs, w_Occurence numWords, Location firstDocEnd, Location endLocation, Location end, size_t currChunkNum) :
                         fileManager(0),
                         numberOfUniqueWords(uniqueWords),
@@ -23,7 +25,7 @@ public:
                             constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
                             termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
                         }
-    
+    // Construct for default thread
     IndexConstructor(size_t threadID = 0) :
                         fileManager(threadID),
                         numberOfUniqueWords(0),
@@ -35,7 +37,6 @@ public:
                         threadID(threadID),
                         chunkMemoryAlloc(0)
                         {
-                            //std::cout << "Created Index constructor with numDocs: " << numberOfDocuments << " numChunks: " << currentChunkNum << std::endl;
                             endDocPostings = SharedPointer<EndDocPostingList>(new EndDocPostingList(NUM_SYNC_POINTS));
                             constructionData = SharedPointer<HashTable< String, ConstructionData*>>(new HashTable<String, ConstructionData*>());
                             termIndex = SharedPointer<HashTable< String, TermPostingList*>>(new HashTable<String, TermPostingList*>());
@@ -49,7 +50,7 @@ public:
     int FinishConstruction();
 
     
-public:
+private:
     FileManager fileManager;
     SharedPointer<HashTable< String, TermPostingList*>> termIndex;
     SharedPointer<HashTable< String, ConstructionData*>> constructionData;
@@ -64,10 +65,15 @@ public:
     size_t currentChunkNum;
     size_t chunkMemoryAlloc;
     size_t threadID;
+    // Optimize hashtable
     void optimizeIndex();
+    // Create sychrnoization table
     void createSynchronization();
+    // Create new chunk file
     void createNewChunk();
+    // Flush data to disk
     int flushData();
+    // 
     int resolveChunkMem();
 };
 

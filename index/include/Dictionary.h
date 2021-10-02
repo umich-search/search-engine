@@ -41,5 +41,6 @@ private:
     d_Occurence numberOfDocuments;
     // number of words in the index
     w_Occurence numberOfWords;
+    // number of chunks in the directory
     size_t numChunks;
 };

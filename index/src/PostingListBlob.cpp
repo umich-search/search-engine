@@ -111,7 +111,6 @@ Location seekTermTarget(TermPostingListRaw *raw, size_t target, size_t &index, s
                 }
             }
         return -1;
-        //throw "seek out of range";
         }
     catch(char *excp) 
         {
@@ -169,19 +168,15 @@ Location seekEndDocTarget(EndDocPostingListRaw *raw, size_t target, size_t &inde
                     }
                 if(loc >= target) 
                     {
-                    // // std::cout << "Found loc in seekEndDocTarget at, setting index to be: " << i << std::endl;
-
                     index = i;
                     return loc;
                     }
                 }
             }
-        // std::cout << "Throwing seek out of range" << std::endl;
         throw "seek out of range";
         }
     catch(char *excp) 
         {
-        // std::cout << "Unkown error" << std::endl;
         throw "unkown error";
         }
     }

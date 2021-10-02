@@ -35,7 +35,6 @@ struct TermPostingListRaw {
     IPostTerm getPostAt(Offset i);
     // byteAfterPost will return the byte offset of 1 after the requested post
     IPostTerm getPostAt(Offset i, Offset &byteAfterPost);
-    // IPostTerm getPostAt(Offset i, Offset numBytes);
     IPostTerm getPostAtByte(Offset numBytes, Offset &byteAfterPost);
 
 };
@@ -62,7 +61,6 @@ struct EndDocPostingListRaw {
     IPostEndDoc getPostAt(Offset i);
     // byteAfterPost will return the byte offset of 1 after the requested post
     IPostEndDoc getPostAt(Offset i, Offset &byteAfterPost);
-    // IPostTerm getPostAt(Offset i, Offset numBytes);
     IPostTerm getPostAtByte(Offset numBytes, Offset &byteAfterPost);
 
 };

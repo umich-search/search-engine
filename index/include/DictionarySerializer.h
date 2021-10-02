@@ -354,7 +354,6 @@ class HashFile
 
       ~HashFile( )
          {
-         // HashBlob::Discard( blob );
          munmap( blob, blobSize );
          }
    };

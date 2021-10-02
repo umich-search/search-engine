@@ -31,10 +31,12 @@ struct DocumentBlob {
     char URL[MAX_URL_LENGTH];
     char title[MAX_TITLE_LENGTH];
     
+    // get bytes required for document
     static size_t BytesRequired(const SharedPointer<DocumentDetails> doc){
         return 2 * sizeof(Location) + MAX_URL_LENGTH + MAX_TITLE_LENGTH;
     }
     
+    // get bytes required for list of documents
     static size_t BytesRequired(const SharedPointer<::vector<SharedPointer<DocumentDetails>>> docs) {
         size_t bytes = 0;
         for(size_t i = 0; i < docs->size(); ++i) {
@@ -43,6 +45,7 @@ struct DocumentBlob {
         return bytes;
     }
 
+    // write document to buffer
     static char *Write( char *buffer, char *bufferEnd, const SharedPointer<DocumentDetails> doc){
         if ( !doc ) {
             return buffer;
@@ -69,73 +72,3 @@ struct DocumentBlob {
         return buffer + RoundUp( bytes, sizeof( size_t ) );
     }
 };
-/*
-class DocumentFile
-   {
-   private:
-
-      DocumentBlob *blob;
-
-      size_t FileSize( int f )
-         {
-         struct stat fileInfo;
-         fstat( f, &fileInfo );
-         return fileInfo.st_size;
-         }
-
-   public:
-
-      const DocumentBlob *Blob( )
-         {
-         return blob;
-         }
-
-      DocumentFile( const char *filename )
-         {
-         // Open the file for reading, map it, check the header,
-         // and note the blob address.
-
-         int f = open( filename, O_RDONLY, S_IRWXU | S_IRWXG | S_IRWXO );
-         if ( f == -1 )
-            std::cerr << "Error openning file " << filename << " with errno = " << strerror( errno ) << std::endl;
-         size_t fileSize = FileSize( f );
-         blob = ( DocumentBlob * )mmap( nullptr, fileSize,
-            PROT_READ, MAP_SHARED, f, 0 );
-         if ( blob != MAP_FAILED )
-            {
-            }
-         close( f );
-         }
-       
-      DocumentFile( const char *filename, const ::vector<DocumentDetails *> * docs )
-         {
-         int f = open( filename, O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO );  // if file not exist, create it
-         if ( f == -1)
-            {
-            // std::cout << "Failed to open file: " << filename << ", with error number " << errno << std::endl;
-            }
-         size_t fileSize = DocumentBlob::BytesRequired( docs );
-         ftruncate( f, fileSize );
-             char * blobBytes = (char*) blob;
-
-        char * blobEnd = blobBytes + fileSize;
-         blob = ( DocumentBlob * )mmap( nullptr, fileSize,
-            PROT_READ | PROT_WRITE, MAP_SHARED, f, 0 );
-             if ( blob != MAP_FAILED ) {
-                 for(size_t i = 0; i < docs->size(); ++i) {
-                     blobBytes = DocumentBlob::Write(blobBytes, blobEnd, docs->operator[](i));
-                 }
-             }
-             else {
-                std::cerr << "Map failed with errno = " << strerror( errno ) << std::endl;
-                exit(0);
-             }
-             close( f );
-         }
-
-      ~DocumentFile( )
-         {
-         // HashBlob::Discard( blob );
-         }
-   };
-*/

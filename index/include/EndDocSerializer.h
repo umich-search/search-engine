@@ -13,9 +13,10 @@
 
 struct SerialEndDocs {
 public:
-    size_t Length;//
+    size_t Length;
     char DynamicSpace[ Unknown ];
 
+    // Bytes required for EndDoc postings
     static size_t BytesRequired ( const CommonHeader * header) {
         size_t typeSize, numOfOccurenceSize, numOfDocumentSize, termSize;
         typeSize = sizeof(int);
@@ -48,6 +49,7 @@ public:
       return headerSize + syncIndexSize + endDocsSize + memberVarSize;
     }
     
+    // Write to buffer
     static char *Write( char *buffer, char *bufferEnd, const SharedPointer<EndDocPostingList> p ) {
        if ( !p ) {
            return buffer + RoundUp( sizeof( SerialEndDocs ), sizeof(size_t));
